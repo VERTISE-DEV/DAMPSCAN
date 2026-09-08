@@ -9,6 +9,8 @@
  * and /#areas, anchors on the home page, which told a crawler that the
  * sixty-four detail pages hang off nothing. It points at the hub pages now.
  */
+import { adsTag } from './ads-tag.js';
+
 const esc = (value) =>
   String(value == null ? '' : value)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -41,6 +43,7 @@ export function shell({ site, url, title, metaDescription, schemas = [], body, a
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+${adsTag(site.key)}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(metaDescription)}" />
 <link rel="canonical" href="${url}" />

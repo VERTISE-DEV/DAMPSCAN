@@ -25,6 +25,7 @@ import { render as renderHub } from './hub-template.js';
 import { render as renderPricing } from './pricing-template.js';
 import { assetHashes, stampAssets } from './asset-version.js';
 import { bookForm } from './book-form.js';
+import { adsTag } from './ads-tag.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'public', 'areas');
@@ -105,6 +106,27 @@ const END = '<!-- area-links:end -->';
    other. Writing it here makes book-form.js the only copy. */
 const BF_START = '<!-- book-form:start, filled by scripts/build-pages.js -->';
 const BF_END = '<!-- book-form:end -->';
+
+/* The Google Ads tag on the two home pages. Same reasoning as the booking form
+   above: the generated pages get theirs from page-shell.js, and a second hand
+   written copy in a head is how the two stop matching. A site with no tag
+   configured writes an empty block, which is what keeps ATi's tag off
+   DampScan. */
+const AD_START = '<!-- ads-tag:start, filled by scripts/build-pages.js -->';
+const AD_END = '<!-- ads-tag:end -->';
+
+async function writeAdsTag() {
+  for (const [site, file] of Object.entries(HOME)) {
+    const path = join(ROOT, file);
+    const html = await readFile(path, 'utf8');
+    const from = html.indexOf(AD_START);
+    const to = html.indexOf(AD_END);
+    if (from === -1 || to === -1) throw new Error(`${file}: ads tag markers missing`);
+    const tag = adsTag(site);
+    const block = `${AD_START}\n${tag ? tag + '\n' : ''}${AD_END}`;
+    await writeFile(path, html.slice(0, from) + block + html.slice(to + AD_END.length), 'utf8');
+  }
+}
 
 async function writeBookForm() {
   for (const [site, file] of Object.entries(HOME)) {
@@ -267,6 +289,7 @@ async function main() {
 
   await writeSitemaps();
   await writeBookForm();
+  await writeAdsTag();
   await writeHomeLinks();
   await writeReviews();
   const stamps = await stampAllPages();

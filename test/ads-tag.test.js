@@ -49,7 +49,7 @@ test('a site with no tag configured gets no markup at all', () => {
 test('the conversion action is a value for book.js, not an event in the head', async () => {
   const tag = adsTag('ati');
   assert.match(tag, /DS_ADS_CONVERSION/);
-  assert.match(tag, /AW-18231740318\/A4nnCOLSzvEcEJ6PyfVD/);
+  assert.match(tag, /AW-18231740318\/TD6mCJ_jxPEcEJ6PyfVD/);
   assert.ok(!/gtag\(\s*'event'\s*,\s*'conversion'/.test(tag),
     'the head must not fire a conversion event on page load');
 

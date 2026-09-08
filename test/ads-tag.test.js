@@ -43,6 +43,31 @@ test('a site with no tag configured gets no markup at all', () => {
   assert.deepEqual(taggedSites, ['ati']);
 });
 
+/* The conversion must never be fired by the page simply loading. Google's setup
+   screen offers exactly that, and on a form that submits in place it would
+   count every visitor on every page as a booking. */
+test('the conversion action is a value for book.js, not an event in the head', async () => {
+  const tag = adsTag('ati');
+  assert.match(tag, /DS_ADS_CONVERSION/);
+  assert.match(tag, /AW-18231740318\/SZ9pCK3VyPEcEJ6PyfVD/);
+  assert.ok(!/gtag\(\s*'event'\s*,\s*'conversion'/.test(tag),
+    'the head must not fire a conversion event on page load');
+
+  const book = await readFile(join(ROOT, 'public/assets/book.js'), 'utf8');
+  assert.match(book, /gtag\('event', 'conversion'/, 'book.js should fire the conversion');
+  assert.match(book, /if \(result\.stored\) adsConversion/,
+    'the conversion should only fire when the server stored the lead');
+});
+
+test('no built page fires a conversion on load', async () => {
+  const pages = (await htmlFiles(join(ROOT, 'public'))).filter((p) => !p.includes('/staff/'));
+  for (const path of pages) {
+    const html = await readFile(path, 'utf8');
+    assert.ok(!/gtag\(\s*['"]event['"]\s*,\s*['"]conversion['"]/.test(html),
+      `${path} fires a Google Ads conversion on page load`);
+  }
+});
+
 test('every ATi page carries the tag and no DampScan page does', async () => {
   const pages = (await htmlFiles(join(ROOT, 'public'))).filter((p) => !p.includes('/staff/'));
   const counts = { ati: 0, dampscan: 0 };

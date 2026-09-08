@@ -20,10 +20,22 @@
  * means a booking.
  */
 
-/* Site key to Google Ads conversion ID. A site with no entry gets no tag, and
-   that is the whole opt in: nothing is added anywhere by default. */
+/* Site key to Google Ads account, and the conversion action a booking counts
+   as. A site with no entry gets no tag, and that is the whole opt in: nothing
+   is added anywhere by default.
+
+   `conversion` is the send_to from the conversion action's event snippet. It
+   is deliberately not pasted into the head where Google's dialog suggests.
+   That dialog offers "page load" or "click", and neither describes this form:
+   it never navigates to a confirmation page, it submits in place and swaps to
+   a success panel. A page load snippet in the head would count every visitor
+   to every page as a booking. So the id travels to the browser as a value and
+   book.js fires the event at the point a booking actually succeeds. */
 const TAGS = {
-  ati: 'AW-18231740318'
+  ati: {
+    id: 'AW-18231740318',
+    conversion: 'AW-18231740318/SZ9pCK3VyPEcEJ6PyfVD'
+  }
 };
 
 /**
@@ -31,17 +43,23 @@ const TAGS = {
  * @returns {string} the script tags, or '' for a site with no tag configured
  */
 export function adsTag(siteKey) {
-  const id = TAGS[siteKey];
-  if (!id) return '';
+  const tag = TAGS[siteKey];
+  if (!tag) return '';
+  /* Google's snippet, exactly as their setup screen gives it, then one line of
+     ours. Kept as separate blocks so the first stays theirs and comparable
+     against what the account shows. */
   return `<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=${tag.id}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '${id}');
-</script>`;
+  gtag('config', '${tag.id}');
+</script>
+<!-- Which conversion action a booking counts as. Read by public/assets/book.js
+     on a successful submission: see the note above on why not in the head. -->
+<script>window.DS_ADS_CONVERSION = ${JSON.stringify(tag.conversion || '')};</script>`;
 }
 
 export const taggedSites = Object.keys(TAGS);

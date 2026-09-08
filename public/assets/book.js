@@ -275,6 +275,12 @@
      the fields genuinely need fixing. */
   async function sendLead(stage){
     pushLeadToCRM(collect(), stage);
+    /* `stored` is what the server actually took, as distinct from what the
+       visitor sees. The catch below still reports ok, because a network they
+       cannot control must not leave them staring at a broken form, but a lead
+       that never arrived is not a conversion and must not be counted as one. */
+    let stored = false;
+    let id = null;
     try {
       const res = await fetch(LEAD_ENDPOINT, {
         method: 'POST',
@@ -283,15 +289,41 @@
       });
       if (res.status === 400) {
         const body = await res.json().catch(function(){ return null; });
-        return { ok: false, errors: (body && body.errors) || {} };
+        return { ok: false, errors: (body && body.errors) || {}, stored: false, id: null };
       }
       const saved = await res.json().catch(function(){ return null; });
-      emailNotification(stage, saved && saved.id);
+      stored = true;
+      id = saved && saved.id;
+      emailNotification(stage, id);
     } catch (err) {
       /* Offline/preview or network blocked: the UI still advances so the visitor is never stuck */
       console.warn('Lead POST failed (stage: ' + stage + ')', err);
     }
-    return { ok: true, errors: {} };
+    return { ok: true, errors: {}, stored, id };
+  }
+
+  /* Google Ads counts a booking.
+   *
+   * Fired from here rather than from a snippet in the head, which is where the
+   * Ads setup screen suggests putting it. That screen offers "page load" or
+   * "click", and neither describes this form: it never navigates to a
+   * confirmation page, it submits in place and swaps to the success panel. In
+   * the head it would count every visitor to every page as a booking, and a
+   * click would count everyone who pressed the button including the ones the
+   * server then rejected.
+   *
+   * Only where a conversion action is configured for the site, which is what
+   * keeps this off DampScan, and only once: a conversion counted twice is
+   * worse than one counted late, because it bids real money on a fiction. */
+  let converted = false;
+  function adsConversion(id){
+    const target = window.DS_ADS_CONVERSION;
+    if (converted || !target || typeof window.gtag !== 'function') return;
+    converted = true;
+    const event = { send_to: target };
+    /* Lets Google discard the duplicate if one ever gets through anyway. */
+    if (id) event.transaction_id = String(id);
+    window.gtag('event', 'conversion', event);
   }
 
   /* The held partial lives in partial.js. It is handed how to build and send
@@ -391,6 +423,9 @@
       return;
     }
     track('form_submit');
+    /* Only when the server took it. A booking that never reached us is not a
+       conversion, however it looked to the visitor. */
+    if (result.stored) adsConversion(result.id);
     /* Said on the confirmation rather than as a field error, because the form
        is gone by now. They are booked either way, so the wording is a next
        step and not an apology for something they need to fix. */

@@ -34,12 +34,7 @@
 const TAGS = {
   ati: {
     id: 'AW-18439115177',
-    /* Empty until the conversion action in this account has been created and
-       its send_to is to hand. An empty value is a working state, not a broken
-       one: the tag still records page views, and book.js checks for a target
-       before firing, so a booking simply goes uncounted rather than throwing.
-       Fill it in and nothing else has to change. */
-    conversion: ''
+    conversion: 'AW-18439115177/BEE7CIGjvPIcEKmjuthE'
   }
 };
 

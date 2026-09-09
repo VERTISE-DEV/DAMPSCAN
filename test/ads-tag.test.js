@@ -49,11 +49,13 @@ test('a site with no tag configured gets no markup at all', () => {
 test('the conversion action is a value for book.js, not an event in the head', async () => {
   const tag = adsTag('ati');
   assert.match(tag, /DS_ADS_CONVERSION/);
-  /* The conversion action for this account is not created yet, so the value
-     is empty. That has to stay a working state rather than a crash: an empty
-     target means a booking goes uncounted, which is the honest outcome until
-     the send_to exists. */
-  assert.match(tag, /window\.DS_ADS_CONVERSION = "(|AW-[0-9]+\/[A-Za-z0-9_-]+)";/);
+  assert.match(tag, /AW-18439115177\/BEE7CIGjvPIcEKmjuthE/);
+  /* The account and the conversion action have to belong to each other. A
+     send_to carrying a different account than the tag above is the mistake
+     that sends conversions nowhere while everything appears to work. */
+  const id = /gtag\('config', '(AW-[0-9]+)'\)/.exec(tag)[1];
+  const target = /DS_ADS_CONVERSION = "(AW-[0-9]+)\//.exec(tag)[1];
+  assert.equal(target, id, 'the conversion action must be in the same Ads account as the tag');
   assert.ok(!/gtag\(\s*'event'\s*,\s*'conversion'/.test(tag),
     'the head must not fire a conversion event on page load');
 

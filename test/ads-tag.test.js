@@ -17,7 +17,7 @@ import { join } from 'node:path';
 import { adsTag, taggedSites } from '../scripts/ads-tag.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const ATI_ID = 'AW-18231740318';
+const ATI_ID = 'AW-18439115177';
 
 async function htmlFiles(dir) {
   const out = [];
@@ -39,7 +39,7 @@ function siteOf(html) {
 test('a site with no tag configured gets no markup at all', () => {
   assert.equal(adsTag('dampscan'), '');
   assert.equal(adsTag('nonsense'), '');
-  assert.match(adsTag('ati'), /AW-18231740318/);
+  assert.match(adsTag('ati'), /AW-18439115177/);
   assert.deepEqual(taggedSites, ['ati']);
 });
 
@@ -49,7 +49,11 @@ test('a site with no tag configured gets no markup at all', () => {
 test('the conversion action is a value for book.js, not an event in the head', async () => {
   const tag = adsTag('ati');
   assert.match(tag, /DS_ADS_CONVERSION/);
-  assert.match(tag, /AW-18231740318\/TD6mCJ_jxPEcEJ6PyfVD/);
+  /* The conversion action for this account is not created yet, so the value
+     is empty. That has to stay a working state rather than a crash: an empty
+     target means a booking goes uncounted, which is the honest outcome until
+     the send_to exists. */
+  assert.match(tag, /window\.DS_ADS_CONVERSION = "(|AW-[0-9]+\/[A-Za-z0-9_-]+)";/);
   assert.ok(!/gtag\(\s*'event'\s*,\s*'conversion'/.test(tag),
     'the head must not fire a conversion event on page load');
 

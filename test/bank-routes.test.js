@@ -124,6 +124,7 @@ test('importing a statement stores its lines, matches the payments and guesses t
   const after = await jobRow(job.id);
   assert.ok(after.deposit_paid_at, 'the bank ticked the deposit');
   assert.ok(after.paid_at, 'and paid in full once the balance arrived');
+  assert.equal(after.status, 'completed', 'paid in full after the survey date is a finished job');
 
   const { transactions, totals } = (await get('?view=all')).json();
   assert.equal(transactions.length, 6);

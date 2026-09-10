@@ -70,7 +70,7 @@ export function sitemapFor(site, today) {
     { loc: `${origin}/`, priority: '1.0', changefreq: 'monthly' },
     { loc: `${origin}/services`, priority: '0.9', changefreq: 'monthly' },
     { loc: `${origin}/damp-survey`, priority: '0.9', changefreq: 'monthly' },
-    ...(site === 'ati' ? [{ loc: `${origin}/pricing`, priority: '0.9', changefreq: 'monthly' }] : []),
+    { loc: `${origin}/pricing`, priority: '0.9', changefreq: 'monthly' },
     ...services
       .filter((s) => s.site === site)
       .map((s) => ({ loc: `${origin}/services/${s.slug}`, priority: '0.9', changefreq: 'monthly' })),
@@ -275,10 +275,13 @@ async function main() {
     await writeFile(join(dir, 'areas.html'), renderHub('areas', site, ars), 'utf8');
   }
 
-  // ATi only. DampScan's survey fee is one line inside a larger job, so
-  // publishing it alone would misrepresent what a customer actually pays.
+  // Both sites now. They publish for opposite reasons, which content/pricing.js
+  // explains: ATi because the survey is the whole transaction, DampScan because
+  // paying for the survey separately is what keeps it independent of the works.
   await mkdir(join(ROOT, 'public', 'pricing'), { recursive: true });
-  await writeFile(join(ROOT, 'public', 'pricing', 'ati.html'), renderPricing(), 'utf8');
+  for (const site of Object.keys(SITES)) {
+    await writeFile(join(ROOT, 'public', 'pricing', `${site}.html`), renderPricing(site), 'utf8');
+  }
 
   await rm(SERVICES_OUT, { recursive: true, force: true });
   for (const service of services) {
@@ -301,7 +304,7 @@ async function main() {
   console.log(`${areas.length} area pages written to public/areas`);
   console.log(`${services.length} service pages written to public/service-pages`);
   console.log('4 hub pages written to public/hubs');
-  console.log('ATi pricing page written to public/pricing');
+  console.log(`${Object.keys(SITES).length} pricing pages written to public/pricing`);
   console.log('sitemaps, home page links and home page booking forms rewritten');
   console.log(`${stamps.files} assets hashed, ${stamps.stamped} pages restamped`);
   for (const site of Object.keys(HOME)) console.log(reviewsSummary(site));

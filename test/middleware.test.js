@@ -124,15 +124,19 @@ test('the hubs resolve per host, and are what the nav points at', () => {
   assert.equal(rewrittenTo(call(LONDON, '/services')), '/hubs/ati/services.html');
 });
 
-test('prices resolve on ATi and do not exist on DampScan', () => {
-  // DampScan's survey fee is one line inside a larger job, so the Kent host
-  // must not resolve this to the wrong firm's published fees. It falls
-  // through, and with no file at that path the response is a 404.
+test('each host resolves /pricing to its own fees and never the other firm\'s', () => {
+  // Both practices publish now, and the fees are the same figures, so a
+  // crossed wire would not look obviously wrong on the page. It would still be
+  // a Kent customer reading London terms, with London coverage and a London
+  // sister-practice referral in the small print. Worth pinning both ways.
   assert.equal(rewrittenTo(call(LONDON, '/pricing')), '/pricing/ati.html');
-  assert.equal(rewrittenTo(call(KENT, '/pricing')), null);
-  const slash = call(LONDON, '/pricing/');
-  assert.equal(slash.status, 301);
-  assert.equal(new URL(slash.headers.get('location')).pathname, '/pricing');
+  assert.equal(rewrittenTo(call(KENT, '/pricing')), '/pricing/dampscan.html');
+
+  for (const host of [LONDON, KENT]) {
+    const slash = call(host, '/pricing/');
+    assert.equal(slash.status, 301);
+    assert.equal(new URL(slash.headers.get('location')).pathname, '/pricing');
+  }
 });
 
 test('the trailing slash form redirects onto the bare path, so there is one URL', () => {

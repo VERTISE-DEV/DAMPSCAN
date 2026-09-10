@@ -31,6 +31,7 @@ const SITES = {
     nav: [
       { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
+      { label: 'Prices', href: '/pricing' },
       { label: 'What you get', href: '/#reviews' },
       { label: 'Landlords', href: '/#landlords' },
       { label: 'Areas', href: '/damp-survey' },

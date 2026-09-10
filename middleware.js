@@ -73,10 +73,13 @@ export default function middleware(request) {
   // breadcrumbs point at. vercel.json sets trailingSlash false, so the bare
   // path is canonical here too and the slashed form redirects onto it. Serving
   // the slashed form instead would fight that setting and loop.
-  // Prices are published by ATi only, so on the Kent host this falls through
-  // to a 404 rather than resolving to the wrong firm's fees.
+  // Both practices publish now, and each host must resolve to its own fees.
+  // Falling through to the other firm's page would show a Kent customer London
+  // prices, which is the one mistake a pricing page cannot survive.
   if (path === '/pricing/') return Response.redirect(new URL('/pricing', url), 301);
-  if (path === '/pricing' && london) return rewrite(new URL('/pricing/ati.html', request.url));
+  if (path === '/pricing') {
+    return rewrite(new URL(london ? '/pricing/ati.html' : '/pricing/dampscan.html', request.url));
+  }
 
   if (path === '/damp-survey/') return Response.redirect(new URL('/damp-survey', url), 301);
   if (path === '/services/') return Response.redirect(new URL('/services', url), 301);

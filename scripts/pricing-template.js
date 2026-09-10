@@ -9,7 +9,7 @@
  */
 import { SITES, bookScripts, verifiedBadge, shell } from './area-template.js';
 import { bookForm } from './book-form.js';
-import { pricing } from '../content/pricing.js';
+import { pricing as pricing_ } from '../content/pricing.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -21,7 +21,7 @@ const esc = (value) =>
    genuinely fixed prices carry a price; the two that start "from" carry a
    minimum, because claiming a fixed price we do not offer would be a lie in
    structured data as much as in the copy. */
-function offerSchema(site, url) {
+function offerSchema(site, url, pricing) {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -56,7 +56,7 @@ function crumbSchema(site, url) {
   });
 }
 
-function faqSchema() {
+function faqSchema(pricing) {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -68,7 +68,7 @@ function faqSchema() {
   });
 }
 
-function band(b) {
+function band(pricing, b) {
   return `      <article class="band${b.fixed ? ' band--fixed' : ''}">
         <h3>${esc(b.name)}</h3>
         <p class="band-price">${esc(b.price)}</p>
@@ -79,7 +79,9 @@ function band(b) {
       </article>`;
 }
 
-export function render() {
+export function render(siteKey) {
+  const pricing = pricing_[siteKey];
+  if (!pricing) throw new Error(`no pricing content for site "${siteKey}"`);
   const site = SITES[pricing.site];
   const url = `${site.origin}/pricing`;
 
@@ -99,7 +101,7 @@ export function render() {
       in practice means how much of it there is. Pick by what you want looked
       at, not by what you think is wrong: that is our job to work out.</p>
     <div class="bands">
-${pricing.bands.map(band).join('\n')}
+${pricing.bands.map((b) => band(pricing, b)).join('\n')}
     </div>
     <p class="band-foot">If you are between two bands, take the smaller one and
       ask. We will tell you on site if it needs to be wider, and what that
@@ -138,7 +140,7 @@ ${pricing.bands.map(band).join('\n')}
     url,
     title: pricing.title,
     metaDescription: pricing.metaDescription,
-    schemas: [offerSchema(site, url), crumbSchema(site, url), faqSchema()],
+    schemas: [offerSchema(site, url, pricing), crumbSchema(site, url), faqSchema(pricing)],
     body,
     aside,
     scripts: bookScripts(site)

@@ -52,7 +52,9 @@
     lines(el('c-address'), addr.length ? addr : ['No address on file. Add one on the Jobs page or ask the client.']);
     var maps = el('c-maps');
     maps.hidden = !addr.length;
-    if (addr.length) maps.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addr.join(', '));
+    /* Waze's universal link. On a phone with the app installed it opens the
+       app and starts navigating; anywhere else it opens Waze on the web. */
+    if (addr.length) maps.href = 'https://www.waze.com/ul?q=' + encodeURIComponent(addr.join(', ')) + '&navigate=yes';
 
     var enquiry = [];
     if (c.issues.length) enquiry.push('Dealing with: ' + c.issues.join(', '));

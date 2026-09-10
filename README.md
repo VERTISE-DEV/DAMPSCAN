@@ -237,7 +237,7 @@ what creates the card; there is no clients table and nothing to keep in step.
 A job recorded by hand still gets a card with whatever the form was given.
 
 Clicking a card opens a native `<dialog>` with everything on it, the
-attachments as download links, a Google Maps link for the address, and two
+attachments as download links, a Waze link for the address, and two
 payment boxes: **deposit paid** and **paid in full**. The deposit is always half
 the survey price. It is derived by `/api/admin/clients` rather than stored, so
 correcting a price on the Jobs page corrects the deposit with it; the odd penny,

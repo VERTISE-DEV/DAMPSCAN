@@ -9,9 +9,16 @@
  *
  * DampScan does carry out the work, which makes publishing harder rather than
  * easier: a firm that surveys and then quotes has an obvious reason to find
- * something. Its page has to say that out loud and explain what stops it, or it
- * is worth less than saying nothing. What stops it is that the survey is paid
- * for on its own, so the diagnosis is not funded by whatever follows it.
+ * something. Its page has to say that out loud and answer it, or it is worth
+ * less than saying nothing. It answers it with the report, which shows the
+ * readings behind every conclusion and can be taken to anybody.
+ *
+ * What neither page says is whether the survey fee comes off the works, in
+ * either direction. It is settled with the customer case by case, so a page
+ * that ruled it in would promise something not always on offer and a page that
+ * ruled it out would refuse something sometimes given. Anything added here
+ * about the fee and a later invoice becomes a published commitment, so do not
+ * add it without being asked to.
  *
  * Both pages state that the figure shown is the figure paid, without going into
  * why. If either practice's tax position ever changes so that something does
@@ -130,15 +137,16 @@ const dampscan = {
   slug: 'pricing',
   title: 'Damp Survey Prices in Kent and the South East | DampScan',
   metaDescription:
-    'What a damp survey costs across Kent and the South East. Four fixed price bands from £215, what each includes, and why the survey is paid for on its own.',
+    'What a damp survey costs across Kent and the South East. Four fixed price bands from £215, what each includes, and what is never added afterwards.',
   h1: 'What a survey costs, and what decides it',
 
   /* The hard sentence, and it goes first on purpose. DampScan does the works,
      so a reader is right to wonder whether the survey exists to sell them.
      Saying so before they think it is the only way the rest of the page is
-     worth reading. */
+     worth reading. What it does not do is set out any arrangement between the
+     fee and a later invoice: see the note at the top of this file. */
   intro:
-    'We carry out the remedial work as well as the survey, so you are entitled to ask whether the survey exists to sell you the work. It does not, and the price is how we keep that true: the survey is paid for on its own, which means the diagnosis does not have to earn its keep from whatever comes after it.',
+    'We carry out the remedial work as well as the survey, so you are entitled to ask whether the survey exists to sell you the work. It does not. What you are paying for here is the diagnosis and the written report, and that report tells you what does not need doing as plainly as what does.',
 
   priceLead: 'The price you see is the price you pay.',
   fixedFee: 'The survey fee is agreed in writing before we attend and does not change afterwards, whatever we find. There is one optional extra, an invasive inspection, and it is never carried out unless you agree to it on the day.',
@@ -213,13 +221,11 @@ const dampscan = {
     {
       /* The question the whole page turns on. Anything less than a direct
          answer here reads as evasion, and evasion is what the reader already
-         suspects. */
+         suspects. The answer is deliberately about the report rather than
+         about the fee: what the fee does or does not do against a later
+         invoice is a conversation for the customer, not a published policy. */
       q: 'You do the works as well. What stops the survey finding something?',
-      a: 'The fee. A free survey has to be paid for by the work it recommends, which means the person diagnosing the problem only gets paid if there is one. Charging for the survey breaks that: it is already paid for by the time we write the report, so a report saying little or nothing needs doing costs us nothing to write. That is the whole reason the survey is priced separately rather than folded into a quote, and it is why the report tells you what does not need doing as plainly as what does.'
-    },
-    {
-      q: 'Does the survey fee come off the works if I go ahead?',
-      a: 'No, and that is deliberate. A fee credited against the works is a discount you lose by saying no, which is a quiet pressure to say yes. The survey is a separate piece of work with its own price, and it stays that way whether you use us for the remedial work, use somebody else, or do nothing at all. You are free to take the specification to other contractors, and plenty of people do.'
+      a: 'A report you can check. Every conclusion in it is shown with the readings and the photographs it rests on, so a finding you did not expect is one you can put in front of another surveyor and have tested. It also says plainly what does not need doing, and where a quote you are already holding goes further than the defect. You are never obliged to use us for the remedial work, and the specification is written to be priced by anybody.'
     },
     {
       q: 'I have damp in one room of a four bedroom house. Which band?',

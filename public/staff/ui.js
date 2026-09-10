@@ -82,7 +82,9 @@
   function money(pence) {
     return (Number(pence || 0) / 100).toLocaleString('en-GB', {
       style: 'currency', currency: 'GBP'
-    });
+    /* A real minus sign. Browsers may break a line after a hyphen-minus, which
+       left a negative balance split across two lines in a narrow tile. */
+    }).replace(/^-/, '\u2212');
   }
 
   /** Pounds typed by a person to whole pence. "1,234.56" and " 12 " both work. */

@@ -309,6 +309,92 @@ who fills each role. Both are editable in the dashboard, so fees can change
 without a deploy. `/api/admin/rates` refuses a percentage outside 0 to 100 and
 an unknown person rather than storing it.
 
+## Bank reconciliation
+
+`/staff/bank.html` takes a Revolut statement and settles it against the jobs.
+Export the account from Revolut as CSV (Transactions, Export) and upload it.
+Overlapping months are fine: every line carries a fingerprint, Revolut's own
+transaction ID where the export has one and the date, amount, description and
+running balance where it does not, and a line already imported is skipped
+rather than doubled. Pending, declined and reverted lines are left out until
+they complete, because a pending line can still change and would otherwise be
+imported again, differently, next month. Fees are folded into the amount, so a
+line is the money that actually moved.
+
+Each line ends up as one of two things, never both:
+
+- **Matched to a job.** Money in is scored against every open job on amount
+  (the price, the deposit, the balance, or what is still owed), the customer's
+  name, the postcode, and the date. A clear winner is matched on upload; anything
+  closer is offered as a suggestion at the top of the job picker for a person to
+  confirm, because a wrong match marks the wrong customer as paid, which is worse
+  than an unmatched line. Once a line is matched, the bank decides the job's
+  paid boxes: it writes the same `deposit_paid_at` and `paid_at` columns a tick
+  on the client card does, dated when the money arrived. Matching only ever
+  ticks; unmatching a line, or removing the upload it came from, unticks what
+  the remaining matched money no longer covers.
+- **Split between people.** Everything else is shared by any of Scott, Tom and
+  Ben, or belongs to the tax pot (a payment to HMRC). The chosen set gets equal
+  shares in whole pence, odd pennies to the earliest, and the four share
+  columns are stored on the line as a ledger, for the same reason a job stores
+  its payouts. Amounts are signed, so a spend split to Tom reduces Tom's figure,
+  Tom's drawings paid out to him reduce it the same way, and a top-up Tom puts
+  in adds to it.
+
+### What the importer decides for itself
+
+A category is guessed from the merchant, Revolut's transaction type and the
+card's merchant code: a garage is fuel, Screwfix is tools, HMRC is tax. The
+split is guessed only where the line itself says whose money it is: a transfer
+out to a partner by name is their drawings, a top-up from a partner is their
+capital, a payment to HMRC is the tax pot's. A card payment to a shop with Ben
+in its name is a shop, and a transfer in from a Tom is a customer until
+somebody says otherwise. Everything else waits, and the page counts what is
+waiting.
+
+Choosing a category or a split by hand teaches the importer. The choice is
+stored in `bank_rules` against the description with its numbers taken out, so
+"BP MAIDSTONE 1234" and "BP MAIDSTONE 5678" share a key, and it is applied at
+once to every other line with that key that nobody has touched, and to every
+later upload. A choice made by hand on a line is never overwritten by a rule
+learned from another: `category_kind` and `split_kind` record which lines a
+person decided and which the importer guessed. Transfers between your own
+accounts are a category of their own and are left out of every figure.
+
+### The reconciliation
+
+The page shows one identity, both sides of it, and whether they agree:
+
+```
+bank in, less bank out  =  Scott + Tom + Ben + tax pot
+                         + remedial work settled offline between Tom and Ben
+                         + deposits on jobs not yet paid in full
+                         + money in not yet matched to a job or split
+                         + spend not yet split
+                         + difference
+```
+
+A person's figure is what the paid jobs say they earned, from the payout
+ledger on `jobs`, plus their signed shares of every bank line. The tax pot is
+what the paid jobs set aside less what has gone to HMRC. The only line that can
+be nonzero once everything is allocated is the difference: bank money matched
+to paid jobs against what those jobs are recorded as worth. A job ticked paid
+by hand because the customer paid cash shows up there, and so does a customer
+who paid more or less than the price. Nil means every pound in the account is
+explained. `test/bank-routes.test.js` asserts the two sides agree after every
+operation it performs.
+
+The reconciliation starts where the bank data does, from the first imported
+line, unless "Reconcile from" says otherwise. Jobs paid before that date are
+out of scope, which is what stops years of pre-Revolut history showing up as
+unexplained. Jobs paid from the bank are dated by the arrival of the money,
+so the cutoff puts them on the right side.
+
+Everything is one route, `/api/admin/bank`, inside the same serverless
+function as the other admin routes. The statement is posted as text from the
+browser, so there is no multipart parser, and lines are inserted in batches
+because the Neon driver is one round trip per statement.
+
 ## Security notes
 
 - The staff session cookie is the only cookie the site sets. `httpOnly`, `Secure`,
@@ -733,6 +819,11 @@ npm test
 
 Override the target with `TEST_DATABASE_URL`. Never point it at production: each run
 truncates every table. No test touches the network, FormSubmit is stubbed.
+
+The files run one at a time (`--test-concurrency=1` in the npm script). Two of
+them, `integration.test.js` and `bank-routes.test.js`, truncate the same tables
+between tests, so run in parallel they empty each other's data mid-test and fail
+at random. The whole suite still takes a few seconds.
 
 ## Continuous integration
 

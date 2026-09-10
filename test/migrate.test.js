@@ -66,7 +66,10 @@ test('every statement applies individually, as the Neon driver sends them', asyn
       where table_schema = $1 order by table_name`,
     [SCRATCH]
   );
-  assert.deepEqual(rows.map((r) => r.table_name), ['events', 'job_rates', 'job_settings', 'jobs', 'leads', 'rate_hits', 'staff_users']);
+  assert.deepEqual(rows.map((r) => r.table_name), [
+    'bank_rules', 'bank_statements', 'bank_transactions',
+    'events', 'job_rates', 'job_settings', 'jobs', 'leads', 'rate_hits', 'staff_users'
+  ]);
 });
 
 test('re-running every statement is idempotent', async () => {

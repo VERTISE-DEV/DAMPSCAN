@@ -211,3 +211,79 @@ create unique index if not exists jobs_lead_unique_idx on jobs (lead_id) where l
 -- ---------------------------------------------------------------------------
 alter table jobs add column if not exists deposit_paid_at timestamptz;
 alter table jobs add column if not exists paid_at         timestamptz;
+
+-- ---------------------------------------------------------------------------
+-- Bank reconciliation
+--
+-- One row per line of a Revolut statement, imported from the CSV export. The
+-- fingerprint is what makes re-uploading an overlapping statement safe: a line
+-- already here is skipped, never duplicated.
+--
+-- amount_pence is signed and is the net effect on the balance, fee included:
+-- money in is positive, money out is negative. A line is either matched to a
+-- job, in which case the job's own payout ledger says whose money it is, or it
+-- is split between some of Scott, Tom, Ben and the tax pot. The four share
+-- columns are the ledger, computed when the split is chosen and never
+-- re-derived, for the same reason a job stores its payouts.
+--
+-- category_kind and split_kind record whether a person chose the value or the
+-- importer guessed it, so a later rule can overwrite a guess and never a choice.
+-- ---------------------------------------------------------------------------
+create table if not exists bank_statements (
+  id          bigserial primary key,
+  imported_at timestamptz not null default now(),
+  filename    text,
+  account     text,
+  first_on    date,
+  last_on     date,
+  rows_seen   integer not null default 0,
+  rows_added  integer not null default 0
+);
+
+create table if not exists bank_transactions (
+  id                bigserial primary key,
+  statement_id      bigint references bank_statements (id) on delete cascade,
+  fingerprint       text not null unique,
+  external_id       text,
+  posted_on         date not null,
+  posted_time       text,
+  type              text,
+  description       text not null default '',
+  reference         text,
+  counterparty      text,
+  mcc               text,
+  currency          text not null default 'GBP',
+  amount_pence      integer not null,
+  fee_pence         integer not null default 0,
+  balance_pence     integer,
+  category          text not null default 'other',
+  category_kind     text not null default 'auto' check (category_kind in ('auto','manual')),
+  split             text[] not null default '{}'
+                      check (split <@ array['scott','tom','ben','tax']::text[]),
+  split_kind        text not null default 'auto' check (split_kind in ('auto','manual')),
+  share_scott_pence integer not null default 0,
+  share_tom_pence   integer not null default 0,
+  share_ben_pence   integer not null default 0,
+  share_tax_pence   integer not null default 0,
+  job_id            bigint references jobs (id) on delete set null,
+  match_kind        text check (match_kind in ('auto','manual')),
+  -- The description with its numbers taken out. What a learned rule keys on.
+  rule_key          text not null default '',
+  updated_at        timestamptz not null default now()
+);
+
+create index if not exists bank_tx_posted_idx    on bank_transactions (posted_on desc, id desc);
+create index if not exists bank_tx_job_idx       on bank_transactions (job_id);
+create index if not exists bank_tx_statement_idx on bank_transactions (statement_id);
+create index if not exists bank_tx_rule_idx      on bank_transactions (rule_key);
+
+-- What the importer learned. Keyed on the description with the numbers taken
+-- out, so tagging one fuel stop as Tom's fuel tags every later visit to the
+-- same garage the same way.
+create table if not exists bank_rules (
+  key        text primary key,
+  category   text not null,
+  split      text[] not null default '{}'
+               check (split <@ array['scott','tom','ben','tax']::text[]),
+  updated_at timestamptz not null default now()
+);

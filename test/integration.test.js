@@ -803,6 +803,24 @@ test('paid in full implies the deposit was paid', async () => {
   assert.ok(c.money.depositPaidAt, 'you cannot have paid the lot without the half');
 });
 
+test('paid in full completes a job whose survey has happened, and leaves a future one booked', async () => {
+  const cookie = await signedInCookie();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  const done = await bookedJob(cookie, { jobDate: yesterday });
+  const c = (await call(clientsRoute, { body: { id: done.job.id, paid: true }, headers: { cookie } })).json().client;
+  assert.equal(c.status, 'completed', 'the money is in and the visit is behind us');
+
+  const untick = (await call(clientsRoute, { body: { id: done.job.id, paid: false }, headers: { cookie } })).json().client;
+  assert.equal(untick.status, 'completed', 'unticking paid does not undo a completed job');
+
+  await pool.query('truncate jobs, leads restart identity cascade');
+  const ahead = await bookedJob(cookie, { jobDate: '2999-01-01' });
+  const paidEarly = (await call(clientsRoute, { body: { id: ahead.job.id, paid: true }, headers: { cookie } })).json().client;
+  assert.ok(paidEarly.money.paidAt);
+  assert.equal(paidEarly.status, 'booked', 'paid up front, but the survey is still to come');
+});
+
 test('the survey date and notes are editable from the card, and the job sees the same values', async () => {
   const cookie = await signedInCookie();
   const { job } = await bookedJob(cookie);

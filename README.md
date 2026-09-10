@@ -257,9 +257,14 @@ labels, so the earnings periods and the card can never disagree about when a
 survey is.
 
 A card archives itself the day after its survey date. That is a view, not a
-status change: the job stays booked until somebody marks it completed on the
-Jobs page, because a survey whose date has passed may have been rescheduled
-rather than done, and a calendar should not tell the earnings tiles otherwise.
+status change: the job stays booked until somebody marks it completed, because
+a survey whose date has passed may have been rescheduled rather than done, and
+a calendar should not tell the earnings tiles otherwise. Ticking **paid in
+full** is what marks it completed, on the card or from a matched bank line,
+provided the survey date has arrived. A customer who pays everything up front
+still has a visit coming, so that job stays booked and its card stays on the
+upcoming board; it completes when paid is still ticked on or after the day.
+Unticking paid never un-completes a job.
 An archived card that was never marked done carries a "date passed" chip, and
 moving its date forward from the card brings it straight back onto the board.
 "Today" is London's today, decided by the database, so every browser agrees

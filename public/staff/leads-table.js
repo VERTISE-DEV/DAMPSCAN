@@ -43,6 +43,10 @@
     td.className = 'timeline';
 
     if ((lead.files || []).length) td.appendChild(attachments(lead));
+    /* The browser's own words, for when the plain version is not enough. */
+    if (lead.emailed && lead.emailed.raw) {
+      td.appendChild(node('p', 'email-raw', 'Email error, as the browser reported it: ' + lead.emailed.raw));
+    }
 
     if (!lead.timeline.length) {
       td.appendChild(node('p', 'empty', 'No events recorded for this session.'));
@@ -89,15 +93,31 @@
     });
   }
 
+  var SITE_LABEL = { dampscan: 'Kent', 'ati-london': 'London', roofing: 'Verge', ac: 'CoolRight' };
+  var EMAIL_TAG = { sent: 'tag--good', failed: 'tag--warn', unconfirmed: 'tag--accent', sending: 'tag--muted', unknown: 'tag--muted' };
+
   var LEAD_COLUMNS = [
     { label: 'When', get: function(r){ return when(r.createdAt); } },
+    /* Every brand by name. This said Kent for anything not London, which
+       was every Verge and CoolRight enquiry too. */
     { label: 'Site', get: function(r){
         return node('span', 'tag ' + (r.site === 'ati-london' ? 'tag--accent' : 'tag--muted'),
-          r.site === 'ati-london' ? 'London' : 'Kent');
+          SITE_LABEL[r.site] || r.site || 'Kent');
       } },
     { label: 'Stage', get: function(r){
         return node('span', 'tag ' + (r.stage === 'complete' ? 'tag--good' : 'tag--muted'),
           r.stage === 'complete' ? 'Booked' : 'Partial');
+      } },
+    /* The status and, for anything short of a confirmed send, why. Next to
+       the stage so it is seen without scrolling, and written out rather than
+       left to a hover, because a phone cannot hover and a phone is where this
+       gets read. */
+    { label: 'Emailed', wrap: true, get: function(r){
+        var e = r.emailed || { state: 'unknown', label: 'No reply', reason: '' };
+        var wrap = node('span', null, '');
+        wrap.appendChild(node('span', 'tag ' + (EMAIL_TAG[e.state] || 'tag--muted'), e.label));
+        if (e.state !== 'sent' && e.reason) wrap.appendChild(node('span', 'email-why', e.reason));
+        return wrap;
       } },
     { label: 'Name', get: function(r){ return r.firstName; } },
     { label: 'Email', get: function(r){ return r.email; } },
@@ -121,11 +141,7 @@
     { label: 'Channel', get: function(r){ return r.channel || 'unknown'; } },
     { label: 'Landing page', get: function(r){ return r.landingPage; } },
     { label: 'Campaign', get: function(r){ return r.utm && r.utm.utm_campaign; } },
-    { label: 'Notes', wrap: true, get: function(r){ return r.notes; } },
-    { label: 'Emailed', get: function(r){
-        if (r.notifiedAt) return node('span', 'tag tag--good', 'Sent');
-        return node('span', 'tag tag--muted', r.notifyError ? 'Failed' : 'Pending');
-      } }
+    { label: 'Notes', wrap: true, get: function(r){ return r.notes; } }
   ];
 
   function renderLeads(data){
@@ -144,7 +160,7 @@
 
   /* ---------- CSV export of the current page of leads ---------- */
   var CSV_COLUMNS = [
-['id', function(l){ return l.id; }], ['created_at', function(l){ return l.createdAt; }], ['stage', function(l){ return l.stage; }], ['first_name', function(l){ return l.firstName; }], ['email', function(l){ return l.email; }], ['phone', function(l){ return l.phone; }], ['postcode', function(l){ return l.postcode; }], ['address_line1', function(l){ return l.addressLine1; }], ['address_line2', function(l){ return l.addressLine2; }], ['town', function(l){ return l.town; }], ['files', function(l){ return (l.files || []).length; }], ['issues', function(l){ return (l.issues || []).join('; '); }], ['role', function(l){ return l.role; }], ['previous_survey', function(l){ return l.previousSurvey === null ? '' : l.previousSurvey ? 'Yes' : 'No'; }], ['notes', function(l){ return l.notes; }], ['channel', function(l){ return l.channel; }], ['landing_page', function(l){ return l.landingPage; }], ['referrer', function(l){ return l.referrer; }], ['utm_source', function(l){ return l.utm && l.utm.utm_source; }], ['utm_medium', function(l){ return l.utm && l.utm.utm_medium; }], ['utm_campaign', function(l){ return l.utm && l.utm.utm_campaign; }], ['device', function(l){ return l.device; }], ['site', function(l){ return l.site; }], ['session_id', function(l){ return l.sessionId; }], ['notified_at', function(l){ return l.notifiedAt; }]
+['id', function(l){ return l.id; }], ['created_at', function(l){ return l.createdAt; }], ['stage', function(l){ return l.stage; }], ['first_name', function(l){ return l.firstName; }], ['email', function(l){ return l.email; }], ['phone', function(l){ return l.phone; }], ['postcode', function(l){ return l.postcode; }], ['address_line1', function(l){ return l.addressLine1; }], ['address_line2', function(l){ return l.addressLine2; }], ['town', function(l){ return l.town; }], ['files', function(l){ return (l.files || []).length; }], ['issues', function(l){ return (l.issues || []).join('; '); }], ['role', function(l){ return l.role; }], ['previous_survey', function(l){ return l.previousSurvey === null ? '' : l.previousSurvey ? 'Yes' : 'No'; }], ['notes', function(l){ return l.notes; }], ['channel', function(l){ return l.channel; }], ['landing_page', function(l){ return l.landingPage; }], ['referrer', function(l){ return l.referrer; }], ['utm_source', function(l){ return l.utm && l.utm.utm_source; }], ['utm_medium', function(l){ return l.utm && l.utm.utm_medium; }], ['utm_campaign', function(l){ return l.utm && l.utm.utm_campaign; }], ['device', function(l){ return l.device; }], ['site', function(l){ return l.site; }], ['session_id', function(l){ return l.sessionId; }], ['notified_at', function(l){ return l.notifiedAt; }], ['email_status', function(l){ return l.emailed && l.emailed.label; }], ['email_reason', function(l){ return l.emailed && l.emailed.state !== 'sent' ? l.emailed.reason : ''; }], ['email_error', function(l){ return l.notifyError; }]
   ];
 
   function exportCsv(range, leads){

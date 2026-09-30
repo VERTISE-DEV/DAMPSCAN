@@ -112,8 +112,8 @@ column cannot be used to point the dashboard at somebody else's blob.
 of the five. `previous_survey` is a nullable boolean: `null` means the visitor
 never reached step 3, which is different from answering "no". `utm` is `jsonb`,
 filtered to known campaign keys. `ip_hash` is `sha256(ip + IP_SALT)`, never the
-address itself. `notified_at` and `notify_error` record what happened to the
-notification email, so a lead that saved but failed to email is visible rather
+address itself. `notified_at`, `notify_error` and `notify_beacon_at` record what happened
+to the notification email, so a lead that saved but failed to email is visible rather
 than silent.
 
 ### `events`
@@ -460,6 +460,27 @@ page posts to FormSubmit and reports the outcome to `/api/notified`, which stamp
 `notified_at` or `notify_error` on the row. A blocked, closed or ad-blocked browser
 therefore costs the email and never the enquiry, and the dashboard shows which of
 the two happened instead of claiming everything was sent.
+
+The post is form encoded rather than JSON. FormSubmit takes either, but JSON sent
+across origins needs a permission check first, and some browsers refuse that check
+on a request meant to outlive the page.
+
+A step 1 dropout who leaves the page is saved by a beacon as it closes, and its
+email now goes by beacon too, first, so the lead can say whether it went. A beacon
+cannot read FormSubmit's answer, so these are stamped `notify_beacon_at` rather
+than `notified_at`. Before this, only a dropout who sat idle with the form open for
+three minutes produced an email, and one who left produced a lead and no email.
+
+The Emailed column in the staff Leads tab turns all of this into a status and a
+reason, worked out in `lib/email-status.js`:
+
+| Status | Meaning |
+|---|---|
+| Sent | FormSubmit confirmed the send. |
+| Failed | FormSubmit refused it, or the browser could not reach FormSubmit. The reason is shown, and the browser's own words are in the expanded row. |
+| Sent on exit | A dropout's email, sent as the page closed and never confirmed. |
+| Sending | Under two minutes old, the browser may still be waiting. |
+| No reply | The browser never reported back, usually because the page closed first. |
 
 Two consequences worth knowing:
 

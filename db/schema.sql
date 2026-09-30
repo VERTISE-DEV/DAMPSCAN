@@ -596,3 +596,14 @@ create table if not exists service_contracts (
   updated_at         timestamptz not null default now()
 );
 create index if not exists service_contracts_due_idx on service_contracts (business_slug, next_due_on) where status = 'active';
+
+-- ---------------------------------------------------------------------------
+-- A notification email fired as the visitor left
+--
+-- A step 1 dropout is saved by a beacon as the page closes, and until now no
+-- email went with it, so the dropouts nobody was told about were exactly the
+-- ones worth a call. The email now goes as a beacon too. A beacon cannot read
+-- FormSubmit's answer, so this is stamped instead of notified_at: it says the
+-- email was sent and that nobody could confirm it arrived.
+-- ---------------------------------------------------------------------------
+alter table leads add column if not exists notify_beacon_at timestamptz;

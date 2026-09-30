@@ -16,11 +16,13 @@ const UPSERT = `
   insert into leads (
     stage, first_name, email, postcode, address_line1, address_line2, town, files,
     phone, issues, role, previous_survey,
-    notes, session_id, source_path, referrer, utm, user_agent, ip_hash, site
+    notes, session_id, source_path, referrer, utm, user_agent, ip_hash, site,
+    notify_beacon_at
   ) values (
     $1, $2, $3, $4, $5, $6, $7, $8::text[],
     $9, $10::text[], $11, $12,
-    $13, $14::uuid, $15, $16, $17::jsonb, $18, $19, $20
+    $13, $14::uuid, $15, $16, $17::jsonb, $18, $19, $20,
+    case when $21::boolean then now() end
   )
   on conflict (session_id, stage) do update set
     updated_at      = now(),
@@ -46,7 +48,8 @@ const UPSERT = `
     utm             = case when excluded.utm = '{}'::jsonb then leads.utm else excluded.utm end,
     user_agent      = coalesce(excluded.user_agent, leads.user_agent),
     ip_hash         = coalesce(excluded.ip_hash, leads.ip_hash),
-    site            = excluded.site
+    site            = excluded.site,
+    notify_beacon_at = coalesce(excluded.notify_beacon_at, leads.notify_beacon_at)
   returning id, notified_at, (xmax = 0) as inserted`;
 
 export default async function handler(req, res) {
@@ -100,7 +103,10 @@ export default async function handler(req, res) {
       JSON.stringify(value.utm || {}),
       str(req.headers['user-agent'], 500),
       hash,
-      site
+      site,
+      // Set by the beacon a dropout leaves with, when its email went too. Only
+      // ever a note about the email, so a forged true costs nothing.
+      body.emailedOnLeave === true
     ]);
   } catch (err) {
     console.error('lead write failed:', err.message);
@@ -126,7 +132,8 @@ export default async function handler(req, res) {
   // The notification email is sent by the browser, not from here: FormSubmit
   // sits behind Cloudflare and answers a serverless call with a bot challenge.
   // The page reports the outcome to /api/notified, which stamps notified_at or
-  // notify_error on this row.
+  // notify_error on this row. A dropout's email goes as the page closes, when
+  // nothing can wait for an answer, so that one is noted above instead.
 
   json(res, 200, { ok: true, id });
 }

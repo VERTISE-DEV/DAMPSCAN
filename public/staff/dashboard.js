@@ -154,7 +154,10 @@
 
   group('[data-range]', function(btn){ state.range = btn.dataset.range; });
   group('[data-site]', function(btn){ state.site = btn.dataset.site; });
-  (global.DSUI || {}).scopePills && global.DSUI.scopePills('[data-site]');
+  /* window, not global: this file is not wrapped in a function handed the
+     global object, and reaching for one that is not there threw before the
+     first load, which left the whole page on "Loading" with no leads. */
+  (window.DSUI || {}).scopePills && window.DSUI.scopePills('[data-site]');
   group('[data-stage]', function(btn){ state.stage = btn.dataset.stage; });
 
   el('prev').addEventListener('click', function(){

@@ -16,7 +16,7 @@
  * Loaded before book.js, not deferred, because book.js calls it as it sets up.
  * Does nothing on its own: book.js hands it how to build and send the payload.
  */
-window.DS_HELD_PARTIAL = function heldPartial({ payload, send, endpoint }){
+window.DS_HELD_PARTIAL = function heldPartial({ payload, send, email, endpoint }){
   const IDLE_MS = 180000;
   const HIDDEN_MS = 45000;
   let armed = false;
@@ -32,8 +32,9 @@ window.DS_HELD_PARTIAL = function heldPartial({ payload, send, endpoint }){
 
   /* leaving means the page is on its way out, so the request has to be a
      beacon: an ordinary fetch is routinely killed mid-flight during unload.
-     The lead still reaches the dashboard, it just cannot report back on the
-     notification email the way an idle flush can. */
+     The email goes the same way, first, so the lead can say whether it went.
+     Before it did, a dropout who left the page was saved and nobody was told,
+     and only one who sat idle with the form open ever produced an email. */
   function flush(leaving){
     if (!armed || done) return;
     armed = false;
@@ -41,7 +42,8 @@ window.DS_HELD_PARTIAL = function heldPartial({ payload, send, endpoint }){
     clearTimeout(idleTimer);
     clearTimeout(hiddenTimer);
     if (leaving && navigator.sendBeacon) {
-      const body = new Blob([JSON.stringify(payload())], { type: 'application/json' });
+      const emailed = email ? email() === true : false;
+      const body = new Blob([JSON.stringify({ ...payload(), emailedOnLeave: emailed })], { type: 'application/json' });
       navigator.sendBeacon(endpoint, body);
       return;
     }

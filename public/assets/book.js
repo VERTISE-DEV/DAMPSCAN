@@ -205,11 +205,11 @@
      bot challenge instead of sending anything. The lead is already stored by
      /api/lead before this runs, so a blocked or abandoned browser costs the
      email, never the enquiry. */
-  function emailNotification(stage, id){
+  function notifyPayload(stage, id){
     const issues = Array.from(form.querySelectorAll('input[name="Issue"]:checked')).map(b => b.value);
     const who = val('f-name') || 'unknown';
     const where = surveyPostcode() || 'no postcode';
-    const payload = {
+    return {
       _subject: (DS_CFG.subjectPrefix || '')
         /* A quoted trade books nothing, so its subject says "quote request".
            The damp default is unchanged. */
@@ -242,8 +242,16 @@
       Notes: val('f-notes') || 'None',
       'Lead stage': stage,
       Submitted: new Date().toLocaleString('en-GB'),
-      'Lead ID': String(id || '')
+      'Lead ID': id ? String(id) : 'Saved as they left the page'
     };
+  }
+
+  /* Form encoded rather than JSON. FormSubmit takes either, but JSON across
+     origins needs a permission check first, one more round trip before the
+     email even starts, and some browsers refuse that check on a request meant
+     to outlive the page. A form post needs none. */
+  function emailNotification(stage, id){
+    const payload = notifyPayload(stage, id);
 
     /* Tell our API what happened, so the dashboard shows the truth rather than
        "Pending" forever. Fire and forget, never surfaced to the visitor. */
@@ -260,8 +268,8 @@
     try {
       fetch(NOTIFY_ENDPOINT, {
         method: 'POST', keepalive: true,
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { Accept: 'application/json' },
+        body: new URLSearchParams(payload)
       })
         .then(r => r.json().catch(function(){ return null; }))
         .then(body => {
@@ -272,6 +280,15 @@
     } catch (e) {
       report(false, String(e && e.message || e));
     }
+  }
+
+  /* A step 1 dropout's email, sent as the page closes. Nothing can wait for
+     FormSubmit's answer then, so it goes as a beacon, and the lead records
+     that it went unconfirmed. Returns whether the browser queued it. */
+  function emailOnLeave(stage){
+    if (!NOTIFY_ENDPOINT || !navigator.sendBeacon) return false;
+    try { return navigator.sendBeacon(NOTIFY_ENDPOINT, new URLSearchParams(notifyPayload(stage, null))); }
+    catch (e) { return false; }
   }
 
   /* Returns { ok, errors }. A network failure resolves ok, so the visitor is
@@ -338,6 +355,7 @@
     ? window.DS_HELD_PARTIAL({
         payload: () => leadPayload('partial'),
         send: () => sendLead('partial'),
+        email: () => emailOnLeave('partial'),
         endpoint: LEAD_ENDPOINT
       })
     : { arm(){}, cancel(){}, bump(){}, rearm(){} };

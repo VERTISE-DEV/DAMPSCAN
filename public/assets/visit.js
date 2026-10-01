@@ -9,10 +9,9 @@ const DS_CFG = window.DS_CONFIG || {};
 
 const LEAD_ENDPOINT = '/api/lead';
 
-/* FormSubmit is called from the browser, not from our functions: it sits behind
-   Cloudflare, which answers a server-to-server request with a bot challenge
-   rather than sending the email. Changing this address needs a commit, since a
-   static page cannot read environment variables. */
+/* The server sends the lead email through FormSubmit as the lead lands. This
+   is the browser's fallback for when it could not. The address comes from
+   lib/lead-email.js through the build, so changing it needs a commit. */
 const NOTIFY_ENDPOINT = DS_CFG.notify || '';
 
 /* ---------- Visit session and first-party attribution (no cookies) ----------

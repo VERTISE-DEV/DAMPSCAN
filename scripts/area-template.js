@@ -9,6 +9,7 @@
  */
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
+import { formSubmitUrl, leadEmailFor } from '../lib/lead-email.js';
 
 const SITES = {
   dampscan: {
@@ -55,8 +56,8 @@ const SITES = {
     book: {
       sessionKey: 'dampscan-session',
       attrKey: 'dampscan-attr',
-      notify: 'https://formsubmit.co/ajax/tom@atidampsurvey.co.uk',
-      subjectPrefix: '',
+      notify: formSubmitUrl('dampscan'),
+      subjectPrefix: leadEmailFor('dampscan').subjectPrefix,
       dataLayerEvent: 'dampscan'
     }
   },
@@ -101,8 +102,8 @@ const SITES = {
     book: {
       sessionKey: 'ati-damp-session',
       attrKey: 'ati-damp-attr',
-      notify: 'https://formsubmit.co/ajax/team@atidampsurvey.co.uk',
-      subjectPrefix: 'ATI London, ',
+      notify: formSubmitUrl('ati'),
+      subjectPrefix: leadEmailFor('ati').subjectPrefix,
       dataLayerEvent: 'ati-damp'
     }
   },
@@ -156,10 +157,10 @@ const SITES = {
     book: {
       sessionKey: 'verge-session',
       attrKey: 'verge-attr',
-      notify: 'https://formsubmit.co/ajax/team@vergeroofing.com',
-      subjectPrefix: 'Verge Roofing, ',
-      subjectComplete: 'NEW quote request, ',
-      subjectPartial: 'PARTIAL enquiry (step 1), ',
+      notify: formSubmitUrl('roofing'),
+      subjectPrefix: leadEmailFor('roofing').subjectPrefix,
+      subjectComplete: leadEmailFor('roofing').subjectComplete,
+      subjectPartial: leadEmailFor('roofing').subjectPartial,
       dataLayerEvent: 'verge-roofing'
     }
   },
@@ -200,10 +201,10 @@ const SITES = {
     book: {
       sessionKey: 'coolright-session',
       attrKey: 'coolright-attr',
-      notify: 'https://formsubmit.co/ajax/team@coolright.co.uk',
-      subjectPrefix: 'CoolRight, ',
-      subjectComplete: 'NEW quote request, ',
-      subjectPartial: 'PARTIAL enquiry (step 1), ',
+      notify: formSubmitUrl('ac'),
+      subjectPrefix: leadEmailFor('ac').subjectPrefix,
+      subjectComplete: leadEmailFor('ac').subjectComplete,
+      subjectPartial: leadEmailFor('ac').subjectPartial,
       dataLayerEvent: 'coolright'
     }
   }

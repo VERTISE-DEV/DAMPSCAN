@@ -27,7 +27,18 @@ mock.module('../lib/db.js', {
   }
 });
 
+/* FormSubmit, stubbed: every send is kept, and it can be told to refuse. */
+let sends = [];
+let formsubmit = 'ok';
+globalThis.fetch = async (url, init) => {
+  sends.push({ url, headers: init.headers, body: new URLSearchParams(init.body) });
+  if (formsubmit === 'down') throw new Error('fetch failed');
+  if (formsubmit === 'challenge') return { status: 403, text: async () => '<html>Just a moment...</html>' };
+  return { status: 200, text: async () => '{"success":"true","message":"The form was submitted successfully."}' };
+};
+
 const { emailStatus, explainError } = await import('../lib/email-status.js');
+const { leadEmailFields, formSubmitUrl } = await import('../lib/lead-email.js');
 const lead = (await import('../api/lead.js')).default;
 const notified = (await import('../api/notified.js')).default;
 const login = (await import('../lib/routes/auth/login.js')).default;
@@ -50,7 +61,11 @@ const partial = (over = {}) => ({
 const beacon = async (sid) => (await pool.query('select notify_beacon_at, notified_at, notify_error from leads where session_id = $1', [sid])).rows[0];
 
 before(async () => { await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8')); });
-beforeEach(async () => { await pool.query('truncate leads, events, rate_hits, staff_users restart identity cascade'); });
+beforeEach(async () => {
+  await pool.query('truncate leads, events, rate_hits, staff_users restart identity cascade');
+  sends = [];
+  formsubmit = 'ok';
+});
 after(async () => { await pool.end(); });
 
 /* ------------------------------------------------------------ wording ---- */
@@ -115,6 +130,7 @@ test('only a real true counts, so a stray string cannot stamp the lead', async (
 
 /* ------------------------------------------------------- staff view ---- */
 test('staff see the reason with each lead', async () => {
+  formsubmit = 'down';
   await call(lead, { body: partial() });
   await call(notified, { url: '/api/notified', body: { sessionId: SID, stage: 'partial', ok: false, error: 'Load failed' } });
 
@@ -127,4 +143,64 @@ test('staff see the reason with each lead', async () => {
   assert.equal(row.emailed.label, 'Failed');
   assert.match(row.emailed.reason, /could not reach FormSubmit/);
   assert.equal(row.emailed.raw, 'Load failed');
+});
+
+/* ------------------------------------------------- the server's send ---- */
+test('the server emails the lead as it lands, and tells the page not to', async () => {
+  const res = await call(lead, { body: partial({ phone: '07700 900123', sourcePath: '/areas/maidstone' }) });
+  assert.equal(res.json().emailed, true);
+  assert.equal(sends.length, 1);
+  assert.equal(sends[0].url, 'https://formsubmit.co/ajax/tom@atidampsurvey.co.uk');
+  assert.equal(sends[0].headers.Origin, 'https://dampscan.co.uk');
+  assert.equal(sends[0].headers.Referer, 'https://dampscan.co.uk/areas/maidstone');
+  assert.equal(sends[0].body.get('_subject'), 'PARTIAL lead (step 1), Priya, ME14 1AA');
+  assert.equal(sends[0].body.get('Email'), 'priya@example.com');
+  assert.equal(sends[0].body.get('Lead ID'), String(res.json().id));
+  const row = await beacon(SID);
+  assert.ok(row.notified_at, 'confirmed by FormSubmit, so it is Sent');
+  assert.equal(row.notify_error, null);
+});
+
+test('when the server cannot send, the reason is kept and the page is told to try', async () => {
+  formsubmit = 'challenge';
+  const res = await call(lead, { body: partial() });
+  assert.equal(res.json().emailed, false);
+  const row = await beacon(SID);
+  assert.equal(row.notified_at, null);
+  assert.match(row.notify_error, /^Server send: .*bot check/);
+  assert.match(emailStatus({ ...row, created_at: '2026-01-01T00:00:00Z' }).reason, /bot check stopped the server/);
+
+  /* The page's own send then succeeds and its report wins. */
+  await call(notified, { url: '/api/notified', body: { sessionId: SID, stage: 'partial', ok: true } });
+  const after = await beacon(SID);
+  assert.ok(after.notified_at);
+  assert.equal(after.notify_error, null);
+});
+
+test('no second copy: not for a dropout whose page emailed, nor for a lead already sent', async () => {
+  await call(lead, { body: partial({ emailedOnLeave: true }) });
+  assert.equal(sends.length, 0, 'the page already sent it as it closed');
+
+  await call(lead, { body: partial({ sessionId: '66666666-6666-4666-8666-666666666666' }) });
+  assert.equal(sends.length, 1);
+  await call(lead, { body: partial({ sessionId: '66666666-6666-4666-8666-666666666666', notes: 'again' }) });
+  assert.equal(sends.length, 1, 'a resubmission of a sent lead is not emailed twice');
+});
+
+test('each brand emails its own address with its own wording', async () => {
+  const value = { firstName: 'Sam', email: 's@example.com', postcode: 'N1 3GZ', issues: ['Flat roof'], files: ['leads/a.jpg'] };
+  assert.equal(formSubmitUrl('ati'), 'https://formsubmit.co/ajax/team@atidampsurvey.co.uk');
+  assert.equal(formSubmitUrl('ati-london'), formSubmitUrl('ati'));
+  assert.equal(leadEmailFields({ site: 'ati-london', stage: 'complete', value, id: 1 })._subject, 'ATI London, NEW survey booking, Sam, N1 3GZ');
+  const roof = leadEmailFields({ site: 'roofing', stage: 'complete', value, id: 2 });
+  assert.equal(roof._subject, 'Verge Roofing, NEW quote request, Sam, N1 3GZ');
+  assert.equal(roof['Attachment 1'], 'https://vergeroofing.com/api/admin/attachment?path=leads%2Fa.jpg');
+  assert.equal(leadEmailFields({ site: 'ac', stage: 'partial', value, id: 3 })._subject, 'CoolRight, PARTIAL enquiry (step 1), Sam, N1 3GZ');
+  assert.throws(() => formSubmitUrl('surveymate'), /no lead email definition/);
+});
+
+test('a CoolRight lead goes to CoolRight', async () => {
+  await call(lead, { body: partial({ issues: [] }), headers: { host: 'coolright.co.uk' } });
+  assert.equal(sends[0].url, 'https://formsubmit.co/ajax/team@coolright.co.uk');
+  assert.equal(sends[0].headers.Origin, 'https://coolright.co.uk');
 });

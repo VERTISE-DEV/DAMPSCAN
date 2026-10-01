@@ -9,6 +9,7 @@ import { json, requireMethod, requireSameOrigin, readJson, ipHash, str } from '.
 import { validateLead } from '../lib/validate.js';
 import { rateLimit, pruneRateHits, LIMITS } from '../lib/ratelimit.js';
 import { siteFor } from '../lib/site.js';
+import { sendLeadEmail } from '../lib/lead-email.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -129,11 +130,28 @@ export default async function handler(req, res) {
     }
   }
 
-  // The notification email is sent by the browser, not from here: FormSubmit
-  // sits behind Cloudflare and answers a serverless call with a bot challenge.
-  // The page reports the outcome to /api/notified, which stamps notified_at or
-  // notify_error on this row. A dropout's email goes as the page closes, when
-  // nothing can wait for an answer, so that one is noted above instead.
+  // The notification email goes from here first, the moment the lead lands,
+  // so it no longer depends on the visitor's tab staying open. `emailed` tells
+  // the page not to send its own. If this send fails, the reason is stamped
+  // and the page sends it as before, reporting to /api/notified, which
+  // overwrites the reason with the outcome. Skipped when the lead was already
+  // emailed, and for a dropout whose page fired its own email as it closed,
+  // because either would be a second copy of the same email.
+  let emailed = false;
+  if (!row.notified_at && body.emailedOnLeave !== true) {
+    const sent = await sendLeadEmail({ site, stage: value.stage, value, id });
+    emailed = sent.ok;
+    try {
+      if (sent.ok) {
+        await query('update leads set notified_at = now(), notify_error = null where id = $1', [id]);
+      } else {
+        await query('update leads set notify_error = $2 where id = $1 and notified_at is null',
+          [id, 'Server send: ' + sent.error]);
+      }
+    } catch (err) {
+      console.warn('lead email bookkeeping failed:', err.message);
+    }
+  }
 
-  json(res, 200, { ok: true, id });
+  json(res, 200, { ok: true, id, emailed });
 }

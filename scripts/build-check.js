@@ -24,14 +24,17 @@
  * away from what the build actually does, because it is what the build actually
  * does.
  *
- * The two sitemaps are compared ignoring <lastmod>. They stamp the day the
+ * The sitemaps are compared ignoring <lastmod>. They stamp the day the
  * build ran, so they differ every day whatever the content says. Every other
  * line of them is still compared, so adding a page and forgetting to list it
  * still fails.
  */
 import { execFileSync } from 'node:child_process';
 
-const SITEMAPS = ['public/sitemap.xml', 'public/sitemap-london.xml'];
+/* Every sitemap the build writes, by pattern rather than by name. This listed
+   the two damp sitemaps by name, so when Verge and CoolRight got their own the
+   check failed on any day after the one they were last built. */
+const isSitemap = (path) => /^public\/sitemap[\w-]*\.xml$/.test(path);
 
 function git(...args) {
   return execFileSync('git', args, { encoding: 'utf8' });
@@ -77,7 +80,7 @@ function main() {
   }
 
   const moved = changedPaths();
-  const stale = moved.filter((path) => !(SITEMAPS.includes(path) && onlyTheDateMoved(path)));
+  const stale = moved.filter((path) => !(isSitemap(path) && onlyTheDateMoved(path)));
 
   /* Safe because the tree was verified clean above, so everything being undone
      here was written by the build a moment ago. clean is limited to public/,
@@ -95,7 +98,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`pages are current (${moved.length ? SITEMAPS.length + ' sitemaps differ only by their date' : 'nothing moved at all'})`);
+  console.log(`pages are current (${moved.length ? moved.length + ' sitemaps differ only by their date' : 'nothing moved at all'})`);
 }
 
 main();

@@ -820,6 +820,25 @@ test('paid in full implies the deposit was paid', async () => {
   assert.ok(c.money.depositPaidAt, 'you cannot have paid the lot without the half');
 });
 
+test('survey sent is its own tick, after paid in full, and touches nothing else', async () => {
+  const cookie = await signedInCookie();
+  const { job } = await bookedJob(cookie);
+  const post = (body) => call(clientsRoute, { body, headers: { cookie } });
+
+  const sent = (await post({ id: job.id, surveySent: true })).json().client;
+  assert.ok(sent.surveySentAt, 'ticked means a timestamp');
+  assert.equal(sent.money.paidAt, null, 'sending the survey is not a payment');
+  assert.equal(sent.money.depositPaidAt, null);
+  assert.equal(sent.status, 'booked', 'and it does not complete the job');
+
+  await new Promise((r) => setTimeout(r, 20));
+  const again = (await post({ id: job.id, surveySent: true, note: 'Emailed the PDF' })).json().client;
+  assert.equal(String(again.surveySentAt), String(sent.surveySentAt), 'a second save keeps the first time');
+
+  const cleared = (await post({ id: job.id, surveySent: false })).json().client;
+  assert.equal(cleared.surveySentAt, null);
+});
+
 test('paid in full completes a job whose survey has happened, and leaves a future one booked', async () => {
   const cookie = await signedInCookie();
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);

@@ -80,6 +80,8 @@
     el('c-paid').checked = Boolean(c.money.paidAt);
     el('c-paid-amt').textContent = U.money(c.survey.pricePence) + ' in total';
     el('c-paid-when').textContent = c.money.paidAt ? 'on ' + U.when(c.money.paidAt) : '';
+    el('c-sent').checked = Boolean(c.surveySentAt);
+    el('c-sent-when').textContent = c.surveySentAt ? 'on ' + U.when(c.surveySentAt) : '';
 
     el('c-date').value = c.surveyDate || '';
     el('c-time').value = c.surveyTime || '';

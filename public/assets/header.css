@@ -60,6 +60,18 @@ p a:not(.btn),.note a{text-decoration:underline;text-underline-offset:2px}
 [data-site="dampscan"] .logo-word .scan{color:var(--accent)}
 [data-site="dampscan"] .logo-tag{font-size:max(9px,calc(var(--logo-size) * .365));letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:600;white-space:nowrap}
 
+/* Verge's own logo artwork, with its tag set the way its old site set it. */
+[data-site="roofing"] .logo{--logo-h:32px;flex-direction:column;align-items:flex-start;gap:8px}
+[data-site="roofing"] .logo img{height:var(--logo-h);width:auto;display:block}
+[data-site="roofing"] .logo-tag{font-size:max(7.5px,calc(var(--logo-h) * .22));letter-spacing:.32em;color:var(--muted-2);font-weight:600;text-transform:uppercase;white-space:nowrap}
+
+/* CoolRight's word mark, Cool and Right, the second half in the accent. */
+[data-site="ac"] .logo{--logo-size:21px}
+[data-site="ac"] .logo-type{display:flex;flex-direction:column;gap:5px}
+[data-site="ac"] .logo-word{font-family:'Manrope',system-ui,sans-serif;font-weight:800;font-size:var(--logo-size);letter-spacing:-.02em;white-space:nowrap}
+[data-site="ac"] .logo-word .scan{color:var(--accent)}
+[data-site="ac"] .logo-tag{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+
 [data-site="ati"] .logo{--logo-size:23px;gap:.62em}
 [data-site="ati"] .logo img{width:auto;height:calc(var(--logo-size) * 1.85);display:block}
 [data-site="ati"] .logo-tag{font-size:max(9.5px,calc(var(--logo-size) * .4));letter-spacing:.02em;color:var(--muted);font-weight:600;max-width:11ch;line-height:1.25;border-left:1px solid var(--line-strong);padding-left:.7em;text-transform:none}

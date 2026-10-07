@@ -81,3 +81,15 @@
 .photo-tick{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text)}
 .photo-public{display:flex;flex-direction:column;gap:8px}
 .photo-public[hidden]{display:none}
+
+/* ---------- insights charts: plain bars, no library ---------- */
+.chart{margin-top:14px}
+.chart-title{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;gap:14px;flex-wrap:wrap}
+.chart-key{display:inline-flex;align-items:center;gap:6px}
+.chart-key i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.chart-bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;height:160px;border-bottom:1px solid var(--line)}
+.chart-col{display:flex;gap:3px;align-items:end;height:100%;justify-content:center}
+.chart-col span{flex:1;max-width:18px;border-radius:4px 4px 0 0;min-height:2px}
+.bar-a{background:var(--accent)}
+.bar-b{background:var(--good)}
+.chart-labels{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;font-size:11px;color:var(--muted-2);text-align:center;margin-top:6px}

@@ -15,15 +15,15 @@
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Calendar', 'calendar.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     }
   };
   var ORDER = ['damp', 'roofing', 'ac'];
@@ -143,6 +143,6 @@
     books: AREAS[area].books,
     /* The routes that narrow by area. Others ignore it, so adding it is safe,
        but keeping the list honest makes a missing one obvious. */
-    scoped: /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar)\b/
+    scoped: /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights)\b/
   };
 })(window);

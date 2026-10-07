@@ -9,7 +9,7 @@
   'use strict';
 
   var U = global.DSUI;
-  var LABEL = { quote: 'Send the quote', followup: 'Follow up the quote', reminder: 'Remind them of the booking', review: 'Ask for a review', invoice: 'Send the invoice' };
+  var LABEL = { quote: 'Send the quote', followup: 'Follow up the quote', reminder: 'Remind them of the booking', review: 'Ask for a review', invoice: 'Send the invoice', service: 'Remind them the visit is due' };
   var CHANNELS = [['whatsapp', 'WhatsApp'], ['sms', 'Text'], ['email', 'Email']];
   var SENT = { whatsapp: 'WhatsApp', sms: 'text', email: 'email' };
 

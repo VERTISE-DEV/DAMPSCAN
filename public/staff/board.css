@@ -101,3 +101,4 @@
 .invoice-row .panel-note{flex-basis:100%;margin:0}
 .invoice-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
 .invoice-row[hidden],.invoice-row a[hidden]{display:none}
+.form-row[hidden]{display:none}

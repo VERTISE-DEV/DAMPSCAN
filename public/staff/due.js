@@ -102,10 +102,11 @@
       { label: 'Brand', get: brand },
       { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
       { label: 'Postcode', get: function (r) { return r.postcode || ''; } },
-      { label: 'Units', numeric: true, get: function (r) { return U.num(r.unitCount); } },
+      { label: 'Units', numeric: true, get: function (r) { return r.site === 'roofing' ? '' : U.num(r.unitCount); } },
       { label: 'Reminded', get: function (r) { return r.lastContactedOn || 'Not yet'; } },
+      { label: 'Remind', wrap: true, get: function (r) { return r.message && r.jobId ? global.DSMSG.buttons(r.jobId, r.message, function () { setTimeout(refresh, 300); }) : ''; } },
       { label: 'Open', sr: true, get: function (r) { return r.jobId ? link('/staff/quoted.html#job-' + r.jobId, 'Open') : ''; } }
-    ], d.services, { empty: 'No services falling due in the next month.', onRow: function (tr, r) { if (r.daysUntilDue < 0) tr.className = 'is-stale'; } });
+    ], d.services, { empty: 'No services or maintenance visits falling due in the next month.', onRow: function (tr, r) { if (r.daysUntilDue < 0) tr.className = 'is-stale'; } });
 
     var money = ['p-owed', 'p-ready', 'p-drifted'];
     money.forEach(function (id) { el(id).hidden = !d.money; });

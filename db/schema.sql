@@ -809,5 +809,19 @@ alter table jobs add column if not exists invoice_number integer;
 alter table jobs add column if not exists invoiced_at    timestamptz;
 alter table jobs add column if not exists invoice_due_on date;
 create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice_number) where invoice_number is not null;
+-- The 'invoice' message kind is allowed by the job_messages check below, with
+-- the maintenance plans. The check lives in one place only: re-running this
+-- file applies every statement in order, and an older, narrower copy of it
+-- would fail against rows a later one allows.
+
+-- ---------------------------------------------------------------------------
+-- Maintenance plans for Verge, and a price on every plan
+--
+-- The service contracts CoolRight uses for air conditioning now carry Verge's
+-- yearly roof and gutter checks too: same table, same due list. A plan can
+-- carry what each visit is charged, so the plans' income can be seen. The
+-- customer's reminder that a visit is due is a one-tap message like the rest.
+-- ---------------------------------------------------------------------------
+alter table service_contracts add column if not exists price_pence integer check (price_pence >= 0);
 alter table job_messages drop constraint if exists job_messages_kind_check;
-alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice'));
+alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service'));

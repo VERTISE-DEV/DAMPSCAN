@@ -1,0 +1,17 @@
+/* The "Our work" page: one card per job, its photographs in a grid, before,
+   during and after. Loaded only by that page. */
+.gallery{display:flex;flex-direction:column;gap:22px}
+.gallery-job{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.gallery-job h2{font-size:1.25rem;margin:0}
+.gallery-meta{color:var(--muted-2);font-size:.92rem;margin:4px 0 14px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.gallery-grid figure{margin:0}
+.gallery-grid a{display:block;border-radius:10px;overflow:hidden;background:var(--card-2)}
+.gallery-grid img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;transition:transform .25s ease}
+.gallery-grid a:hover img{transform:scale(1.03)}
+.gallery-grid figcaption{font-size:.88rem;color:var(--muted);margin-top:6px}
+.stage{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;
+  border:1px solid var(--line-strong);color:var(--muted)}
+.stage--after{border-color:var(--accent);color:var(--accent)}
+.gallery-empty{color:var(--muted);background:var(--card);border:1px dashed var(--line-strong);border-radius:16px;padding:22px}
+@media (prefers-reduced-motion:reduce){.gallery-grid img{transition:none}}

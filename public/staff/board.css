@@ -68,3 +68,16 @@
 .pb-manage summary{cursor:pointer;font-size:13px;color:var(--muted);font-weight:600}
 .pb-manage .lines{margin-top:10px}
 .pb-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 6px}
+
+/* ---------- job photos ---------- */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:12px}
+.photo-card{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--navy)}
+.photo-card.is-public{border-color:var(--accent-ring)}
+.photo-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--slate)}
+.photo-field{display:flex;flex-direction:column;gap:4px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.photo-field input,.photo-field select{text-transform:none;letter-spacing:0;font-weight:400;font:inherit;font-size:16px;width:100%;
+  background:var(--slate);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:8px 10px}
+.photo-field input:focus,.photo-field select:focus{outline:none;border-color:var(--accent)}
+.photo-tick{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text)}
+.photo-public{display:flex;flex-direction:column;gap:8px}
+.photo-public[hidden]{display:none}

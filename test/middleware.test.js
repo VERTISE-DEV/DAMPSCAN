@@ -210,6 +210,14 @@ test('roofing has no pricing page, and its area pages keep the old /roofing-in U
   assert.equal(rewrittenTo(await call(KENT, '/roofing-in/essex-and-east')), null);
 });
 
+test('the /our-work page is the gallery function on Verge, and no other brand has one', async () => {
+  const res = await call(ROOFING, '/our-work');
+  assert.equal(rewrittenTo(res), '/api/gallery');
+  assert.equal(new URL(res.headers.get('x-middleware-rewrite')).searchParams.get('site'), 'roofing');
+  assert.equal(rewrittenTo(await call(KENT, '/our-work')), null);
+  assert.equal(rewrittenTo(await call(LONDON, '/our-work')), null);
+});
+
 test('each brand is served its own robots, sitemap and llms at the shared paths', async () => {
   assert.equal(rewrittenTo(await call(ROOFING, '/robots.txt')), '/robots-roofing.txt');
   assert.equal(rewrittenTo(await call(ROOFING, '/sitemap.xml')), '/sitemap-roofing.xml');

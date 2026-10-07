@@ -150,6 +150,7 @@ const SITES = {
     nav: [
       { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
+      { label: 'Our work', href: '/our-work' },
       { label: 'Areas', href: '/roofing-in' },
       { label: 'Guides', href: '/guides' },
       { label: 'FAQs', href: 'FAQ' }
@@ -158,9 +159,13 @@ const SITES = {
        not have is a dead link on every page of it. */
     footerLinks: [
       { href: '/services', label: 'Services' },
+      { href: '/our-work', label: 'Our work' },
       { href: '/roofing-in', label: 'Areas' },
       { href: '/guides', label: 'Guides' }
     ],
+    /* Photographs of finished jobs, published from the staff area and served
+       by api/gallery.js; see content/gallery.js for the words around them. */
+    galleryPath: '/our-work',
     profileUrl: 'https://share.google/p2JjORGy8UdZUpQnV',
     /* Other places the business is, linked in the footer and listed in sameAs
        so search engines can tie them to this site. */

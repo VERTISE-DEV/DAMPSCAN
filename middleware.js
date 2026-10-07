@@ -32,7 +32,8 @@ export const config = {
     '/roofing-in', '/roofing-in/', '/roofing-in/:slug',
     '/services', '/services/', '/services/:slug',
     '/guides', '/guides/', '/guides/:slug',
-    '/pricing', '/pricing/'
+    '/pricing', '/pricing/',
+    '/our-work', '/our-work/'
   ]
 };
 
@@ -75,6 +76,8 @@ const SITES = {
   roofing: {
     origin: 'https://vergeroofing.com',
     areas: '/roofing-in',
+    /* Rendered by a function, because staff publish the photos. */
+    gallery: true,
     files: {
       '/robots.txt': '/robots-roofing.txt',
       '/sitemap.xml': '/sitemap-roofing.xml',
@@ -173,6 +176,13 @@ export default function middleware(request) {
        right: nothing serves it and the 404 is honest. */
     if (key === 'roofing') return next();
     return rewrite(new URL(london ? '/pricing/ati.html' : '/pricing/dampscan.html', request.url));
+  }
+
+  if (path === '/our-work/') return Response.redirect(new URL('/our-work', url), 301);
+  if (path === '/our-work') {
+    /* Only a brand with a gallery has the page; anywhere else it is a 404. */
+    if (!site.gallery) return next();
+    return rewrite(new URL(`/api/gallery?site=${key}`, request.url));
   }
 
   if (site.areas && path === `${site.areas}/`) return Response.redirect(new URL(site.areas, url), 301);

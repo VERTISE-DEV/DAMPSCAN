@@ -721,3 +721,32 @@ create table if not exists quote_templates (
   created_at     timestamptz not null default now()
 );
 create index if not exists quote_templates_business_idx on quote_templates (business_slug, name);
+
+-- ---------------------------------------------------------------------------
+-- Job photographs and the public gallery
+--
+-- Taken on site for the record, before, during and after, and stored private
+-- (see lib/photos.js). A photo reaches the website only when somebody ticks
+-- it, and then only with what they typed for it: a caption and a town. The
+-- job's customer, address and postcode are never published with it, and the
+-- file has its location metadata stripped on the way in.
+-- ---------------------------------------------------------------------------
+create table if not exists job_photos (
+  id              bigserial primary key,
+  job_id          bigint not null references jobs (id) on delete cascade,
+  site            text   not null,
+  path_full       text   not null,
+  path_thumb      text,
+  width           integer,
+  height          integer,
+  stage           text   not null default 'during' check (stage in ('before', 'during', 'after')),
+  caption         text,
+  public          boolean not null default false,
+  public_caption  text,
+  area_label      text,
+  added_by        bigint references people (id) on delete set null,
+  created_at      timestamptz not null default now(),
+  published_at    timestamptz
+);
+create index if not exists job_photos_job_idx on job_photos (job_id, id);
+create index if not exists job_photos_public_idx on job_photos (site, published_at desc) where public;

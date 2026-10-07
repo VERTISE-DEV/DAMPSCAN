@@ -60,14 +60,15 @@ export default {
   coverage: {
     h2: 'Roofers covering London and the whole of the South East',
     intro:
-      'Our own teams work right across the region, so a quote visit is usually days away rather than weeks. Recent jobs include re-roofs in Orpington, Blackfen and Milton, a natural slate roof in Petts Wood, a loft conversion roof in Bexley and a lead box gutter in central London. If your town is not listed, send your postcode anyway.',
+      'Our own teams work right across the region, so a quote visit is usually days away rather than weeks. Recent jobs include re-roofs in Orpington, Blackfen and Milton, a natural slate roof in Petts Wood, a loft conversion roof in Bexley and a lead box gutter in central London. If your town is not listed, send your postcode anyway, or see <a href="/roofing-in">every area we cover</a>.',
+    /* Each card links to its region page, which is how those pages get found. */
     regions: [
-      { name: 'Greater London', places: ['Every borough, from Bromley, Bexley and Croydon to Barnet, Ealing and Havering'] },
-      { name: 'Kent', places: ['Orpington', 'Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend', 'Canterbury'] },
-      { name: 'Surrey', places: ['Croydon', 'Kingston', 'Sutton', 'Epsom', 'Guildford', 'Woking', 'Reigate'] },
-      { name: 'Essex', places: ['Romford', 'Brentwood', 'Basildon', 'Chelmsford', 'Southend', 'Ilford', 'Grays'] },
-      { name: 'Hertfordshire', places: ['Watford', 'St Albans', 'Hemel Hempstead', 'Borehamwood', 'Hatfield', 'Enfield'] },
-      { name: 'Sussex and Berkshire', places: ['Crawley', 'Horsham', 'Brighton', 'Slough', 'Windsor', 'Reading'] }
+      { name: 'Greater London', href: '/roofing-in', places: ['Every borough, from Bromley, Bexley and Croydon to Barnet, Ealing and Havering'] },
+      { name: 'Kent', href: '/roofing-in/kent-and-south-east-london', places: ['Orpington', 'Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend', 'Canterbury'] },
+      { name: 'Surrey', href: '/roofing-in/surrey-and-south-west-london', places: ['Croydon', 'Kingston', 'Sutton', 'Epsom', 'Guildford', 'Woking', 'Reigate'] },
+      { name: 'Essex', href: '/roofing-in/essex-and-east', places: ['Romford', 'Brentwood', 'Basildon', 'Chelmsford', 'Southend', 'Ilford', 'Grays'] },
+      { name: 'Hertfordshire', href: '/roofing-in/hertfordshire-and-north-west', places: ['Watford', 'St Albans', 'Hemel Hempstead', 'Borehamwood', 'Hatfield', 'Enfield'] },
+      { name: 'Sussex and Berkshire', href: '/roofing-in/sussex-and-berkshire', places: ['Crawley', 'Horsham', 'Brighton', 'Slough', 'Windsor', 'Reading'] }
     ]
   },
 

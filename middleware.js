@@ -68,13 +68,13 @@ const SITES = {
       '/llms.txt': '/llms-london.txt'
     }
   },
-  /* No home page written yet, and no area pages. `home: false` is load bearing
-     rather than documentation: public/index.html exists and is DampScan's, so
-     without this a roofing visitor would be served a damp home page under a
-     roofing domain. Refusing is the only honest answer until the page exists. */
+  /* `home` is load bearing rather than documentation: public/index.html is
+     DampScan's, so a brand without its own home file would be served a damp
+     home page under its own domain. The regional pages keep the /roofing-in
+     URLs the old vergeroofing.com used. */
   roofing: {
     origin: 'https://vergeroofing.com',
-    areas: null,
+    areas: '/roofing-in',
     files: {
       '/robots.txt': '/robots-roofing.txt',
       '/sitemap.xml': '/sitemap-roofing.xml',

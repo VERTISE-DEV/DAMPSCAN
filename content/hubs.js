@@ -36,19 +36,31 @@ export const hubs = {
       ]
     }
   },
-  /* Verge Roofing. No areas hub yet: the regional pages have not been carried
-     across, so the nav points at /roofing-in only once they exist. */
+  /* Verge Roofing. A contractor, not an inspector: the hubs lead with the
+     work and who does it, and say what is true of the roofs in each region. */
   roofing: {
     services: {
-      title: 'Roofing Services | Verge Roofing',
+      title: 'Roofing Services | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
       metaDescription:
-        'Re-roofs, repairs, flat roofing, leadwork, chimneys and guttering across London and the South East. What each job involves and what moves its price.',
-      h1: 'What we do, and when we tell you not to',
+        'Re-roofs, roof repairs, flat roofing, EPDM, leadwork, chimneys, guttering and conservatory roofs across London and the South East. Carried out by our own team. Free quotes, fixed in writing.',
+      h1: 'Roofing services across London and the South East',
       intro:
-        'Roofing is sold on fear more than any other trade. A roof is the one part of a house nobody can see, the quote arrives after somebody has been up a ladder alone, and the person who found the fault is the person selling the cure. That arrangement pays for a lot of roofs that did not need replacing.',
+        'Pitched roofs in tile and slate, flat roofs in felt and EPDM rubber, leadwork, chimneys, gutters and conservatory roof conversions. Every job is carried out by our own team, with thirty years in the trade behind it, and every job is priced after a free visit with the figure fixed in writing.',
       body: [
-        'Each page below covers one job on its own terms: what it actually involves, what it is most often confused with, and what moves the figure up or down. Several of them spend their length explaining how to tell when you do not need the work at all.',
-        'We quote every job rather than publishing a rate card, because a roof is a building and not a product. What we will do is tell you what is included, what is not, and what would be discussed if we open up and find something neither of us could see.'
+        'Each page below covers one kind of work: what it involves on the roof, what is always included in the price, what it is most often confused with, and the questions people ask us before going ahead.',
+        'Some of them also say when you do not need the work. A roof with years left in it does not need replacing today, and if a repair will do, the repair is what we will price.'
+      ]
+    },
+    areas: {
+      title: 'Areas We Cover | Roofers in London & the South East | Verge Roofing',
+      metaDescription:
+        'Roofing across London, Kent, Surrey, Essex, Hertfordshire, Sussex and Berkshire. What the roofs in each region are made of, how they fail, and the towns our own team covers.',
+      h1: 'Where we work, and what the roofs are like there',
+      intro:
+        'Our own team covers every London borough and the whole of the South East. The roofs are not the same everywhere: Victorian slate behind a parapet in Hackney, interwar concrete tile in Bexley, Kent peg on a village cottage and Regency slate on the Brighton seafront all fail in different ways.',
+      body: [
+        'Each page below is about one region: what was built there, what the roofs are covered in, what tends to go wrong with them, and the towns we work in. If your town is not listed, send your postcode anyway.',
+        'The quote visit is free wherever you are, and the price comes back fixed and in writing.'
       ]
     },
     guides: {

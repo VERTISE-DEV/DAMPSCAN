@@ -79,10 +79,15 @@ function schema(type, extra) {
   return JSON.stringify({ '@context': 'https://schema.org', '@type': type, ...extra });
 }
 
-export function render(service, allServices) {
+/* Services sit under /services. The roofing regional pages share this shape
+   and are served under the brand's areas path instead, so the URL, the
+   breadcrumb and the area named in the schema follow the hub passed in. */
+const SERVICES_HUB = { path: '/services', label: 'Services' };
+
+export function render(service, allServices, hub = SERVICES_HUB) {
   const site = SITES[service.site];
   if (!site) throw new Error(`${service.slug}: unknown site "${service.site}"`);
-  const url = `${site.origin}/services/${service.slug}`;
+  const url = `${site.origin}${hub.path}/${service.slug}`;
 
   const related = (service.related || [])
     .map((slug) => allServices.find((s) => s.slug === slug && s.site === service.site))
@@ -99,7 +104,9 @@ export function render(service, allServices) {
     description: service.metaDescription,
     url,
     provider: { '@type': site.schemaType, name: site.brand, url: `${site.origin}/`, telephone: site.phone || undefined },
-    areaServed: areaServed(site)
+    areaServed: service.areaServed
+      ? service.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name }))
+      : areaServed(site)
   });
 
   const faqSchema = schema('FAQPage', {
@@ -110,17 +117,17 @@ export function render(service, allServices) {
     }))
   });
 
-  /* Middle rung is /services/, a real page, not an anchor on the home page. */
+  /* Middle rung is the hub, a real page, not an anchor on the home page. */
   const crumbSchema = schema('BreadcrumbList', {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: site.brand, item: `${site.origin}/` },
-      { '@type': 'ListItem', position: 2, name: 'Services', item: `${site.origin}/services` },
+      { '@type': 'ListItem', position: 2, name: hub.label, item: `${site.origin}${hub.path}` },
       { '@type': 'ListItem', position: 3, name: service.name, item: url }
     ]
   });
 
   const body = `
-  <p class="crumb"><a href="/">Home</a> / <a href="/services">Services</a> / ${esc(service.name)}</p>
+  <p class="crumb"><a href="/">Home</a> / <a href="${hub.path}">${esc(hub.label)}</a> / ${esc(service.name)}</p>
 
   <div class="hero">
     <h1>${esc(service.h1)}</h1>

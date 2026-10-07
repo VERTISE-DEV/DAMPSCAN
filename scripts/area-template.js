@@ -128,9 +128,9 @@ const SITES = {
     areasServed: ['Greater London', 'Kent', 'Surrey', 'Essex', 'Hertfordshire', 'East Sussex', 'West Sussex', 'Berkshire'],
     strap: 'Roofing across London and the South East',
     surveyMateSlug: null,
-    /* Null until the regional pages are carried across. A sitemap that lists a
-       path nothing serves is worse than a short sitemap. */
-    areasPath: null,
+    /* The regional pages, at the URLs the old vergeroofing.com used, so the
+       links and rankings they had carry over. */
+    areasPath: '/roofing-in',
     sitemapFile: 'sitemap-roofing.xml',
     ctaLabel: 'Get a Quote',
     barLabel: 'Get a quote',
@@ -144,20 +144,21 @@ const SITES = {
     headSolid: '#141414',
     lockup: '<span class="logo"><img src="/assets/verge-logo.png" alt="Verge Roofing" width="155" height="48" /><span class="logo-tag">Higher standards</span></span>',
     /* No Prices entry, because every roof is quoted and the guides carry the
-       basis instead. No Areas entry either, until the regional pages are
-       carried across: a nav item is a promise that a page answers. */
+       basis instead. A nav item is a promise that a page answers, so Reviews
+       joins this list when content/reviews/roofing.js holds enough to show:
+       until then the section is hidden and the link would go nowhere. */
     nav: [
       { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
+      { label: 'Areas', href: '/roofing-in' },
       { label: 'Guides', href: '/guides' },
-      { label: 'Our work', href: '/#reviews' },
       { label: 'FAQs', href: 'FAQ' }
     ],
-    /* No Areas and no Prices: the regional pages are not carried across yet and
-       every roof is quoted. A footer that lists pages a brand does not have is
-       two dead links on every page of it. */
+    /* No Prices: every roof is quoted. A footer that lists pages a brand does
+       not have is a dead link on every page of it. */
     footerLinks: [
       { href: '/services', label: 'Services' },
+      { href: '/roofing-in', label: 'Areas' },
       { href: '/guides', label: 'Guides' }
     ],
     profileUrl: 'https://share.google/p2JjORGy8UdZUpQnV',

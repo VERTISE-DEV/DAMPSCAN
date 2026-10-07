@@ -19,6 +19,7 @@ import { dirname, join } from 'node:path';
 import { areas } from '../content/areas/index.js';
 import { services } from '../content/services/index.js';
 import { guides } from '../content/guides/index.js';
+import { regions } from '../content/regions/index.js';
 import { render, SITES } from './area-template.js';
 import { render as renderService } from './service-template.js';
 import { render as renderGuide } from './guide-template.js';
@@ -59,7 +60,7 @@ export function sitemapFor(site, today) {
     ...services
       .filter((s) => s.site === site)
       .map((s) => ({ loc: `${origin}/services/${s.slug}`, priority: '0.9', changefreq: 'monthly' })),
-    ...areas
+    ...[...areas, ...regions]
       .filter((a) => a.site === site)
       .map((a) => ({ loc: `${origin}${brand.areasPath}/${a.slug}`, priority: '0.8', changefreq: 'monthly' }))
   ];
@@ -220,7 +221,9 @@ async function main() {
     if (problems.length) failures.push(`area ${area.slug || '(no slug)'}: ${problems.join(', ')}`);
   }
   const seenServices = new Set();
-  for (const service of services) {
+  /* Regions are service-shaped pages under the areas path, so they meet the
+     same floor, and share the slug set so one cannot shadow a service. */
+  for (const service of [...services, ...regions]) {
     const problems = checkService(service, seenServices);
     if (problems.length) failures.push(`service ${service.slug || '(no slug)'}: ${problems.join(', ')}`);
   }
@@ -244,6 +247,12 @@ async function main() {
     await writeFile(join(dir, `${area.slug}.html`), render(area, areas), 'utf8');
     counts[area.site] = (counts[area.site] || 0) + 1;
   }
+  for (const region of regions) {
+    const hub = { path: SITES[region.site].areasPath, label: 'Areas' };
+    await mkdir(join(OUT, region.site), { recursive: true });
+    await writeFile(join(OUT, region.site, `${region.slug}.html`), renderService(region, services, hub), 'utf8');
+    counts[region.site] = (counts[region.site] || 0) + 1;
+  }
 
   /* A hub is written because somebody wrote its copy, not because the loop
      came round. A brand with no area pages should have no areas hub and no nav
@@ -251,7 +260,7 @@ async function main() {
   await rm(HUBS_OUT, { recursive: true, force: true });
   const HUB_KINDS = {
     services: (site) => services.filter((s) => s.site === site),
-    areas: (site) => areas.filter((a) => a.site === site),
+    areas: (site) => [...areas, ...regions].filter((a) => a.site === site),
     guides: (site) => guides.filter((g) => g.site === site)
   };
   let hubCount = 0;

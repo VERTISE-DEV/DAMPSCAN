@@ -120,7 +120,7 @@ function coverage(home) {
     <p>${home.coverage.intro}</p>
     <div class="cards">
       ${home.coverage.regions.map((r) => `<div class="card">
-        <h3>${esc(r.name)}</h3>
+        <h3>${r.href ? `<a href="${r.href}">${esc(r.name)}</a>` : esc(r.name)}</h3>
         <p>${esc(r.places.join(', '))}</p>
       </div>`).join('\n      ')}
     </div>

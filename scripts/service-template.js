@@ -15,6 +15,7 @@ import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell, orCall } from './page-shell.js';
 import { bookForm } from './book-form.js';
 import { guides } from '../content/guides/index.js';
+import { areaServed } from './home-template.js';
 
 
 const esc = (value) =>
@@ -98,7 +99,7 @@ export function render(service, allServices) {
     description: service.metaDescription,
     url,
     provider: { '@type': site.schemaType, name: site.brand, url: `${site.origin}/`, telephone: site.phone || undefined },
-    areaServed: { '@type': 'Place', name: site.served }
+    areaServed: areaServed(site)
   });
 
   const faqSchema = schema('FAQPage', {

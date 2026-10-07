@@ -1,73 +1,84 @@
-/* Verge Roofing's home page, carried over from the standalone roofing repo.
-   The argument is its own and is kept: nobody can see their roof, which is
-   exactly why standards slip, so every claim here is one you can check against
-   a photograph rather than take on trust. */
+/* Verge Roofing's home page.
+
+   Written as a roofing contractor's page rather than an inspector's: the
+   headline says the trade, the area and the scope, the process is about the
+   work rather than the visit, and every claim is one the business has
+   confirmed. No guarantee terms and no accreditations are stated, by the
+   owners' choice, and there is no emergency call-out service to promise. */
 export default {
   site: 'roofing',
-  title: 'Roofing in London & the South East | Verge Roofing',
+  title: 'Roofers in London & the South East | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
   metaDescription:
-    'Re-roofs, repairs, flat roofing, leadwork and guttering across London and the South East. We look for nothing, photograph what we find, and fix the price in writing within 48 hours.',
-  h1: 'Your roof, done properly. Fixed price, in writing.',
+    'Roofing contractors covering London, Kent, Surrey, Essex, Sussex, Hertfordshire and Berkshire. Re-roofs, roof repairs, flat roofs, EPDM, leadwork and conservatory roofs. Thirty years in the trade. Free quotes, fixed in writing.',
+  h1: 'Re-roofs, repairs and flat roofs across London and the South East',
   lede:
-    'Tell us what the roof is doing and we will price it. We come out and look, free, and photograph exactly what we find. One fixed figure in writing within 48 hours, with scaffolding and waste included. Thirty years in the trade, and fully insured.',
+    'Pitched roofs in tile and natural slate, felt and EPDM rubber flat roofs, leadwork, chimneys, box gutters and conservatory roof conversions. Carried out by our own team, with thirty years in the trade behind it. Tell us what the roof needs and we will come out, price it for free and put a fixed figure in writing.',
 
-  highlightsHeading: 'Nobody can see your roof. That is exactly why standards slip.',
+  trust: [
+    'Thirty years in the roofing trade',
+    'Every job carried out by our own team, never subcontracted',
+    'Free quote visit, no call-out charge',
+    'Fixed price in writing, scaffolding, skips and VAT included',
+    'Fully insured'
+  ],
+
+  highlightsHeading: 'What you get when Verge does your roof',
   highlights: [
     {
-      h3: 'Photographed, then priced',
-      body: 'Every quote comes back with images of the actual defect attached, so you are buying a repair you can see rather than one you are told about.'
+      h3: 'The materials named, not "like for like"',
+      body: 'Your quote says which tile or slate, which membrane, which lead and which ridge system. Redland 49s, Mini Stonewolds, plain tiles, natural slate, Code 4 lead, EPDM, torch-on felt. What is written down is what goes on.'
     },
     {
-      h3: 'The right materials',
-      body: 'Code 4 lead where lead belongs, breathable membrane, treated battens, mechanically fixed ridge. Specified by name in the quote, not &ldquo;like for like&rdquo;.'
+      h3: 'A price that does not move',
+      body: 'Scaffolding, skips, making good and VAT are in the figure. The only change is if opening up shows something nobody could see from outside, and then we stop, show you, and agree it before carrying on.'
     },
     {
-      h3: 'A price that holds',
-      body: 'Scaffolding, skips, making good and VAT in the quoted figure. Variations only if we open up and find something neither of us could see, and only with your say so.'
+      h3: 'Done right the first time',
+      body: 'Breathable membrane and new treated battens on a re-roof, dry-fixed hips, ridges and verges, lead dressed and fixed properly, flat roofs laid to proper falls. Plenty of our work is putting right a roof somebody else did quickly.'
     },
     {
-      h3: 'Guaranteed, in writing',
-      body: 'A written workmanship guarantee on what we have done, handed over with the completion photographs rather than promised and forgotten.'
+      h3: 'Photographed from start to finish',
+      body: 'You get photographs of what we found before we started and of the finished roof, so you can see work you would otherwise never see.'
     }
   ],
 
   process: {
-    h2: 'Four stages, and you see the roof before you spend a penny.',
+    h2: 'How a job runs, from your enquiry to a finished roof',
     intro:
-      'Every job here is priced after somebody has looked at it, so the part worth being clear about is what happens between your enquiry and your price.',
+      'Most of what matters happens on the roof, so most of this is about the work itself.',
     steps: [
       {
-        h3: 'Enquiry and reply',
-        body: 'Send the form with your postcode and what you are dealing with. We reply the same day, and sooner if water is coming in.'
+        h3: 'Tell us what the roof needs',
+        body: 'Send the form with your postcode and a line about the job. Photos help, and sometimes mean we can give you a guide price straight away. We reply the same day.'
       },
       {
-        h3: 'We come and look',
-        body: 'Free, and we get up and look properly. Coverings, flashings, valleys, verges, ridge, chimney, gutters and, where we can access it, the loft side of the deck.'
+        h3: 'Free quote, fixed in writing',
+        body: 'We come out, get up on the roof where it is safe to, and send a written quote within 48 hours: the work, the materials by name and one fixed price.'
       },
       {
-        h3: 'Photos and a fixed quote',
-        body: 'Within 48 hours of us looking. Images of what we found, what it needs, what it does not need, materials named and the price fixed.'
+        h3: 'The work',
+        body: 'Scaffold up, old roof off where it is coming off, then the new roof on by our own team. The house is sheeted and watertight every night, and the site is cleared every day.'
       },
       {
-        h3: 'The works, then the guarantee',
-        body: 'Scaffold where the job needs it, site kept tidy, daily updates. Completion photographs and your written guarantee at handover.'
+        h3: 'Finished and cleared away',
+        body: 'Gutters cleared, debris gone, scaffold down, and you walk round it with us. You get the completion photographs to keep.'
       }
     ]
   },
 
   servicesSection: {
-    h2: 'Residential. Commercial. Repairs. Maintenance. Re-roofs.',
+    h2: 'Roofing services',
     intro:
-      'From a single slipped slate to a full strip and re-cover with new battens and membrane. Each page below says what the job involves, what it is most often confused with, and what moves the figure.'
+      'From a few slipped tiles to a full strip and re-roof, a new flat roof or a tiled roof on what used to be a conservatory. Each page says what the work involves, what is included in the price and the questions people ask us about it.'
   },
 
   coverage: {
-    h2: 'Roofing across London and the South East.',
+    h2: 'Roofers covering London and the whole of the South East',
     intro:
-      'Teams working across the region, so a quote is usually days away rather than weeks. If your postcode is not listed, send it anyway and we will confirm either way.',
+      'Our own teams work right across the region, so a quote visit is usually days away rather than weeks. Recent jobs include re-roofs in Orpington, Blackfen and Milton, a natural slate roof in Petts Wood, a loft conversion roof in Bexley and a lead box gutter in central London. If your town is not listed, send your postcode anyway.',
     regions: [
-      { name: 'Greater London', places: ['All postcode districts'] },
-      { name: 'Kent', places: ['Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend'] },
+      { name: 'Greater London', places: ['Every borough, from Bromley, Bexley and Croydon to Barnet, Ealing and Havering'] },
+      { name: 'Kent', places: ['Orpington', 'Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend', 'Canterbury'] },
       { name: 'Surrey', places: ['Croydon', 'Kingston', 'Sutton', 'Epsom', 'Guildford', 'Woking', 'Reigate'] },
       { name: 'Essex', places: ['Romford', 'Brentwood', 'Basildon', 'Chelmsford', 'Southend', 'Ilford', 'Grays'] },
       { name: 'Hertfordshire', places: ['Watford', 'St Albans', 'Hemel Hempstead', 'Borehamwood', 'Hatfield', 'Enfield'] },
@@ -75,39 +86,43 @@ export default {
     ]
   },
 
-  faqHeading: 'Fair questions before you let anyone on your roof.',
+  faqHeading: 'Questions people ask before choosing a roofer',
   faq: [
     {
-      q: 'Do you charge for coming out?',
-      a: 'No. We come out, get up on the roof where it is safe to, and give you a price. Nothing is charged for coming out or for the quote that follows.'
+      q: 'Is the quote free?',
+      a: 'Yes. We come out, get up on the roof where it is safe to, and give you a written price. There is no call-out charge and no obligation.'
     },
     {
-      q: 'Why is there no price list?',
-      a: 'Because every roof is different, and a published figure that does not survive contact with your roof is worth less than no figure at all. What drives the cost is set out in the guides instead, so you can read the basis before anybody quotes.'
+      q: 'Who actually does the work?',
+      a: 'Our own team, every time. We do not sell the job on to a subcontractor, so the people who priced it are the people responsible for it.'
     },
     {
-      q: 'How quickly do I get the quote?',
-      a: 'Within 48 hours of us looking, with photographs of what we found attached. If water is actively coming in we will tell you on the day what needs doing to stop it.'
+      q: 'Is the price fixed, and what is in it?',
+      a: 'Fixed. Scaffolding, materials, labour, skips, making good and VAT are all in the figure, and the materials are named on the quote. If opening the roof shows something nobody could have seen from outside, we stop, show you, and agree any change before doing it.'
     },
     {
-      q: 'Is the price fixed or an estimate?',
-      a: 'Fixed. Scaffolding, skips, making good and VAT are in the figure. The only variation is if we open the roof up and find something neither of us could see, and that is discussed before anything is done.'
+      q: 'How soon can you start, and how long does it take?',
+      a: 'It depends on the season and the job, and we give you a start date with the quote. A repair is usually a day or two. A re-roof on a typical semi is about a week once the scaffold is up, weather allowing.'
+    },
+    {
+      q: 'How do I pay?',
+      a: 'Payment terms are agreed with you before any work starts and written on the quote, so there are no surprises about when anything is due.'
     },
     {
       q: 'Will you tell me if I do not need the work?',
-      a: 'Yes, and we do it regularly. A roof with five years left in it does not need replacing today, and saying so is how we end up doing the job when it does.'
+      a: 'Yes. A roof with years left in it does not need replacing today, and if a repair will do, we will price the repair.'
+    },
+    {
+      q: 'Do you work with insurers after storm damage?',
+      a: 'Yes. We photograph the damage before we touch it and write a quote scoped line by line, which is what loss adjusters need to settle a claim. We do not run an out-of-hours emergency service.'
     },
     {
       q: 'What happens to my details?',
-      a: 'They go to the person pricing your job and nowhere else. Your details are not sold, shared with lead brokers or added to any marketing list.'
-    },
-    {
-      q: 'Do you handle insurance and storm claims?',
-      a: 'Regularly. We provide dated photographic reports with the cause stated and quotations scoped the way loss adjusters expect, which is usually what settles a claim.'
+      a: 'They go to the person pricing your job and nowhere else. They are not sold, shared with lead brokers or added to any marketing list.'
     }
   ],
 
-  ctaHeading: 'Get your free quote',
+  ctaHeading: 'Get your free roofing quote',
   ctaBody:
-    'Send your postcode and what you are dealing with. We reply the same day, come out and look for nothing, and put the price in writing within 48 hours. Your details price your job and nothing else.'
+    'Send your postcode and what the roof needs. We reply the same day, come out and price it for free, and put a fixed price in writing within 48 hours.'
 };

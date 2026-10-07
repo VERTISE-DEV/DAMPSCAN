@@ -296,3 +296,4 @@ td.details small{display:block;color:var(--muted-2);font-size:12px;margin-top:2p
   padding:0 18px;font:inherit;font-size:14.5px;min-height:40px;transition:border-color .16s}
 .search input:focus{outline:none;border-color:var(--accent);background:var(--slate-2)}
 .search input::placeholder{color:var(--muted-2)}
+.quote-block{grid-column:1/-1}

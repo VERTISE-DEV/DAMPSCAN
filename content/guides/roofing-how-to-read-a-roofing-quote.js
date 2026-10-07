@@ -37,7 +37,7 @@ export default {
         "Materials named, not described",
         "Scaffolding and waste inside the figure",
         "Variations shown and agreed before they happen",
-        "A written guarantee that says what it covers",
+        "Payment terms written down before any work starts",
         "Photographs of the defect the work is fixing"
       ]
     },

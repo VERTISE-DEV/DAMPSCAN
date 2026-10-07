@@ -48,7 +48,7 @@ mock.module('@vercel/blob', {
 });
 
 const { sweepOrphans } = await import('../lib/sweep.js');
-const cron = (await import('../api/cron/sweep-blobs.js')).default;
+const cron = (await import('../lib/routes/cron/sweep-blobs.js')).default;
 
 beforeEach(() => {
   store = [];

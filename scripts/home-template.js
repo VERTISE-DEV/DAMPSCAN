@@ -31,6 +31,7 @@ const words = (text) => String(text).replace(/<[^>]+>/g, ' ').split(/\s+/).filte
 export function distinctiveWordCount(home) {
   return words([
     home.lede,
+    ...(home.trust || []),
     ...(home.highlights || []).flatMap((h) => [h.h3, h.body]),
     home.process ? [home.process.h2, home.process.intro].join(' ') : '',
     ...((home.process && home.process.steps) || []).flatMap((s) => [s.h3, s.body]),
@@ -40,8 +41,24 @@ export function distinctiveWordCount(home) {
   ].join(' '));
 }
 
+/* Each county named, for a brand that lists them, rather than one long
+   string a search engine has to guess the parts of. */
+export function areaServed(site) {
+  if (!Array.isArray(site.areasServed)) return { '@type': 'Place', name: site.served };
+  return site.areasServed.map((name) => ({ '@type': 'AdministrativeArea', name }));
+}
+
 function schema(type, extra) {
   return JSON.stringify({ '@context': 'https://schema.org', '@type': type, ...extra });
+}
+
+/* Short checkable facts under the headline, for a brand that sets them. */
+function trustList(home) {
+  if (!Array.isArray(home.trust) || !home.trust.length) return '';
+  return `
+    <ul class="ticks">
+      ${home.trust.map((t) => `<li>${esc(t)}</li>`).join('\n      ')}
+    </ul>`;
 }
 
 function highlights(home) {
@@ -141,7 +158,7 @@ export function render(home, services) {
     url,
     email: site.email,
     telephone: site.phone || undefined,
-    areaServed: { '@type': 'Place', name: site.served },
+    areaServed: areaServed(site),
     sameAs: site.profileUrl ? [site.profileUrl] : undefined
   });
 
@@ -158,7 +175,7 @@ export function render(home, services) {
   const body = `
   <div class="hero">
     <h1>${esc(home.h1)}</h1>
-    <p class="lede">${home.lede}</p>
+    <p class="lede">${home.lede}</p>${trustList(home)}
   </div>
 ${highlights(home)}${process(home)}${serviceGrid(home, services)}${coverage(home)}${reviewsSection(home)}${faqBlock(home)}`;
 

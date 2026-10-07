@@ -94,7 +94,7 @@
             <input id="q-postcode" type="text" autocomplete="off" />
           </div>
           <div class="form-row">
-            <label for="q-invoice">Invoice net of VAT &pound;</label>
+            <label for="q-invoice">Price net of VAT &pound; <small>(or leave blank and build it from quote lines)</small></label>
             <input id="q-invoice" type="text" inputmode="decimal" autocomplete="off" />
           </div>
           <div class="form-row">
@@ -165,6 +165,31 @@
   </section>
 
   <div class="client-grid">
+    <section class="client-block quote-block" aria-labelledby="h-quote">
+      <h3 id="h-quote">Quote</h3>
+      <p class="panel-note">What each part costs you, plus your markup. The customer sees prices, VAT and total, never a cost or the markup.</p>
+      <div id="w-quote" class="lines"></div>
+      <form id="w-quote-form" class="work-add" novalidate>
+        <div class="form-row"><label for="w-quote-kind">Type</label>
+          <select id="w-quote-kind"><option value="materials">Materials</option><option value="labour">Labour</option><option value="scaffolding">Scaffolding</option>
+            <option value="waste">Waste and skip</option><option value="other">Other</option></select></div>
+        <div class="form-row"><label for="w-quote-desc">Description</label><input id="w-quote-desc" type="text" autocomplete="off" placeholder="Redland 49 tiles, membrane, battens" /></div>
+        <div class="form-row"><label for="w-quote-cost">Cost to you &pound;</label><input id="w-quote-cost" type="text" inputmode="decimal" autocomplete="off" /></div>
+        <button type="submit" class="btn btn--ghost btn--sm">Add</button>
+      </form>
+      <form id="w-markup-form" class="work-add" novalidate><div class="form-row"><label for="w-markup">Markup %</label><input id="w-markup" type="text" inputmode="decimal" autocomplete="off" /></div>
+        <button type="submit" class="btn btn--ghost btn--sm">Set markup</button></form>
+      <div class="tiles" id="w-quote-totals"></div>
+      <p class="panel-note" id="w-quote-note"></p>
+      <div class="top-end" style="margin-top:10px">
+        <button type="button" class="btn btn--primary btn--sm" id="w-quote-link">Customer link</button>
+        <a class="btn btn--ghost btn--sm" id="w-quote-open" href="#" target="_blank" rel="noopener" hidden>Open the quote</a>
+        <button type="button" class="btn btn--ghost btn--sm" id="w-quote-costs">Copy costs to "What it cost"</button>
+        <span class="who" id="w-quote-saved" role="status"></span>
+      </div>
+      <span class="err" id="w-quote-error" role="alert"></span>
+    </section>
+
     <section class="client-block" aria-labelledby="h-costs">
       <h3 id="h-costs">What it cost</h3>
       <div id="w-costs" class="lines"></div>
@@ -229,7 +254,7 @@
         <div class="jgrid work-grid">
           <div class="form-row"><label for="w-customer">Customer</label><input id="w-customer" type="text" autocomplete="off" /></div>
           <div class="form-row"><label for="w-postcode">Postcode</label><input id="w-postcode" type="text" autocomplete="off" /></div>
-          <div class="form-row"><label for="w-invoice">Invoice net &pound;</label><input id="w-invoice" type="text" inputmode="decimal" autocomplete="off" /></div>
+          <div class="form-row"><label for="w-invoice">Price net of VAT &pound;</label><input id="w-invoice" type="text" inputmode="decimal" autocomplete="off" /></div>
           <div class="form-row"><label for="w-date">Job date</label><input id="w-date" type="date" /></div>
           <div class="form-row"><label for="w-time">Time</label><input id="w-time" type="time" step="300" /></div>
           <div class="form-row"><label for="w-status">Status</label>
@@ -268,6 +293,7 @@
 <script src="/staff/quoted.js"></script>
 <script src="/staff/quoted-job.js"></script>
 <script src="/staff/quoted-contract.js"></script>
+<script src="/staff/quoted-quote.js"></script>
 <script src="/staff/quoted-lines.js"></script>
 </body>
 </html>

@@ -1,53 +1,65 @@
-/* Commercial roofing, Verge Roofing. Carried over from the standalone roofing repo
-   with its copy unchanged, reshaped to the fields the shared templates read:
-   paragraphs became paras, faqs became faq, and the mixed related list split
-   into services this site has and guides it has, both looked up per site. */
+/* Verge Roofing service page, written works-first: what we do and what is
+   included, then the trade knowledge, then questions. Generated content lives
+   here as data; the template is scripts/service-template.js. */
 export default {
-  slug: "commercial-roofing",
-  site: 'roofing',
-  name: "Commercial roofing",
-  title: "Commercial roofing | Verge Roofing",
-  metaDescription:
-    "Industrial units, warehouses, retail parades, schools and managed blocks: single ply, built-up felt, liquid coatings and sheet repairs, programmed around occupancy.",
-  h1: "Commercial roofing",
-  intro:
-    "A commercial roof failing costs trading, not just repair. Most of what we do on these buildings is timed and phased around that fact.",
-  sections: [
+  "site": "roofing",
+  "slug": "commercial-roofing",
+  "name": "Commercial roofing",
+  "title": "Commercial Roofing in London & the South East | Flat Roofs, Repairs, Refurbishment | Verge Roofing",
+  "metaDescription": "Commercial roofing across London and the South East: flat roof replacement in felt and EPDM, roof repairs, gutter lining and planned maintenance for offices, shops, warehouses, schools and managed blocks.",
+  "h1": "Commercial roofing for businesses, landlords and managing agents",
+  "intro": "Offices, shops and parades, warehouses and industrial units, schools and managed residential blocks. A failing commercial roof costs trading as well as repairs, so we plan the work around the building and the people in it.",
+  "sections": [
     {
-      h2: "What we work on",
-      paras: [
-        "Industrial units and warehouses, retail parades, schools, offices and managed residential blocks. Single-ply membrane, built-up felt systems, liquid-applied coatings over a roof that has life left in it, profiled sheet repairs, gutter lining and roof light replacement.",
-        "Roof lights are worth a separate mention: they are the most common source of both leaks and falls on a commercial roof, and on many buildings they are now well past the life they were specified for."
+      "h2": "What we do on commercial buildings",
+      "paras": [
+        "All carried out by our own team:"
+      ],
+      "list": [
+        "Flat roof replacement and refurbishment in torch-on felt and EPDM",
+        "Repairs to felt, EPDM and profiled sheet roofs",
+        "Box gutter and valley lining, and lead and EPDM gutter replacement",
+        "Roof light replacement and sealing, one of the most common leak sources",
+        "Re-roofing pitched roofs on managed blocks and mixed-use buildings",
+        "Planned maintenance visits with dated photographs"
       ]
     },
     {
-      h2: "Working around a building in use",
-      paras: [
-        "Works programmed around occupancy and trading hours, with method statements and risk assessments provided before anybody arrives. Where a full replacement cannot be taken in one budget year, we phase it by area and tell you which section genuinely has to be this year and which can wait.",
-        "That phasing conversation is the one most worth having early, because it turns an unaffordable number into a plan."
+      "h2": "Working around a building in use",
+      "paras": [
+        "We programme work around opening hours and occupancy, and provide method statements and risk assessments before anyone arrives. Where a full replacement does not fit one year's budget, we phase it by area and tell you honestly which section needs doing first, which often turns an impossible figure into a plan."
       ]
     },
     {
-      h2: "Condition reporting with costs against it",
-      paras: [
-        "For agents, trustees and facilities managers, a report is only useful if it can go into a budget. Ours rank defects by urgency and put an indicative figure against each, so the document works in a service charge forecast or a board paper rather than just listing concerns.",
-        "Where a leak has already become a dispute, a dated photographic record of the defect and of the repair carried out is usually what settles it."
-      ]
-    },
-    {
-      h2: "Coatings, and when they are the wrong answer",
-      paras: [
-        "A liquid coating over a sound but ageing membrane can buy real time for a fraction of a replacement. Over a wet build-up, or where the falls are wrong, it seals the water in and wastes the money. We core or lift to check before recommending one."
+      "h2": "Prices that work in a budget",
+      "paras": [
+        "Our quotes are itemised by area and by item, so they can go straight into a service charge budget, a board paper or a landlord's approval without being rewritten. Where a coating over an ageing but dry membrane will buy several years for a fraction of a replacement, we say so, and where the build-up underneath is wet and a coating would trap the water in, we say that too."
       ]
     }
   ],
-  ctaHeading: "Get a commercial roof surveyed",
-  ctaBody:
-    "Programmes of work, planned maintenance and one off failures all start the same way, with somebody going up and writing down what is there. Quotes follow the survey rather than the other way round.",
-  faq: [
-    { q: "Can you work out of hours?", a: "Yes, where the building needs it. Say so at the enquiry, because it changes the price and we would rather quote it properly than revise it later." },
-    { q: "Do you provide RAMS?", a: "As standard, before we arrive." }
+  "ctaHeading": "Get your commercial roof priced",
+  "ctaBody": "Tell us about the building, the roof and any timing constraints. We come out, look at it properly and send an itemised, fixed price you can take to a budget meeting.",
+  "faq": [
+    {
+      "q": "Can you work out of hours?",
+      "a": "Yes, where the building needs it. Tell us at the enquiry, because it changes the price and we would rather quote it properly once."
+    },
+    {
+      "q": "Do you provide RAMS?",
+      "a": "Yes, method statements and risk assessments as standard before we start."
+    },
+    {
+      "q": "Can you phase the work?",
+      "a": "Yes. We often phase larger roofs by area across more than one budget year."
+    }
   ],
-  related: ["roof-maintenance", "flat-roofing"],
-  reading: []
+  "related": [
+    "flat-roofing",
+    "roof-maintenance",
+    "box-gutters-and-parapets"
+  ],
+  "reading": [
+    "flat-roof-options-compared",
+    "how-to-read-a-roofing-quote"
+  ]
 };

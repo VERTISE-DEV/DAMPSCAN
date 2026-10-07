@@ -203,6 +203,7 @@
     fillDetails(j);
     fillFoot(j);
     if (global.DSQCONTRACT) global.DSQCONTRACT.fill(j);
+    if (global.DSQQUOTE) global.DSQQUOTE.fill(j);
     ['w-cost-error', 'w-days-error', 'w-pay-error', 'w-details-error'].forEach(function (id) { el(id).classList.remove('is-shown'); });
   }
 

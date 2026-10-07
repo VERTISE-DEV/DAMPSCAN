@@ -1,55 +1,71 @@
-/* Flat roofing, Verge Roofing. Carried over from the standalone roofing repo
-   with its copy unchanged, reshaped to the fields the shared templates read:
-   paragraphs became paras, faqs became faq, and the mixed related list split
-   into services this site has and guides it has, both looked up per site. */
+/* Verge Roofing service page, written works-first: what we do and what is
+   included, then the trade knowledge, then questions. Generated content lives
+   here as data; the template is scripts/service-template.js. */
 export default {
-  slug: "flat-roofing",
-  site: 'roofing',
-  name: "Flat roofing",
-  title: "Flat roofing | Verge Roofing",
-  metaDescription:
-    "GRP, EPDM and torch-on felt compared honestly, why most failed flat roofs fail for the same two reasons, and what a proper job corrects.",
-  h1: "Flat roofing",
-  intro:
-    "Extensions, dormers, garages, balconies and commercial decks. Almost every failed flat roof we strip has the same two problems, and neither of them is the covering everybody blames.",
-  sections: [
+  "site": "roofing",
+  "slug": "flat-roofing",
+  "name": "Flat roofing",
+  "title": "Flat Roofing in London & the South East | EPDM, Felt & GRP | Verge Roofing",
+  "metaDescription": "New flat roofs and flat roof replacements across London and the South East in EPDM rubber and torch-on felt, on extensions, garages, dormers and bays. New timber decks and proper falls. Free quotes, fixed in writing.",
+  "h1": "Flat roofing: replacements, new decks and repairs",
+  "intro": "Extensions, garages, dormers, bays and porches. We strip failed flat roofs, build new timber decks where the old one has gone, and lay EPDM rubber or high-performance felt to proper falls so water runs off instead of sitting there.",
+  "sections": [
     {
-      h2: "Why flat roofs fail",
-      paras: [
-        "Falls first. A flat roof is not flat: it needs a consistent fall to an outlet, and a great many do not have one. Water that stands in a low spot finds the weakness in any material eventually, and ponding over a winter does more damage than a decade of rain running off properly.",
-        "Upstands and detailing second. Where the roof meets a wall, a door threshold, a parapet or a pipe, the covering has to turn up far enough and be terminated properly. Most leaks we are called to on a flat roof are at an edge or a penetration rather than in the middle of the field.",
-        "Lay a new covering over bad falls and poor detailing and you have bought a few years. We correct both, which is why our quote for a failed flat roof usually includes firring the deck rather than just re-covering it."
-      ]
-    },
-    {
-      h2: "GRP, EPDM and felt, honestly",
-      paras: [
-        "Fibreglass GRP is laid wet and cures to a single seamless skin with neat moulded trims. It suits clean rectangular decks, it hates movement, and it wants dry weather and a sound board to go down on.",
-        "EPDM rubber is a single sheet, often with no joins at all on a domestic roof. It copes with movement and cold better than GRP, goes down in weather that would stop a fibreglass job, and it is the sensible answer over a deck that will move a little.",
-        "High-performance torch-on felt is the one people dismiss because they remember the felt of forty years ago. A modern two or three layer system with a mineral cap is tough, easily repaired, and often the best answer on a larger or more complicated roof with lots of detailing."
+      "h2": "What a flat roof replacement includes",
+      "paras": [
+        "A new flat roof is only as good as what it sits on, so the price covers the whole build-up and not just the top layer:"
       ],
-      list: [
-        "Small tidy extension roof, sound deck: GRP or EPDM both work",
-        "Dormer or anything that moves: EPDM",
-        "Large roof, many penetrations, awkward details: torch-on felt",
-        "Foot traffic or a balcony: say so, because it changes the specification"
+      "list": [
+        "Stripping the old covering and checking the deck underneath",
+        "New timber joists or firrings where the falls are wrong, and new OSB or ply decking where the old boards are wet or soft",
+        "The covering itself: an EPDM rubber membrane or a multi-layer torch-on felt system",
+        "Upstands turned properly up walls and finished under lead or a trim",
+        "New edge trims, drip details and outlets into the gutter",
+        "Skips, making good and clearing away"
       ]
     },
     {
-      h2: "What is confused with it",
-      paras: [
-        "Two things. A leak under a flat roof extension that turns out to be the abutment flashing where the extension meets the house wall, which is leadwork rather than flat roofing. And condensation under a cold deck with no ventilation path, which soaks the insulation and marks the ceiling below without any water having got through the covering at all."
+      "h2": "EPDM or felt?",
+      "paras": [
+        "EPDM is a single sheet of synthetic rubber, usually with no joins at all on a house roof. It copes well with movement and cold, and it is our usual choice for extensions, dormers and bays. Torch-on felt is a modern two or three layer system with a mineral finish. It is tough, easy to repair and often the better answer on larger roofs with lots of details. We recommend one at the quote visit and tell you why."
+      ],
+      "list": [
+        "Small extension or garage, sound structure: EPDM or felt both work well",
+        "Dormer or anything that moves a little: EPDM",
+        "Large roof with lots of pipes, roof lights and awkward details: torch-on felt",
+        "Balcony or roof that will be walked on: tell us, because it needs a different build-up"
+      ]
+    },
+    {
+      "h2": "Why so many flat roofs fail early",
+      "paras": [
+        "Two reasons, and neither is the covering people blame. Falls: a flat roof needs a steady slope to an outlet, and water left standing finds a weakness in any material. Edges: most leaks start where the roof meets a wall, a door or a pipe, not in the middle. A new covering over bad falls and poor edges buys a few years. We correct both, which is why our quotes often include new firrings rather than just a new top layer."
       ]
     }
   ],
-  ctaHeading: "Get a flat roof quoted properly",
-  ctaBody:
-    "Falls, upstands, outlets and the deck underneath decide whether a flat roof lasts five years or twenty five, so we look at all four before quoting rather than pricing an area.",
-  faq: [
-    { q: "How long should a flat roof last?", a: "Properly laid on correct falls, a modern system should be good for decades rather than years. Poor falls will shorten any of them." },
-    { q: "Can you overlay the existing roof?", a: "Sometimes, and we will tell you when it is a false economy. If the deck is wet or the falls are wrong, overlaying seals the problem in." },
-    { q: "Do you do balconies?", a: "Yes, but tell us at the enquiry, because a trafficked surface needs a different build-up." }
+  "ctaHeading": "Get your flat roof priced",
+  "ctaBody": "Tell us roughly how big the roof is and what it sits over. Photos help. We come out, check the deck and the falls, and give you a fixed price in writing.",
+  "faq": [
+    {
+      "q": "How long should a new flat roof last?",
+      "a": "Laid properly on correct falls, a modern EPDM or felt roof should last decades rather than years. Poor falls and edges shorten any of them."
+    },
+    {
+      "q": "Can you go over the existing roof?",
+      "a": "Sometimes, and an overlay can be good value on a dry, sound roof. If the deck is wet or the falls are wrong, an overlay seals the problem in, and we will tell you so."
+    },
+    {
+      "q": "How long does it take?",
+      "a": "Most extension and garage roofs are one to three days, depending on whether the deck needs rebuilding."
+    }
   ],
-  related: ["roof-repairs"],
-  reading: ["flat-roof-options-compared"]
+  "related": [
+    "epdm-rubber-roofing",
+    "felt-flat-roofing",
+    "porch-and-bay-roofs",
+    "box-gutters-and-parapets"
+  ],
+  "reading": [
+    "flat-roof-options-compared"
+  ]
 };

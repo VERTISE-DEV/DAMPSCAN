@@ -607,3 +607,12 @@ create index if not exists service_contracts_due_idx on service_contracts (busin
 -- email was sent and that nobody could confirm it arrived.
 -- ---------------------------------------------------------------------------
 alter table leads add column if not exists notify_beacon_at timestamptz;
+
+-- ---------------------------------------------------------------------------
+-- Survey sent
+--
+-- The last tick on a client card, after paid in full: the written survey has
+-- gone to the customer. Like the payment ticks it is a time rather than a
+-- flag, so the card can say when, and unticking it clears it.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists survey_sent_at timestamptz;

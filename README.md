@@ -450,10 +450,16 @@ because the Neon driver is one round trip per statement.
 
 ## Lead notifications
 
-The email is sent by the visitor's browser, not by our functions. FormSubmit sits
-behind Cloudflare, which answers a serverless request with a bot challenge page and
-a 403 rather than sending anything, so a server-side call cannot work. FormSubmit is
-built to be posted to from a browser, and that is what the page now does.
+The email is sent by `/api/lead` itself, through FormSubmit, the moment the lead
+is written, and its answer stamps `notified_at` or `notify_error` straight away.
+The response tells the page `emailed: true`, and the page then sends nothing. Each
+brand's address and subject wording live once, in `lib/lead-email.js`, which the
+build also writes into the pages.
+
+The visitor's browser is the fallback. FormSubmit sits behind Cloudflare, which
+once answered every serverless request with a bot challenge. If it does that
+again, the server records "Server send" and the reason, the response says
+`emailed: false`, and the page sends the email itself as it always did.
 
 The order is deliberate. `/api/lead` stores the lead first and answers, then the
 page posts to FormSubmit and reports the outcome to `/api/notified`, which stamps
@@ -484,9 +490,9 @@ reason, worked out in `lib/email-status.js`:
 
 Two consequences worth knowing:
 
-- The notification address lives in `NOTIFY_ENDPOINT` at the top of the script in
-  `public/index.html`. A static page cannot read environment variables, so changing
-  where leads are emailed is a commit rather than a dashboard edit.
+- The notification addresses live in `lib/lead-email.js`. A static page cannot
+  read environment variables, so changing where leads are emailed is a commit and
+  a `npm run build:pages` rather than a dashboard edit.
 - Delivery is best effort. Treat the dashboard as the record of what came in, and
   email as the prompt to go and look. Any lead whose `notify_error` is set is in the
   database and simply was not emailed.

@@ -315,7 +315,9 @@
       const saved = await res.json().catch(function(){ return null; });
       stored = true;
       id = saved && saved.id;
-      emailNotification(stage, id);
+      /* The server sends the email itself as the lead lands. Only when it
+         could not does this page send it. */
+      if (!(saved && saved.emailed)) emailNotification(stage, id);
     } catch (err) {
       /* Offline/preview or network blocked: the UI still advances so the visitor is never stuck */
       console.warn('Lead POST failed (stage: ' + stage + ')', err);

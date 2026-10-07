@@ -140,6 +140,8 @@
     var paid = el('c-paid').checked;
     if (deposit !== Boolean(c.money.depositPaidAt)) body.depositPaid = deposit;
     if (paid !== Boolean(c.money.paidAt)) body.paid = paid;
+    var sent = el('c-sent').checked;
+    if (sent !== Boolean(c.surveySentAt)) body.surveySent = sent;
     var date = el('c-date').value || null;
     if (date !== (c.surveyDate || null)) body.jobDate = date;
     /* Sent only when it has actually moved, so clearing the hour is a real

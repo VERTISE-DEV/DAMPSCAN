@@ -237,3 +237,17 @@ body{padding-top:92px}
 /* SurveyMate verified badge, under the booking form in the sidebar. */
 .smate-badge{display:block;margin-top:18px;text-align:center;line-height:0}
 .smate-badge img{display:inline-block;width:200px;height:64px}
+
+/* WhatsApp chat button, for a brand that has a number for it. Sits above the
+   mobile action bar rather than on top of it. */
+.wa-float{position:fixed;right:18px;bottom:88px;z-index:40;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  background:#25d366;color:#fff;box-shadow:0 10px 26px -10px rgba(0,0,0,.6)}
+.wa-float:hover{color:#fff;transform:translateY(-1px)}
+@media (min-width:900px){.wa-float{bottom:24px}}
+
+/* A service's typical price range, and real reviews, on service pages. */
+.price-range{font-size:clamp(26px,3.4vw,34px);font-weight:800;letter-spacing:-.01em;margin:4px 0 8px}
+.price-range span{font-size:15px;font-weight:600;color:var(--muted)}
+.quote-card{margin:0 0 14px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px}
+.quote-card p{margin:0 0 8px}
+.quote-card cite{font-style:normal;font-size:14px;color:var(--muted-2)}

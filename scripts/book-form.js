@@ -66,7 +66,8 @@ const COPY = {
     issueLabel: 'What is the roof doing? Tick anything that applies.',
     addressLabel: 'Address of the property',
     addressErr: 'Please give the address of the property.',
-    filesSummary: 'Add photos or a previous quote',
+    filesSummary: 'Add photos of the roof',
+    filesOpen: true,
     filesLabel: 'Photos or a previous quote',
     filesHint: `Up to 10 photos or PDFs, 25MB each. A photo of the roof often means
                   we can price it over the phone, and it always makes us quicker when we come out.`
@@ -83,7 +84,8 @@ const COPY = {
     issueLabel: 'What are you trying to solve? Tick anything that applies.',
     addressLabel: 'Address of the property',
     addressErr: 'Please give the address of the property.',
-    filesSummary: 'Add photos or a previous quote',
+    filesSummary: 'Add photos of the room and the outside wall',
+    filesOpen: true,
     filesLabel: 'Photos or a previous quote',
     filesHint: `Up to 10 photos or PDFs, 25MB each. A photo of the room and of where an
                   outdoor unit could go often lets us quote without a second visit.`
@@ -208,7 +210,7 @@ export function bookForm(site) {
               <label for="f-phone">Phone number <span class="opt">(optional, quickest way to confirm a time)</span></label>
               <input id="f-phone" name="Phone" type="tel" inputmode="tel" autocomplete="tel" />
             </div>
-            <details class="fold">
+            <details class="fold"${t.filesOpen ? ' open' : ''}>
               <summary>${t.filesSummary} <span class="opt">(optional)</span></summary>
               <div class="form-row">
                 <label for="f-files" class="sr-only">${t.filesLabel}</label>

@@ -161,6 +161,13 @@ export const SITES = {
     /* Photographs of finished jobs, published from the staff area and served
        by api/gallery.js; see content/gallery.js for the words around them. */
     galleryPath: '/our-work',
+    font: '/assets/fonts/archivo-latin.woff2',
+    /* A UK mobile as 447..., once one is given for WhatsApp; until then no
+       button is shown. */
+    whatsapp: null,
+    /* Real reviews on every service page, once content/reviews/roofing.js
+       holds enough for the home page to show them. */
+    reviewsOnServices: true,
     profileUrl: 'https://share.google/p2JjORGy8UdZUpQnV',
     /* Other places the business is, linked in the footer and listed in sameAs
        so search engines can tie them to this site. */
@@ -192,6 +199,9 @@ export const SITES = {
     strap: 'Air conditioning, heating and ventilation across London and the South East',
     surveyMateSlug: null,
     areasPath: null,
+    font: '/assets/fonts/manrope.woff2',
+    whatsapp: null,
+    reviewsOnServices: true,
     sitemapFile: 'sitemap-ac.xml',
     ctaLabel: 'Get a Quote',
     barLabel: 'Get a quote',

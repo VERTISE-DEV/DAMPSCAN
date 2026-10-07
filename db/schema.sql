@@ -616,3 +616,36 @@ alter table leads add column if not exists notify_beacon_at timestamptz;
 -- flag, so the card can say when, and unticking it clears it.
 -- ---------------------------------------------------------------------------
 alter table jobs add column if not exists survey_sent_at timestamptz;
+
+-- ---------------------------------------------------------------------------
+-- Quotes built from costs
+--
+-- A quoted-trade job's price used to be one typed figure. A quote is now its
+-- cost lines (materials, labour, scaffolding, waste, other) at what each costs
+-- the business, and a markup; the price net of VAT is the costs plus the
+-- markup. While the job is still quoted, its invoice follows the lines; once
+-- it is booked the agreed price stands and later lines move only the margin.
+--
+-- quote_token is the customer's link to a printable quote. It is random,
+-- unguessable and shows prices only, never a cost or the markup.
+--
+-- A job cost copied from a quote line remembers which, so copying twice
+-- cannot add the same cost twice. Labour is never copied: the roofing payout
+-- pays its owners by days worked, and a labour cost as well would pay twice.
+-- ---------------------------------------------------------------------------
+create table if not exists quote_lines (
+  id           bigserial primary key,
+  job_id       bigint not null references jobs (id) on delete cascade,
+  kind         text   not null check (kind in ('materials', 'labour', 'scaffolding', 'waste', 'other')),
+  description  text   not null,
+  cost_pence   bigint not null check (cost_pence >= 0),
+  added_by     bigint references people (id) on delete set null,
+  added_at     timestamptz not null default now()
+);
+create index if not exists quote_lines_job_idx on quote_lines (job_id, id);
+alter table jobs add column if not exists markup_bp integer check (markup_bp between 0 and 100000);
+alter table jobs add column if not exists quote_token text;
+create unique index if not exists jobs_quote_token_idx on jobs (quote_token) where quote_token is not null;
+alter table businesses add column if not exists vat_bp integer not null default 2000 check (vat_bp between 0 and 10000);
+alter table job_costs add column if not exists quote_line_id bigint references quote_lines (id) on delete set null;
+create unique index if not exists job_costs_quote_line_idx on job_costs (quote_line_id) where quote_line_id is not null;

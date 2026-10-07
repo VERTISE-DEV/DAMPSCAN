@@ -342,6 +342,25 @@ that get searched by town name rather than borough name (Romford, not
 Havering) have one, rendered as a "By town" section with a heading per town,
 and their titles name the towns.
 
+## Quotes for roofing and air conditioning
+
+A quoted-trade job's price is built on the Quotes page from cost lines and a
+markup. Each line is a type (materials, labour, scaffolding, waste and skip,
+other), a description and what it costs the business. The price net of VAT is
+the costs plus the markup, VAT goes on top at the business's `vat_bp`, and the
+arithmetic is in `lib/quote.js`.
+
+- While a job is **Quoted** and has lines, its invoice is the quote's net price,
+  recomputed on every change; a typed price does not stick. Once it is
+  **booked**, the agreed price stands and later lines move the margin only.
+- **Copy costs** puts every non-labour line into "What it cost" for the payout,
+  once each. Labour is left out because the roofing payout pays owners by days.
+- **Customer link** makes a random token and a page at `/quote.html?t=...` on the
+  brand's own domain. It shows each line marked up by the same percentage, the
+  net, VAT and total, and never a cost, the markup or an internal note. The page
+  and `/api/quote` are kept out of search engines and caches, and a wrong token
+  is a plain 404.
+
 ## Bank reconciliation
 
 `/staff/bank.html` takes a Revolut statement and settles it against the jobs.
@@ -1046,9 +1065,11 @@ The upload merge is different in kind: those two were always two halves of one
 question, sharing an origin check, a throttle and a type check, so they read
 better as one file than they did as two.
 
-Ten functions now, with two to spare. Adding an eleventh and twelfth is fine;
-past that, the next group of related routes wants collecting behind a dynamic
-segment the same way.
+The two cron jobs share one more, `api/cron/[task].js`, with their handlers in
+`lib/routes/cron/`; the schedule paths in `vercel.json` are unchanged. That made
+room for `api/quote.js`, the customer's view of a quote. Eleven functions now,
+with one to spare; the next group of related routes wants collecting behind a
+dynamic segment the same way.
 
 ## The Vertise mirror
 

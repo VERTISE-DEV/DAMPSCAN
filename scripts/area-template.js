@@ -10,6 +10,7 @@
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
 import { formSubmitUrl, leadEmailFor } from '../lib/lead-email.js';
+import { BRANDS } from '../lib/brands.js';
 
 const SITES = {
   dampscan: {
@@ -116,12 +117,12 @@ const SITES = {
      pages, which is how the pages were built before the number was issued. */
   roofing: {
     key: 'roofing',
-    brand: 'Verge Roofing',
-    origin: 'https://vergeroofing.com',
+    brand: BRANDS.roofing.name,
+    origin: BRANDS.roofing.origin,
     logo: null,
-    phone: '+442034324561',
-    phoneLabel: '020 3432 4561',
-    email: 'team@vergeroofing.com',
+    phone: BRANDS.roofing.phone,
+    phoneLabel: BRANDS.roofing.phoneLabel,
+    email: BRANDS.roofing.email,
     schemaType: 'RoofingContractor',
     served: 'London, Kent, Surrey, Essex, Hertfordshire, Sussex and Berkshire',
     strap: 'Roofing across London and the South East',
@@ -169,12 +170,12 @@ const SITES = {
      page, and its number is not issued yet so no call link ships. */
   ac: {
     key: 'ac',
-    brand: 'CoolRight',
-    origin: 'https://coolright.co.uk',
+    brand: BRANDS.ac.name,
+    origin: BRANDS.ac.origin,
     logo: null,
-    phone: '+442034324559',
-    phoneLabel: '020 3432 4559',
-    email: 'team@coolright.co.uk',
+    phone: BRANDS.ac.phone,
+    phoneLabel: BRANDS.ac.phoneLabel,
+    email: BRANDS.ac.email,
     schemaType: 'HVACBusiness',
     served: 'London and the whole of the South East',
     strap: 'Air conditioning, heating and ventilation across London and the South East',

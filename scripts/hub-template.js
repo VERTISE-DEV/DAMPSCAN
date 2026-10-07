@@ -93,9 +93,9 @@ ${list}
 
   const aside = `
     <div class="booking">
-      <h2>${kind === 'services' ? 'Book a survey' : 'Book a survey'}</h2>
-      <p>Same day response to every enquiry, and your written report within 24
-        hours of the visit.${orCall(site)}</p>
+      <h2>${site.enquiryCta ? esc(site.enquiryCta.heading) : 'Book a survey'}</h2>
+      <p>${site.enquiryCta ? esc(site.enquiryCta.body) : `Same day response to every enquiry, and your written report within 24
+        hours of the visit.`}${orCall(site)}</p>
       ${bookForm(site.key)}
       ${verifiedBadge(site)}
     </div>`;

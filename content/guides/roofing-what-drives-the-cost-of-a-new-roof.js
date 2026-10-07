@@ -39,7 +39,7 @@ export default {
       h2: "How to compare three quotes properly",
       paras: [
         "Line them up on what is included rather than on the total. Ask each for the make and type of the covering, the batten specification, whether the ridge is mechanically fixed, what happens to the flashings, and what is excluded. The cheapest quote with the shortest scope is usually the most expensive roof over ten years.",
-        "Ask what happens if it rains for a fortnight, and what the guarantee actually covers. A number without those answers is not a quote, it is a bid."
+        "Ask what happens if it rains for a fortnight, and who will actually be on the roof. A number without those answers is not a quote, it is a bid."
       ]
     },
     {

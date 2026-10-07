@@ -1,62 +1,80 @@
-/* Full re-roofs, Verge Roofing. Carried over from the standalone roofing repo
-   with its copy unchanged, reshaped to the fields the shared templates read:
-   paragraphs became paras, faqs became faq, and the mixed related list split
-   into services this site has and guides it has, both looked up per site. */
+/* Verge Roofing service page, written works-first: what we do and what is
+   included, then the trade knowledge, then questions. Generated content lives
+   here as data; the template is scripts/service-template.js. */
 export default {
-  slug: "re-roofs",
-  site: 'roofing',
-  name: "Full re-roofs",
-  title: "Full re-roofs | Verge Roofing",
-  metaDescription:
-    "When a roof is worth replacing rather than patching, what a full strip and re-cover involves, and what moves the price up or down.",
-  h1: "Full re-roofs",
-  intro:
-    "A strip and re-cover is the biggest single thing most people spend on a house, and it is the job most often sold to somebody who did not need it yet. This is how to tell which you are.",
-  sections: [
+  "site": "roofing",
+  "slug": "re-roofs",
+  "name": "Re-roofing",
+  "title": "Re-roofing in London & the South East | New Tiled & Slate Roofs | Verge Roofing",
+  "metaDescription": "Full re-roofs in tile and natural slate across London and the South East: strip, new breathable membrane and treated battens, new tiles or slates, dry hip and ridge, new lead. Fixed price in writing, scaffolding included.",
+  "h1": "Re-roofing: a new roof, stripped back to the rafters",
+  "intro": "When a roof is beyond repair we strip it back to the rafters and build it again properly. Recent re-roofs include Redland 49 tiles in Orpington, Milton and Blackfen, and natural slate in Petts Wood.",
+  "sections": [
     {
-      h2: "What a full re-roof actually is",
-      paras: [
-        "The coverings come off, and so does everything under them. New breathable membrane, new treated battens gauged to the tile or slate, new coverings, dry-fixed ridge and verge rather than mortar, and every flashing renewed instead of reused. Where a rafter end or a wall plate has rotted, it is cut out and replaced while the roof is open, because it will never be that accessible again.",
-        "A re-roof that reuses the old battens, or beds the ridge in sand and cement because that is quicker, is not a re-roof. It is a recover with a warranty on somebody else's timber, and it is the reason a fifteen year old roof can already be failing."
-      ]
-    },
-    {
-      h2: "How to tell a tired roof from a finished one",
-      paras: [
-        "Nail fatigue is the usual verdict on Victorian slate: the slates themselves are sound, the nails holding them have rusted through, and slipped slates start appearing after every gale in different places. Patching buys a winter at a time.",
-        "On a tiled roof the tells are different. Widespread delamination, tiles that crumble at the edge when handled, a ridge line that has gone wavy because the timber beneath has moved, or battens so far gone that a tile cannot be re-hung where it slipped. Any one of those on its own is a repair. Together they are a roof at the end of its life.",
-        "What is not evidence: moss, a handful of slipped tiles in one area, a single leak, or a roofer pointing at your neighbour's new roof."
-      ]
-    },
-    {
-      h2: "What is most often confused with it",
-      paras: [
-        "Two things get quoted as a re-roof when they are not. The first is a failed valley or chimney flashing that has soaked one area of a ceiling: the roof is fine, the detail is not, and the repair is a fraction of the price. The second is condensation in an unventilated loft, which looks exactly like a leak and is not cured by any amount of new tile.",
-        "If somebody quotes a re-roof for a damp patch without going into the loft, get another quote."
-      ]
-    },
-    {
-      h2: "What moves the price",
-      paras: [
-        "Access first: a terraced house with no side return needs a different scaffold to a detached bungalow, and scaffolding is a real cost rather than a line to be shaved. Then size and pitch, which set both the material quantity and how long people are on the roof. Then what the covering is: natural slate, clay, concrete interlocking and hand-made tile are not remotely the same money.",
-        "After that it is what is found underneath. A deck that is sound is a known quantity. Rotten rafter ends, a failed wall plate, or a roof that was already recovered once over battens all add. That is why our quotes state what is included and what would be discussed if we open up and find something neither of us could see."
+      "h2": "What a Verge re-roof includes",
+      "paras": [
+        "Everything under the tiles is renewed, not just the tiles. Every re-roof we price includes:"
       ],
-      list: [
-        "Scaffolding and safe access, always in the quoted figure",
-        "Membrane, treated battens and mechanical fixings, named in the quote",
-        "Dry-fixed ridge and verge rather than mortar",
-        "Skips, making good and VAT"
+      "list": [
+        "Scaffolding and safe access, with a skip or grab lorry for the old roof",
+        "Stripping the old coverings, felt and battens back to the rafters",
+        "Any rotten rafter ends, fascia boards or wall plates replaced while the roof is open",
+        "New breathable roofing membrane and new treated battens gauged to the tile or slate",
+        "New tiles or slates of your choice, nailed and clipped to the current standard",
+        "Dry-fixed hip, ridge and verge systems, so there is no mortar to crack and fall out",
+        "New lead to chimneys, abutments and valleys",
+        "Gutters cleared, the site cleaned, and completion photographs"
+      ]
+    },
+    {
+      "h2": "Choosing what goes on",
+      "paras": [
+        "Concrete interlocking tiles such as Redland 49s are the most common choice on houses across the South East: strong, quick to lay and good value. Mini Stonewold and other flat profile tiles give a cleaner, more modern line and suit loft conversions. Plain tiles and natural slate cost more and take longer to lay, and on period houses and in conservation areas they are usually the right answer. We go through the options at the quote visit and name the one you choose on the quote."
+      ]
+    },
+    {
+      "h2": "How a re-roof runs",
+      "paras": [
+        "The scaffold goes up first. We strip one section at a time and never leave more open than we can make watertight that evening, so the house is sheeted and dry every night. A typical semi takes about a week on site once the scaffold is up, weather allowing, and we give you a date range rather than a single day because nobody strips a roof in front of a storm.",
+        "You can stay in the house throughout. We keep the drive and garden clear and tidy every day, and the old roof goes straight into the skip rather than piling up."
+      ]
+    },
+    {
+      "h2": "Do you need a new roof yet?",
+      "paras": [
+        "A handful of slipped tiles, some moss, or one leak at a chimney is a repair, not a re-roof. The signs that a roof is genuinely finished are widespread: slates slipping all over because the nails have rusted through, tiles crumbling at the edges, battens too far gone to re-hang a tile, or a ridge line that has started to sag. If yours is not there yet, we will tell you and price the repair."
       ]
     }
   ],
-  ctaHeading: "Find out whether you need one yet",
-  ctaBody:
-    "We look at the roof, go into the loft, and tell you what we find, including when the answer is that it has years left in it. The quote that follows names the scaffold, the materials and what would be discussed if we open up and find something neither of us could see.",
-  faq: [
-    { q: "How long does a re-roof take?", a: "A typical semi is a week or so on site once scaffolding is up, weather allowing. We give you a date range rather than a single day, because nobody strips a roof in front of a storm." },
-    { q: "Do I have to move out?", a: "No. The house stays watertight overnight, and we sheet up before we leave." },
-    { q: "Will you tell me if I do not need it?", a: "Yes, and we do regularly. A roof with five or ten years left in it does not need replacing today, and saying so is how we end up doing it when it does." }
+  "ctaHeading": "Get your re-roof priced",
+  "ctaBody": "Send your postcode and roughly what the house is. We come out, look at the roof and the loft, and put a fixed price in writing that names the scaffold, the materials and everything included.",
+  "faq": [
+    {
+      "q": "How long does a re-roof take?",
+      "a": "About a week on a typical semi once the scaffold is up, longer for a large or complicated roof or natural slate. We give you a date range with the quote."
+    },
+    {
+      "q": "Do I have to move out?",
+      "a": "No. The house is sheeted and watertight every night, and you can live in it as normal."
+    },
+    {
+      "q": "Can I keep my old tiles?",
+      "a": "Sometimes, if they are sound and the reason for the re-roof is the battens and felt rather than the tiles. We will tell you honestly whether they are worth reusing."
+    },
+    {
+      "q": "How is a re-roof paid for?",
+      "a": "Payment terms are agreed with you before we start and written on the quote."
+    }
   ],
-  related: ["roof-repairs"],
-  reading: ["repair-or-replace-a-roof", "what-drives-the-cost-of-a-new-roof"]
+  "related": [
+    "tiled-roofs",
+    "slate-roofing",
+    "leadwork-and-chimneys",
+    "roof-repairs"
+  ],
+  "reading": [
+    "what-drives-the-cost-of-a-new-roof",
+    "repair-or-replace-a-roof",
+    "scaffolding-and-access"
+  ]
 };

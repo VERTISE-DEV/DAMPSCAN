@@ -1,53 +1,70 @@
-/* Leadwork and chimneys, Verge Roofing. Carried over from the standalone roofing repo
-   with its copy unchanged, reshaped to the fields the shared templates read:
-   paragraphs became paras, faqs became faq, and the mixed related list split
-   into services this site has and guides it has, both looked up per site. */
+/* Verge Roofing service page, written works-first: what we do and what is
+   included, then the trade knowledge, then questions. Generated content lives
+   here as data; the template is scripts/service-template.js. */
 export default {
-  slug: "leadwork-and-chimneys",
-  site: 'roofing',
-  name: "Leadwork and chimneys",
-  title: "Leadwork and chimneys | Verge Roofing",
-  metaDescription:
-    "Chimney stacks, parapets, valleys and abutments: where most roofs leak, and why a mortar fillet is doing a job only lead can do.",
-  h1: "Leadwork and chimneys",
-  intro:
-    "This is where most roofs leak. It is also where most roofs have a strip of sand and cement doing a job that only lead does properly.",
-  sections: [
+  "site": "roofing",
+  "slug": "leadwork-and-chimneys",
+  "name": "Leadwork and chimneys",
+  "title": "Leadwork & Chimney Repairs in London & the South East | Verge Roofing",
+  "metaDescription": "Lead flashings, chimney flashings, lead valleys, coping caps and chimney repairs across London and the South East. Code 4 and Code 5 lead, properly dressed and fixed. Free quotes, fixed in writing.",
+  "h1": "Leadwork, flashings and chimney repairs",
+  "intro": "Where a roof meets a chimney, a wall or a valley, lead keeps the water out. Most leaks we find start at one of these details, and most can be fixed without touching the rest of the roof.",
+  "sections": [
     {
-      h2: "The mortar fillet problem",
-      paras: [
-        "A fillet is a triangle of mortar smeared where the roof meets a chimney or a wall. It is quick, it looks tidy on the day, and it has no future: mortar is rigid, the roof and the stack move against each other with every temperature change, and the fillet cracks. Water then runs behind it into the stack and comes out somewhere inside.",
-        "The correct detail is lead, in bays, dressed into a chase and wedged, with a soaker under each course on a tiled or slated roof. It moves with the building instead of fighting it, which is why hundred year old leadwork is still doing its job on plenty of roofs we look at."
+      "h2": "What we do",
+      "paras": [
+        "Lead is cut, dressed and fixed by our own team on site. The common jobs:"
+      ],
+      "list": [
+        "Chimney flashings: back gutters, soakers and stepped flashings renewed in one piece",
+        "Abutment flashings where a roof or extension meets a wall",
+        "Lead valleys, and box gutters lined in lead",
+        "Lead coping caps and parapet cappings",
+        "Chimney repointing, new flaunching and new pots or caps",
+        "Removing a mortar fillet and replacing it with lead, the most common fix we do"
       ]
     },
     {
-      h2: "Getting lead right",
-      paras: [
-        "Code 4 and Code 5 for most domestic work, chosen for the job rather than whatever was on the van. Bay lengths kept short enough that thermal movement does not tear the sheet, welted or lapped joints rather than sealant, and clips where wind uplift needs them.",
-        "Lead that is too long in one piece splits down the middle within a few years. It is the single most common fault we find in other people's leadwork, and it is invisible from the ground."
+      "h2": "Getting lead right",
+      "paras": [
+        "Lead needs to be the right thickness for the job, Code 4 for most flashings and Code 5 for gutters and heavier details, and it needs to be cut into lengths that can move. A length that is too long splits down the middle within a few years, which is one of the most common failures we see. Laps, clips and fixings follow the Lead Sheet Association's guidance, and we tell you on the quote which code we are using."
       ]
     },
     {
-      h2: "When the stack itself is the problem",
-      paras: [
-        "Sometimes the flashing is fine and the brickwork has gone. Perished pointing lets water into the stack, frost opens it further, and a redundant flue with no cowl turns the chimney into a funnel. Repointing, re-flaunching the top, and capping or cowling a flue that is no longer used usually solves what three flashing repairs did not.",
-        "Where a stack is leaning or the brickwork has blown badly, rebuilding from a sound course is the honest answer, and we will price it that way rather than dressing it up."
+      "h2": "The mortar fillet problem",
+      "paras": [
+        "A lot of chimneys and walls on older houses are sealed to the roof with a fillet of sand and cement rather than lead. Mortar is rigid and the roof moves, so the fillet cracks and water runs straight down behind it. Patching it with more mortar or a tube of sealant lasts a season. Replacing it with lead lasts decades."
       ]
     },
     {
-      h2: "Valleys, parapets and box gutters",
-      paras: [
-        "Valleys collect everything the roof sheds and fail at the laps first. Parapets and box gutters are worse, because there is nowhere for water to go if an outlet blocks. On these we check the whole run rather than the visible end, and we tell you where a build-up of debris will put you back in the same position in two years."
+      "h2": "When the chimney itself needs work",
+      "paras": [
+        "Sometimes the flashing is fine and the stack is the problem: open joints, cracked flaunching or a pot that has moved. We repoint, re-flaunch and rebuild the top courses where needed. If a chimney is no longer used, capping it properly with ventilation is often the cheapest long-term answer, and we will tell you if that is an option."
       ]
     }
   ],
-  ctaHeading: "Have the detail looked at, not the whole roof",
-  ctaBody:
-    "A failed flashing soaks a ceiling exactly the way a failed roof does, and costs a fraction to put right. We tell you which one you have before anybody quotes for the other.",
-  faq: [
-    { q: "Can you repair rather than replace leadwork?", a: "Sometimes. A split can be lead-welded where the rest of the sheet is sound. Where it has split because the bays were too long, replacing it properly is the only repair that lasts." },
-    { q: "Do you scaffold for chimney work?", a: "Yes. Stack work from a ladder is how people get hurt, and it is in the quoted figure." }
+  "ctaHeading": "Get your leadwork or chimney priced",
+  "ctaBody": "Tell us where the water is showing and what is above it. We come out, look at the detail properly, and give you a fixed price in writing, without quoting for a whole roof that does not need it.",
+  "faq": [
+    {
+      "q": "Do I need scaffolding for chimney work?",
+      "a": "Usually some access is needed, often a chimney scaffold rather than a full one. It is always in the price we give you."
+    },
+    {
+      "q": "Is lead still worth it?",
+      "a": "Yes. Properly fitted lead lasts far longer than mortar or sealant, and on chimneys and valleys it is still the best material for the job."
+    },
+    {
+      "q": "Can you just reseal it?",
+      "a": "A sealant repair can get you through a winter, and we will say if that is a sensible stopgap. It is not a permanent fix, and we will not sell it as one."
+    }
   ],
-  related: ["roof-repairs"],
-  reading: ["signs-your-roof-needs-work"]
+  "related": [
+    "roof-repairs",
+    "box-gutters-and-parapets",
+    "re-roofs"
+  ],
+  "reading": [
+    "signs-your-roof-needs-work"
+  ]
 };

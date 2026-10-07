@@ -11,7 +11,8 @@
   var IMPORT = global.DSBANKIMPORT;
   var el = function (id) { return document.getElementById(id); };
 
-  var state = { books: '', view: 'attention', from: '', query: '', data: null };
+  /* Opens on the open business's books. The damp brands share one set. */
+  var state = { books: (global.DSAREA && global.DSAREA.books) || '', view: 'attention', from: '', query: '', data: null };
 
   var PEOPLE = [['scott', 'Scott'], ['tom', 'Tom'], ['ben', 'Ben'], ['tax', 'Tax pot']];
 
@@ -28,7 +29,8 @@
     var mount = el('books');
     var list = state.data.allBooks || [];
     mount.textContent = '';
-    mount.hidden = list.length < 2;
+    /* Inside a business's area there is one set of books, its own. */
+    mount.hidden = list.length < 2 || Boolean(global.DSAREA);
     list.forEach(function (b) {
       var pill = U.node('button', 'pill', b.name);
       pill.type = 'button';

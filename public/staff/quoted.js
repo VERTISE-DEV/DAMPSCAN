@@ -22,7 +22,10 @@
 
   /** Businesses the viewer may see whose jobs are quoted, not surveyed. */
   function quotedBusinesses() {
-    return ((state.me && state.me.businesses) || []).filter(function (b) { return b.payoutModel !== 'damp'; });
+    var area = global.DSAREA ? global.DSAREA.sites : null;
+    return ((state.me && state.me.businesses) || []).filter(function (b) {
+      return b.payoutModel !== 'damp' && (!area || area.indexOf(b.slug) !== -1);
+    });
   }
 
   function personName(id) {

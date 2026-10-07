@@ -1,0 +1,24 @@
+/* The three staff areas. Each wears its business's own accent, so it is
+   obvious at a glance which business's figures are on screen: DampScan blue
+   for the damp area, Verge orange, CoolRight sky blue. */
+:root[data-area="roofing"]{--accent:#f4581c;--accent-hi:#ff7038;--accent-soft:rgba(244,88,28,.13);--accent-ring:rgba(244,88,28,.4)}
+:root[data-area="ac"]{--accent:#38bdf8;--accent-hi:#7dd3fc;--accent-soft:rgba(56,189,248,.12);--accent-ring:rgba(56,189,248,.38)}
+:root[data-area="roofing"] .btn--primary{color:#fff;box-shadow:0 6px 22px -8px rgba(244,88,28,.7)}
+:root[data-area="ac"] .btn--primary{box-shadow:0 6px 22px -8px rgba(56,189,248,.7)}
+
+.logo--roofing img{height:32px;width:auto;display:block}
+.logo--ac .logo-word{text-transform:none;letter-spacing:-.02em}
+
+/* The switcher sits under the header, one link per business the person holds. */
+.area-switch{display:flex;gap:8px;flex-wrap:wrap;max-width:var(--maxw);margin:14px auto 0;padding:0 var(--pad)}
+.area-pill{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;
+  border:1px solid var(--line-strong, rgba(255,255,255,.15));color:var(--muted);font-weight:600;font-size:14px}
+.area-pill:hover{color:var(--text);border-color:var(--accent-ring)}
+.area-pill[aria-current="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
+.area-pill--damp[aria-current="true"]{border-color:#4fa8e8}
+.area-pill--roofing[aria-current="true"]{border-color:#f4581c;background:rgba(244,88,28,.13)}
+.area-pill--ac[aria-current="true"]{border-color:#38bdf8;background:rgba(56,189,248,.12)}
+
+/* area.js hides the brand row in a one-brand area; .ranges sets display:flex,
+   which would otherwise beat the hidden attribute. */
+.ranges[hidden] { display: none; }

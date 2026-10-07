@@ -28,6 +28,13 @@
 
   /* A 401 means the session expired, so send the viewer back to the login page. */
   async function get(path) {
+    /* The staff area is split by business, and area.js says which one is
+       open. Routes that narrow by area get it added here, once, rather than in
+       every page's every request. */
+    var area = global.DSAREA;
+    if (area && area.scoped.test(path) && !/[?&]area=/.test(path)) {
+      path += (path.indexOf('?') === -1 ? '?' : '&') + 'area=' + area.area;
+    }
     var res = await fetch(path, { headers: { Accept: 'application/json' } });
     if (res.status === 401) { global.location.replace('/staff'); throw new Error('unauthorised'); }
     if (!res.ok) throw new Error('Request failed (' + res.status + ')');

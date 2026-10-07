@@ -161,6 +161,9 @@ const SITES = {
       { href: '/guides', label: 'Guides' }
     ],
     profileUrl: 'https://share.google/p2JjORGy8UdZUpQnV',
+    /* Other places the business is, linked in the footer and listed in sameAs
+       so search engines can tie them to this site. */
+    socials: [{ label: 'Instagram', href: 'https://www.instagram.com/vergeroofing/' }],
     og: null,
     book: {
       sessionKey: 'verge-session',

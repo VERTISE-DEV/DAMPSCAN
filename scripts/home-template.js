@@ -164,7 +164,9 @@ export function render(home, services) {
     email: site.email,
     telephone: site.phone || undefined,
     areaServed: areaServed(site),
-    sameAs: site.profileUrl ? [site.profileUrl] : undefined
+    sameAs: [site.profileUrl, ...(site.socials || []).map((x) => x.href)].filter(Boolean).length
+      ? [site.profileUrl, ...(site.socials || []).map((x) => x.href)].filter(Boolean)
+      : undefined
   });
 
   const faqSchema = home.faq && home.faq.length

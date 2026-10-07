@@ -60,7 +60,7 @@
     var tiles = el('w-quote-totals');
     tiles.textContent = '';
     [['Costs', U.money(q.costPence)], ['Markup ' + pct(q.markupBp), U.money(q.markupPence)],
-     ['Price net', U.money(q.netPence), true], ['VAT ' + pct(q.vatBp), U.money(q.vatPence)], ['Customer pays', U.money(q.totalPence), true]]
+     ['Price net', U.money(q.netPence), true], (q.vatRegistered ? ['VAT ' + pct(q.vatBp), U.money(q.vatPence)] : ['VAT', 'Not registered']), ['Customer pays', U.money(q.totalPence), true]]
       .forEach(function (t) {
         var tile = U.node('div', 'tile' + (t[2] ? ' is-key' : ''));
         tile.appendChild(U.node('span', 'k', t[0]));
@@ -121,7 +121,7 @@
   el('w-quote-error').parentNode.insertBefore(inv, el('w-quote-error'));
   invBtn.addEventListener('click', async function () {
     var open = Q.state.open;
-    if (!open.quote.invoice && !global.confirm('Issue an invoice for ' + U.money(open.invoiceNetPence) + ' plus VAT? It takes the next invoice number and cannot be undone.')) return;
+    if (!open.quote.invoice && !global.confirm('Issue an invoice for ' + U.money(open.invoiceNetPence) + (open.quote.vatRegistered ? ' plus VAT' : '') + '? It takes the next invoice number and cannot be undone.')) return;
     var job = await op({ op: 'invoice', dueDays: Number(invDue.value) }, 'The invoice could not be issued.');
     if (job) el('w-quote-saved').textContent = 'Invoice ' + job.quote.invoice.number + ' issued. Send it from Messages.';
   });
@@ -134,9 +134,9 @@
     if (q.invoice && q.invoice.url) invOpen.href = q.invoice.url;
     invBtn.textContent = q.invoice ? 'Change due date' : 'Issue invoice';
     invBtn.disabled = !q.canInvoice;
-    invNote.textContent = !q.canInvoice ? 'Invoices need the business address and VAT number added to the site first.'
+    invNote.textContent = !q.canInvoice ? q.invoiceBlocker
       : q.invoice ? 'Invoice ' + q.invoice.number + ', issued ' + U.when(q.invoice.issuedAt) + (q.invoice.dueOn ? ', due ' + new Date(q.invoice.dueOn + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }) : '') + '.'
-        : 'Ready to invoice: ' + U.money(j.invoiceNetPence) + ' plus VAT.';
+        : 'Ready to invoice: ' + U.money(j.invoiceNetPence) + (q.vatRegistered ? ' plus VAT.' : ', no VAT.');
   }
 
   el('w-quote-link').addEventListener('click', async function () {

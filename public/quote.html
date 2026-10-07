@@ -30,6 +30,8 @@
   .num { text-align:right; white-space:nowrap; }
   .totals { margin-left:auto; margin-top:16px; width:min(100%, 320px); }
   .totals div { display:flex; justify-content:space-between; padding:6px 6px; }
+  .totals .novat { font-size:13px; color:var(--muted); justify-content:flex-end; }
+  .totals div[hidden] { display:none; }
   .totals .grand { border-top:2px solid var(--ink); margin-top:6px; padding-top:10px; font-size:20px; font-weight:700; }
   .terms { margin-top:28px; font-size:14px; color:var(--muted); }
   .terms p { margin:0 0 8px; }
@@ -183,6 +185,16 @@
       });
       el('net').textContent = money(q.netPence);
       el('vat-label').textContent = 'VAT at ' + (q.vatBp / 100) + '%';
+      /* Not VAT registered: one figure, and a plain statement that no VAT is
+         charged, rather than a VAT line of nought. */
+      if (!q.vatBp) {
+        el('net').parentNode.hidden = true;
+        el('vat').parentNode.hidden = true;
+        var novat = document.createElement('div');
+        novat.className = 'novat';
+        novat.textContent = 'No VAT is charged.';
+        el('total').parentNode.parentNode.appendChild(novat);
+      }
       el('vat').textContent = money(q.vatPence);
       el('total').textContent = money(q.totalPence);
       el('print').addEventListener('click', function () { window.print(); });

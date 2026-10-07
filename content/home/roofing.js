@@ -18,7 +18,7 @@ export default {
     'Thirty years in the roofing trade',
     'Every job carried out by our own team, never subcontracted',
     'Free quote visit, no call-out charge',
-    'Fixed price in writing, scaffolding, skips and VAT included',
+    'Fixed price in writing, scaffolding and skips included',
     'Fully insured'
   ],
 
@@ -84,7 +84,7 @@ export default {
     },
     {
       q: 'Is the price fixed, and what is in it?',
-      a: 'Fixed. Scaffolding, materials, labour, skips, making good and VAT are all in the figure, and the materials are named on the quote. If opening the roof shows something nobody could have seen from outside, we stop, show you, and agree any change before doing it.'
+      a: 'Fixed. Scaffolding, materials, labour, skips and making good are all in the figure, and the materials are named on the quote. If opening the roof shows something nobody could have seen from outside, we stop, show you, and agree any change before doing it.'
     },
     {
       q: 'How soon can you start, and how long does it take?',

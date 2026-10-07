@@ -17,6 +17,7 @@
 import { json, requireMethod, actionFrom } from '../../lib/http.js';
 import attachment from '../../lib/routes/admin/attachment.js';
 import bank from '../../lib/routes/admin/bank.js';
+import business from '../../lib/routes/admin/business.js';
 import calendar from '../../lib/routes/admin/calendar.js';
 import clients from '../../lib/routes/admin/clients.js';
 import contracts from '../../lib/routes/admin/contracts.js';
@@ -36,7 +37,7 @@ import summary from '../../lib/routes/admin/summary.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, quoted, rates, summary };
+const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, quoted, rates, summary };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;

@@ -88,7 +88,7 @@ function priceBlock(service) {
   return `
   <section class="sec price-guide">
     <h2>What it usually costs</h2>
-    <p class="price-range">${pounds(g.from)} to ${pounds(g.to)} <span>including VAT</span></p>
+    <p class="price-range">${pounds(g.from)} to ${pounds(g.to)} <span>all in</span></p>
     <p>That is the range for ${esc(g.typical)}. Yours depends on the size, the access and what we find, so every job is priced after a free visit and the quote you get is fixed.</p>
   </section>
 `;

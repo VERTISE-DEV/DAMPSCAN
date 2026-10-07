@@ -26,7 +26,6 @@ mock.module('../lib/db.js', {
 
 const login = (await import('../lib/routes/auth/login.js')).default;
 const quoted = (await import('../lib/routes/admin/quoted.js')).default;
-const { BRANDS } = await import('../lib/brands.js');
 const publicQuote = (await import('../api/quote.js')).default;
 
 const P = (pounds) => Math.round(pounds * 100);
@@ -60,22 +59,39 @@ async function bookedJob(cookie, name, pounds) {
 before(async () => { await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8')); });
 beforeEach(async () => {
   await pool.query('truncate leads, events, rate_hits, jobs, people, audit, job_costs, job_owner_days, job_payments, payouts, quote_lines, job_messages restart identity cascade');
-  await pool.query("update businesses set next_invoice = 1");
-  Object.assign(BRANDS.roofing, { address: null, vatNumber: null });
+  await pool.query("update businesses set next_invoice = 1, vat_registered = false, vat_number = null, trading_address = null");
 });
 after(async () => { await pool.end(); });
 
-test('no invoice until the business address and VAT number are on the site', async () => {
+const details = (fields) => pool.query(
+  `update businesses set trading_address = $1, vat_registered = $2, vat_number = $3 where slug = 'roofing'`,
+  [fields.address || null, Boolean(fields.vat), fields.vatNumber || null]);
+
+test('no invoice without the business address, nor without the VAT number once VAT is on', async () => {
   const cookie = await personWith('verge-code', ['roofing']);
   const job = await bookedJob(cookie, 'Mrs Patel', 1000);
   assert.equal(job.quote.canInvoice, false);
   const refused = await post(cookie, { op: 'invoice', id: job.id });
   assert.equal(refused.ok, false);
-  assert.match(refused.errors.invoice, /VAT number/);
+  assert.match(refused.errors.invoice, /address/);
+  await details({ address: '1 High Street', vat: true });
+  assert.match((await post(cookie, { op: 'invoice', id: job.id })).errors.invoice, /VAT number/);
+});
+
+test('an unregistered business issues a plain invoice with no VAT and no VAT number', async () => {
+  await details({ address: '1 High Street, Orpington' });
+  const cookie = await personWith('verge-code', ['roofing']);
+  const job = await bookedJob(cookie, 'Mrs Patel', 1000);
+  const inv = (await post(cookie, { op: 'invoice', id: job.id })).job.quote.invoice;
+  const v = (await invoiceView(new URL(inv.url).searchParams.get('t'))).json();
+  assert.equal(v.invoice.vatPence, 0);
+  assert.equal(v.invoice.totalPence, P(1000));
+  assert.equal(v.brand.vatNumber, null);
+  assert.equal(v.brand.address, '1 High Street, Orpington');
 });
 
 test('invoices take the next number once each, and the customer sees lines, VAT, payments and the balance', async () => {
-  Object.assign(BRANDS.roofing, { address: '1 High Street, Orpington BR6 0AA', vatNumber: 'GB123456789' });
+  await details({ address: '1 High Street, Orpington BR6 0AA', vat: true, vatNumber: 'GB123456789' });
   const cookie = await personWith('verge-code', ['roofing']);
   const quotedOnly = (await post(cookie, { op: 'save', site: 'roofing', customerName: 'X', invoiceNetPence: P(100), status: 'quoted' })).job;
   assert.equal((await post(cookie, { op: 'invoice', id: quotedOnly.id })).ok, false, 'not before it is booked');
@@ -108,7 +124,7 @@ test('invoices take the next number once each, and the customer sees lines, VAT,
 });
 
 test('an invoice link shows nothing before an invoice is issued', async () => {
-  Object.assign(BRANDS.roofing, { address: '1 High Street', vatNumber: 'GB123456789' });
+  await details({ address: '1 High Street' });
   const cookie = await personWith('verge-code', ['roofing']);
   const job = await bookedJob(cookie, 'Mrs Patel', 1000);
   const url = (await post(cookie, { op: 'quotelink', id: job.id })).job.quote.url;

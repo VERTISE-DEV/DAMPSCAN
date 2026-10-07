@@ -21,7 +21,8 @@ import { rateLimit, LIMITS } from '../lib/ratelimit.js';
 import { loadQuoteLines } from '../lib/quote-store.js';
 import { quoteTotals, spread } from '../lib/quote.js';
 import { bpOf } from '../lib/splits.js';
-import { brandFor, canInvoice } from '../lib/brands.js';
+import { brandFor } from '../lib/brands.js';
+import { effectiveVatBp, canInvoice } from '../lib/business-details.js';
 import { invoiceNumber } from '../lib/quote-store.js';
 
 export const config = { runtime: 'nodejs' };
@@ -36,7 +37,8 @@ async function findJob(token) {
   if (!TOKEN_RE.test(token || '')) return null;
   return queryOne(
     `select j.id, j.site, j.status, j.customer_name, j.customer_postcode, j.markup_bp, j.invoice_net_pence, j.created_at,
-            j.quote_accepted_at, j.quote_accepted_name, j.lead_id, j.invoice_number, j.invoiced_at, j.invoice_due_on::text as invoice_due_on, b.vat_bp
+            j.quote_accepted_at, j.quote_accepted_name, j.lead_id, j.invoice_number, j.invoiced_at, j.invoice_due_on::text as invoice_due_on,
+            b.vat_bp, b.vat_registered, b.vat_number, b.trading_address, b.company_number, b.payment_details
        from jobs j join businesses b on b.slug = j.site where j.quote_token = $1`, [token]);
 }
 
@@ -44,7 +46,7 @@ async function findJob(token) {
 async function figures(job) {
   const rows = await loadQuoteLines(job.id);
   const totals = quoteTotals(rows.map((r) => ({ kind: r.kind, description: r.description, costPence: N(r.cost_pence) })),
-    N(job.markup_bp), job.vat_bp == null ? 2000 : N(job.vat_bp));
+    N(job.markup_bp), effectiveVatBp(job));
   /* An accepted or booked job's agreed price stands even if lines were added
      afterwards, so the customer's lines are spread across that price. */
   const agreed = (job.status !== 'quoted' || job.quote_accepted_at) && rows.length > 0;
@@ -57,12 +59,12 @@ async function figures(job) {
 const expired = (job) => Date.now() - new Date(job.created_at).getTime() > (VALID_DAYS + 1) * 86400000;
 const pounds = (p) => `£${(p / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-/* The invoice: the agreed lines, VAT, and what has been paid against it.
-   Nothing until one has been issued, and nothing if the business's VAT
-   details are missing, so a document that is not a valid VAT invoice is
-   never shown as one. */
+/* The invoice: the agreed lines, any VAT, and what has been paid against it.
+   Nothing until one has been issued, and nothing while the business's
+   details are incomplete, so an invalid invoice is never shown as one. A
+   business that is not VAT registered issues a plain invoice with no VAT. */
 async function invoice(res, job, brand) {
-  if (!job.invoice_number || !canInvoice(brand)) { json(res, 404, { ok: false, error: 'not_found' }); return; }
+  if (!job.invoice_number || !canInvoice(job)) { json(res, 404, { ok: false, error: 'not_found' }); return; }
   const { lines, netPence, vatBp, vatPence } = await figures(job);
   const payments = await query('select paid_on::text as paid_on, amount_pence, label from job_payments where job_id = $1 order by paid_on, id', [job.id]);
   const lead = job.lead_id ? await queryOne('select address_line1, address_line2, town, postcode from leads where id = $1', [job.lead_id]) : null;
@@ -70,7 +72,7 @@ async function invoice(res, job, brand) {
   json(res, 200, {
     ok: true,
     brand: { name: brand.name, phone: brand.phone, phoneLabel: brand.phoneLabel, email: brand.email, origin: brand.origin,
-      address: brand.address, vatNumber: brand.vatNumber, companyNumber: brand.companyNumber, payment: brand.payment },
+      address: job.trading_address, vatNumber: job.vat_registered ? job.vat_number : null, companyNumber: job.company_number, payment: job.payment_details },
     invoice: {
       number: invoiceNumber(brand, job.invoice_number),
       issuedOn: isoDay(job.invoiced_at),

@@ -825,3 +825,19 @@ create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice
 alter table service_contracts add column if not exists price_pence integer check (price_pence >= 0);
 alter table job_messages drop constraint if exists job_messages_kind_check;
 alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service'));
+
+-- ---------------------------------------------------------------------------
+-- VAT registration and the details an invoice prints
+--
+-- Verge and CoolRight are not VAT registered yet, and a business that is not
+-- registered must not charge VAT. So VAT is off until somebody who manages
+-- the business switches it on in the staff area, on the day registration
+-- takes effect, and vat_bp is only the rate it uses once it is on. The
+-- address, VAT number, company number and payment details are kept here
+-- rather than in code, so they can be changed there too.
+-- ---------------------------------------------------------------------------
+alter table businesses add column if not exists vat_registered  boolean not null default false;
+alter table businesses add column if not exists vat_number      text;
+alter table businesses add column if not exists trading_address text;
+alter table businesses add column if not exists company_number  text;
+alter table businesses add column if not exists payment_details text;

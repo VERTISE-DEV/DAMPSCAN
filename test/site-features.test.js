@@ -20,7 +20,7 @@ test('no price range is shown until the owners give one, and then it says what t
   try {
     const html = render(reRoofs, services);
     assert.match(html, /<h2>What it usually costs<\/h2>/);
-    assert.match(html, /£9,000 to £14,000 <span>including VAT<\/span>/);
+    assert.match(html, /£9,000 to £14,000 <span>all in<\/span>/);
     assert.match(html, /a three-bedroom semi/);
   } finally {
     delete priceGuide.roofing['re-roofs'];

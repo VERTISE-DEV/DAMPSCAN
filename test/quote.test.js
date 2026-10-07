@@ -133,6 +133,7 @@ test('a quote line needs a type, a description and a figure', async () => {
 
 /* ------------------------------------------------------ customer's view ---- */
 test('the customer link shows prices, VAT and total, and never a cost or the markup', async () => {
+  await pool.query("update businesses set vat_registered = true where slug = 'roofing'");
   const cookie = await signedIn();
   const { job } = await post(cookie, { op: 'save', site: 'roofing', customerName: 'Mrs Patel', customerPostcode: 'BR6 0AA', note: 'Tight on budget', status: 'quoted' });
   await post(cookie, { op: 'qline', id: job.id, kind: 'materials', description: 'Natural slate', costPence: P(3000) });
@@ -155,6 +156,22 @@ test('the customer link shows prices, VAT and total, and never a cost or the mar
   assert.deepEqual(body.quote.lines, [{ kind: 'materials', label: 'Materials', description: 'Natural slate', pricePence: P(3900) }]);
   const text = res.body;
   for (const secret of ['3000', 'markup', 'cost', 'Tight on budget']) assert.ok(!text.toLowerCase().includes(secret.toLowerCase()), `leaks ${secret}`);
+  await pool.query("update businesses set vat_registered = false where slug = 'roofing'");
+});
+
+test('a business that is not VAT registered charges no VAT, to staff or the customer', async () => {
+  await pool.query("update businesses set vat_registered = false where slug = 'roofing'");
+  const cookie = await signedIn();
+  const { job } = await post(cookie, { op: 'save', site: 'roofing', customerName: 'Mrs Patel', status: 'quoted' });
+  await post(cookie, { op: 'qline', id: job.id, kind: 'materials', description: 'Natural slate', costPence: P(3000) });
+  const j = (await post(cookie, { op: 'markup', id: job.id, markupBp: 3000 })).job;
+  assert.equal(j.quote.vatRegistered, false);
+  assert.equal(j.quote.vatPence, 0);
+  assert.equal(j.quote.totalPence, P(3900), 'the customer pays the net price and nothing more');
+  const token = new URL((await post(cookie, { op: 'quotelink', id: job.id })).job.quote.url).searchParams.get('t');
+  const body = (await view(token)).json();
+  assert.equal(body.quote.vatBp, 0);
+  assert.equal(body.quote.totalPence, P(3900));
 });
 
 test('a wrong or missing token is a plain 404, and a declined quote says it is closed', async () => {

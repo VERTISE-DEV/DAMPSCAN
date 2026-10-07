@@ -105,3 +105,10 @@
 .search-site + .search-site{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
 .search-title{font-size:16px;margin-bottom:10px}
 .search-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 8px}
+/* ---------- business details and the VAT meter ---------- */
+.biz + .biz{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.biz textarea{width:100%;background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:12px 14px;font:inherit;font-size:16px}
+.biz .photo-tick{margin:14px 0}
+.vat-bar{height:10px;border-radius:999px;background:var(--navy);border:1px solid var(--line);overflow:hidden}
+.vat-bar span{display:block;height:100%;background:var(--good)}
+.vat-bar span.is-near{background:var(--warn)}

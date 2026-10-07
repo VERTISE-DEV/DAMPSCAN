@@ -30,6 +30,8 @@
   .num { text-align:right; white-space:nowrap; }
   .totals { margin-left:auto; margin-top:16px; width:min(100%, 320px); }
   .totals div { display:flex; justify-content:space-between; padding:6px 6px; }
+  .totals .novat { font-size:13px; color:var(--muted); justify-content:flex-end; }
+  .totals div[hidden] { display:none; }
   .totals .grand { border-top:2px solid var(--ink); margin-top:6px; padding-top:10px; font-size:20px; font-weight:700; }
   .terms { margin-top:28px; font-size:14px; color:var(--muted); }
   .terms p { margin:0 0 8px; }
@@ -141,6 +143,16 @@
       });
       el('net').textContent = money(v.netPence);
       el('vat-label').textContent = 'VAT at ' + (v.vatBp / 100) + '%';
+      /* Not VAT registered: one figure, and a plain statement that no VAT is
+         charged, rather than a VAT line of nought. */
+      if (!v.vatBp) {
+        el('net').parentNode.hidden = true;
+        el('vat').parentNode.hidden = true;
+        var novat = document.createElement('div');
+        novat.className = 'novat';
+        novat.textContent = 'No VAT is charged.';
+        el('total').parentNode.parentNode.appendChild(novat);
+      }
       el('vat').textContent = money(v.vatPence);
       el('total').textContent = money(v.totalPence);
 
@@ -156,7 +168,7 @@
       }
       if (!v.balancePence) { el('notice').textContent = 'Paid in full. Thank you.'; el('notice').hidden = false; }
       el('pay').textContent = b.payment ? 'How to pay: ' + b.payment + '. Please use ' + v.number + ' as the reference.' : 'Please use ' + v.number + ' as the payment reference.';
-      el('legal').textContent = [b.name, b.companyNumber ? 'Company number ' + b.companyNumber : '', 'VAT registration number ' + b.vatNumber].filter(Boolean).join('. ') + '. Quote ' + v.quoteNumber + '.';
+      el('legal').textContent = [b.name, b.companyNumber ? 'Company number ' + b.companyNumber : '', b.vatNumber ? 'VAT registration number ' + b.vatNumber : ''].filter(Boolean).join('. ') + '. Quote ' + v.quoteNumber + '.';
       el('print').addEventListener('click', function () { window.print(); });
       el('state').hidden = true;
       el('doc').hidden = false;

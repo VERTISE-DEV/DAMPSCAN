@@ -7,7 +7,7 @@
  * or borrowed from another firm. A service with no entry shows no block.
  *
  * Each entry, keyed by the service page's slug:
- *   from, to   pounds, including VAT, for a typical job of that kind
+ *   from, to   pounds, everything included (and VAT, once registered), for a typical job
  *   typical    what "typical" means, e.g. 'a three-bedroom semi, scaffold included'
  *
  * For example, once the owners confirm it:

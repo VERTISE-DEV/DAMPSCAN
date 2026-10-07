@@ -77,7 +77,7 @@ function footCall(site) {
   return ` &middot; <a href="tel:${site.phone}">${esc(site.phoneLabel)}</a>`;
 }
 
-export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true }) {
+export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true, styles = [] }) {
   return `<!DOCTYPE html>
 <html lang="en-GB" class="no-js" data-site="${site.key}">
 <head>
@@ -98,7 +98,7 @@ ${site.og ? `<meta property="og:image" content="${site.origin}${site.og}" />
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
 <link rel="stylesheet" href="/assets/header.css" />
 <link rel="stylesheet" href="/assets/area.css" />
-<link rel="stylesheet" href="/assets/book.css" />
+<link rel="stylesheet" href="/assets/book.css" />${styles.map((href) => `\n<link rel="stylesheet" href="${href}" />`).join('')}
 <style>:root{--head-bg:${site.headBg};--head-solid:${site.headSolid}}</style>
 <script>document.documentElement.classList.remove('no-js')</script>
 ${schemas.map((s) => `<script type="application/ld+json">${s}</script>`).join('\n')}

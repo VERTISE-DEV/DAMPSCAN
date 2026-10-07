@@ -22,25 +22,10 @@ export default {
     'Fully insured'
   ],
 
-  highlightsHeading: 'What you get when Verge does your roof',
-  highlights: [
-    {
-      h3: 'The materials named, not "like for like"',
-      body: 'Your quote says which tile or slate, which membrane, which lead and which ridge system. Redland 49s, Mini Stonewolds, plain tiles, natural slate, Code 4 lead, EPDM, torch-on felt. What is written down is what goes on.'
-    },
-    {
-      h3: 'A price that does not move',
-      body: 'Scaffolding, skips, making good and VAT are in the figure. The only change is if opening up shows something nobody could see from outside, and then we stop, show you, and agree it before carrying on.'
-    },
-    {
-      h3: 'Done right the first time',
-      body: 'Breathable membrane and new treated battens on a re-roof, dry-fixed hips, ridges and verges, lead dressed and fixed properly, flat roofs laid to proper falls. Plenty of our work is putting right a roof somebody else did quickly.'
-    },
-    {
-      h3: 'Photographed from start to finish',
-      body: 'You get photographs of what we found before we started and of the finished roof, so you can see work you would otherwise never see.'
-    }
-  ],
+  /* Customer reviews sit straight under the headline, in the same carousel
+     as the damp home pages, and show once there are enough of them. */
+  reviewsFirst: true,
+  reviewsHeading: 'What our customers say',
 
   process: {
     h2: 'How a job runs, from your enquiry to a finished roof',

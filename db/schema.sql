@@ -649,3 +649,30 @@ create unique index if not exists jobs_quote_token_idx on jobs (quote_token) whe
 alter table businesses add column if not exists vat_bp integer not null default 2000 check (vat_bp between 0 and 10000);
 alter table job_costs add column if not exists quote_line_id bigint references quote_lines (id) on delete set null;
 create unique index if not exists job_costs_quote_line_idx on job_costs (quote_line_id) where quote_line_id is not null;
+
+-- ---------------------------------------------------------------------------
+-- Customer messages from the staff area
+--
+-- The quote, two follow-ups, the day-before reminder and the review request
+-- go out from the staff member's own phone or mail, one tap each, as WhatsApp,
+-- a text or an email with the words already written. No message provider is
+-- involved, so nothing here sends anything: a row says somebody tapped to send
+-- that message on that channel, which is what takes it off the Due list.
+--
+-- The phone and email live on the job because most roofing and air
+-- conditioning jobs start as a phone call, with no web enquiry behind them.
+-- quote_sent_at is when the quote first went, which is what the follow-ups
+-- count from.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists customer_phone text;
+alter table jobs add column if not exists customer_email text;
+alter table jobs add column if not exists quote_sent_at  timestamptz;
+create table if not exists job_messages (
+  id        bigserial primary key,
+  job_id    bigint not null references jobs (id) on delete cascade,
+  kind      text   not null check (kind in ('quote', 'followup', 'reminder', 'review')),
+  channel   text   not null check (channel in ('whatsapp', 'sms', 'email')),
+  sent_at   timestamptz not null default now(),
+  sent_by   bigint references people (id) on delete set null
+);
+create index if not exists job_messages_job_idx on job_messages (job_id, sent_at);

@@ -44,6 +44,7 @@
     mount.textContent = '';
     var owed = d.owed.reduce(function (s, r) { return s + r.owedPence; }, 0);
     var tiles = [
+      ['Messages to send', U.num(d.messages.length), d.messages.length > 0],
       ['Enquiries waiting', U.num(d.enquiries.length), d.enquiries.length > 0],
       ['Visits this week', U.num(d.visits.length), false],
       ['Quotes out', U.num(d.quotes.length), false],
@@ -60,6 +61,15 @@
 
   function render(d) {
     renderTiles(d);
+    /* Only the quoted trades send these, so the damp area has no use for it. */
+    el('p-messages').hidden = !d.messages.length && !(global.DSAREA && global.DSAREA.area !== 'damp');
+    U.table(el('messages'), [
+      { label: 'Message', get: function (r) { return global.DSMSG.label(r.message); } },
+      { label: 'Brand', get: brand },
+      { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
+      { label: 'Send', wrap: true, get: function (r) { return global.DSMSG.buttons(r.id, r.message, function () { setTimeout(refresh, 300); }); } },
+      { label: 'Open', sr: true, get: function (r) { return link('/staff/quoted.html#job-' + r.id, 'Open'); } }
+    ], d.messages, { empty: 'Nothing to send today. Follow-ups, tomorrow\'s reminders and review requests appear here when they fall due.' });
     U.table(el('enquiries'), [
       { label: 'Received', get: function (r) { return U.when(r.createdAt); } },
       { label: 'Brand', get: brand },

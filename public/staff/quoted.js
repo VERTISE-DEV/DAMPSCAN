@@ -199,6 +199,7 @@
     pick.value = state.site && business(state.site) ? state.site : (sites[0] ? sites[0].slug : '');
     fillPeople(el('q-finder'), pick.value, state.me && state.me.personId);
     el('q-name').value = ''; el('q-postcode').value = ''; el('q-invoice').value = '';
+    el('q-phone').value = ''; el('q-email').value = '';
     el('q-date').value = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
     el('q-time').value = ''; el('q-status').value = 'quoted'; el('q-note').value = '';
     el('q-error').classList.remove('is-shown');
@@ -214,6 +215,7 @@
     var res = await U.send('/api/admin/quoted', {
       op: 'save', site: el('q-site').value,
       customerName: el('q-name').value, customerPostcode: el('q-postcode').value,
+      customerPhone: el('q-phone').value, customerEmail: el('q-email').value,
       invoiceNetPence: invoice, jobDate: el('q-date').value || undefined, jobTime: el('q-time').value || null,
       status: el('q-status').value, finderPersonId: el('q-finder').value || null, note: el('q-note').value
     });

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Due | DampScan</title>
+<title>Pipeline | DampScan</title>
 <meta name="theme-color" content="#0c1a2b" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
@@ -39,7 +39,7 @@
     </span>
   </a>
   <nav class="tabs" aria-label="Sections">
-    <a href="/staff/due.html" aria-current="page">Due</a>
+    <a href="/staff/due.html">Due</a>
     <a href="/staff/dashboard.html">Dashboard</a>
     <a href="/staff/jobs.html">Jobs</a>
     <a href="/staff/quoted.html">Quotes</a>
@@ -53,66 +53,31 @@
 </header>
 
 <main class="wrap">
-  <h1 class="sr-only">What needs doing</h1>
-  <div class="ranges" role="group" aria-label="Business" style="margin-bottom:10px">
-    <button class="pill" data-site="" aria-pressed="true">All brands</button>
-    <button class="pill" data-site="dampscan" aria-pressed="false">DampScan, Kent</button>
-    <button class="pill" data-site="ati-london" aria-pressed="false">ATI, London</button>
-    <button class="pill" data-site="roofing" aria-pressed="false">Verge Roofing</button>
-    <button class="pill" data-site="ac" aria-pressed="false">CoolRight</button>
-  </div>
-
+  <h1 class="sr-only">Pipeline</h1>
   <div class="state" id="state">Loading…</div>
-
   <div id="content" hidden>
     <div class="tiles" id="tiles" style="margin-top:12px"></div>
-
-    <section class="panel" aria-labelledby="h-messages" id="p-messages">
-      <h2 id="h-messages">Messages to send</h2>
-      <div id="messages"></div>
-      <p class="panel-note">Each one opens on your phone with the words written. You press send; tapping the button takes it off this list.</p>
-    </section>
-
-    <section class="panel" aria-labelledby="h-enquiries">
-      <h2 id="h-enquiries">Enquiries with no job yet</h2>
-      <div id="enquiries"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-visits">
-      <h2 id="h-visits">Today and this week</h2>
-      <div id="visits"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-quotes" id="p-quotes">
-      <h2 id="h-quotes">Quotes out with no answer</h2>
-      <div id="quotes"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-services" id="p-services">
-      <h2 id="h-services">Services due this month</h2>
-      <div id="services"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-owed" id="p-owed">
-      <h2 id="h-owed">Money owed</h2>
-      <div id="owed"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-ready" id="p-ready">
-      <h2 id="h-ready">Paid in full, ready to freeze</h2>
-      <div id="ready"></div>
-    </section>
-
-    <section class="panel" aria-labelledby="h-drifted" id="p-drifted">
-      <h2 id="h-drifted">Frozen figures that have moved</h2>
-      <div id="drifted"></div>
-      <p class="panel-note">A cost entered after the freeze does not change what was stored. These are
-        the jobs where it would have, for an admin to reopen or leave.</p>
-    </section>
+    <div class="board" id="board" aria-label="Jobs by stage"></div>
+    <p class="panel-note board-foot" id="foot"></p>
+    <p class="panel-note">Drag a card to move it on, or use its buttons. Paid only comes from freezing the payout,
+      which checks the money is in. Open a card for its quote, costs, payments and messages.</p>
   </div>
 </main>
 
+<dialog class="book-dialog" id="book-dialog" aria-labelledby="book-title">
+  <form method="dialog" id="book-form">
+    <h2 id="book-title">Book the work in</h2>
+    <div class="form-row"><label for="book-date">Start date</label><input id="book-date" type="date" required /></div>
+    <div class="form-row"><label for="book-time">Time <small>(optional)</small></label><input id="book-time" type="time" step="300" /></div>
+    <span class="err" id="book-error" role="alert"></span>
+    <div class="top-end" style="margin-top:14px">
+      <button type="submit" class="btn btn--primary btn--sm" value="book">Book it</button>
+      <button type="submit" class="btn btn--ghost btn--sm" value="cancel" formnovalidate>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
 <script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
-<script src="/staff/messages.js"></script><script src="/staff/due.js"></script>
+<script src="/staff/pipeline.js"></script>
 </body>
 </html>

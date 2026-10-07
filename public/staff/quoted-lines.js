@@ -82,6 +82,7 @@
     var job = await op('w-details-error', {
       op: 'save', id: open.id, site: open.site,
       customerName: el('w-customer').value, customerPostcode: el('w-postcode').value,
+      customerPhone: el('w-phone').value, customerEmail: el('w-email').value,
       invoiceNetPence: open.frozen ? open.invoiceNetPence : invoice,
       jobDate: el('w-date').value || undefined, jobTime: el('w-time').value || null,
       status: open.frozen ? open.status : el('w-status').value,

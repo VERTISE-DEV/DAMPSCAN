@@ -299,22 +299,21 @@ test('the difference names the jobs behind it, and they add back to it', async (
   assert.equal(clean.differencePence, 0);
   assert.deepEqual(clean.differenceJobs, [], 'nothing to chase when the books are square');
 
-  // A third payment matched to a job that was already square: 215 recorded,
-  // 265 in the bank.
-  await upload(businessCsv([
-    { date: '2026-08-25', id: 'in-3', type: 'TRANSFER', description: 'Payment from PRIYA AGAIN', amount: 50 }
-  ]), 'extra.csv');
-  const extra = (await get('?view=in')).json().transactions.find((t) => t.description === 'Payment from PRIYA AGAIN');
-  const t = (await post({ id: extra.id, jobId: job.id })).json().totals;
+  // The price edited down after the money arrived: 215 in the bank, the job
+  // now says 165. (A second payment onto a paid job is refused outright.)
+  const edited = await call(jobsRoute, { method: 'POST', url: '/api/admin/jobs', headers: { cookie },
+    body: { id: job.id, surveyType: 'localised', surveyor: 'tom', customerName: 'Priya Sharma', customerPostcode: 'ME14 1AA', jobDate: '2026-08-20', surveyPricePence: 16500, status: 'completed' } });
+  assert.equal(edited.statusCode, 200, edited.body);
+  const t = (await get()).json().totals;
 
   assert.equal(t.differencePence, 5000);
   assert.equal(t.differenceJobs.length, 1);
   const [only] = t.differenceJobs;
   assert.equal(only.id, job.id);
-  assert.equal(only.receivedPence, 26500);
-  assert.equal(only.countedValuePence, 21500);
+  assert.equal(only.receivedPence, 21500);
+  assert.equal(only.countedValuePence, 16500);
   assert.equal(only.deltaPence, 5000);
-  assert.equal(only.lines, 3);
+  assert.equal(only.lines, 2);
   assert.equal(only.reason, 'more money matched than the job is worth');
   assert.equal(t.differenceJobs.reduce((sum, j) => sum + j.deltaPence, 0), t.differencePence,
     'the list is the whole of the difference');
@@ -346,4 +345,16 @@ test('something that is not a statement is refused, and an empty body too', asyn
   assert.equal(bad.json().error, 'not_a_statement');
   assert.equal((await upload('   ')).statusCode, 400);
   assert.equal((await pool.query('select count(*)::int as n from bank_statements')).rows[0].n, 0, 'nothing recorded for a refused file');
+});
+
+test('a job already paid in full cannot take another payment, by hand or by the importer', async () => {
+  const job = await createJob();
+  await upload(businessCsv(AUGUST));
+  const extra = businessCsv([{ date: '2026-09-02', id: 'in-9', type: 'TRANSFER', description: 'Payment from PRIYA SHARMA', payer: 'PRIYA SHARMA', amount: 107.5 }]);
+  const r = (await upload(extra, 'september.csv')).json();
+  assert.equal(r.matched, 0, 'the importer does not guess a second payment onto a paid job');
+  const line = (await get('?view=all')).json().transactions.find((t) => t.postedOn === '2026-09-02');
+  const refused = await post({ id: line.id, jobId: job.id });
+  assert.equal(refused.statusCode, 400);
+  assert.match(refused.json().errors.jobId, /already paid in full \(£215\.00 of £215\.00\)/);
 });

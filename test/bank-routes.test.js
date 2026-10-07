@@ -148,6 +148,20 @@ test('importing a statement stores its lines, matches the payments and guesses t
   assertBalances(totals);
 });
 
+test('each person sees earned, costs and taken, left equals their balance, and every amount taken is listed', async () => {
+  await createJob();
+  await upload(businessCsv(AUGUST));
+  const { totals } = (await get('?view=all')).json();
+  const tom = totals.statements.find((p) => p.key === 'tom');
+  assert.equal(tom.earnedPence, 12310);
+  assert.equal(tom.costsPence, -3403, 'his share of the fuel');
+  assert.equal(tom.takenPence, -50000, 'the drawings');
+  assert.equal(tom.leftPence, totals.balances.tom, 'left is exactly the balance the reconciliation uses');
+  assert.deepEqual(tom.taken.map((x) => [x.postedOn, x.amountPence, x.how]), [['2026-08-31', 50000, 'Transfer']]);
+  for (const p of totals.statements) assert.equal(p.leftPence, totals.balances[p.key], p.key);
+  assert.deepEqual(totals.statements.find((p) => p.key === 'scott').taken, [], 'Scott took nothing');
+});
+
 test('uploading an overlapping statement adds nothing twice', async () => {
   await createJob();
   await upload(businessCsv(AUGUST));

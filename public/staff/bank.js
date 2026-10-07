@@ -14,7 +14,6 @@
   /* Opens on the open business's books. The damp brands share one set. */
   var state = { books: (global.DSAREA && global.DSAREA.books) || '', view: 'attention', from: '', query: '', data: null };
 
-  var PEOPLE = [['scott', 'Scott'], ['tom', 'Tom'], ['ben', 'Ben'], ['tax', 'Tax pot']];
 
   /* `lead` is '?' or '&', depending on whether the URL already has a query. */
   function qs(lead) {
@@ -49,22 +48,50 @@
     mount.appendChild(d);
   }
 
+  /* Each person's figure is what is left in the account for them: what their
+     paid jobs earned, plus anything they put in, less their share of costs,
+     less what they have taken out. The parts are on the tile and every amount
+     taken is listed underneath, dated. */
+  function personTile(mount, p) {
+    var parts = ['Earned ' + U.money(p.earnedPence)];
+    if (p.putInPence) parts.push('put in ' + U.money(p.putInPence));
+    if (p.costsPence) parts.push('costs ' + U.money(p.costsPence));
+    parts.push('taken ' + U.money(-p.takenPence));
+    if (p.leftPence < 0) parts.push('taken ' + U.money(-p.leftPence) + ' more than earned so far');
+    tile(mount, p.name + ', left in the account', U.money(p.leftPence), parts.join(' · '), true);
+  }
+
+  function renderTaken(t) {
+    var mount = el('taken');
+    mount.textContent = '';
+    (t.statements || []).forEach(function (p) {
+      var box = U.node('div', 'taken-person');
+      box.appendChild(U.node('h3', null, p.name + ': taken ' + U.money(-p.takenPence)));
+      if (!p.taken.length) { box.appendChild(U.node('p', 'panel-note', 'Nothing taken out yet.')); mount.appendChild(box); return; }
+      var ul = U.node('ul', 'taken-list');
+      p.taken.forEach(function (x) {
+        var li = U.node('li');
+        li.appendChild(U.node('span', 'taken-amount', 'Taken ' + U.money(x.amountPence)));
+        li.appendChild(document.createTextNode(' on ' + new Date(x.postedOn + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+          + ' · ' + x.how + (x.said ? ', ' + x.said : '')));
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+      mount.appendChild(box);
+    });
+  }
+
   function renderTiles(t) {
     var mount = el('tiles');
     mount.textContent = '';
+    (t.statements || []).forEach(function (p) { personTile(mount, p); });
     if (t.model === 'quoted') {
-      t.people.forEach(function (p) {
-        tile(mount, p.name, U.money(p.balancePence), U.money(p.owedPence) + ' owed from paid jobs, ' + U.money(-p.paidPence) + ' paid out', true);
-      });
       tile(mount, 'Tax pot', U.money(t.tax.balancePence), U.money(t.tax.reservedPence) + ' reserved, ' + U.money(-t.tax.paidPence) + ' paid to HMRC', true);
       tile(mount, 'Kept by the company', U.money(t.retainedPence), 'on ' + U.num(t.jobs.paid) + ' paid ' + (t.jobs.paid === 1 ? 'job' : 'jobs'));
     } else {
-      PEOPLE.forEach(function (p) {
-        var earned = p[0] === 'tax' ? t.earned.taxSetAside : t.earned[p[0]];
-        tile(mount, p[1], U.money(t.balances[p[0]]),
-          U.money(earned) + ' from paid jobs, ' + U.money(t.shares[p[0]]) + ' from the bank', true);
-      });
+      tile(mount, 'Tax pot', U.money(t.balances.tax), U.money(t.earned.taxSetAside) + ' set aside, ' + U.money(-t.shares.tax) + ' paid to HMRC', true);
     }
+    renderTaken(t);
     tile(mount, 'Bank in', U.money(t.bank.inPence), U.num(t.jobs.paid) + ' paid ' + (t.jobs.paid === 1 ? 'job' : 'jobs'));
     tile(mount, 'Bank out', U.money(t.bank.outPence), U.num(t.lines) + ' lines');
     tile(mount, 'Needs attention', U.num(t.waiting), t.waiting ? 'lines waiting on a decision' : 'everything is allocated');
@@ -77,7 +104,7 @@
   function reconRows(t) {
     if (t.model === 'quoted') {
       var rows = [['Bank in, less bank out', t.bank.netPence, 'is-total']];
-      t.people.forEach(function (p) { rows.push([p.name + ', owed less paid out', p.balancePence]); });
+      (t.statements || []).forEach(function (p) { rows.push([p.name + ', left in the account', p.leftPence]); });
       rows.push(['Tax pot: reserved on paid jobs, less paid to HMRC', t.tax.balancePence]);
       rows.push(['Kept by the company on paid jobs', t.retainedPence]);
       if (t.unassignedPence) rows.push(['Owed to somebody not yet named on the business', t.unassignedPence]);
@@ -90,7 +117,7 @@
     }
     return [
       ['Bank in, less bank out', t.bank.netPence, 'is-total'],
-      ['Scott', t.balances.scott], ['Tom', t.balances.tom], ['Ben', t.balances.ben], ['Tax pot', t.balances.tax],
+      ['Scott, left in the account', t.balances.scott], ['Tom, left in the account', t.balances.tom], ['Ben, left in the account', t.balances.ben], ['Tax pot', t.balances.tax],
       ['Remedial work settled offline between Tom and Ben', t.remedialOfflinePence],
       ['Deposits on jobs not yet paid in full', t.partPaidPence],
       ['Money in not yet matched to a job or split', t.unmatchedInPence],
@@ -138,12 +165,12 @@
 
     var start = 'From ' + (t.from || 'the first imported line') + '. ';
     el('basis').textContent = t.model === 'quoted'
-      ? start + 'A person\'s figure is what the paid jobs say they are owed, less every line paid out to them. '
+      ? start + 'A person\'s figure is what is left in the account for them: what the paid jobs say they are owed, less every line paid out to them. '
         + 'The tax pot is what the paid jobs reserved less what has gone to HMRC. Spend from the account is the '
         + 'company\'s unless it went to a person, and is set against the costs recorded on paid jobs. '
         + 'Transfers between your own accounts are left out of everything.'
-      : start + 'A person\'s figure is what the paid jobs say they earned plus their share of every bank line '
-        + 'split to them, so drawings paid out to them and spend that was theirs come off it. The tax pot is '
+      : start + 'A person\'s figure is what is left in the account for them: what their paid jobs earned, plus anything they put in, '
+        + 'less their share of costs and less everything taken out to them, each listed under Taken out. The tax pot is '
         + 'what the paid jobs set aside less what has gone to HMRC. Transfers between your own accounts are '
         + 'left out of everything.';
   }

@@ -54,7 +54,8 @@
     top.appendChild(U.node('span', 'card-value', U.money(job.invoiceNetPence)));
     card.appendChild(top);
     card.appendChild(U.node('span', 'card-meta', [job.customerPostcode, meta(job)].filter(Boolean).join(' · ')));
-    if (job.messages && job.messages.due) card.appendChild(U.node('span', 'tag tag--accent', DUE[job.messages.due.kind]));
+    if (job.quote && job.quote.accepted) card.appendChild(U.node('span', 'tag tag--good', 'Accepted online, book a date'));
+    else if (job.messages && job.messages.due) card.appendChild(U.node('span', 'tag tag--accent', DUE[job.messages.due.kind]));
     var actions = U.node('div', 'card-actions');
     var open = document.createElement('a');
     open.className = 'pill';

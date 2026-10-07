@@ -89,13 +89,13 @@
     ], d.visits, { empty: 'Nothing booked in the next seven days.' });
 
     U.table(el('quotes'), [
-      { label: 'Out for', get: function (r) { return r.ageDays + (r.ageDays === 1 ? ' day' : ' days'); } },
+      { label: 'Out for', get: function (r) { return r.acceptedAt ? U.node('span', 'tag tag--good', 'Accepted, book a date') : r.ageDays + (r.ageDays === 1 ? ' day' : ' days'); } },
       { label: 'Brand', get: brand },
       { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
       { label: 'Postcode', get: function (r) { return r.postcode || ''; } },
       { label: 'Quoted', numeric: true, get: function (r) { return U.money(r.invoicePence); } },
       { label: 'Open', sr: true, get: open }
-    ], d.quotes, { empty: 'No quotes waiting on an answer.', onRow: function (tr, r) { if (r.ageDays >= 7) tr.className = 'is-stale'; } });
+    ], d.quotes, { empty: 'No quotes waiting on an answer.', onRow: function (tr, r) { if (r.ageDays >= 7 && !r.acceptedAt) tr.className = 'is-stale'; } });
 
     U.table(el('services'), [
       { label: 'Due', get: function (r) { return r.daysUntilDue < 0 ? Math.abs(r.daysUntilDue) + ' days overdue' : r.daysUntilDue === 0 ? 'Today' : 'In ' + r.daysUntilDue + (r.daysUntilDue === 1 ? ' day' : ' days'); } },

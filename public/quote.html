@@ -40,8 +40,16 @@
   .skip-link { position:absolute; left:-9999px; top:8px; background:#fff; color:var(--ink); padding:8px 14px; border-radius:8px; z-index:10; }
   .skip-link:focus { left:8px; }
   .state { padding:60px 32px; text-align:center; color:var(--muted); }
+  .accept { margin-top:26px; padding:20px; border:2px solid var(--accent); border-radius:12px; }
+  .accept h2 { margin:0 0 6px; font-size:19px; }
+  .accept p { margin:0 0 14px; color:var(--muted); font-size:15px; }
+  .accept label { display:block; font-weight:600; margin-bottom:6px; }
+  .accept input[type=text] { width:100%; max-width:360px; font:inherit; padding:10px 12px; border:1px solid #c5cad2; border-radius:8px; }
+  .accept .tick { display:flex; gap:10px; align-items:flex-start; font-weight:400; margin:14px 0; }
+  .accept .tick input { width:20px; height:20px; margin-top:2px; flex:none; }
+  .accept .err { color:#a3291c; min-height:1em; margin:0 0 10px; }
   @media (max-width:560px) { header, main { padding-left:18px; padding-right:18px; } .contact { text-align:left; } .sheet { margin:0; border-radius:0; } }
-  @media print { body { background:#fff; } .sheet { box-shadow:none; margin:0; max-width:none; } .actions { display:none; } header { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+  @media print { body { background:#fff; } .sheet { box-shadow:none; margin:0; max-width:none; } .actions, .accept { display:none; } header { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
 </style>
 </head>
 <body>
@@ -78,6 +86,17 @@
         <p>If opening up shows something nobody could see beforehand, we stop, show you, and agree any change with you before doing it.</p>
         <p>To go ahead, or with any question, call or email us using the details at the top of this quote.</p>
       </div>
+      <section class="accept" id="accept" hidden aria-labelledby="accept-h">
+        <h2 id="accept-h">Accept this quote</h2>
+        <p>Type your name and tick the box. We will then be in touch to agree a start date.</p>
+        <form id="accept-form" novalidate>
+          <label for="accept-name">Your full name</label>
+          <input id="accept-name" type="text" autocomplete="name" maxlength="80" />
+          <label class="tick" for="accept-agree"><input id="accept-agree" type="checkbox" /> <span>I accept this quote, for the work and the price shown above.</span></label>
+          <p class="err" id="accept-error" role="alert"></p>
+          <button class="btn btn-primary" type="submit" id="accept-btn">Accept the quote</button>
+        </form>
+      </section>
       <div class="actions">
         <button class="btn btn-primary" id="print" type="button">Print or save as PDF</button>
         <a class="btn btn-ghost" id="call" href="#">Call us</a>
@@ -119,8 +138,38 @@
       el('valid').textContent = day(addDays(q.issuedOn, q.validDays));
 
       var notice = el('notice');
+      function acceptedNotice(name, on) {
+        notice.textContent = 'Accepted' + (name ? ' by ' + name : '') + (on ? ' on ' + day(on) : '') + '. Thank you, we will be in touch to agree a start date.';
+        notice.className = 'notice ok';
+        notice.hidden = false;
+      }
       if (q.withdrawn) { notice.textContent = 'This quote is no longer open. Call us if you would like it looked at again.'; notice.hidden = false; }
-      else if (q.accepted) { notice.textContent = 'Accepted. Thank you, we will be in touch about dates.'; notice.className = 'notice ok'; notice.hidden = false; }
+      else if (q.accepted) acceptedNotice(q.acceptedName, q.acceptedOn);
+      else if (q.expired) { notice.textContent = 'This quote was valid until ' + day(addDays(q.issuedOn, q.validDays)) + '. Call us and we will look at it again.'; notice.hidden = false; }
+
+      /* Accepting online: the name typed and the tick are the customer's
+         signature. The server checks again that the quote is still open. */
+      el('accept').hidden = !q.acceptable;
+      ['accept-name', 'accept-agree'].forEach(function (id) { el(id).addEventListener('input', function () { el('accept-error').textContent = ''; }); });
+      el('accept-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = el('accept-name').value.trim();
+        var err = el('accept-error');
+        if (name.length < 2) { err.textContent = 'Please type your full name.'; el('accept-name').focus(); return; }
+        if (!el('accept-agree').checked) { err.textContent = 'Please tick the box to accept.'; return; }
+        err.textContent = '';
+        el('accept-btn').disabled = true;
+        fetch('/api/quote', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ t: token, name: name, agree: true }) })
+          .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, body: b }; }); })
+          .then(function (r) {
+            if (!r.ok) { err.textContent = (r.body && r.body.message) || 'That did not go through. Please try again, or call us.'; el('accept-btn').disabled = false; return; }
+            el('accept').hidden = true;
+            acceptedNotice(name, new Date().toISOString().slice(0, 10));
+            notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          })
+          .catch(function () { err.textContent = 'That did not go through. Please try again, or call us.'; el('accept-btn').disabled = false; });
+      });
 
       var tbody = el('lines');
       q.lines.forEach(function (l) {

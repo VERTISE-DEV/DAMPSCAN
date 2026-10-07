@@ -69,7 +69,8 @@
       });
 
     var note = el('w-quote-note');
-    if (!q.lines.length) note.textContent = 'With no lines, the job keeps the price typed under "The job".';
+    if (q.accepted) note.textContent = 'Accepted online by ' + q.accepted.name + ' on ' + U.when(q.accepted.at) + ', at ' + U.money(j.invoiceNetPence) + ' net. That price is agreed: lines added now change your margin, not the price. Book a start date to move it on.';
+    else if (!q.lines.length) note.textContent = 'With no lines, the job keeps the price typed under "The job".';
     else if (q.driving) note.textContent = 'While the job is Quoted, its price follows these lines. Once it is booked, the agreed price stays fixed.';
     else note.textContent = 'This job is ' + j.status + ', so its agreed price of ' + U.money(j.invoiceNetPence) + ' stays fixed. Lines added now change your margin, not the price.';
 

@@ -676,3 +676,48 @@ create table if not exists job_messages (
   sent_by   bigint references people (id) on delete set null
 );
 create index if not exists job_messages_job_idx on job_messages (job_id, sent_at);
+
+-- ---------------------------------------------------------------------------
+-- Accepting a quote online
+--
+-- The customer's quote page has an accept button: they type their name and
+-- tick that they accept. That is recorded here, with the time and a salted
+-- hash of the address it came from (never the address itself), and the price
+-- stops following the quote lines from that moment, because it is now agreed.
+-- The job stays quoted until staff book a start date, so nothing lands on the
+-- calendar on a day nobody has agreed.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists quote_accepted_at      timestamptz;
+alter table jobs add column if not exists quote_accepted_name    text;
+alter table jobs add column if not exists quote_accepted_ip_hash text;
+
+-- ---------------------------------------------------------------------------
+-- Price book and quote templates
+--
+-- The price book is what things cost each business, by the unit, so a quote
+-- line is a pick and a quantity rather than a figure looked up every time. A
+-- template is a whole set of lines and a markup, saved from a quote that was
+-- right, for the jobs that come round again: a standard re-roof, a single
+-- split install. Both belong to one business and are never shared across.
+-- ---------------------------------------------------------------------------
+create table if not exists price_items (
+  id             bigserial primary key,
+  business_slug  text   not null references businesses (slug),
+  kind           text   not null check (kind in ('materials', 'labour', 'scaffolding', 'waste', 'other')),
+  description    text   not null,
+  unit           text   not null default 'each',
+  cost_pence     bigint not null check (cost_pence >= 0),
+  active         boolean not null default true,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+create index if not exists price_items_business_idx on price_items (business_slug, kind, description) where active;
+create table if not exists quote_templates (
+  id             bigserial primary key,
+  business_slug  text   not null references businesses (slug),
+  name           text   not null,
+  lines          jsonb  not null default '[]'::jsonb,
+  markup_bp      integer check (markup_bp between 0 and 100000),
+  created_at     timestamptz not null default now()
+);
+create index if not exists quote_templates_business_idx on quote_templates (business_slug, name);

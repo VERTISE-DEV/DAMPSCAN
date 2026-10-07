@@ -61,3 +61,10 @@
 .agenda h3{font-size:13px;color:var(--muted);margin:16px 0 6px}
 .agenda .ev{white-space:normal;padding:8px 10px;margin-bottom:6px}
 @media (max-width:760px){.cal,.cal-dows{display:none}.agenda{display:block}}
+
+/* ---------- price book, inside the job's Quote block ---------- */
+.pb{margin:10px 0;display:flex;flex-direction:column;gap:6px}
+.pb-manage{margin-top:6px}
+.pb-manage summary{cursor:pointer;font-size:13px;color:var(--muted);font-weight:600}
+.pb-manage .lines{margin-top:10px}
+.pb-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 6px}

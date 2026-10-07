@@ -6,7 +6,7 @@
 
   var U = global.DSUI;
   var M = global.DSMSG;
-  var ORDER = ['quote', 'followup', 'reminder', 'review'];
+  var ORDER = ['quote', 'followup', 'reminder', 'invoice', 'review'];
 
   var block = document.createElement('section');
   block.className = 'client-block msg-block';

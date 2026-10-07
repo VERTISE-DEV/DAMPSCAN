@@ -95,3 +95,9 @@
 .bar-a{background:var(--accent)}
 .bar-b{background:var(--good)}
 .chart-labels{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;font-size:11px;color:var(--muted-2);text-align:center;margin-top:6px}
+
+/* ---------- invoice, in the job's Quote block ---------- */
+.invoice-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.invoice-row .panel-note{flex-basis:100%;margin:0}
+.invoice-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
+.invoice-row[hidden],.invoice-row a[hidden]{display:none}

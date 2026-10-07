@@ -80,6 +80,7 @@
     if (q.url) open.href = q.url;
     el('w-quote-costs').hidden = !q.lines.some(function (l) { return l.kind !== 'labour'; });
     el('w-quote-error').classList.remove('is-shown');
+    fillInvoice(j);
   }
 
   el('w-quote-form').addEventListener('submit', async function (e) {
@@ -98,6 +99,45 @@
     var job = await op({ op: 'markup', markupBp: Math.round(n * 100) }, 'The markup could not be saved.');
     if (job) el('w-quote-saved').textContent = 'Markup saved';
   });
+
+  /* ---------- the invoice ---------- */
+  var inv = U.node('div', 'invoice-row');
+  var invNote = U.node('p', 'panel-note');
+  var invDue = document.createElement('select');
+  invDue.id = 'w-invoice-due';
+  [['0', 'Due on receipt'], ['7', 'Due in 7 days'], ['14', 'Due in 14 days'], ['30', 'Due in 30 days']].forEach(function (o) {
+    var opt = document.createElement('option'); opt.value = o[0]; opt.textContent = o[1]; invDue.appendChild(opt);
+  });
+  invDue.value = '14';
+  invDue.setAttribute('aria-label', 'When payment is due');
+  var invBtn = U.node('button', 'btn btn--ghost btn--sm', 'Issue invoice');
+  invBtn.type = 'button';
+  var invOpen = document.createElement('a');
+  invOpen.className = 'btn btn--ghost btn--sm';
+  invOpen.target = '_blank';
+  invOpen.rel = 'noopener';
+  invOpen.textContent = 'Open the invoice';
+  [invNote, invDue, invBtn, invOpen].forEach(function (n) { inv.appendChild(n); });
+  el('w-quote-error').parentNode.insertBefore(inv, el('w-quote-error'));
+  invBtn.addEventListener('click', async function () {
+    var open = Q.state.open;
+    if (!open.quote.invoice && !global.confirm('Issue an invoice for ' + U.money(open.invoiceNetPence) + ' plus VAT? It takes the next invoice number and cannot be undone.')) return;
+    var job = await op({ op: 'invoice', dueDays: Number(invDue.value) }, 'The invoice could not be issued.');
+    if (job) el('w-quote-saved').textContent = 'Invoice ' + job.quote.invoice.number + ' issued. Send it from Messages.';
+  });
+
+  function fillInvoice(j) {
+    var q = j.quote;
+    var ready = ['booked', 'completed', 'paid'].indexOf(j.status) !== -1 && j.invoiceNetPence > 0;
+    inv.hidden = !ready && !q.invoice;
+    invOpen.hidden = !(q.invoice && q.invoice.url);
+    if (q.invoice && q.invoice.url) invOpen.href = q.invoice.url;
+    invBtn.textContent = q.invoice ? 'Change due date' : 'Issue invoice';
+    invBtn.disabled = !q.canInvoice;
+    invNote.textContent = !q.canInvoice ? 'Invoices need the business address and VAT number added to the site first.'
+      : q.invoice ? 'Invoice ' + q.invoice.number + ', issued ' + U.when(q.invoice.issuedAt) + (q.invoice.dueOn ? ', due ' + new Date(q.invoice.dueOn + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }) : '') + '.'
+        : 'Ready to invoice: ' + U.money(j.invoiceNetPence) + ' plus VAT.';
+  }
 
   el('w-quote-link').addEventListener('click', async function () {
     var job = Q.state.open;

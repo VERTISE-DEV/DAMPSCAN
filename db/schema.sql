@@ -794,3 +794,20 @@ create table if not exists mcp_tokens (
   created_at     timestamptz not null default now()
 );
 create index if not exists mcp_tokens_person_idx on mcp_tokens (person_id) where revoked_at is null;
+
+-- ---------------------------------------------------------------------------
+-- Invoices for the quoted trades
+--
+-- An invoice is the agreed job, issued: a number from the business's own
+-- sequence (UK VAT invoices must be numbered in an unbroken sequence), the
+-- date it was issued, which is the tax point, and when payment is due. The
+-- lines and payments are read live from the job, so a payment recorded after
+-- issuing shows on the same invoice as a lower balance.
+-- ---------------------------------------------------------------------------
+alter table businesses add column if not exists next_invoice integer not null default 1;
+alter table jobs add column if not exists invoice_number integer;
+alter table jobs add column if not exists invoiced_at    timestamptz;
+alter table jobs add column if not exists invoice_due_on date;
+create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice_number) where invoice_number is not null;
+alter table job_messages drop constraint if exists job_messages_kind_check;
+alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice'));

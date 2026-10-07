@@ -119,7 +119,7 @@ const SITES = {
     key: 'roofing',
     brand: BRANDS.roofing.name,
     origin: BRANDS.roofing.origin,
-    logo: null,
+    logo: '/assets/verge-logo.png',
     phone: BRANDS.roofing.phone,
     phoneLabel: BRANDS.roofing.phoneLabel,
     email: BRANDS.roofing.email,
@@ -140,9 +140,9 @@ const SITES = {
       heading: 'Get a free quote',
       body: 'Tell us what the roof needs. We reply the same day, come out and price it for free, and put a fixed price in writing.'
     },
-    headBg: 'rgba(23,26,31,.88)',
-    headSolid: '#171a1f',
-    lockup: '<span class="logo"><span class="logo-type"><span class="logo-word">Verge<span class="scan">Roofing</span></span><span class="logo-tag">Higher standards</span></span></span>',
+    headBg: 'rgba(20,20,20,.9)',
+    headSolid: '#141414',
+    lockup: '<span class="logo"><img src="/assets/verge-logo.png" alt="Verge Roofing" width="155" height="48" /><span class="logo-tag">Higher standards</span></span>',
     /* No Prices entry, because every roof is quoted and the guides carry the
        basis instead. No Areas entry either, until the regional pages are
        carried across: a nav item is a promise that a page answers. */
@@ -195,8 +195,8 @@ const SITES = {
       heading: 'Get a free quote',
       body: 'Tell us what you are trying to solve. We reply the same day, the quote visit costs nothing, and the price comes back fixed and in writing.'
     },
-    headBg: 'rgba(12,32,46,.88)',
-    headSolid: '#0c202e',
+    headBg: 'rgba(15,23,42,.88)',
+    headSolid: '#0f172a',
     lockup: '<span class="logo"><span class="logo-type"><span class="logo-word">Cool<span class="scan">Right</span></span><span class="logo-tag">Climate control. Done right.</span></span></span>',
     nav: [
       { label: 'How It Works', href: '/#how' },

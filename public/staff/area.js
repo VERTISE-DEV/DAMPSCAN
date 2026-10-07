@@ -1,63 +1,89 @@
-/* The three staff areas: ATi and DampScan, Verge Roofing, CoolRight.
+/* The staff site's two levels of navigation.
 
-   One staff site, three businesses that work differently, so each gets its own
-   tabs and every page shows only that business. The area comes from ?area= in
-   the address, then from the last one used on this device, then the first
-   business the signed in person holds. A person sees only the areas their
-   grants cover; the shared owners' code and an admin see all three.
+   Across the top: the companies, ATi & DampScan, Verge Roofing and CoolRight,
+   and the Calendar, which is one view of every company's work together.
+   Underneath, once a company is chosen: its own sections (Due, Leads,
+   Pipeline and the rest), which differ because the businesses work
+   differently. Every page shows only the chosen company's data.
+
+   The company comes from ?area= in the address, then from the last one used
+   on this device, then the first the signed in person holds. A person sees
+   only the companies their grants cover; the shared owners' code and an
+   admin see all three.
 
    Loaded straight after ui.js on every staff page and before the page's own
-   script, so the tabs and the brand pills are right before anything loads,
-   and DSUI.get adds the area to every request that takes one. */
+   script, so the navigation and the brand pills are right before anything
+   loads, and DSUI.get adds the company to every request that takes one. */
 (function (global) {
   'use strict';
 
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Calendar', 'calendar.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
     }
   };
   var ORDER = ['damp', 'roofing', 'ac'];
   var KEY = 'ds_staff_area';
+  var CALENDAR = 'calendar.html';
 
   function stored() { try { return global.localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(a) { try { global.localStorage.setItem(KEY, a); } catch (e) {} }
 
+  var page = global.location.pathname.split('/').pop() || 'due.html';
+  /* The calendar belongs to no one company: it shows them all together. */
+  var overall = page === CALENDAR;
   var fromUrl = new URLSearchParams(global.location.search).get('area');
   var area = AREAS[fromUrl] ? fromUrl : (AREAS[stored()] ? stored() : 'damp');
-  remember(area);
-  var page = global.location.pathname.split('/').pop() || 'due.html';
+  if (!overall) remember(area);
 
   function href(a, file) { return '/staff/' + file + '?area=' + a; }
   function hasPage(a, file) { return AREAS[a].tabs.some(function (t) { return t[1] === file; }); }
 
-  /* A page this area does not have, such as Jobs under Verge, goes to the
-     area's first tab rather than showing another business's screen. */
-  if (!hasPage(area, page)) { global.location.replace(href(area, AREAS[area].tabs[0][1])); return; }
+  /* A page this company does not have, such as Jobs under Verge, goes to the
+     company's first section rather than showing another business's screen. */
+  if (!overall && !hasPage(area, page)) { global.location.replace(href(area, AREAS[area].tabs[0][1])); return; }
 
   var root = document.documentElement;
-  root.setAttribute('data-area', area);
+  if (!overall) root.setAttribute('data-area', area);
 
-  function drawTabs() {
+  function link(text, to, current, cls) {
+    var a = document.createElement('a');
+    a.href = to;
+    a.textContent = text;
+    if (cls) a.className = cls;
+    if (current) a.setAttribute('aria-current', 'page');
+    return a;
+  }
+
+  /* The top bar: one link per company, then the Calendar. */
+  function drawCompanies(allowed) {
     var nav = document.querySelector('nav.tabs');
     if (!nav) return;
     nav.textContent = '';
-    AREAS[area].tabs.forEach(function (t) {
-      var a = document.createElement('a');
-      a.href = href(area, t[1]);
-      a.textContent = t[0];
-      if (t[1] === page) a.setAttribute('aria-current', 'page');
-      nav.appendChild(a);
-    });
+    nav.setAttribute('aria-label', 'Companies');
+    allowed.forEach(function (a) { nav.appendChild(link(AREAS[a].name, href(a, 'due.html'), !overall && a === area, 'co-tab co-tab--' + a)); });
+    nav.appendChild(link('Calendar', '/staff/' + CALENDAR, overall, 'co-tab co-tab--calendar'));
+  }
+
+  /* The row under it: the chosen company's own sections. */
+  function drawSections() {
+    if (overall) return;
+    var header = document.querySelector('header.top');
+    if (!header) return;
+    var bar = document.createElement('nav');
+    bar.className = 'section-tabs';
+    bar.setAttribute('aria-label', AREAS[area].name + ' sections');
+    AREAS[area].tabs.forEach(function (t) { bar.appendChild(link(t[0], href(area, t[1]), t[1] === page, 'section-tab')); });
+    header.parentNode.insertBefore(bar, header.nextSibling);
   }
 
   /* The header lockup is the business you are working in. The damp area keeps
@@ -106,43 +132,31 @@
     }
   }
 
-  /* The switcher, once we know which areas this person holds. */
-  async function drawSwitcher() {
+  /* Which companies this person holds, once /api/admin/me says. Until then
+     the top bar shows all three, which is what most people with access see. */
+  async function trimCompanies() {
     var me;
     try { me = await global.DSUI.get('/api/admin/me'); } catch (e) { return; }
     var held = {};
     (me.businesses || []).forEach(function (b) { held[b.slug] = true; });
     var allowed = ORDER.filter(function (a) { return AREAS[a].sites.some(function (s) { return held[s]; }); });
     if (!allowed.length) return;
-    if (allowed.indexOf(area) === -1) { remember(allowed[0]); global.location.replace(href(allowed[0], 'due.html')); return; }
-    if (allowed.length < 2) return;
-    var header = document.querySelector('header.top');
-    var bar = document.createElement('nav');
-    bar.className = 'area-switch';
-    bar.setAttribute('aria-label', 'Business');
-    allowed.forEach(function (a) {
-      var link = document.createElement('a');
-      link.href = href(a, hasPage(a, page) ? page : 'due.html');
-      link.textContent = AREAS[a].name;
-      link.className = 'area-pill area-pill--' + a;
-      if (a === area) link.setAttribute('aria-current', 'true');
-      bar.appendChild(link);
-    });
-    header.parentNode.insertBefore(bar, header.nextSibling);
+    if (!overall && allowed.indexOf(area) === -1) { remember(allowed[0]); global.location.replace(href(allowed[0], 'due.html')); return; }
+    drawCompanies(allowed);
   }
 
-  drawTabs();
-  drawLogo();
-  trimPills();
-  drawSwitcher();
+  drawCompanies(ORDER);
+  drawSections();
+  if (!overall) { drawLogo(); trimPills(); }
+  trimCompanies();
 
   global.DSAREA = {
-    area: area,
-    name: AREAS[area].name,
-    sites: AREAS[area].sites.slice(),
-    books: AREAS[area].books,
-    /* The routes that narrow by area. Others ignore it, so adding it is safe,
-       but keeping the list honest makes a missing one obvious. */
-    scoped: /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights)\b/
+    area: overall ? null : area,
+    name: overall ? 'All companies' : AREAS[area].name,
+    sites: overall ? [] : AREAS[area].sites.slice(),
+    books: overall ? null : AREAS[area].books,
+    /* The routes that narrow by company. The calendar asks for every company
+       the person holds, so nothing is added to its requests. */
+    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights)\b/
   };
 })(window);

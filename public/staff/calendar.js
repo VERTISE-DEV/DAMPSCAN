@@ -1,4 +1,5 @@
-/* A month of booked work and service visits, for the area you are in. On a
+/* A month of booked work and service visits, for every company you hold,
+   each in its own colour. On a
    phone the grid becomes a list of days with something on them. "Add to my
    calendar" writes the month as an .ics file, which is how it gets into a
    phone or Outlook calendar without the staff area holding anyone's login. */
@@ -47,7 +48,20 @@
     return a;
   }
 
+  /* Which colour is which company, for the companies with something on. */
+  function drawKey() {
+    var key = el('cal-key');
+    key.textContent = '';
+    var seen = {};
+    state.events.forEach(function (e) { seen[e.site] = true; });
+    Object.keys(NAME).filter(function (s) { return seen[s]; }).forEach(function (s) {
+      var item = U.node('span', 'ev ev--' + s + ' cal-key-item', NAME[s]);
+      key.appendChild(item);
+    });
+  }
+
   function render() {
+    drawKey();
     var win = windowFor(state.month);
     el('month').textContent = at(state.month + '-01').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
     var byDay = {};

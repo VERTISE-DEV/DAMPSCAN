@@ -51,12 +51,14 @@
 .ev{display:block;font-size:12px;line-height:1.3;padding:4px 6px;border-radius:6px;border-left:3px solid var(--accent);
   background:var(--navy);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ev:hover{color:var(--text);background:var(--slate-2)}
-.ev--dampscan{border-left-color:#4fa8e8}
+.ev--dampscan{border-left-color:#8b7cff}
 .ev--ati-london{border-left-color:#d6b25e}
 .ev--roofing{border-left-color:#f4581c}
 .ev--ac{border-left-color:#38bdf8}
 .ev--service{border-left-style:dashed}
 .ev--done{opacity:.6}
+.cal-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.cal-key-item{display:inline-block;width:auto}
 .agenda{display:none;margin-top:16px}
 .agenda h3{font-size:13px;color:var(--muted);margin:16px 0 6px}
 .agenda .ev{white-space:normal;padding:8px 10px;margin-bottom:6px}

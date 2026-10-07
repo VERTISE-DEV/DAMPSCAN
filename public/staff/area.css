@@ -9,15 +9,18 @@
 .logo--roofing img{height:32px;width:auto;display:block}
 .logo--ac .logo-word{text-transform:none;letter-spacing:-.02em}
 
-/* The switcher sits under the header, one link per business the person holds. */
-.area-switch{display:flex;gap:8px;flex-wrap:wrap;max-width:var(--maxw);margin:14px auto 0;padding:0 var(--pad)}
-.area-pill{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;
+/* The top bar is the companies and the Calendar; the chosen company wears
+   its own colour there. Its sections sit in the row underneath. */
+.tabs .co-tab[aria-current="page"]{border-color:var(--accent);background:var(--accent-soft)}
+.tabs .co-tab--damp[aria-current="page"]{border-color:#4fa8e8;background:rgba(79,168,232,.12)}
+.tabs .co-tab--roofing[aria-current="page"]{border-color:#f4581c;background:rgba(244,88,28,.13)}
+.tabs .co-tab--ac[aria-current="page"]{border-color:#38bdf8;background:rgba(56,189,248,.12)}
+.section-tabs{display:flex;gap:6px;flex-wrap:wrap;max-width:var(--maxw);margin:14px auto 0;padding:0 var(--pad)}
+.section-tab{display:inline-flex;align-items:center;min-height:38px;padding:0 15px;border-radius:999px;
   border:1px solid var(--line-strong, rgba(255,255,255,.15));color:var(--muted);font-weight:600;font-size:14px}
-.area-pill:hover{color:var(--text);border-color:var(--accent-ring)}
-.area-pill[aria-current="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--text)}
-.area-pill--damp[aria-current="true"]{border-color:#4fa8e8}
-.area-pill--roofing[aria-current="true"]{border-color:#f4581c;background:rgba(244,88,28,.13)}
-.area-pill--ac[aria-current="true"]{border-color:#38bdf8;background:rgba(56,189,248,.12)}
+.section-tab:hover{color:var(--text);border-color:var(--accent-ring)}
+.section-tab[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#06121f}
+:root[data-area="roofing"] .section-tab[aria-current="page"]{color:#fff}
 
 /* area.js hides the brand row in a one-brand area; .ranges sets display:flex,
    which would otherwise beat the hidden attribute. */

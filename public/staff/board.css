@@ -102,3 +102,6 @@
 .invoice-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
 .invoice-row[hidden],.invoice-row a[hidden]{display:none}
 .form-row[hidden]{display:none}
+.search-site + .search-site{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.search-title{font-size:16px;margin-bottom:10px}
+.search-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 8px}

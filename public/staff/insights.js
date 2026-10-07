@@ -61,6 +61,58 @@
     mount.appendChild(labels);
   }
 
+  var BRAND = { dampscan: 'DampScan', 'ati-london': 'ATi Damp Survey', roofing: 'Verge Roofing', ac: 'CoolRight' };
+
+  /* Search Console, one block per brand: the last 28 settled days against the
+     28 before, then the searches and pages that brought people. */
+  function renderSearch(d) {
+    var mount = el('search');
+    mount.textContent = '';
+    if (!d.searchConnected) {
+      mount.appendChild(U.node('p', 'panel-note', 'Not connected yet. Once a Google service account key is added to the site and the account is given access to each site in Search Console, this shows how often each business appears in Google, how often it is clicked, and the searches behind it.'));
+      return;
+    }
+    d.search.forEach(function (s) {
+      var box = U.node('div', 'search-site');
+      box.appendChild(U.node('h3', 'search-title', BRAND[s.site] || s.site));
+      if (s.error) {
+        box.appendChild(U.node('p', 'panel-note', s.error === 'not_shared'
+          ? 'Search Console has not given the service account access to ' + s.property + ' yet. Add it as a user on that property.'
+          : 'Search Console could not be reached just now.'));
+        mount.appendChild(box);
+        return;
+      }
+      var t = document.createElement('div');
+      t.className = 'tiles';
+      box.appendChild(t);
+      var pos = s.now.position && s.before.position ? (s.now.position < s.before.position ? 'Up from ' : s.now.position > s.before.position ? 'Down from ' : 'Same as ') + s.before.position : '';
+      tiles(t, [
+        ['Clicks from Google', U.num(s.now.clicks), change(s.now.clicks, s.before.clicks), true],
+        ['Times shown in Google', U.num(s.now.impressions), change(s.now.impressions, s.before.impressions)],
+        ['Click rate', s.now.ctr + '%'],
+        ['Average position', s.now.position ? String(s.now.position) : 'None yet', pos]
+      ]);
+      var q = document.createElement('div');
+      var p = document.createElement('div');
+      box.appendChild(U.node('h4', 'search-sub', 'Searches'));
+      box.appendChild(q);
+      box.appendChild(U.node('h4', 'search-sub', 'Pages'));
+      box.appendChild(p);
+      var cols = function (first) {
+        return [
+          { label: first, wrap: true, get: function (r) { return first === 'Page' ? r.key.replace(/^https?:\/\/[^/]+/, '') || '/' : r.key; } },
+          { label: 'Clicks', numeric: true, get: function (r) { return U.num(r.clicks); } },
+          { label: 'Shown', numeric: true, get: function (r) { return U.num(r.impressions); } },
+          { label: 'Position', numeric: true, get: function (r) { return String(r.position); } }
+        ];
+      };
+      U.table(q, cols('Search'), s.queries, { empty: 'No searches yet.' });
+      U.table(p, cols('Page'), s.pages, { empty: 'No pages yet.' });
+      box.appendChild(U.node('p', 'panel-note', s.from + ' to ' + s.to + ', compared with the 28 days before. Google settles these figures about three days late.'));
+      mount.appendChild(box);
+    });
+  }
+
   function render(d) {
     el('p-money').hidden = !d.money;
     if (d.money) {
@@ -91,6 +143,7 @@
       ['Enquiry to job', f.daysToJob === null ? 'None yet' : f.daysToJob + ' days', 'Average, for web enquiries']
     ]);
 
+    renderSearch(d);
     var rate = function (r) { return r.enquiries ? Math.round((100 * r.won) / r.enquiries) + '%' : ''; };
     U.table(el('channels'), [
       { label: 'Channel', get: function (r) { return CHANNEL[r.channel] || r.channel; } },

@@ -750,3 +750,47 @@ create table if not exists job_photos (
 );
 create index if not exists job_photos_job_idx on job_photos (job_id, id);
 create index if not exists job_photos_public_idx on job_photos (site, published_at desc) where public;
+
+-- ---------------------------------------------------------------------------
+-- Connecting an AI assistant (ChatGPT, Claude) to the staff area
+--
+-- The assistant talks to /api/admin/mcp, the Model Context Protocol, and
+-- signs in the standard way: OAuth with PKCE. The person types their staff
+-- code on our own page, and the assistant gets a token that acts as them, with
+-- exactly their businesses and levels. It can read and can do three things:
+-- mark a deposit paid, mark a job paid in full, mark a report sent.
+--
+-- Codes and tokens are stored as SHA-256 hashes only, so this table leaking
+-- does not hand anybody a working token. A token for a person who has been
+-- deactivated stops working on its next use, because the scope is read from
+-- people and grants every time, as it is for a browser session.
+-- ---------------------------------------------------------------------------
+create table if not exists mcp_clients (
+  id             text primary key,
+  name           text,
+  redirect_uris  text[] not null,
+  secret_hash    text,
+  created_at     timestamptz not null default now()
+);
+create table if not exists mcp_codes (
+  code_hash      text primary key,
+  client_id      text not null references mcp_clients (id) on delete cascade,
+  redirect_uri   text not null,
+  challenge      text not null,
+  person_id      bigint references people (id) on delete cascade,
+  shared         boolean not null default false,
+  expires_at     timestamptz not null,
+  used_at        timestamptz
+);
+create table if not exists mcp_tokens (
+  token_hash     text primary key,
+  kind           text not null check (kind in ('access', 'refresh')),
+  client_id      text not null references mcp_clients (id) on delete cascade,
+  person_id      bigint references people (id) on delete cascade,
+  shared         boolean not null default false,
+  expires_at     timestamptz not null,
+  revoked_at     timestamptz,
+  last_used_at   timestamptz,
+  created_at     timestamptz not null default now()
+);
+create index if not exists mcp_tokens_person_idx on mcp_tokens (person_id) where revoked_at is null;

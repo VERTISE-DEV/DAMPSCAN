@@ -33,7 +33,10 @@ export const config = {
     '/services', '/services/', '/services/:slug',
     '/guides', '/guides/', '/guides/:slug',
     '/pricing', '/pricing/',
-    '/our-work', '/our-work/'
+    '/our-work', '/our-work/',
+    '/.well-known/oauth-protected-resource', '/.well-known/oauth-protected-resource/:path*',
+    '/.well-known/oauth-authorization-server', '/.well-known/oauth-authorization-server/:path*',
+    '/.well-known/openid-configuration'
   ]
 };
 
@@ -131,6 +134,13 @@ function siteFor(host) {
 export default function middleware(request) {
   const url = new URL(request.url);
   const path = url.pathname;
+
+  /* How an AI assistant finds out where to sign in to the staff area: see
+     lib/routes/admin/oauth.js. The same on every host. */
+  if (path.startsWith('/.well-known/oauth-protected-resource')) return rewrite(new URL('/api/admin/oauth?step=resource', request.url));
+  if (path.startsWith('/.well-known/oauth-authorization-server') || path === '/.well-known/openid-configuration') {
+    return rewrite(new URL('/api/admin/oauth?step=meta', request.url));
+  }
   const host = (request.headers.get('host') || '').split(':')[0];
   const london = LONDON_HOST.test(host);
   const key = siteFor(host);

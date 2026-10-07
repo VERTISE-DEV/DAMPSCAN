@@ -24,7 +24,9 @@ import due from '../../lib/routes/admin/due.js';
 import insights from '../../lib/routes/admin/insights.js';
 import jobs from '../../lib/routes/admin/jobs.js';
 import leads from '../../lib/routes/admin/leads.js';
+import mcp from '../../lib/routes/admin/mcp.js';
 import me from '../../lib/routes/admin/me.js';
+import oauth from '../../lib/routes/admin/oauth.js';
 import people from '../../lib/routes/admin/people.js';
 import photos from '../../lib/routes/admin/photos.js';
 import pricebook from '../../lib/routes/admin/pricebook.js';
@@ -34,7 +36,7 @@ import summary from '../../lib/routes/admin/summary.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, calendar, clients, contracts, due, insights, jobs, leads, me, people, photos, pricebook, quoted, rates, summary };
+const ROUTES = { attachment, bank, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, quoted, rates, summary };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;

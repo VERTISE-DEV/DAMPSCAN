@@ -1,0 +1,168 @@
+/**
+ * Connecting an AI assistant to the staff area.
+ *
+ * The whole sign-in, as ChatGPT does it: discover, register, sign in with a
+ * staff code on our page, swap the code with PKCE, call tools, refresh. Then
+ * the rules: only expected assistants may register, a code works once, the
+ * assistant sees only the person's businesses, it can read but change only
+ * the deposit, paid in full and report sent, and every change is audited.
+ */
+import { test, before, beforeEach, after, mock } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import pg from 'pg';
+import { hash, Algorithm } from '@node-rs/argon2';
+
+const TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'postgresql://dampscan@127.0.0.1:55432/dampscan';
+process.env.SESSION_SECRET = 'mcp-test-secret-long-enough-xxxxxxxx';
+process.env.IP_SALT = 'mcp-test-salt-long-enough';
+process.env.STAFF_ACCESS_CODE = '1290';
+
+const pool = new pg.Pool({ connectionString: TEST_DATABASE_URL, max: 4 });
+mock.module('../lib/db.js', {
+  namedExports: {
+    sql: () => { throw new Error('not used'); },
+    query: async (t, p = []) => (await pool.query(t, p)).rows,
+    queryOne: async (t, p = []) => { const { rows } = await pool.query(t, p); return rows[0] || null; },
+    ping: async () => true
+  }
+});
+
+const oauth = (await import('../lib/routes/admin/oauth.js')).default;
+const mcp = (await import('../lib/routes/admin/mcp.js')).default;
+const middleware = (await import('../middleware.js')).default;
+
+const REDIRECT = 'https://chatgpt.com/connector_platform_oauth_redirect';
+function makeReq({ method = 'POST', url, body, headers = {} }) {
+  return { method, url, body, headers: { host: 'dampscan.co.uk', 'x-forwarded-for': '198.51.100.77', ...headers }, socket: {} };
+}
+function makeRes() {
+  const res = { statusCode: 200, headers: {}, body: '', setHeader(k, v) { this.headers[k.toLowerCase()] = v; }, getHeader(k) { return this.headers[k.toLowerCase()]; }, end(p) { if (p) this.body += p; } };
+  res.json = () => (res.body ? JSON.parse(res.body) : null);
+  return res;
+}
+async function call(handler, init) { const res = makeRes(); await handler(makeReq(init), res); return res; }
+const step = (s) => `/api/admin/oauth?step=${s}`;
+
+async function person(code, grants) {
+  const h = await hash(code, { algorithm: Algorithm.Argon2id });
+  const { rows } = await pool.query('insert into people (name, passcode_hash) values ($1, $2) returning id', [code, h]);
+  for (const g of grants) await pool.query("insert into grants (person_id, business_slug, level) values ($1, $2, 'manage')", [rows[0].id, g]);
+  return Number(rows[0].id);
+}
+
+/** The whole sign-in, returning the tokens. */
+async function connect(code) {
+  const reg = (await call(oauth, { url: step('register'), body: { client_name: 'ChatGPT', redirect_uris: [REDIRECT] } })).json();
+  const verifier = 'v'.repeat(64);
+  const challenge = createHash('sha256').update(verifier).digest('base64url');
+  const params = { response_type: 'code', client_id: reg.client_id, redirect_uri: REDIRECT, state: 'xyz', code_challenge: challenge, code_challenge_method: 'S256' };
+  const pageRes = await call(oauth, { method: 'GET', url: step('authorize') + '&' + new URLSearchParams(params) });
+  assert.equal(pageRes.statusCode, 200);
+  assert.match(pageRes.body, /chatgpt\.com/);
+  const signed = await call(oauth, { url: step('authorize'), body: { ...params, code } });
+  if (signed.statusCode !== 302) return { status: signed.statusCode, body: signed.body };
+  const back = new URL(signed.getHeader('location'));
+  assert.equal(back.searchParams.get('state'), 'xyz');
+  const tokens = (await call(oauth, { url: step('token'), body: `grant_type=authorization_code&code=${back.searchParams.get('code')}&redirect_uri=${encodeURIComponent(REDIRECT)}&client_id=${reg.client_id}&code_verifier=${verifier}` })).json();
+  return { ...tokens, clientId: reg.client_id, code: back.searchParams.get('code'), verifier };
+}
+let rpcId = 0;
+const rpc = async (accessToken, method, params) => call(mcp, { url: '/api/admin/mcp', body: { jsonrpc: '2.0', id: ++rpcId, method, params }, headers: { authorization: `Bearer ${accessToken}` } });
+const tool = async (accessToken, name, args = {}) => (await rpc(accessToken, 'tools/call', { name, arguments: args })).json().result;
+
+before(async () => { await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8')); });
+beforeEach(async () => { await pool.query('truncate leads, events, rate_hits, jobs, people, audit, job_payments, payouts, mcp_clients, mcp_codes, mcp_tokens restart identity cascade'); });
+after(async () => { await pool.end(); });
+
+test('an assistant finds the sign-in from the 401 and the well-known addresses', async () => {
+  const res = await call(mcp, { url: '/api/admin/mcp', body: { jsonrpc: '2.0', id: 1, method: 'tools/list' } });
+  assert.equal(res.statusCode, 401);
+  assert.match(res.getHeader('www-authenticate'), /resource_metadata="https:\/\/dampscan\.co\.uk\/\.well-known\/oauth-protected-resource"/);
+  const rewritten = await middleware(new Request('https://dampscan.co.uk/.well-known/oauth-authorization-server'));
+  assert.match(rewritten.headers.get('x-middleware-rewrite'), /\/api\/admin\/oauth\?step=meta$/);
+  const meta = (await call(oauth, { method: 'GET', url: step('meta') })).json();
+  assert.equal(meta.token_endpoint, 'https://dampscan.co.uk/api/admin/oauth?step=token');
+  assert.deepEqual(meta.code_challenge_methods_supported, ['S256']);
+});
+
+test('only the expected assistants may register, and a wrong code gets no token', async () => {
+  const bad = await call(oauth, { url: step('register'), body: { redirect_uris: ['https://evil.example/cb'] } });
+  assert.equal(bad.statusCode, 400);
+  assert.equal((await call(oauth, { url: step('register'), body: { redirect_uris: ['http://chatgpt.com/cb'] } })).statusCode, 400, 'https only');
+  await person('verge-code', ['roofing']);
+  assert.equal((await connect('wrong-code')).status, 401);
+});
+
+test('a person connects, sees only their business, and a code and a refresh token each work once', async () => {
+  await person('verge-code', ['roofing']);
+  await pool.query(`insert into leads (site, stage, first_name, email, postcode, session_id) values ('roofing','complete','Ola','o@x.com','BR6 0AA',gen_random_uuid()), ('dampscan','complete','Dee','d@x.com','ME1 1AA',gen_random_uuid())`);
+  const t = await connect('verge-code');
+  assert.equal(t.token_type, 'Bearer');
+
+  const init = (await rpc(t.access_token, 'initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'test' } })).json().result;
+  assert.equal(init.serverInfo.name, 'staff-area');
+  const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools;
+  const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
+  assert.deepEqual(writes, ['mark_deposit_paid', 'mark_paid_in_full', 'mark_report_sent']);
+  assert.ok(tools.every((x) => !('run' in x)));
+
+  const found = await tool(t.access_token, 'search', { text: 'BR6' });
+  assert.deepEqual(found.structuredContent.enquiries.map((l) => l.first_name), ['Ola']);
+  assert.deepEqual((await tool(t.access_token, 'search', { text: 'ME1' })).structuredContent.enquiries, [], 'not the damp lead');
+  assert.deepEqual((await tool(t.access_token, 'whoami')).structuredContent.businesses.map((b) => b.slug), ['roofing']);
+
+  const again = await call(oauth, { url: step('token'), body: `grant_type=authorization_code&code=${t.code}&redirect_uri=${encodeURIComponent(REDIRECT)}&client_id=${t.clientId}&code_verifier=${t.verifier}` });
+  assert.equal(again.statusCode, 400, 'the code was spent');
+  const refreshed = (await call(oauth, { url: step('token'), body: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: t.clientId } })).json();
+  assert.ok(refreshed.access_token);
+  assert.equal((await call(oauth, { url: step('token'), body: { grant_type: 'refresh_token', refresh_token: t.refresh_token, client_id: t.clientId } })).statusCode, 400, 'rotated');
+});
+
+test('the three marks work on damp cards and quoted jobs, each audited, and nothing else can be changed', async () => {
+  const pid = await person('both-code', ['dampscan', 'roofing']);
+  const damp = (await pool.query(`insert into jobs (site, status, survey_price_pence, surveyor, tax_bp, lead_bp, lead_earner, partner_a, partner_b) values ('dampscan','booked',45000,'tom',2000,1000,'scott','scott','tom') returning id`)).rows[0].id;
+  const roof = (await pool.query(`insert into jobs (site, status, invoice_net_pence, surveyor, survey_price_pence, tax_bp, lead_bp, lead_earner, partner_a, partner_b, reserve_bp, fee_bp, fee_floor_pence, split_bp) values ('roofing','booked',800000,null,0,0,0,'','','',1900,1000,0,5000) returning id`)).rows[0].id;
+  const t = await connect('both-code');
+
+  assert.equal((await tool(t.access_token, 'mark_deposit_paid', { id: Number(damp) })).isError, false);
+  assert.equal((await tool(t.access_token, 'mark_report_sent', { id: Number(damp) })).isError, false);
+  assert.equal((await tool(t.access_token, 'mark_paid_in_full', { id: Number(damp) })).isError, false);
+  const row = (await pool.query('select deposit_paid_at, paid_at, survey_sent_at from jobs where id = $1', [damp])).rows[0];
+  assert.ok(row.deposit_paid_at && row.paid_at && row.survey_sent_at);
+
+  assert.equal((await tool(t.access_token, 'mark_deposit_paid', { id: Number(roof) })).isError, true, 'a roofing deposit needs an amount');
+  assert.equal((await tool(t.access_token, 'mark_deposit_paid', { id: Number(roof), amount_pounds: 2000 })).isError, false);
+  assert.equal((await tool(t.access_token, 'mark_paid_in_full', { id: Number(roof) })).isError, false);
+  const paid = (await pool.query('select label, amount_pence from job_payments where job_id = $1 order by id', [roof])).rows;
+  assert.deepEqual(paid.map((p) => [p.label, Number(p.amount_pence)]), [['deposit', 200000], ['balance', 600000]]);
+  assert.equal((await tool(t.access_token, 'mark_paid_in_full', { id: Number(roof) })).isError, true, 'nothing left to pay');
+  assert.equal((await tool(t.access_token, 'mark_report_sent', { id: Number(roof) })).isError, true);
+
+  const audited = (await pool.query('select person_id from audit where entity_id in ($1, $2)', [damp, roof])).rows;
+  assert.ok(audited.length >= 4 && audited.every((a) => Number(a.person_id) === pid), 'under the person\'s name');
+  assert.equal((await tool(t.access_token, 'delete_job', { id: Number(roof) })).isError, true, 'no such tool');
+  assert.equal((await tool(t.access_token, 'get_job', { id: 999 })).isError, true);
+});
+
+test('a deactivated person\'s assistant stops working at once', async () => {
+  const pid = await person('gone-code', ['roofing']);
+  const t = await connect('gone-code');
+  assert.equal((await rpc(t.access_token, 'tools/list')).statusCode, 200);
+  await pool.query('update people set active = false where id = $1', [pid]);
+  assert.equal((await rpc(t.access_token, 'tools/list')).statusCode, 401);
+});
+
+test('every read works for the owners\' code, which sees all four businesses', async () => {
+  const t = await connect('1290');
+  const today = new Date().toISOString().slice(0, 10);
+  const args = { search: { text: 'a' + 'b' }, get_job: { id: 1 }, calendar: { from: today, to: today }, job_photos: { job: 1 }, price_book: { site: 'roofing' } };
+  const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools.filter((x) => x.annotations.readOnlyHint);
+  for (const x of tools) {
+    const r = await tool(t.access_token, x.name, args[x.name] || {});
+    const expectedMissing = ['get_job', 'job_photos'].includes(x.name);
+    assert.equal(r.isError, expectedMissing, `${x.name}: ${r.content[0].text.slice(0, 160)}`);
+  }
+  assert.deepEqual((await tool(t.access_token, 'whoami')).structuredContent.businesses.map((b) => b.slug).sort(), ['ac', 'ati-london', 'dampscan', 'roofing']);
+});

@@ -223,3 +223,14 @@ test('a job is found by the customer\'s name and postcode, never needing its num
   await roofJob();
   assert.equal((await resolveJobArgs(me, { id: 'Anita' })).error.matches.length, 2, 'two Anitas: ask which');
 });
+
+test('a job moves to a new date and time by the customer\'s name, keeping its place in the pipeline', async () => {
+  const me = await person('Scott', [['roofing', 'manage']]);
+  const id = await roofJob();
+  await pool.query("update jobs set status = 'completed' where id = $1", [id]);
+  const { resolveJobArgs } = await import('../lib/mcp/find-job.js');
+  const moved = await run(me, 'move_job', (await resolveJobArgs(me, { id: 'Anita Patel', date: '2026-11-12', time: '09:30' })).args);
+  assert.equal(moved.status, 200, JSON.stringify(moved.data));
+  const row = (await pool.query('select status, job_date::text, job_time::text from jobs where id = $1', [id])).rows[0];
+  assert.deepEqual(row, { status: 'completed', job_date: '2026-11-12', job_time: '09:30:00' });
+});

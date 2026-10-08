@@ -42,6 +42,16 @@ const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;
 
+  /* The sign-in addresses an AI assistant looks for (/.well-known/...) are
+     rewritten here by middleware.js, but on Vercel the function still sees
+     the address that was asked for, not the rewrite. So they are recognised
+     by path and sent to the sign-in route with the step it needs. */
+  const path = new URL(req.url || '/', 'http://x').pathname;
+  if (path.startsWith('/.well-known/oauth-protected-resource')) { req.url = '/api/admin/oauth?step=resource'; return oauth(req, res); }
+  if (path.startsWith('/.well-known/oauth-authorization-server') || path === '/.well-known/openid-configuration') {
+    req.url = '/api/admin/oauth?step=meta';
+    return oauth(req, res);
+  }
   const route = ROUTES[actionFrom(req.url)];
   if (!route) {
     json(res, 404, { ok: false, error: 'not_found' });

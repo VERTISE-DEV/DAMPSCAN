@@ -166,3 +166,13 @@ test('every read works for the owners\' code, which sees all four businesses', a
   }
   assert.deepEqual((await tool(t.access_token, 'whoami')).structuredContent.businesses.map((b) => b.slug).sort(), ['ac', 'ati-london', 'dampscan', 'roofing']);
 });
+
+test('the well-known addresses answer through the admin function, as Vercel delivers them', async () => {
+  const admin = (await import('../api/admin/[action].js')).default;
+  for (const [path, key] of [['/.well-known/oauth-protected-resource', 'authorization_servers'], ['/.well-known/oauth-protected-resource/api/admin/mcp', 'authorization_servers'],
+    ['/.well-known/oauth-authorization-server', 'token_endpoint'], ['/.well-known/openid-configuration', 'token_endpoint']]) {
+    const res = await call(admin, { method: 'GET', url: path });
+    assert.equal(res.statusCode, 200, path);
+    assert.ok(key in res.json(), path);
+  }
+});

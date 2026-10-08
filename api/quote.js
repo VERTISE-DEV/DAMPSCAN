@@ -20,8 +20,8 @@ import { query, queryOne } from '../lib/db.js';
 import { json, requireMethod, ipHash, readJson, str } from '../lib/http.js';
 import { notify } from '../lib/notify.js';
 import { rateLimit, LIMITS } from '../lib/ratelimit.js';
-import { loadQuoteLines } from '../lib/quote-store.js';
-import { quoteTotals, spread } from '../lib/quote.js';
+import { loadQuoteLines, priceFollowsLines } from '../lib/quote-store.js';
+import { quoteTotals } from '../lib/quote.js';
 import { bpOf } from '../lib/splits.js';
 import { brandFor } from '../lib/brands.js';
 import { effectiveVatBp, canInvoice } from '../lib/business-details.js';
@@ -40,7 +40,7 @@ async function findJob(token) {
   if (!TOKEN_RE.test(token || '')) return null;
   return queryOne(
     `select j.id, j.site, j.status, j.customer_name, j.customer_postcode, j.markup_bp, j.invoice_net_pence, j.created_at,
-            j.quote_accepted_at, j.quote_accepted_name, j.lead_id, j.invoice_number, j.invoiced_at, j.invoice_due_on::text as invoice_due_on,
+            j.quote_accepted_at, j.quote_accepted_name, j.price_fixed, j.lead_id, j.invoice_number, j.invoiced_at, j.invoice_due_on::text as invoice_due_on,
             b.vat_bp, b.vat_registered, b.vat_number, b.trading_address, b.company_number, b.payment_details
        from jobs j join businesses b on b.slug = j.site where j.quote_token = $1`, [token]);
 }
@@ -50,12 +50,16 @@ async function figures(job) {
   const rows = await loadQuoteLines(job.id);
   const totals = quoteTotals(rows.map((r) => ({ kind: r.kind, description: r.description, costPence: N(r.cost_pence) })),
     N(job.markup_bp), effectiveVatBp(job));
-  /* An accepted or booked job's agreed price stands even if lines were added
-     afterwards, so the customer's lines are spread across that price. */
-  const agreed = (job.status !== 'quoted' || job.quote_accepted_at) && rows.length > 0;
-  const netPence = agreed ? N(job.invoice_net_pence) : totals.netPence;
-  const prices = spread(netPence, rows.map((r) => N(r.cost_pence)));
-  const lines = totals.customerLines.map((l, i) => ({ ...l, pricePence: prices[i] }));
+  /* The customer sees the job's price. Lines are shown priced only while
+     they are the price (still following them, or adding up to it exactly).
+     A price agreed or typed by hand, with lines that total something else,
+     is shown as the one figure: the lines under it are costs, and scaling
+     them would print a "Materials" figure that is really the whole job. */
+  const follows = priceFollowsLines(job) && rows.length > 0;
+  const netPence = follows ? totals.netPence : N(job.invoice_net_pence);
+  const itemised = rows.length > 0 && totals.netPence === netPence;
+  const lines = itemised ? totals.customerLines
+    : netPence > 0 ? [{ kind: 'other', label: 'Work as quoted', description: `Quote Q-${job.id}`, pricePence: netPence }] : [];
   return { lines, netPence, vatBp: totals.vatBp, vatPence: bpOf(netPence, totals.vatBp) };
 }
 
@@ -109,7 +113,7 @@ async function accept(req, res) {
   if (!open) { json(res, 409, { ok: false, error: 'not_open', message: 'This quote can no longer be accepted online. Please call us.' }); return; }
   /* One update, guarded on the same conditions, so two taps cannot accept twice. */
   const done = await queryOne(
-    `update jobs set quote_accepted_at = now(), quote_accepted_name = $2, quote_accepted_ip_hash = $3, invoice_net_pence = $4, updated_at = now()
+    `update jobs set quote_accepted_at = now(), quote_accepted_name = $2, quote_accepted_ip_hash = $3, invoice_net_pence = $4, price_fixed = true, updated_at = now()
       where id = $1 and status = 'quoted' and quote_accepted_at is null returning id`, [job.id, name, ipHash(req), f.netPence]);
   if (!done) { json(res, 409, { ok: false, error: 'not_open', message: 'This quote has already been accepted.' }); return; }
   await notify({ business: job.site, kind: 'quote_accepted', ref: job.id, tags: 'white_check_mark',

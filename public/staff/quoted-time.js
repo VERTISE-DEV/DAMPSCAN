@@ -104,9 +104,9 @@
     var p = j.profit;
     tiles.hidden = !p;
     if (!p) return;
-    [['Price', U.money(p.pricePence)], ['Costs', U.money(p.costsPence)],
-      ['Labour', U.money(p.labourPence), p.labourHours + ' hours clocked'],
-      [p.profitPence < 0 ? 'Loss' : 'Profit', U.money(p.profitPence), p.overBudget ? 'Over budget: costs and labour are ' + Math.round(p.spentBp / 100) + '% of the price' : null, true]
+    [['Price', U.money(p.pricePence)], ['Less materials and costs', '− ' + U.money(p.costsPence)],
+      ['Less labour', '− ' + U.money(p.labourPence), p.labourHours + ' hours clocked'],
+      [p.profitPence < 0 ? 'Loss, what is left' : 'Profit, what is left', U.money(p.profitPence), p.overBudget ? 'Over budget: costs and labour are ' + Math.round(p.spentBp / 100) + '% of the price' : null, true]
     ].forEach(function (t) {
       var d = U.node('div', 'tile' + (t[3] ? ' is-key' : ''));
       d.appendChild(U.node('span', 'k', t[0]));

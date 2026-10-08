@@ -45,3 +45,5 @@
 .work .lines small{display:block;color:var(--muted-2);font-size:12px;margin-top:2px;white-space:normal}
 .work .lines td.wrap-cell{min-width:140px;color:var(--text)}
 .nowrap{white-space:nowrap}
+/* Small screens: 16px gutters, fields full width, the owners' days stacked. */
+@media (max-width:640px){.work-figure{padding:16px 16px 0}.work-foot{padding:14px 16px 20px}.work-add .form-row{flex:1 1 100%}.work-add .btn{flex:1 1 auto}.work-owed-row{min-width:0;flex:1 1 100%}}

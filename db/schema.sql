@@ -951,3 +951,31 @@ create table if not exists push_subscriptions (
   created_at  timestamptz not null default now()
 );
 create index if not exists push_subscriptions_person_idx on push_subscriptions (person_id);
+
+-- ---------------------------------------------------------------------------
+-- The shared to-do list between staff, lib/todos.js. Mostly written by each
+-- person's assistant, so the words are kept exactly as said. site null is a
+-- general to-do; for_person_id null is everyone in that business (or the
+-- owners, when general). The owners' shared login has no person, so who set
+-- it is kept as a name. source 'failed' is a change the assistant tried that
+-- did not go through, saved so it is not forgotten.
+-- ---------------------------------------------------------------------------
+create table if not exists todos (
+  id                bigserial primary key,
+  site              text references businesses (slug),
+  job_id            bigint references jobs (id) on delete set null,
+  lead_info         text,
+  text              text not null,
+  for_person_id     bigint references people (id) on delete set null,
+  set_by_person_id  bigint references people (id) on delete set null,
+  set_by_name       text,
+  source            text not null default 'manual',
+  due_on            date,
+  done_at           timestamptz,
+  done_by           bigint references people (id) on delete set null,
+  created_at        timestamptz not null default now()
+);
+alter table todos drop constraint if exists todos_source_check;
+alter table todos add constraint todos_source_check check (source in ('manual', 'assistant', 'failed'));
+create index if not exists todos_open_idx on todos (for_person_id, created_at desc) where done_at is null;
+create index if not exists todos_site_idx on todos (site) where done_at is null;

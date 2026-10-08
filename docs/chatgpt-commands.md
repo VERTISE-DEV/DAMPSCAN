@@ -82,6 +82,20 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "I'm stuck in traffic outside Sevenoaks, tell Mrs Patel I'll be 45 minutes, and make it sound cheerful."
 - "Turn this voice note into a quote: forty metres of Redland, two days, scaffold both sides, skip."
 
+## To-do list
+
+A to-do list shared between staff. Ask the assistant to put something on somebody's list and it keeps your words exactly as you said them. It is also in the staff app under **To-do** (for each business, and across all of them from the top bar), with Mine, Set by me, Failed and Done, and a box to tick when it's done.
+
+- Tom: "Need to tell Scott about a potential job next week, name Laura." (a to-do for Scott, in Tom's words, set by Tom; Scott's phone buzzes)
+- Scott: "Anything on the to-do list?" (it lists Tom's note, who set it and when; it also checks at the start of every chat)
+- "Remind me to order the lead for Mrs Patel by Friday." / "Put on everyone's list: van MOT on the 20th."
+- "What have I asked other people to do?" / "What did we finish this week?"
+- "I've rung Laura." (it ticks that one off) / "Put the Laura one back on the list."
+
+If the assistant tries to change something and it doesn't go through (a booking, a quote line, a payment), it saves what you asked and the error to your own list under **Failed**, and tells you, so you can sort it out later.
+
+The morning digest also says how many to-dos are open for each person and how many are overdue.
+
 ## Phone notifications
 
 In the staff app on your phone, tap **Turn on notifications** at the top. You'll get a buzz for new enquiries, quotes accepted online and new ratings (low ones flagged), only for your own businesses. Tap it again to turn them off on that phone.

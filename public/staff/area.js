@@ -20,28 +20,31 @@
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['Bank', 'bank.html']]
+      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
     }
   };
   var ORDER = ['damp', 'roofing', 'ac'];
   var KEY = 'ds_staff_area';
   var CALENDAR = 'calendar.html';
+  var TODO = 'todo.html';
 
   function stored() { try { return global.localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(a) { try { global.localStorage.setItem(KEY, a); } catch (e) {} }
 
   var page = global.location.pathname.split('/').pop() || 'due.html';
-  /* The calendar belongs to no one company: it shows them all together. */
-  var overall = page === CALENDAR;
   var fromUrl = new URLSearchParams(global.location.search).get('area');
+  /* The calendar belongs to no one company: it shows them all together. The
+     to-do list is both: under a company it is that company's list, and from
+     the top bar (no company in the address) it is everything. */
+  var overall = page === CALENDAR || (page === TODO && !AREAS[fromUrl]);
   var area = AREAS[fromUrl] ? fromUrl : (AREAS[stored()] ? stored() : 'damp');
   if (!overall) remember(area);
 
@@ -64,14 +67,15 @@
     return a;
   }
 
-  /* The top bar: one link per company, then the Calendar. */
+  /* The top bar: one link per company, then the Calendar and the To-do list. */
   function drawCompanies(allowed) {
     var nav = document.querySelector('nav.tabs');
     if (!nav) return;
     nav.textContent = '';
     nav.setAttribute('aria-label', 'Companies');
     allowed.forEach(function (a) { nav.appendChild(link(AREAS[a].name, href(a, 'due.html'), !overall && a === area, 'co-tab co-tab--' + a)); });
-    nav.appendChild(link('Calendar', '/staff/' + CALENDAR, overall, 'co-tab co-tab--calendar'));
+    nav.appendChild(link('Calendar', '/staff/' + CALENDAR, overall && page === CALENDAR, 'co-tab co-tab--calendar'));
+    nav.appendChild(link('To-do', '/staff/' + TODO, overall && page === TODO, 'co-tab co-tab--calendar'));
   }
 
   /* The row under it: the chosen company's own sections. */

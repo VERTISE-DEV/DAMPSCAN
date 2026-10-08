@@ -63,13 +63,40 @@
 
   var BRAND = { dampscan: 'DampScan', 'ati-london': 'ATi Damp Survey', roofing: 'Verge Roofing', ac: 'CoolRight' };
 
+  /* Google visits from the site's own tracking: search and ads, the last 28
+     days against the 28 before, and the pages search visitors land on. */
+  function renderOwn(mount, o) {
+    if (!o) return;
+    var t = document.createElement('div');
+    t.className = 'tiles';
+    mount.appendChild(t);
+    tiles(t, [
+      ['Visits from Google search', U.num(o.organic.now.visits), change(o.organic.now.visits, o.organic.before.visits), true],
+      ['Enquiries from search', U.num(o.organic.now.enquiries), change(o.organic.now.enquiries, o.organic.before.enquiries), true],
+      ['Calls from search', U.num(o.organic.now.calls), change(o.organic.now.calls, o.organic.before.calls)],
+      ['Visits from Google Ads', U.num(o.paid.now.visits), change(o.paid.now.visits, o.paid.before.visits)],
+      ['Enquiries from ads', U.num(o.paid.now.enquiries), change(o.paid.now.enquiries, o.paid.before.enquiries)]
+    ]);
+    mount.appendChild(U.node('h4', 'search-sub', 'Pages people land on from Google search'));
+    var p = document.createElement('div');
+    mount.appendChild(p);
+    U.table(p, [
+      { label: 'Page', wrap: true, get: function (r) { return r.page; } },
+      { label: 'Visits', numeric: true, get: function (r) { return U.num(r.visits); } },
+      { label: 'Calls', numeric: true, get: function (r) { return U.num(r.calls); } },
+      { label: 'Enquiries', numeric: true, get: function (r) { return U.num(r.enquiries); } }
+    ], o.pages, { empty: 'No visits from Google search in the last 28 days.' });
+    mount.appendChild(U.node('p', 'panel-note', 'The last 28 days, compared with the 28 before.'));
+  }
+
   /* Search Console, one block per brand: the last 28 settled days against the
      28 before, then the searches and pages that brought people. */
   function renderSearch(d) {
     var mount = el('search');
     mount.textContent = '';
+    renderOwn(mount, d.ownSearch);
     if (!d.searchConnected) {
-      mount.appendChild(U.node('p', 'panel-note', 'Not connected yet. Once a Google service account key is added to the site and the account is given access to each site in Search Console, this shows how often each business appears in Google, how often it is clicked, and the searches behind it.'));
+      mount.appendChild(U.node('p', 'panel-note', 'From the site\'s own tracking. The words people searched and the ranking position are only in Google Search Console, which can be added later.'));
       return;
     }
     d.search.forEach(function (s) {

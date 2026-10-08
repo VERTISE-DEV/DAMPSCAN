@@ -107,3 +107,20 @@ test('a damp job is worth its survey and remedial work, and the money is hidden 
   assert.equal(w.months[11].workPence, 0, 'no money in the months either');
   assert.equal(w.funnel.jobs, 1, 'counts are still shown');
 });
+
+test('Google visits come from our own tracking: search and ads, with landing pages and enquiries', async () => {
+  const boss = await personWith('verge-search', ['roofing']);
+  const ev = (sid, type, channel, path, ago = '1 day') => pool.query(
+    `insert into events (session_id, type, channel, path, landing_page, site, created_at) values ($1, $2, $3, $4, $4, 'roofing', now() - $5::interval)`, [sid, type, channel, path, ago]);
+  const { randomUUID } = await import('node:crypto');
+  const a = randomUUID(); const b = randomUUID(); const c = randomUUID();
+  await ev(a, 'page_view', 'organic', '/roofing-in/essex-and-east'); await ev(a, 'form_submit', 'organic', '/roofing-in/essex-and-east');
+  await ev(b, 'page_view', 'organic', '/services/re-roofs');
+  await ev(c, 'page_view', 'paid', '/');
+  await ev(randomUUID(), 'page_view', 'organic', '/', '40 days');
+  const o = (await get(boss, '?area=roofing')).ownSearch;
+  assert.deepEqual(o.organic.now, { visits: 2, calls: 0, enquiries: 1 });
+  assert.equal(o.organic.before.visits, 1);
+  assert.equal(o.paid.now.visits, 1);
+  assert.deepEqual(o.pages.find((p) => p.page === '/roofing-in/essex-and-east'), { page: '/roofing-in/essex-and-east', visits: 1, calls: 0, enquiries: 1 });
+});

@@ -25,3 +25,16 @@
 /* area.js hides the brand row in a one-brand area; .ranges sets display:flex,
    which would otherwise beat the hidden attribute. */
 .ranges[hidden] { display: none; }
+
+/* The to-do list (todo.html). */
+.todo-add{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.todo-add label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.todo-add .todo-text{flex:1 1 100%}
+.todo-add textarea,.todo-add select,.todo-add input{font:inherit;padding:8px;border-radius:8px;border:1px solid var(--line-strong);background:transparent;color:var(--text)}
+.todo-list{list-style:none;padding:0;margin:16px 0 0}
+.todo-list li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line-strong)}
+.todo-list input[type=checkbox]{width:22px;height:22px;margin-top:2px;flex:none}
+.todo-list .todo-words{white-space:pre-wrap;margin:0}
+.todo-list .todo-meta{font-size:13px;color:var(--muted);margin:4px 0 0}
+.todo-list .is-overdue{color:#e5484d;font-weight:600}
+.todo-list .is-done .todo-words{text-decoration:line-through;opacity:.7}

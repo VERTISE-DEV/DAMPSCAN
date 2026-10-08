@@ -841,3 +841,31 @@ alter table businesses add column if not exists vat_number      text;
 alter table businesses add column if not exists trading_address text;
 alter table businesses add column if not exists company_number  text;
 alter table businesses add column if not exists payment_details text;
+
+-- ---------------------------------------------------------------------------
+-- Matching payments to jobs
+--
+-- bank_payers remembers who pays for whom: once a payment from "P SHARMA" is
+-- matched to Priya Sharma's job, the next one from the same payer is put on
+-- her open job without asking. Keyed on the payer as the bank writes it and
+-- the customer's name, squashed to letters and digits.
+--
+-- bank_feeds is the automatic import from Revolut Business, ready for the
+-- day it is switched on: off until the API keys are set in Vercel and
+-- somebody ticks it on the Bank page. It records when it last ran and why it
+-- failed, if it did.
+-- ---------------------------------------------------------------------------
+create table if not exists bank_payers (
+  books         text not null,
+  payer_key     text not null,
+  customer_key  text not null,
+  created_at    timestamptz not null default now(),
+  primary key (books, payer_key, customer_key)
+);
+create table if not exists bank_feeds (
+  books           text primary key,
+  enabled         boolean not null default false,
+  last_synced_at  timestamptz,
+  last_error      text,
+  updated_at      timestamptz not null default now()
+);

@@ -121,3 +121,17 @@
 .taken-list li{padding:6px 0;border-top:1px solid var(--line)}
 .taken-list li:first-child{border-top:0}
 .taken-amount{color:var(--text);font-weight:700}
+/* ---------- matching payments, one card at a time ---------- */
+.match-card{background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:18px}
+.match-top{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.match-amount{font-size:28px;font-weight:800}
+.match-from{color:var(--muted)}
+.match-guess{font-size:17px;margin:12px 0}
+.match-search input,.match-pick input{width:100%;background:var(--slate);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:12px 14px;font:inherit;font-size:16px;margin:10px 0}
+.match-results{display:flex;flex-direction:column;gap:6px}
+.match-job{display:flex;justify-content:space-between;gap:10px;text-align:left;background:var(--slate);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text)}
+.match-job:hover{border-color:var(--accent)}
+.match-job span{color:var(--muted);font-size:13.5px}
+.match-pick{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center}
+.feed-box{margin-top:18px}
+.feed-box h3{font-size:14px;margin-bottom:4px}

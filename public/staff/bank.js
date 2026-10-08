@@ -249,6 +249,7 @@
   }
 
   /* ---------- loading and wiring ---------- */
+  global.DSBANK = { refresh: function () { return refresh(); }, books: function () { return state.books; } };
   async function refresh() {
     try {
       var data = await U.get('/api/admin/bank?view=' + state.view + qs('&'));
@@ -259,6 +260,7 @@
       renderRecon(data.totals);
       renderStatements(data.statements);
       renderLines();
+      if (global.DSBANKMATCH && !state.matchLoaded) { state.matchLoaded = true; global.DSBANKMATCH.load(); }
       el('from').placeholder = state.from ? '' : (data.totals.from || '');
       el('state').hidden = true;
       el('content').hidden = false;

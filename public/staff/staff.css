@@ -222,15 +222,15 @@ tbody tr.is-stale td:first-child{color:var(--warn);font-weight:600}
 .ccard-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 
 /* The one client, big and simple. */
-.client{width:min(880px,calc(100vw - 32px));max-height:calc(100vh - 32px);padding:0;border:1px solid var(--line-strong);
+.client{width:min(880px,calc(100vw - 32px));max-width:calc(100% - 32px);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-x:hidden;padding:0;border:1px solid var(--line-strong);
   border-radius:18px;background:var(--navy);color:var(--text);box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
 .client::backdrop{background:rgba(4,10,18,.7);backdrop-filter:blur(6px)}
 .client-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:26px 28px 18px;
   border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--navy);z-index:1}
 .client-head h2{font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;line-height:1.1;margin:0}
 .client-sub{margin:6px 0 0;font-size:13.5px;color:var(--muted)}
-.client-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:22px 28px 0}
-@media (max-width:640px){.client-grid{grid-template-columns:1fr}}
+.client-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;padding:22px 28px 0}
+@media (max-width:640px){.client-grid{grid-template-columns:minmax(0,1fr);padding:16px 16px 0;gap:12px}.client-head{padding:18px 16px 14px}.client-block{padding:14px}} /* Phones and iPads: iOS zooms into any field under 16px and the zoomed page then runs off the edge, so fields are 16px; grid and flex children may shrink below their content; long names and links wrap. */ @media (max-width:1024px){input,select,textarea{font-size:16px!important;max-width:100%}.client-block,.client-grid>*,.top-end>*{min-width:0}.client-head h2,.client-sub,.client-lines{overflow-wrap:anywhere}img,video{max-width:100%;height:auto}}
 .client-block{background:var(--slate);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
 .client-block h3{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);font-weight:600;margin:0 0 10px}
 .client-lines{margin:0;font-size:15px;line-height:1.6}

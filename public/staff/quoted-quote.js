@@ -59,8 +59,10 @@
     el('w-markup').value = q.markupBp ? String(q.markupBp / 100) : '';
     var tiles = el('w-quote-totals');
     tiles.textContent = '';
-    [['Costs', U.money(q.costPence)], ['Markup ' + pct(q.markupBp), U.money(q.markupPence)],
-     ['Price net', U.money(q.netPence), true], (q.vatRegistered ? ['VAT ' + pct(q.vatBp), U.money(q.vatPence)] : ['VAT', 'Not registered']), ['Customer pays', U.money(q.totalPence), true]]
+    var shown = q.driving
+      ? [['Costs', U.money(q.costPence)], ['Markup ' + pct(q.markupBp), U.money(q.markupPence)], ['Price net', U.money(q.netPence), true]]
+      : [['Job price net', U.money(q.netPence), true], ['Lines total', U.money(q.linesNetPence)]];
+    shown.concat([(q.vatRegistered ? ['VAT ' + pct(q.vatBp), U.money(q.vatPence)] : ['VAT', 'Not registered']), ['Customer pays', U.money(q.totalPence), true]])
       .forEach(function (t) {
         var tile = U.node('div', 'tile' + (t[2] ? ' is-key' : ''));
         tile.appendChild(U.node('span', 'k', t[0]));
@@ -69,10 +71,12 @@
       });
 
     var note = el('w-quote-note');
-    if (q.accepted) note.textContent = 'Accepted online by ' + q.accepted.name + ' on ' + U.when(q.accepted.at) + ', at ' + U.money(j.invoiceNetPence) + ' net. That price is agreed: lines added now change your margin, not the price. Book a start date to move it on.';
-    else if (!q.lines.length) note.textContent = 'With no lines, the job keeps the price typed under "The job".';
-    else if (q.driving) note.textContent = 'While the job is Quoted, its price follows these lines. Once it is booked, the agreed price stays fixed.';
-    else note.textContent = 'This job is ' + j.status + ', so its agreed price of ' + U.money(j.invoiceNetPence) + ' stays fixed. Lines added now change your margin, not the price.';
+    if (q.accepted) note.textContent = 'Accepted online by ' + q.accepted.name + ' on ' + U.when(q.accepted.at) + ', at ' + U.money(j.invoiceNetPence) + ' net. That price is agreed: lines added now are costs of the job, not a new price.';
+    else if (q.driving) note.textContent = 'No price typed yet, so the price is these lines plus markup. Type a price under "The job" and it stays fixed.';
+    else if (!q.lines.length) note.textContent = 'The price is the one typed under "The job". Lines added here are costs of the job: they come off the price for profit and payout, they do not change it.';
+    else note.textContent = 'The price of ' + U.money(j.invoiceNetPence) + ' is fixed. Lines (except labour) are costs of the job, taken off the price for profit and payout. The customer sees the price, not the lines.';
+    var useLines = el('w-quote-useLines');
+    useLines.hidden = q.driving || !q.lines.length || Boolean(j.frozen) || q.linesNetPence === q.netPence;
 
     el('w-quote-link').textContent = q.url ? 'Copy customer link' : 'Make customer link';
     var open = el('w-quote-open');
@@ -149,6 +153,13 @@
     } catch (e) {
       global.prompt('Copy this link for the customer:', job.quote.url);
     }
+  });
+
+  el('w-quote-useLines').addEventListener('click', async function () {
+    var q = Q.state.open.quote;
+    if (!global.confirm('Change the price from ' + U.money(q.netPence) + ' to the lines\' total of ' + U.money(q.linesNetPence) + '?')) return;
+    var job = await op({ op: 'pricefromlines' }, 'The price could not be changed.');
+    if (job) el('w-quote-saved').textContent = 'The price is now the lines\' total';
   });
 
   el('w-quote-costs').addEventListener('click', async function () {

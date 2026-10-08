@@ -691,6 +691,19 @@ alter table jobs add column if not exists quote_accepted_at      timestamptz;
 alter table jobs add column if not exists quote_accepted_name    text;
 alter table jobs add column if not exists quote_accepted_ip_hash text;
 
+-- A price typed by hand is the price. price_fixed says the invoice was set
+-- by staff (or agreed), so quote lines added later are costs of the job and
+-- never move it. Unfixed, a quoted job's price follows its lines as before.
+-- Added nullable so the backfill runs once: a job already booked, accepted,
+-- or carrying a typed price with no lines is fixed, so no live price moves.
+-- After that every row is set and the update touches nothing.
+alter table jobs add column if not exists price_fixed boolean;
+update jobs j set price_fixed = (j.status <> 'quoted' or j.quote_accepted_at is not null
+       or (coalesce(j.invoice_net_pence, 0) > 0 and not exists (select 1 from quote_lines q where q.job_id = j.id)))
+ where j.price_fixed is null;
+alter table jobs alter column price_fixed set default false;
+alter table jobs alter column price_fixed set not null;
+
 -- ---------------------------------------------------------------------------
 -- Price book and quote templates
 --

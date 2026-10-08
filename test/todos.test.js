@@ -184,3 +184,17 @@ test('the morning digest counts open and overdue to-dos per person', async () =>
   assert.ok(lines.includes('3 open to-dos (Everyone 1, Scott 2), 1 overdue.'), lines.join(' | '));
   assert.equal(await todoLine(null), null);
 });
+
+test('"Scott" means the owners\' list when Scott signs in with the owners\' code', async () => {
+  const tom = await person('Tom', ['roofing']);
+  const owners = await scopeFor({ person: false, name: 'Owners' });
+  const r = await run(tom, 'add_todo', { text: 'Ring the scaffolder', for: 'Scott' });
+  assert.equal(r.status, 200, JSON.stringify(r.data));
+  assert.match(r.data.said, /owners/);
+  assert.equal((await run(owners, 'add_todo', { text: 'Note to self', for: 'scott' })).status, 200);
+  const seen = (await run(owners, 'list_todos', { view: 'open' })).data.todos;
+  assert.deepEqual(seen.map((t) => t.text).sort(), ['Note to self', 'Ring the scaffolder']);
+  assert.ok(seen.every((t) => t.forName === 'Scott'), 'shown as for Scott');
+  const err = (await run(tom, 'add_todo', { text: 'x', for: 'Zed' })).data.error;
+  assert.match(err, /Scott/, 'owner names are offered');
+});

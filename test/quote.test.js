@@ -96,9 +96,9 @@ test('while quoted, the price follows the lines; once booked, it stands', async 
   assert.equal(j.invoiceNetPence, P(5250), 'the invoice is the quote while the job is quoted');
   assert.equal(j.quote.driving, true);
 
-  /* Typing a different price on a quoted job with lines does not stick. */
-  j = (await post(cookie, { op: 'save', id: job.id, site: 'roofing', customerName: 'Mrs Patel', invoiceNetPence: P(9999), status: 'quoted' })).job;
-  assert.equal(j.invoiceNetPence, P(5250));
+  /* Saving the same figure back does not fix it: the lines still drive. */
+  j = (await post(cookie, { op: 'save', id: job.id, site: 'roofing', customerName: 'Mrs Patel', invoiceNetPence: P(5250), status: 'quoted' })).job;
+  assert.equal(j.quote.driving, true);
 
   /* Accepted: booked at the quoted price, and a later line moves the margin only. */
   j = (await post(cookie, { op: 'save', id: job.id, site: 'roofing', customerName: 'Mrs Patel', invoiceNetPence: P(5250), status: 'booked' })).job;

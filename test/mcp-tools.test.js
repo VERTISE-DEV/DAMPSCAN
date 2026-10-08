@@ -211,3 +211,15 @@ test('clients are found, added, corrected and reused for a new job, inside the p
   assert.equal(again.data.job.customerPostcode, 'BR6 0AA');
   assert.ok((await pool.query("select 1 from audit where action = 'quoted_update' and entity_id = $1", [old])).rows.length, 'audited');
 });
+
+test('a job is found by the customer\'s name and postcode, never needing its number', async () => {
+  const { resolveJobArgs } = await import('../lib/mcp/find-job.js');
+  const me = await person('Scott', [['roofing', 'manage']]);
+  const id = await roofJob();
+  assert.deepEqual((await resolveJobArgs(me, { id: 'Anita BR60AA', text: 'x' })).args, { id, text: 'x' });
+  assert.equal((await resolveJobArgs(me, { id: 'patel br6 0aa' })).args.id, id);
+  assert.equal((await resolveJobArgs(me, { id: String(id) })).args.id, id);
+  assert.match((await resolveJobArgs(me, { id: 'Nobody' })).error.error, /No job/);
+  await roofJob();
+  assert.equal((await resolveJobArgs(me, { id: 'Anita' })).error.matches.length, 2, 'two Anitas: ask which');
+});

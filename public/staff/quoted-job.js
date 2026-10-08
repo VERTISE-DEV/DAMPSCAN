@@ -150,6 +150,8 @@
   function fillDetails(j) {
     el('w-customer').value = j.customerName || '';
     el('w-postcode').value = j.customerPostcode || '';
+    el('w-phone').value = j.customerPhone || '';
+    el('w-email').value = j.customerEmail || '';
     el('w-invoice').value = (j.invoiceNetPence / 100).toFixed(2);
     el('w-date').value = j.jobDate ? String(j.jobDate).slice(0, 10) : '';
     el('w-time').value = j.jobTime || '';
@@ -204,6 +206,9 @@
     fillFoot(j);
     if (global.DSQCONTRACT) global.DSQCONTRACT.fill(j);
     if (global.DSQQUOTE) global.DSQQUOTE.fill(j);
+    if (global.DSQMSG) global.DSQMSG.fill(j);
+    if (global.DSQPB) global.DSQPB.fill(j);
+    if (global.DSQPHOTOS) global.DSQPHOTOS.fill(j);
     ['w-cost-error', 'w-days-error', 'w-pay-error', 'w-details-error'].forEach(function (id) { el(id).classList.remove('is-shown'); });
   }
 

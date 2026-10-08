@@ -66,7 +66,7 @@ before(async () => {
 });
 
 beforeEach(async () => {
-  await pool.query('truncate leads, events, rate_hits, jobs, bank_statements, bank_transactions, bank_rules restart identity cascade');
+  await pool.query('truncate leads, events, rate_hits, jobs, bank_statements, bank_transactions, bank_rules, bank_payers, bank_feeds restart identity cascade');
 });
 
 after(async () => { await pool.end(); });
@@ -146,6 +146,20 @@ test('importing a statement stores its lines, matches the payments and guesses t
   assert.equal(totals.jobs.paid, 1);
   assert.equal(totals.differencePence, 0, '215 arrived for a 215 job');
   assertBalances(totals);
+});
+
+test('each person sees earned, costs and taken, left equals their balance, and every amount taken is listed', async () => {
+  await createJob();
+  await upload(businessCsv(AUGUST));
+  const { totals } = (await get('?view=all')).json();
+  const tom = totals.statements.find((p) => p.key === 'tom');
+  assert.equal(tom.earnedPence, 12310);
+  assert.equal(tom.costsPence, -3403, 'his share of the fuel');
+  assert.equal(tom.takenPence, -50000, 'the drawings');
+  assert.equal(tom.leftPence, totals.balances.tom, 'left is exactly the balance the reconciliation uses');
+  assert.deepEqual(tom.taken.map((x) => [x.postedOn, x.amountPence, x.how]), [['2026-08-31', 50000, 'Transfer']]);
+  for (const p of totals.statements) assert.equal(p.leftPence, totals.balances[p.key], p.key);
+  assert.deepEqual(totals.statements.find((p) => p.key === 'scott').taken, [], 'Scott took nothing');
 });
 
 test('uploading an overlapping statement adds nothing twice', async () => {
@@ -285,22 +299,21 @@ test('the difference names the jobs behind it, and they add back to it', async (
   assert.equal(clean.differencePence, 0);
   assert.deepEqual(clean.differenceJobs, [], 'nothing to chase when the books are square');
 
-  // A third payment matched to a job that was already square: 215 recorded,
-  // 265 in the bank.
-  await upload(businessCsv([
-    { date: '2026-08-25', id: 'in-3', type: 'TRANSFER', description: 'Payment from PRIYA AGAIN', amount: 50 }
-  ]), 'extra.csv');
-  const extra = (await get('?view=in')).json().transactions.find((t) => t.description === 'Payment from PRIYA AGAIN');
-  const t = (await post({ id: extra.id, jobId: job.id })).json().totals;
+  // The price edited down after the money arrived: 215 in the bank, the job
+  // now says 165. (A second payment onto a paid job is refused outright.)
+  const edited = await call(jobsRoute, { method: 'POST', url: '/api/admin/jobs', headers: { cookie },
+    body: { id: job.id, surveyType: 'localised', surveyor: 'tom', customerName: 'Priya Sharma', customerPostcode: 'ME14 1AA', jobDate: '2026-08-20', surveyPricePence: 16500, status: 'completed' } });
+  assert.equal(edited.statusCode, 200, edited.body);
+  const t = (await get()).json().totals;
 
   assert.equal(t.differencePence, 5000);
   assert.equal(t.differenceJobs.length, 1);
   const [only] = t.differenceJobs;
   assert.equal(only.id, job.id);
-  assert.equal(only.receivedPence, 26500);
-  assert.equal(only.countedValuePence, 21500);
+  assert.equal(only.receivedPence, 21500);
+  assert.equal(only.countedValuePence, 16500);
   assert.equal(only.deltaPence, 5000);
-  assert.equal(only.lines, 3);
+  assert.equal(only.lines, 2);
   assert.equal(only.reason, 'more money matched than the job is worth');
   assert.equal(t.differenceJobs.reduce((sum, j) => sum + j.deltaPence, 0), t.differencePence,
     'the list is the whole of the difference');
@@ -332,4 +345,56 @@ test('something that is not a statement is refused, and an empty body too', asyn
   assert.equal(bad.json().error, 'not_a_statement');
   assert.equal((await upload('   ')).statusCode, 400);
   assert.equal((await pool.query('select count(*)::int as n from bank_statements')).rows[0].n, 0, 'nothing recorded for a refused file');
+});
+
+test('a job already paid in full cannot take another payment, by hand or by the importer', async () => {
+  const job = await createJob();
+  await upload(businessCsv(AUGUST));
+  const extra = businessCsv([{ date: '2026-09-02', id: 'in-9', type: 'TRANSFER', description: 'Payment from PRIYA SHARMA', payer: 'PRIYA SHARMA', amount: 107.5 }]);
+  const r = (await upload(extra, 'september.csv')).json();
+  assert.equal(r.matched, 0, 'the importer does not guess a second payment onto a paid job');
+  const line = (await get('?view=all')).json().transactions.find((t) => t.postedOn === '2026-09-02');
+  const refused = await post({ id: line.id, jobId: job.id });
+  assert.equal(refused.statusCode, 400);
+  assert.match(refused.json().errors.jobId, /already paid in full \(£215\.00 of £215\.00\)/);
+});
+
+test('a reference that is the customer\'s first name is enough to match, and who paid is remembered', async () => {
+  const job = await createJob({ customerName: 'Priya Sharma', customerPostcode: 'ME14 1AA', jobDate: '2026-08-20' });
+  const r = (await upload(businessCsv([
+    { date: '2026-08-21', id: 'f-1', type: 'TRANSFER', description: 'Payment from ACME LETTINGS', payer: 'ACME LETTINGS', reference: 'Priya', amount: 99 }
+  ]), 'ref.csv')).json();
+  assert.equal(r.matched, 1, 'name in the reference, amount wrong: still matched on the first name');
+  assert.equal((await get('?view=in')).json().transactions[0].jobId, job.id);
+
+  // Matched by hand next time, then the payer is known for this customer.
+  const second = await createJob({ customerName: 'Priya Sharma', customerPostcode: 'ME14 1AA', jobDate: '2026-09-10' });
+  await upload(businessCsv([{ date: '2026-09-11', id: 'f-2', type: 'TRANSFER', description: 'Payment from ACME LETTINGS', payer: 'ACME LETTINGS', amount: 12 }]), 'two.csv');
+  const line = (await get('?view=in')).json().transactions.find((t) => t.postedOn === '2026-09-11');
+  await post({ id: line.id, jobId: second.id });
+  const known = (await pool.query('select payer_key, customer_key from bank_payers')).rows;
+  assert.deepEqual(known, [{ payer_key: 'acmelettings', customer_key: 'priyasharma' }]);
+});
+
+test('one payment divides between two jobs, adding back exactly, and each part matches its own job', async () => {
+  const a = await createJob({ customerName: 'Ann Lee', customerPostcode: 'ME1 1AA' });
+  const b = await createJob({ customerName: 'Bob Ray', customerPostcode: 'ME2 2BB' });
+  await upload(businessCsv([{ date: '2026-08-22', id: 'd-1', type: 'TRANSFER', description: 'Payment from LANDLORD LTD', payer: 'LANDLORD LTD', amount: 430 }]), 'two-jobs.csv');
+  const line = (await get('?view=in')).json().transactions.find((t) => t.amountPence === 43000);
+  assert.equal((await post({ op: 'divide', id: line.id, parts: [21500, 20000] })).statusCode, 400, 'must add up');
+  const d = (await post({ op: 'divide', id: line.id, parts: [21500, 21500] })).json();
+  assert.equal(d.ids.length, 2);
+  await post({ id: d.ids[0], jobId: a.id });
+  await post({ id: d.ids[1], jobId: b.id });
+  const { totals } = (await get('?view=all')).json();
+  assert.equal(totals.bank.inPence, 43000, 'the bank total did not move');
+  assert.ok((await jobRow(a.id)).paid_at && (await jobRow(b.id)).paid_at, 'both jobs paid');
+  assertBalances(totals);
+});
+
+test('the Revolut feed cannot be switched on until it is connected', async () => {
+  const r = await post({ op: 'feed', enabled: true });
+  assert.equal(r.statusCode, 400);
+  const { feed } = (await get()).json();
+  assert.deepEqual([feed.configured, feed.enabled], [false, false]);
 });

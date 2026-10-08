@@ -18,12 +18,19 @@ const esc = (value) =>
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-/** Where each hub lives, and what the pages under it are called. */
+/** Where each hub lives, and what the pages under it are called. The areas
+    hub is the one exception: its path is the brand's own (damp-survey for the
+    damp sites, roofing-in for Verge), so it is read from the site. */
 export const HUBS = {
   services: { path: '/services', label: 'Services', child: '/services/' },
   areas: { path: '/damp-survey', label: 'Areas', child: '/damp-survey/' },
   guides: { path: '/guides', label: 'Guides', child: '/guides/' }
 };
+
+function hubFor(kind, site) {
+  if (kind !== 'areas' || !site.areasPath) return HUBS[kind];
+  return { ...HUBS.areas, path: site.areasPath, child: `${site.areasPath}/` };
+}
 
 const LIST_HEADING = {
   services: 'Every service, in detail',
@@ -39,7 +46,7 @@ function itemSchema(entries, site, kind) {
       '@type': 'ListItem',
       position: i + 1,
       name: e.name,
-      url: `${SITES[site].origin}${HUBS[kind].child}${e.slug}`
+      url: `${SITES[site].origin}${hubFor(kind, SITES[site]).child}${e.slug}`
     }))
   });
 }
@@ -50,7 +57,7 @@ function crumbSchema(site, kind, url) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: SITES[site].brand, item: `${SITES[site].origin}/` },
-      { '@type': 'ListItem', position: 2, name: HUBS[kind].label, item: url }
+      { '@type': 'ListItem', position: 2, name: hubFor(kind, SITES[site]).label, item: url }
     ]
   });
 }
@@ -63,17 +70,18 @@ function crumbSchema(site, kind, url) {
 export function render(kind, siteKey, entries) {
   const site = SITES[siteKey];
   const copy = hubs[siteKey][kind];
-  const url = `${site.origin}${HUBS[kind].path}`;
+  const hub = hubFor(kind, site);
+  const url = `${site.origin}${hub.path}`;
 
   const list = entries
     .map((e) => `      <li>
-        <a href="${HUBS[kind].child}${e.slug}">${esc(e.name)}</a>
+        <a href="${hub.child}${e.slug}">${esc(e.name)}</a>
         <span>${esc(e.metaDescription)}</span>
       </li>`)
     .join('\n');
 
   const body = `
-  <p class="crumb"><a href="/">Home</a> / ${esc(HUBS[kind].label)}</p>
+  <p class="crumb"><a href="/">Home</a> / ${esc(hub.label)}</p>
 
   <div class="hero">
     <h1>${esc(copy.h1)}</h1>

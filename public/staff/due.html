@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex, nofollow" />
 <title>Due | DampScan</title>
 <meta name="theme-color" content="#0c1a2b" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
-<link rel="stylesheet" href="/staff/staff.css" />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/board.css" />
 <script>
 /* Both sites share this staff area, so the hostname decides whose name is on
    it. This runs in the head, before anything is painted, so neither brand ever
@@ -67,6 +67,12 @@
   <div id="content" hidden>
     <div class="tiles" id="tiles" style="margin-top:12px"></div>
 
+    <section class="panel" aria-labelledby="h-messages" id="p-messages">
+      <h2 id="h-messages">Messages to send</h2>
+      <div id="messages"></div>
+      <p class="panel-note">Each one opens on your phone with the words written. You press send; tapping the button takes it off this list.</p>
+    </section>
+
     <section class="panel" aria-labelledby="h-enquiries">
       <h2 id="h-enquiries">Enquiries with no job yet</h2>
       <div id="enquiries"></div>
@@ -78,12 +84,12 @@
     </section>
 
     <section class="panel" aria-labelledby="h-quotes" id="p-quotes">
-      <h2 id="h-quotes">Quotes out with no answer</h2>
+      <h2 id="h-quotes">Quotes out</h2>
       <div id="quotes"></div>
     </section>
 
     <section class="panel" aria-labelledby="h-services" id="p-services">
-      <h2 id="h-services">Services due this month</h2>
+      <h2 id="h-services">Services and maintenance visits due</h2>
       <div id="services"></div>
     </section>
 
@@ -106,7 +112,7 @@
   </div>
 </main>
 
-<script src="/staff/ui.js"></script>
-<script src="/staff/due.js"></script>
+<script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
+<script src="/staff/messages.js"></script><script src="/staff/due.js"></script>
 </body>
 </html>

@@ -208,3 +208,27 @@ test('a client update by a person is written to the audit trail with before and 
   assert.equal(audit.after_json.note, 'Scaffold Tuesday');
   assert.ok(audit.person_id, 'attributed to the person, not to nobody');
 });
+
+/* ------------------------------------------------- the three staff areas ---- */
+test('an area is its businesses within the scope: damp is both damp brands, and a site beats an area', async () => {
+  const cookie = await signIn('1290');
+  const get = async (url) => (await call(leadsRoute, { method: 'GET', url, headers: { cookie } })).json();
+  assert.deepEqual((await get('/api/admin/leads?range=all&area=damp')).leads.map((l) => l.site).sort(), ['ati-london', 'dampscan']);
+  assert.deepEqual((await get('/api/admin/leads?range=all&area=roofing')).leads.map((l) => l.site), ['roofing']);
+  assert.deepEqual((await get('/api/admin/leads?range=all&area=ac')).leads, []);
+  assert.deepEqual((await get('/api/admin/leads?range=all&area=damp&site=ati-london')).leads.map((l) => l.site), ['ati-london']);
+  assert.equal((await get('/api/admin/leads?range=all&area=nonsense')).leads.length, 3, 'an unknown area is no filter, the same as none');
+
+  const cards = (await call(clientsRoute, { method: 'GET', url: '/api/admin/clients?view=all&area=damp', headers: { cookie } })).json();
+  assert.deepEqual(cards.clients.map((c) => c.site).sort(), ['ati-london', 'dampscan']);
+  const jobs = (await call(jobsRoute, { method: 'GET', url: '/api/admin/jobs?range=all&area=roofing', headers: { cookie } })).json();
+  assert.deepEqual(jobs.jobs.map((j) => j.site), ['roofing']);
+});
+
+test('an area cannot widen a scope: roofing-only Steve asking for the damp area sees nothing', async () => {
+  await person('Steve', 'steve-passcode', ['roofing']);
+  const cookie = await signIn('steve-passcode');
+  const leads = (await call(leadsRoute, { method: 'GET', url: '/api/admin/leads?range=all&area=damp', headers: { cookie } })).json();
+  assert.deepEqual(leads.leads, []);
+  assert.equal(leads.total, 0);
+});

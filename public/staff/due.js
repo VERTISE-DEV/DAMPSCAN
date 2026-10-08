@@ -44,6 +44,7 @@
     mount.textContent = '';
     var owed = d.owed.reduce(function (s, r) { return s + r.owedPence; }, 0);
     var tiles = [
+      ['Messages to send', U.num(d.messages.length), d.messages.length > 0],
       ['Enquiries waiting', U.num(d.enquiries.length), d.enquiries.length > 0],
       ['Visits this week', U.num(d.visits.length), false],
       ['Quotes out', U.num(d.quotes.length), false],
@@ -60,6 +61,15 @@
 
   function render(d) {
     renderTiles(d);
+    /* Only the quoted trades send these, so the damp area has no use for it. */
+    el('p-messages').hidden = !d.messages.length && !(global.DSAREA && global.DSAREA.area !== 'damp');
+    U.table(el('messages'), [
+      { label: 'Message', get: function (r) { return global.DSMSG.label(r.message); } },
+      { label: 'Brand', get: brand },
+      { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
+      { label: 'Send', wrap: true, get: function (r) { return global.DSMSG.buttons(r.id, r.message, function () { setTimeout(refresh, 300); }); } },
+      { label: 'Open', sr: true, get: function (r) { return link('/staff/quoted.html#job-' + r.id, 'Open'); } }
+    ], d.messages, { empty: 'Nothing to send today. Follow-ups, tomorrow\'s reminders and review requests appear here when they fall due.' });
     U.table(el('enquiries'), [
       { label: 'Received', get: function (r) { return U.when(r.createdAt); } },
       { label: 'Brand', get: brand },
@@ -79,23 +89,24 @@
     ], d.visits, { empty: 'Nothing booked in the next seven days.' });
 
     U.table(el('quotes'), [
-      { label: 'Out for', get: function (r) { return r.ageDays + (r.ageDays === 1 ? ' day' : ' days'); } },
+      { label: 'Out for', get: function (r) { return r.acceptedAt ? U.node('span', 'tag tag--good', 'Accepted, book a date') : r.ageDays + (r.ageDays === 1 ? ' day' : ' days'); } },
       { label: 'Brand', get: brand },
       { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
       { label: 'Postcode', get: function (r) { return r.postcode || ''; } },
       { label: 'Quoted', numeric: true, get: function (r) { return U.money(r.invoicePence); } },
       { label: 'Open', sr: true, get: open }
-    ], d.quotes, { empty: 'No quotes waiting on an answer.', onRow: function (tr, r) { if (r.ageDays >= 7) tr.className = 'is-stale'; } });
+    ], d.quotes, { empty: 'No quotes waiting on an answer.', onRow: function (tr, r) { if (r.ageDays >= 7 && !r.acceptedAt) tr.className = 'is-stale'; } });
 
     U.table(el('services'), [
       { label: 'Due', get: function (r) { return r.daysUntilDue < 0 ? Math.abs(r.daysUntilDue) + ' days overdue' : r.daysUntilDue === 0 ? 'Today' : 'In ' + r.daysUntilDue + (r.daysUntilDue === 1 ? ' day' : ' days'); } },
       { label: 'Brand', get: brand },
       { label: 'Customer', get: function (r) { return r.customerName || 'Not given'; } },
       { label: 'Postcode', get: function (r) { return r.postcode || ''; } },
-      { label: 'Units', numeric: true, get: function (r) { return U.num(r.unitCount); } },
+      { label: 'Units', numeric: true, get: function (r) { return r.site === 'roofing' ? '' : U.num(r.unitCount); } },
       { label: 'Reminded', get: function (r) { return r.lastContactedOn || 'Not yet'; } },
+      { label: 'Remind', wrap: true, get: function (r) { return r.message && r.jobId ? global.DSMSG.buttons(r.jobId, r.message, function () { setTimeout(refresh, 300); }) : ''; } },
       { label: 'Open', sr: true, get: function (r) { return r.jobId ? link('/staff/quoted.html#job-' + r.jobId, 'Open') : ''; } }
-    ], d.services, { empty: 'No services falling due in the next month.', onRow: function (tr, r) { if (r.daysUntilDue < 0) tr.className = 'is-stale'; } });
+    ], d.services, { empty: 'No services or maintenance visits falling due in the next month.', onRow: function (tr, r) { if (r.daysUntilDue < 0) tr.className = 'is-stale'; } });
 
     var money = ['p-owed', 'p-ready', 'p-drifted'];
     money.forEach(function (id) { el(id).hidden = !d.money; });

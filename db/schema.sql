@@ -649,3 +649,223 @@ create unique index if not exists jobs_quote_token_idx on jobs (quote_token) whe
 alter table businesses add column if not exists vat_bp integer not null default 2000 check (vat_bp between 0 and 10000);
 alter table job_costs add column if not exists quote_line_id bigint references quote_lines (id) on delete set null;
 create unique index if not exists job_costs_quote_line_idx on job_costs (quote_line_id) where quote_line_id is not null;
+
+-- ---------------------------------------------------------------------------
+-- Customer messages from the staff area
+--
+-- The quote, two follow-ups, the day-before reminder and the review request
+-- go out from the staff member's own phone or mail, one tap each, as WhatsApp,
+-- a text or an email with the words already written. No message provider is
+-- involved, so nothing here sends anything: a row says somebody tapped to send
+-- that message on that channel, which is what takes it off the Due list.
+--
+-- The phone and email live on the job because most roofing and air
+-- conditioning jobs start as a phone call, with no web enquiry behind them.
+-- quote_sent_at is when the quote first went, which is what the follow-ups
+-- count from.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists customer_phone text;
+alter table jobs add column if not exists customer_email text;
+alter table jobs add column if not exists quote_sent_at  timestamptz;
+create table if not exists job_messages (
+  id        bigserial primary key,
+  job_id    bigint not null references jobs (id) on delete cascade,
+  kind      text   not null check (kind in ('quote', 'followup', 'reminder', 'review')),
+  channel   text   not null check (channel in ('whatsapp', 'sms', 'email')),
+  sent_at   timestamptz not null default now(),
+  sent_by   bigint references people (id) on delete set null
+);
+create index if not exists job_messages_job_idx on job_messages (job_id, sent_at);
+
+-- ---------------------------------------------------------------------------
+-- Accepting a quote online
+--
+-- The customer's quote page has an accept button: they type their name and
+-- tick that they accept. That is recorded here, with the time and a salted
+-- hash of the address it came from (never the address itself), and the price
+-- stops following the quote lines from that moment, because it is now agreed.
+-- The job stays quoted until staff book a start date, so nothing lands on the
+-- calendar on a day nobody has agreed.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists quote_accepted_at      timestamptz;
+alter table jobs add column if not exists quote_accepted_name    text;
+alter table jobs add column if not exists quote_accepted_ip_hash text;
+
+-- ---------------------------------------------------------------------------
+-- Price book and quote templates
+--
+-- The price book is what things cost each business, by the unit, so a quote
+-- line is a pick and a quantity rather than a figure looked up every time. A
+-- template is a whole set of lines and a markup, saved from a quote that was
+-- right, for the jobs that come round again: a standard re-roof, a single
+-- split install. Both belong to one business and are never shared across.
+-- ---------------------------------------------------------------------------
+create table if not exists price_items (
+  id             bigserial primary key,
+  business_slug  text   not null references businesses (slug),
+  kind           text   not null check (kind in ('materials', 'labour', 'scaffolding', 'waste', 'other')),
+  description    text   not null,
+  unit           text   not null default 'each',
+  cost_pence     bigint not null check (cost_pence >= 0),
+  active         boolean not null default true,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+create index if not exists price_items_business_idx on price_items (business_slug, kind, description) where active;
+create table if not exists quote_templates (
+  id             bigserial primary key,
+  business_slug  text   not null references businesses (slug),
+  name           text   not null,
+  lines          jsonb  not null default '[]'::jsonb,
+  markup_bp      integer check (markup_bp between 0 and 100000),
+  created_at     timestamptz not null default now()
+);
+create index if not exists quote_templates_business_idx on quote_templates (business_slug, name);
+
+-- ---------------------------------------------------------------------------
+-- Job photographs and the public gallery
+--
+-- Taken on site for the record, before, during and after, and stored private
+-- (see lib/photos.js). A photo reaches the website only when somebody ticks
+-- it, and then only with what they typed for it: a caption and a town. The
+-- job's customer, address and postcode are never published with it, and the
+-- file has its location metadata stripped on the way in.
+-- ---------------------------------------------------------------------------
+create table if not exists job_photos (
+  id              bigserial primary key,
+  job_id          bigint not null references jobs (id) on delete cascade,
+  site            text   not null,
+  path_full       text   not null,
+  path_thumb      text,
+  width           integer,
+  height          integer,
+  stage           text   not null default 'during' check (stage in ('before', 'during', 'after')),
+  caption         text,
+  public          boolean not null default false,
+  public_caption  text,
+  area_label      text,
+  added_by        bigint references people (id) on delete set null,
+  created_at      timestamptz not null default now(),
+  published_at    timestamptz
+);
+create index if not exists job_photos_job_idx on job_photos (job_id, id);
+create index if not exists job_photos_public_idx on job_photos (site, published_at desc) where public;
+
+-- ---------------------------------------------------------------------------
+-- Connecting an AI assistant (ChatGPT, Claude) to the staff area
+--
+-- The assistant talks to /api/admin/mcp, the Model Context Protocol, and
+-- signs in the standard way: OAuth with PKCE. The person types their staff
+-- code on our own page, and the assistant gets a token that acts as them, with
+-- exactly their businesses and levels. It can read and can do three things:
+-- mark a deposit paid, mark a job paid in full, mark a report sent.
+--
+-- Codes and tokens are stored as SHA-256 hashes only, so this table leaking
+-- does not hand anybody a working token. A token for a person who has been
+-- deactivated stops working on its next use, because the scope is read from
+-- people and grants every time, as it is for a browser session.
+-- ---------------------------------------------------------------------------
+create table if not exists mcp_clients (
+  id             text primary key,
+  name           text,
+  redirect_uris  text[] not null,
+  secret_hash    text,
+  created_at     timestamptz not null default now()
+);
+create table if not exists mcp_codes (
+  code_hash      text primary key,
+  client_id      text not null references mcp_clients (id) on delete cascade,
+  redirect_uri   text not null,
+  challenge      text not null,
+  person_id      bigint references people (id) on delete cascade,
+  shared         boolean not null default false,
+  expires_at     timestamptz not null,
+  used_at        timestamptz
+);
+create table if not exists mcp_tokens (
+  token_hash     text primary key,
+  kind           text not null check (kind in ('access', 'refresh')),
+  client_id      text not null references mcp_clients (id) on delete cascade,
+  person_id      bigint references people (id) on delete cascade,
+  shared         boolean not null default false,
+  expires_at     timestamptz not null,
+  revoked_at     timestamptz,
+  last_used_at   timestamptz,
+  created_at     timestamptz not null default now()
+);
+create index if not exists mcp_tokens_person_idx on mcp_tokens (person_id) where revoked_at is null;
+
+-- ---------------------------------------------------------------------------
+-- Invoices for the quoted trades
+--
+-- An invoice is the agreed job, issued: a number from the business's own
+-- sequence (UK VAT invoices must be numbered in an unbroken sequence), the
+-- date it was issued, which is the tax point, and when payment is due. The
+-- lines and payments are read live from the job, so a payment recorded after
+-- issuing shows on the same invoice as a lower balance.
+-- ---------------------------------------------------------------------------
+alter table businesses add column if not exists next_invoice integer not null default 1;
+alter table jobs add column if not exists invoice_number integer;
+alter table jobs add column if not exists invoiced_at    timestamptz;
+alter table jobs add column if not exists invoice_due_on date;
+create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice_number) where invoice_number is not null;
+-- The 'invoice' message kind is allowed by the job_messages check below, with
+-- the maintenance plans. The check lives in one place only: re-running this
+-- file applies every statement in order, and an older, narrower copy of it
+-- would fail against rows a later one allows.
+
+-- ---------------------------------------------------------------------------
+-- Maintenance plans for Verge, and a price on every plan
+--
+-- The service contracts CoolRight uses for air conditioning now carry Verge's
+-- yearly roof and gutter checks too: same table, same due list. A plan can
+-- carry what each visit is charged, so the plans' income can be seen. The
+-- customer's reminder that a visit is due is a one-tap message like the rest.
+-- ---------------------------------------------------------------------------
+alter table service_contracts add column if not exists price_pence integer check (price_pence >= 0);
+alter table job_messages drop constraint if exists job_messages_kind_check;
+alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service'));
+
+-- ---------------------------------------------------------------------------
+-- VAT registration and the details an invoice prints
+--
+-- Verge and CoolRight are not VAT registered yet, and a business that is not
+-- registered must not charge VAT. So VAT is off until somebody who manages
+-- the business switches it on in the staff area, on the day registration
+-- takes effect, and vat_bp is only the rate it uses once it is on. The
+-- address, VAT number, company number and payment details are kept here
+-- rather than in code, so they can be changed there too.
+-- ---------------------------------------------------------------------------
+alter table businesses add column if not exists vat_registered  boolean not null default false;
+alter table businesses add column if not exists vat_number      text;
+alter table businesses add column if not exists trading_address text;
+alter table businesses add column if not exists company_number  text;
+alter table businesses add column if not exists payment_details text;
+
+-- ---------------------------------------------------------------------------
+-- Matching payments to jobs
+--
+-- bank_payers remembers who pays for whom: once a payment from "P SHARMA" is
+-- matched to Priya Sharma's job, the next one from the same payer is put on
+-- her open job without asking. Keyed on the payer as the bank writes it and
+-- the customer's name, squashed to letters and digits.
+--
+-- bank_feeds is the automatic import from Revolut Business, ready for the
+-- day it is switched on: off until the API keys are set in Vercel and
+-- somebody ticks it on the Bank page. It records when it last ran and why it
+-- failed, if it did.
+-- ---------------------------------------------------------------------------
+create table if not exists bank_payers (
+  books         text not null,
+  payer_key     text not null,
+  customer_key  text not null,
+  created_at    timestamptz not null default now(),
+  primary key (books, payer_key, customer_key)
+);
+create table if not exists bank_feeds (
+  books           text primary key,
+  enabled         boolean not null default false,
+  last_synced_at  timestamptz,
+  last_error      text,
+  updated_at      timestamptz not null default now()
+);

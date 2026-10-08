@@ -18,29 +18,14 @@ export default {
     'Thirty years in the roofing trade',
     'Every job carried out by our own team, never subcontracted',
     'Free quote visit, no call-out charge',
-    'Fixed price in writing, scaffolding, skips and VAT included',
+    'Fixed price in writing, scaffolding and skips included',
     'Fully insured'
   ],
 
-  highlightsHeading: 'What you get when Verge does your roof',
-  highlights: [
-    {
-      h3: 'The materials named, not "like for like"',
-      body: 'Your quote says which tile or slate, which membrane, which lead and which ridge system. Redland 49s, Mini Stonewolds, plain tiles, natural slate, Code 4 lead, EPDM, torch-on felt. What is written down is what goes on.'
-    },
-    {
-      h3: 'A price that does not move',
-      body: 'Scaffolding, skips, making good and VAT are in the figure. The only change is if opening up shows something nobody could see from outside, and then we stop, show you, and agree it before carrying on.'
-    },
-    {
-      h3: 'Done right the first time',
-      body: 'Breathable membrane and new treated battens on a re-roof, dry-fixed hips, ridges and verges, lead dressed and fixed properly, flat roofs laid to proper falls. Plenty of our work is putting right a roof somebody else did quickly.'
-    },
-    {
-      h3: 'Photographed from start to finish',
-      body: 'You get photographs of what we found before we started and of the finished roof, so you can see work you would otherwise never see.'
-    }
-  ],
+  /* Customer reviews sit straight under the headline, in the same carousel
+     as the damp home pages, and show once there are enough of them. */
+  reviewsFirst: true,
+  reviewsHeading: 'What our customers say',
 
   process: {
     h2: 'How a job runs, from your enquiry to a finished roof',
@@ -75,14 +60,15 @@ export default {
   coverage: {
     h2: 'Roofers covering London and the whole of the South East',
     intro:
-      'Our own teams work right across the region, so a quote visit is usually days away rather than weeks. Recent jobs include re-roofs in Orpington, Blackfen and Milton, a natural slate roof in Petts Wood, a loft conversion roof in Bexley and a lead box gutter in central London. If your town is not listed, send your postcode anyway.',
+      'Our own teams work right across the region, so a quote visit is usually days away rather than weeks. Recent jobs include re-roofs in Orpington, Blackfen and Milton, a natural slate roof in Petts Wood, a loft conversion roof in Bexley and a lead box gutter in central London. If your town is not listed, send your postcode anyway, or see <a href="/roofing-in">every area we cover</a>.',
+    /* Each card links to its region page, which is how those pages get found. */
     regions: [
-      { name: 'Greater London', places: ['Every borough, from Bromley, Bexley and Croydon to Barnet, Ealing and Havering'] },
-      { name: 'Kent', places: ['Orpington', 'Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend', 'Canterbury'] },
-      { name: 'Surrey', places: ['Croydon', 'Kingston', 'Sutton', 'Epsom', 'Guildford', 'Woking', 'Reigate'] },
-      { name: 'Essex', places: ['Romford', 'Brentwood', 'Basildon', 'Chelmsford', 'Southend', 'Ilford', 'Grays'] },
-      { name: 'Hertfordshire', places: ['Watford', 'St Albans', 'Hemel Hempstead', 'Borehamwood', 'Hatfield', 'Enfield'] },
-      { name: 'Sussex and Berkshire', places: ['Crawley', 'Horsham', 'Brighton', 'Slough', 'Windsor', 'Reading'] }
+      { name: 'Greater London', href: '/roofing-in', places: ['Every borough, from Bromley, Bexley and Croydon to Barnet, Ealing and Havering'] },
+      { name: 'Kent', href: '/roofing-in/kent-and-south-east-london', places: ['Orpington', 'Bromley', 'Dartford', 'Sevenoaks', 'Tunbridge Wells', 'Maidstone', 'Medway', 'Gravesend', 'Canterbury'] },
+      { name: 'Surrey', href: '/roofing-in/surrey-and-south-west-london', places: ['Croydon', 'Kingston', 'Sutton', 'Epsom', 'Guildford', 'Woking', 'Reigate'] },
+      { name: 'Essex', href: '/roofing-in/essex-and-east', places: ['Romford', 'Brentwood', 'Basildon', 'Chelmsford', 'Southend', 'Ilford', 'Grays'] },
+      { name: 'Hertfordshire', href: '/roofing-in/hertfordshire-and-north-west', places: ['Watford', 'St Albans', 'Hemel Hempstead', 'Borehamwood', 'Hatfield', 'Enfield'] },
+      { name: 'Sussex and Berkshire', href: '/roofing-in/sussex-and-berkshire', places: ['Crawley', 'Horsham', 'Brighton', 'Slough', 'Windsor', 'Reading'] }
     ]
   },
 
@@ -98,7 +84,7 @@ export default {
     },
     {
       q: 'Is the price fixed, and what is in it?',
-      a: 'Fixed. Scaffolding, materials, labour, skips, making good and VAT are all in the figure, and the materials are named on the quote. If opening the roof shows something nobody could have seen from outside, we stop, show you, and agree any change before doing it.'
+      a: 'Fixed. Scaffolding, materials, labour, skips and making good are all in the figure, and the materials are named on the quote. If opening the roof shows something nobody could have seen from outside, we stop, show you, and agree any change before doing it.'
     },
     {
       q: 'How soon can you start, and how long does it take?',

@@ -1,0 +1,14 @@
+{
+  "name": "Staff area",
+  "short_name": "Staff",
+  "description": "Jobs, quotes, messages and money for ATi and DampScan, Verge Roofing and CoolRight.",
+  "start_url": "/staff/due.html",
+  "scope": "/staff/",
+  "display": "standalone",
+  "background_color": "#0c1a2b",
+  "theme_color": "#0c1a2b",
+  "icons": [
+    { "src": "/staff/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/staff/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

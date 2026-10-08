@@ -199,10 +199,23 @@ test('each brand is served its own home page, never another brand\'s', async () 
   assert.equal(rewrittenTo(await call(KENT, '/')), null);
 });
 
-test('roofing has no pricing page and no area pages, so nothing routes to them', async () => {
-  /* next() leaves the request to the filesystem, where neither exists. */
+test('roofing has no pricing page, and its area pages keep the old /roofing-in URLs', async () => {
+  /* next() leaves the request to the filesystem, where no pricing page exists. */
   assert.equal(rewrittenTo(await call(ROOFING, '/pricing')), null);
-  assert.equal(rewrittenTo(await call(ROOFING, '/roofing-in')), null);
+  assert.equal(rewrittenTo(await call(ROOFING, '/roofing-in')), '/hubs/roofing/areas.html');
+  assert.equal(rewrittenTo(await call(ROOFING, '/roofing-in/essex-and-east')), '/areas/roofing/essex-and-east.html');
+  /* The damp path means nothing on the roofing domain, and the roofing path
+     nothing on a damp one. */
+  assert.equal(rewrittenTo(await call(ROOFING, '/damp-survey/essex-and-east')), null);
+  assert.equal(rewrittenTo(await call(KENT, '/roofing-in/essex-and-east')), null);
+});
+
+test('the /our-work page is the gallery function on Verge, and no other brand has one', async () => {
+  const res = await call(ROOFING, '/our-work');
+  assert.equal(rewrittenTo(res), '/api/gallery');
+  assert.equal(new URL(res.headers.get('x-middleware-rewrite')).searchParams.get('site'), 'roofing');
+  assert.equal(rewrittenTo(await call(KENT, '/our-work')), null);
+  assert.equal(rewrittenTo(await call(LONDON, '/our-work')), null);
 });
 
 test('each brand is served its own robots, sitemap and llms at the shared paths', async () => {

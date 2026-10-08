@@ -1,6 +1,8 @@
-/* The service contract block on an air conditioning job's working screen.
-   An install starts a relationship: this is where its interval and next
-   service live, and where a reminder or a service is recorded. Loaded after
+/* The service contract block on a job's working screen: an air conditioning
+   service contract for CoolRight, a maintenance plan (the yearly roof and
+   gutter check) for Verge. A finished job starts a relationship: this is
+   where its interval, next visit and price live, and where a reminder or a
+   visit is recorded. Loaded after
    quoted-job.js, which calls fill(job) on every redraw. */
 (function (global) {
   'use strict';
@@ -8,6 +10,26 @@
   var U = global.DSUI;
   var el = function (id) { return document.getElementById(id); };
   var current = { job: null, contract: null };
+  var roofing = function () { return current.job && current.job.model === 'roofing'; };
+  var WORDS = {
+    ac: { heading: 'Service contract', start: 'Start a contract', update: 'Update contract', visit: 'service', done: 'Serviced today' },
+    roofing: { heading: 'Maintenance plan', start: 'Start a maintenance plan', update: 'Update plan', visit: 'roof and gutter check', done: 'Checked today' }
+  };
+  var words = function () { return WORDS[roofing() ? 'roofing' : 'ac']; };
+
+  /* A price per visit, for both trades; added here so quoted.html keeps its size. */
+  var priceRow = U.node('div', 'form-row');
+  var priceLabel = U.node('label', null, 'Price per visit £');
+  priceLabel.htmlFor = 'w-contract-price';
+  var priceInput = document.createElement('input');
+  priceInput.id = 'w-contract-price';
+  priceInput.type = 'text';
+  priceInput.inputMode = 'decimal';
+  priceInput.autocomplete = 'off';
+  priceRow.appendChild(priceLabel);
+  priceRow.appendChild(priceInput);
+  el('w-contract-due').parentNode.parentNode.insertBefore(priceRow, el('w-contract-save'));
+  var rowOf = function (id) { return el(id).parentNode; };
 
   function fail(message) {
     var err = el('w-contract-error');
@@ -17,11 +39,12 @@
 
   function describe(c) {
     var bits = [];
-    bits.push('Next service due ' + c.nextDueOn + (c.daysUntilDue < 0 ? ', ' + Math.abs(c.daysUntilDue) + ' days overdue' : c.daysUntilDue === 0 ? ', today' : ', in ' + c.daysUntilDue + ' days'));
+    bits.push('Next ' + words().visit + ' due ' + c.nextDueOn + (c.daysUntilDue < 0 ? ', ' + Math.abs(c.daysUntilDue) + ' days overdue' : c.daysUntilDue === 0 ? ', today' : ', in ' + c.daysUntilDue + ' days'));
     bits.push('every ' + c.intervalMonths + ' months');
-    bits.push(c.unitCount + (c.unitCount === 1 ? ' unit' : ' units') + (c.refrigerantKg ? ', ' + c.refrigerantKg + ' kg refrigerant' : ''));
+    if (!roofing()) bits.push(c.unitCount + (c.unitCount === 1 ? ' unit' : ' units') + (c.refrigerantKg ? ', ' + c.refrigerantKg + ' kg refrigerant' : ''));
+    if (c.pricePence != null) bits.push(U.money(c.pricePence) + ' a visit');
     if (c.installedOn) bits.push('installed ' + c.installedOn);
-    if (c.lastServicedOn) bits.push('last serviced ' + c.lastServicedOn);
+    if (c.lastServicedOn) bits.push((roofing() ? 'last checked ' : 'last serviced ') + c.lastServicedOn);
     if (c.lastContactedOn) bits.push('last reminded ' + c.lastContactedOn);
     return bits.join(' · ') + '.';
   }
@@ -42,7 +65,8 @@
       el('w-contract-units').value = String(c.unitCount);
       el('w-contract-kg').value = c.refrigerantKg == null ? '' : String(c.refrigerantKg);
       el('w-contract-due').value = c.nextDueOn || '';
-      el('w-contract-save').textContent = 'Update contract';
+      priceInput.value = c.pricePence == null ? '' : (c.pricePence / 100).toFixed(2);
+      el('w-contract-save').textContent = words().update;
     } else {
       summary.hidden = true;
       el('w-contract-status').hidden = true;
@@ -51,16 +75,22 @@
       el('w-contract-units').value = '1';
       el('w-contract-kg').value = '';
       el('w-contract-due').value = '';
-      el('w-contract-save').textContent = 'Start a contract';
+      priceInput.value = '';
+      el('w-contract-save').textContent = words().start;
     }
     form.hidden = false;
   }
 
   async function fill(job) {
     var block = el('w-contract-block');
-    block.hidden = job.model !== 'ac';
+    block.hidden = job.model !== 'ac' && job.model !== 'roofing';
     if (block.hidden) return;
     current.job = job;
+    /* A roof has no indoor units or refrigerant. */
+    rowOf('w-contract-units').hidden = roofing();
+    rowOf('w-contract-kg').hidden = roofing();
+    el('h-contract').firstChild.textContent = words().heading + ' ';
+    el('w-contract-serviced').textContent = words().done;
     current.contract = null;
     try {
       var data = await U.get('/api/admin/contracts?jobId=' + job.id);
@@ -91,7 +121,8 @@
     send({
       op: 'save', id: c ? c.id : undefined, site: job.site, jobId: job.id,
       intervalMonths: Number(el('w-contract-interval').value), unitCount: Number(el('w-contract-units').value),
-      refrigerantKg: el('w-contract-kg').value || null, nextDueOn: el('w-contract-due').value || null
+      refrigerantKg: roofing() ? null : el('w-contract-kg').value || null, nextDueOn: el('w-contract-due').value || null,
+      pricePence: priceInput.value.trim() ? U.toPence(priceInput.value) : null
     }, 'The contract could not be saved.');
   });
   el('w-contract-contacted').addEventListener('click', function () { send({ op: 'contacted', id: current.contract.id }, 'Could not record that.'); });

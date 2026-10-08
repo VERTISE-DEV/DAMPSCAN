@@ -32,7 +32,11 @@ export const config = {
     '/roofing-in', '/roofing-in/', '/roofing-in/:slug',
     '/services', '/services/', '/services/:slug',
     '/guides', '/guides/', '/guides/:slug',
-    '/pricing', '/pricing/'
+    '/pricing', '/pricing/',
+    '/our-work', '/our-work/',
+    '/.well-known/oauth-protected-resource', '/.well-known/oauth-protected-resource/:path*',
+    '/.well-known/oauth-authorization-server', '/.well-known/oauth-authorization-server/:path*',
+    '/.well-known/openid-configuration'
   ]
 };
 
@@ -68,13 +72,15 @@ const SITES = {
       '/llms.txt': '/llms-london.txt'
     }
   },
-  /* No home page written yet, and no area pages. `home: false` is load bearing
-     rather than documentation: public/index.html exists and is DampScan's, so
-     without this a roofing visitor would be served a damp home page under a
-     roofing domain. Refusing is the only honest answer until the page exists. */
+  /* `home` is load bearing rather than documentation: public/index.html is
+     DampScan's, so a brand without its own home file would be served a damp
+     home page under its own domain. The regional pages keep the /roofing-in
+     URLs the old vergeroofing.com used. */
   roofing: {
     origin: 'https://vergeroofing.com',
-    areas: null,
+    areas: '/roofing-in',
+    /* Rendered by a function, because staff publish the photos. */
+    gallery: true,
     files: {
       '/robots.txt': '/robots-roofing.txt',
       '/sitemap.xml': '/sitemap-roofing.xml',
@@ -128,6 +134,13 @@ function siteFor(host) {
 export default function middleware(request) {
   const url = new URL(request.url);
   const path = url.pathname;
+
+  /* How an AI assistant finds out where to sign in to the staff area: see
+     lib/routes/admin/oauth.js. The same on every host. */
+  if (path.startsWith('/.well-known/oauth-protected-resource')) return rewrite(new URL('/api/admin/oauth?step=resource', request.url));
+  if (path.startsWith('/.well-known/oauth-authorization-server') || path === '/.well-known/openid-configuration') {
+    return rewrite(new URL('/api/admin/oauth?step=meta', request.url));
+  }
   const host = (request.headers.get('host') || '').split(':')[0];
   const london = LONDON_HOST.test(host);
   const key = siteFor(host);
@@ -173,6 +186,13 @@ export default function middleware(request) {
        right: nothing serves it and the 404 is honest. */
     if (key === 'roofing') return next();
     return rewrite(new URL(london ? '/pricing/ati.html' : '/pricing/dampscan.html', request.url));
+  }
+
+  if (path === '/our-work/') return Response.redirect(new URL('/our-work', url), 301);
+  if (path === '/our-work') {
+    /* Only a brand with a gallery has the page; anywhere else it is a 404. */
+    if (!site.gallery) return next();
+    return rewrite(new URL(`/api/gallery?site=${key}`, request.url));
   }
 
   if (site.areas && path === `${site.areas}/`) return Response.redirect(new URL(site.areas, url), 301);

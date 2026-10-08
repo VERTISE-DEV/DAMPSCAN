@@ -16,6 +16,9 @@ import { shell, orCall } from './page-shell.js';
 import { bookForm } from './book-form.js';
 import { guides } from '../content/guides/index.js';
 import { areaServed } from './home-template.js';
+import { priceGuide } from '../content/price-guide.js';
+import { reviews } from '../content/reviews/index.js';
+import { MIN_REVIEWS } from '../lib/google-reviews.js';
 
 
 const esc = (value) =>
@@ -75,14 +78,49 @@ function signsBlock(service) {
 `;
 }
 
+const pounds = (n) => '£' + Number(n).toLocaleString('en-GB');
+
+/* What this kind of job usually costs, from content/price-guide.js. Nothing
+   at all until the owners have given a real range for it. */
+function priceBlock(service) {
+  const g = (priceGuide[service.site] || {})[service.slug];
+  if (!g) return '';
+  return `
+  <section class="sec price-guide">
+    <h2>What it usually costs</h2>
+    <p class="price-range">${pounds(g.from)} to ${pounds(g.to)} <span>all in</span></p>
+    <p>That is the range for ${esc(g.typical)}. Yours depends on the size, the access and what we find, so every job is priced after a free visit and the quote you get is fixed.</p>
+  </section>
+`;
+}
+
+/* Three real reviews, for the brands that show them on service pages, once
+   the brand has enough for the home page to show them too. Words exactly as
+   the customer wrote them, like everywhere else. */
+function reviewsBlock(service, site) {
+  const list = (reviews[site.key] || []).filter((r) => r.text);
+  if (!site.reviewsOnServices || (reviews[site.key] || []).length < MIN_REVIEWS || !list.length) return '';
+  return `
+  <section class="sec quotes">
+    <h2>What customers say</h2>
+    ${list.slice(0, 3).map((r) => `<blockquote class="quote-card"><p>${esc(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
+  </section>
+`;
+}
+
 function schema(type, extra) {
   return JSON.stringify({ '@context': 'https://schema.org', '@type': type, ...extra });
 }
 
-export function render(service, allServices) {
+/* Services sit under /services. The roofing regional pages share this shape
+   and are served under the brand's areas path instead, so the URL, the
+   breadcrumb and the area named in the schema follow the hub passed in. */
+const SERVICES_HUB = { path: '/services', label: 'Services' };
+
+export function render(service, allServices, hub = SERVICES_HUB) {
   const site = SITES[service.site];
   if (!site) throw new Error(`${service.slug}: unknown site "${service.site}"`);
-  const url = `${site.origin}/services/${service.slug}`;
+  const url = `${site.origin}${hub.path}/${service.slug}`;
 
   const related = (service.related || [])
     .map((slug) => allServices.find((s) => s.slug === slug && s.site === service.site))
@@ -99,7 +137,9 @@ export function render(service, allServices) {
     description: service.metaDescription,
     url,
     provider: { '@type': site.schemaType, name: site.brand, url: `${site.origin}/`, telephone: site.phone || undefined },
-    areaServed: areaServed(site)
+    areaServed: service.areaServed
+      ? service.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name }))
+      : areaServed(site)
   });
 
   const faqSchema = schema('FAQPage', {
@@ -110,17 +150,17 @@ export function render(service, allServices) {
     }))
   });
 
-  /* Middle rung is /services/, a real page, not an anchor on the home page. */
+  /* Middle rung is the hub, a real page, not an anchor on the home page. */
   const crumbSchema = schema('BreadcrumbList', {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: site.brand, item: `${site.origin}/` },
-      { '@type': 'ListItem', position: 2, name: 'Services', item: `${site.origin}/services` },
+      { '@type': 'ListItem', position: 2, name: hub.label, item: `${site.origin}${hub.path}` },
       { '@type': 'ListItem', position: 3, name: service.name, item: url }
     ]
   });
 
   const body = `
-  <p class="crumb"><a href="/">Home</a> / <a href="/services">Services</a> / ${esc(service.name)}</p>
+  <p class="crumb"><a href="/">Home</a> / <a href="${hub.path}">${esc(hub.label)}</a> / ${esc(service.name)}</p>
 
   <div class="hero">
     <h1>${esc(service.h1)}</h1>
@@ -132,7 +172,7 @@ ${signsBlock(service)}  ${service.sections.map((s) => `<section class="sec">
     ${s.paras.map((p) => `<p>${p}</p>`).join('\n    ')}${sectionList(s)}
   </section>`).join('\n\n  ')}
 
-  <section class="sec" id="faq">
+${priceBlock(service)}${reviewsBlock(service, site)}  <section class="sec" id="faq">
     <h2>Questions</h2>
     ${service.faq.map((f) => `<details class="qa"><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n    ')}
   </section>

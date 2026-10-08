@@ -19,6 +19,8 @@ import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell } from './page-shell.js';
 import { bookForm } from './book-form.js';
 import { reviewsBlock } from './reviews-block.js';
+import { reviews } from '../content/reviews/index.js';
+import { MIN_REVIEWS } from '../lib/google-reviews.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -118,7 +120,7 @@ function coverage(home) {
     <p>${home.coverage.intro}</p>
     <div class="cards">
       ${home.coverage.regions.map((r) => `<div class="card">
-        <h3>${esc(r.name)}</h3>
+        <h3>${r.href ? `<a href="${r.href}">${esc(r.name)}</a>` : esc(r.name)}</h3>
         <p>${esc(r.places.join(', '))}</p>
       </div>`).join('\n      ')}
     </div>
@@ -130,8 +132,11 @@ function coverage(home) {
    section and its id exist either way, because the nav points at #reviews and
    an anchor that resolves to nothing is a link that does nothing. */
 function reviewsSection(home) {
+  /* Hidden whole, heading included, until the brand has enough reviews: a
+     heading with nothing under it reads as a page that failed to load. */
+  const shown = (reviews[home.site] || []).length >= MIN_REVIEWS;
   return `
-  <section class="sec" id="reviews">
+  <section class="sec reviews-wall" id="reviews"${shown ? '' : ' hidden'}>
     <h2>${esc(home.reviewsHeading || 'What customers say')}</h2>
     ${reviewsBlock(home.site)}
   </section>
@@ -159,7 +164,9 @@ export function render(home, services) {
     email: site.email,
     telephone: site.phone || undefined,
     areaServed: areaServed(site),
-    sameAs: site.profileUrl ? [site.profileUrl] : undefined
+    sameAs: [site.profileUrl, ...(site.socials || []).map((x) => x.href)].filter(Boolean).length
+      ? [site.profileUrl, ...(site.socials || []).map((x) => x.href)].filter(Boolean)
+      : undefined
   });
 
   const faqSchema = home.faq && home.faq.length
@@ -177,7 +184,7 @@ export function render(home, services) {
     <h1>${esc(home.h1)}</h1>
     <p class="lede">${home.lede}</p>${trustList(home)}
   </div>
-${highlights(home)}${process(home)}${serviceGrid(home, services)}${coverage(home)}${reviewsSection(home)}${faqBlock(home)}`;
+${home.reviewsFirst ? reviewsSection(home) : ''}${highlights(home)}${process(home)}${serviceGrid(home, services)}${coverage(home)}${home.reviewsFirst ? '' : reviewsSection(home)}${faqBlock(home)}`;
 
   const aside = `
     <div class="booking">
@@ -195,7 +202,8 @@ ${highlights(home)}${process(home)}${serviceGrid(home, services)}${coverage(home
     schemas: [business, faqSchema].filter(Boolean),
     body,
     aside,
-    scripts: bookScripts(site),
+    scripts: bookScripts(site) + '\n<script src="/assets/reviews.js" defer></script>',
+    styles: ['/assets/reviews.css'],
     /* The questions are on this page, so the shell must not add a link to a
        FAQ that lives somewhere else. */
     ownFaq: true

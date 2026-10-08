@@ -54,6 +54,16 @@ function nav(ownFaq, site) {
  */
 const CALL_SVG = (size) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.5 2.1L8.1 9.5a16 16 0 006 6l1.1-1.1a2 2 0 012.1-.5c.8.3 1.7.5 2.6.6a2 2 0 011.7 2z"/></svg>`;
 
+/* A WhatsApp chat button, for a brand that has given a number for it. Most
+   people with a leaking roof would rather send a photo than fill in a form. */
+const WA_SVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.4-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 000-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 001.8-1.3 2.3 2.3 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>';
+export function whatsappButton(site) {
+  if (!site.whatsapp) return '';
+  const text = encodeURIComponent(`Hello ${site.brand}, I'd like a quote. My postcode is `);
+  return `<a class="wa-float" href="https://wa.me/${site.whatsapp}?text=${text}" target="_blank" rel="noopener" aria-label="Message ${esc(site.brand)} on WhatsApp">${WA_SVG}</a>
+`;
+}
+
 function headerCall(site) {
   if (!site.phone) return '';
   return `        <a href="tel:${site.phone}" class="call-link">${CALL_SVG(15)}${esc(site.phoneLabel)}</a>\n`;
@@ -77,7 +87,7 @@ function footCall(site) {
   return ` &middot; <a href="tel:${site.phone}">${esc(site.phoneLabel)}</a>`;
 }
 
-export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true }) {
+export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true, styles = [] }) {
   return `<!DOCTYPE html>
 <html lang="en-GB" class="no-js" data-site="${site.key}">
 <head>
@@ -95,10 +105,10 @@ ${adsTag(site.key)}
 ${site.og ? `<meta property="og:image" content="${site.origin}${site.og}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />` : ''}
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="${site.font || '/assets/fonts/plus-jakarta-sans-var.woff2'}" crossorigin />
 <link rel="stylesheet" href="/assets/header.css" />
 <link rel="stylesheet" href="/assets/area.css" />
-<link rel="stylesheet" href="/assets/book.css" />
+<link rel="stylesheet" href="/assets/book.css" />${styles.map((href) => `\n<link rel="stylesheet" href="${href}" />`).join('')}
 <style>:root{--head-bg:${site.headBg};--head-solid:${site.headSolid}}</style>
 <script>document.documentElement.classList.remove('no-js')</script>
 ${schemas.map((s) => `<script type="application/ld+json">${s}</script>`).join('\n')}
@@ -140,10 +150,10 @@ ${headerCall(site)}        <a href="#book" class="btn btn--primary">${esc(site.c
 ${barCall(site)}  <a href="#book" class="btn btn--primary">${esc(site.barLabel)}</a>
 </nav>
 
-<footer class="afoot">
+${whatsappButton(site)}<footer class="afoot">
   <div class="wrap">
     <span>${esc(site.brand)}. ${esc(site.strap)}.</span>
-    <span><a href="/">Home</a>${(site.footerLinks || []).map((l) => ` &middot; <a href="${l.href}">${esc(l.label)}</a>`).join('')}${footCall(site)} &middot; <a href="mailto:${site.email}">${esc(site.email)}</a></span>
+    <span><a href="/">Home</a>${(site.footerLinks || []).map((l) => ` &middot; <a href="${l.href}">${esc(l.label)}</a>`).join('')}${(site.socials || []).map((l) => ` &middot; <a href="${l.href}" rel="noopener me" target="_blank">${esc(l.label)}</a>`).join('')}${footCall(site)} &middot; <a href="mailto:${site.email}">${esc(site.email)}</a></span>
   </div>
 </footer>
 ${scripts}

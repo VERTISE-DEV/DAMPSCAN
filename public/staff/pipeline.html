@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Pipeline | DampScan</title>
+<meta name="theme-color" content="#0c1a2b" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/board.css" />
+<script>
+/* Both sites share this staff area, so the hostname decides whose name is on
+   it. This runs in the head, before anything is painted, so neither brand ever
+   flashes the other's. The markup carries both lockups; staff.css hides one. */
+(function brand(){
+  var ati = /(^|\.)atidampsurvey\.co\.uk$/i.test(location.hostname);
+  if (!ati) return;
+  document.documentElement.setAttribute('data-brand', 'ati');
+  document.title = document.title.replace('DampScan', 'ATi Damp Survey');
+  var icon = document.querySelector('link[rel="icon"]');
+  if (icon) { icon.type = 'image/png'; icon.href = '/assets/ati-mark.png'; }
+})();
+</script>
+</head>
+<body>
+
+<header class="top">
+  <a href="/" class="logo brand-dampscan" aria-label="DampScan home">
+    <span class="logo-type">
+      <span class="logo-word">Damp<span class="scan">Scan</span></span>
+      <span class="logo-tag">Survey Specialists</span>
+    </span>
+  </a>
+  <a href="/" class="logo brand-ati" aria-label="ATi Damp Survey home">
+    <span class="logo-type">
+      <span class="logo-word">ATi <span class="scan">Damp</span></span>
+      <span class="logo-tag">Survey Practice</span>
+    </span>
+  </a>
+  <nav class="tabs" aria-label="Sections">
+    <a href="/staff/due.html">Due</a>
+    <a href="/staff/dashboard.html">Dashboard</a>
+    <a href="/staff/jobs.html">Jobs</a>
+    <a href="/staff/quoted.html">Quotes</a>
+    <a href="/staff/clients.html">Clients</a>
+    <a href="/staff/bank.html">Bank</a>
+  </nav>
+  <div class="top-end">
+    <button class="btn btn--ghost btn--sm" id="refresh">Refresh</button>
+    <button class="btn btn--ghost btn--sm" id="logout">Sign out</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="sr-only">Pipeline</h1>
+  <div class="state" id="state">Loading…</div>
+  <div id="content" hidden>
+    <div class="tiles" id="tiles" style="margin-top:12px"></div>
+    <div class="board" id="board" aria-label="Jobs by stage"></div>
+    <p class="panel-note board-foot" id="foot"></p>
+    <p class="panel-note">Drag a card to move it on, or use its buttons. Paid only comes from freezing the payout,
+      which checks the money is in. Open a card for its quote, costs, payments and messages.</p>
+  </div>
+</main>
+
+<dialog class="book-dialog" id="book-dialog" aria-labelledby="book-title">
+  <form method="dialog" id="book-form">
+    <h2 id="book-title">Book the work in</h2>
+    <div class="form-row"><label for="book-date">Start date</label><input id="book-date" type="date" required /></div>
+    <div class="form-row"><label for="book-time">Time <small>(optional)</small></label><input id="book-time" type="time" step="300" /></div>
+    <span class="err" id="book-error" role="alert"></span>
+    <div class="top-end" style="margin-top:14px">
+      <button type="submit" class="btn btn--primary btn--sm" value="book">Book it</button>
+      <button type="submit" class="btn btn--ghost btn--sm" value="cancel" formnovalidate>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
+<script src="/staff/pipeline.js"></script>
+</body>
+</html>

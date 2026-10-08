@@ -1,0 +1,137 @@
+/* The pipeline board, the calendar and the one-tap message buttons. Kept out
+   of staff.css, which is at the size the project keeps files to, and loaded
+   only by the pages that use them. */
+
+/* ---------- message buttons ---------- */
+.msg{display:flex;flex-direction:column;gap:6px}
+.msg-actions{display:flex;gap:6px;flex-wrap:wrap}
+.msg-actions .pill{padding:7px 14px;font-size:13px;color:var(--text)}
+.msg-whatsapp{border-color:rgba(37,211,102,.5)}
+.msg-whatsapp:hover{background:rgba(37,211,102,.12)}
+.msg-words summary{cursor:pointer;font-size:12.5px;color:var(--muted-2)}
+.msg-words p{white-space:pre-wrap;font-size:13px;color:var(--muted);background:var(--navy);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;margin-top:6px;max-width:60ch}
+.msg-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.msg-item{border:1px solid var(--line);border-radius:12px;padding:12px}
+.msg-item.is-due{border-color:var(--accent-ring);background:var(--accent-soft)}
+.msg-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+
+/* ---------- pipeline ---------- */
+.board{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:14px;margin-top:18px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--slate);border:1px solid var(--line);border-radius:var(--radius);padding:14px;min-height:200px;display:flex;flex-direction:column;gap:10px}
+.col.is-target{border-color:var(--accent);background:var(--accent-soft)}
+.col-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.col-head h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.col-head span{font-size:12.5px;color:var(--muted-2)}
+.col-value{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.card{background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.card[draggable="true"]{cursor:grab}
+.card.is-dragging{opacity:.5}
+.card-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card-name{font-weight:700}
+.card-value{font-weight:700;white-space:nowrap}
+.card-meta{font-size:12.5px;color:var(--muted-2)}
+.card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.card-actions .pill{padding:6px 12px;font-size:12.5px}
+.board-foot{margin-top:12px}
+.book-dialog{background:var(--slate);color:var(--text);border:1px solid var(--line-strong);border-radius:var(--radius);padding:22px;max-width:360px;width:calc(100% - 32px)}
+.book-dialog::backdrop{background:rgba(0,0,0,.55)}
+.book-dialog h2{font-size:18px;margin-bottom:12px}
+
+/* ---------- calendar ---------- */
+.cal-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.cal-bar h2{font-size:22px;margin-right:auto}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:16px}
+.cal-dow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:0 6px}
+.cal-day{background:var(--slate);border:1px solid var(--line);border-radius:10px;min-height:112px;padding:6px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.cal-day.is-out{opacity:.45}
+.cal-day.is-today{border-color:var(--accent)}
+.cal-num{font-size:12.5px;font-weight:700;color:var(--muted)}
+.cal-day.is-today .cal-num{color:var(--accent)}
+.ev{display:block;font-size:12px;line-height:1.3;padding:4px 6px;border-radius:6px;border-left:3px solid var(--accent);
+  background:var(--navy);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev:hover{color:var(--text);background:var(--slate-2)}
+.ev--dampscan{border-left-color:#8b7cff}
+.ev--ati-london{border-left-color:#d6b25e}
+.ev--roofing{border-left-color:#f4581c}
+.ev--ac{border-left-color:#38bdf8}
+.ev--service{border-left-style:dashed}
+.ev--done{opacity:.6}
+.cal-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.cal-key-item{display:inline-block;width:auto}
+.agenda{display:none;margin-top:16px}
+.agenda h3{font-size:13px;color:var(--muted);margin:16px 0 6px}
+.agenda .ev{white-space:normal;padding:8px 10px;margin-bottom:6px}
+@media (max-width:760px){.cal,.cal-dows{display:none}.agenda{display:block}}
+
+/* ---------- price book, inside the job's Quote block ---------- */
+.pb{margin:10px 0;display:flex;flex-direction:column;gap:6px}
+.pb-manage{margin-top:6px}
+.pb-manage summary{cursor:pointer;font-size:13px;color:var(--muted);font-weight:600}
+.pb-manage .lines{margin-top:10px}
+.pb-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 6px}
+
+/* ---------- job photos ---------- */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:12px}
+.photo-card{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--navy)}
+.photo-card.is-public{border-color:var(--accent-ring)}
+.photo-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--slate)}
+.photo-field{display:flex;flex-direction:column;gap:4px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.photo-field input,.photo-field select{text-transform:none;letter-spacing:0;font-weight:400;font:inherit;font-size:16px;width:100%;
+  background:var(--slate);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:8px 10px}
+.photo-field input:focus,.photo-field select:focus{outline:none;border-color:var(--accent)}
+.photo-tick{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text)}
+.photo-public{display:flex;flex-direction:column;gap:8px}
+.photo-public[hidden]{display:none}
+
+/* ---------- insights charts: plain bars, no library ---------- */
+.chart{margin-top:14px}
+.chart-title{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;gap:14px;flex-wrap:wrap}
+.chart-key{display:inline-flex;align-items:center;gap:6px}
+.chart-key i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.chart-bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;height:160px;border-bottom:1px solid var(--line)}
+.chart-col{display:flex;gap:3px;align-items:end;height:100%;justify-content:center}
+.chart-col span{flex:1;max-width:18px;border-radius:4px 4px 0 0;min-height:2px}
+.bar-a{background:var(--accent)}
+.bar-b{background:var(--good)}
+.chart-labels{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;font-size:11px;color:var(--muted-2);text-align:center;margin-top:6px}
+
+/* ---------- invoice, in the job's Quote block ---------- */
+.invoice-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.invoice-row .panel-note{flex-basis:100%;margin:0}
+.invoice-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:8px 10px;font:inherit;font-size:16px}
+.invoice-row[hidden],.invoice-row a[hidden]{display:none}
+.form-row[hidden]{display:none}
+.search-site + .search-site{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.search-title{font-size:16px;margin-bottom:10px}
+.search-sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 8px}
+/* ---------- business details and the VAT meter ---------- */
+.biz + .biz{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.biz textarea{width:100%;background:var(--navy);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:12px 14px;font:inherit;font-size:16px}
+.biz .photo-tick{margin:14px 0}
+.vat-bar{height:10px;border-radius:999px;background:var(--navy);border:1px solid var(--line);overflow:hidden}
+.vat-bar span{display:block;height:100%;background:var(--good)}
+.vat-bar span.is-near{background:var(--warn)}
+/* ---------- the Bank page: what each person has taken out ---------- */
+.taken-head{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin:22px 0 10px}
+.taken{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.taken-person{background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:14px}
+.taken-person h3{font-size:15px;margin-bottom:8px}
+.taken-list{list-style:none;margin:0;padding:0;font-size:13.5px;color:var(--muted);max-height:220px;overflow:auto}
+.taken-list li{padding:6px 0;border-top:1px solid var(--line)}
+.taken-list li:first-child{border-top:0}
+.taken-amount{color:var(--text);font-weight:700}
+/* ---------- matching payments, one card at a time ---------- */
+.match-card{background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:18px}
+.match-top{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.match-amount{font-size:28px;font-weight:800}
+.match-from{color:var(--muted)}
+.match-guess{font-size:17px;margin:12px 0}
+.match-search input,.match-pick input{width:100%;background:var(--slate);border:1px solid var(--line-strong);border-radius:10px;color:var(--text);padding:12px 14px;font:inherit;font-size:16px;margin:10px 0}
+.match-results{display:flex;flex-direction:column;gap:6px}
+.match-job{display:flex;justify-content:space-between;gap:10px;text-align:left;background:var(--slate);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text)}
+.match-job:hover{border-color:var(--accent)}
+.match-job span{color:var(--muted);font-size:13.5px}
+.match-pick{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center}
+.feed-box{margin-top:18px}
+.feed-box h3{font-size:14px;margin-bottom:4px}

@@ -11,7 +11,7 @@
   var el = function (id) { return document.getElementById(id); };
   var listeners = [];
 
-  var state = { site: '', range: '30d', rates: [], settings: null, jobs: [], leads: [], totals: null };
+  var state = { site: '', range: 'all', rates: [], settings: null, jobs: [], leads: [], totals: null };
 
   var PEOPLE = [
     { key: 'scott', name: 'Scott' },

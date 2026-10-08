@@ -150,6 +150,13 @@
   if (!overall) { drawLogo(); trimPills(); }
   trimCompanies();
 
+  /* Phone notifications: its own file, so a page that never needs it costs
+     one small request and nothing else. */
+  var pushScript = document.createElement('script');
+  pushScript.src = '/staff/push.js';
+  pushScript.defer = true;
+  document.head.appendChild(pushScript);
+
   global.DSAREA = {
     area: overall ? null : area,
     name: overall ? 'All companies' : AREAS[area].name,

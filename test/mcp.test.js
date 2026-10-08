@@ -105,7 +105,10 @@ test('a person connects, sees only their business, and a code and a refresh toke
   assert.equal(init.serverInfo.name, 'staff-area');
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools;
   const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
-  assert.deepEqual(writes, ['mark_deposit_paid', 'mark_paid_in_full', 'mark_report_sent']);
+  assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'book_job', 'build_quote_from_words', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
+    'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'remove_quote_line',
+    'set_project_page', 'update_client', 'update_job_status']);
+  assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');
   assert.ok(tools.every((x) => !('run' in x)));
 
   const found = await tool(t.access_token, 'search', { text: 'BR6' });
@@ -157,11 +160,12 @@ test('a deactivated person\'s assistant stops working at once', async () => {
 test('every read works for the owners\' code, which sees all four businesses', async () => {
   const t = await connect('1290');
   const today = new Date().toISOString().slice(0, 10);
-  const args = { search: { text: 'a' + 'b' }, get_job: { id: 1 }, calendar: { from: today, to: today }, job_photos: { job: 1 }, price_book: { site: 'roofing' } };
+  const args = { search: { text: 'a' + 'b' }, get_job: { id: 1 }, calendar: { from: today, to: today }, job_photos: { job: 1 }, price_book: { site: 'roofing' }, list_price_book: { site: 'roofing' },
+    get_message: { id: 1, kind: 'rating' }, get_google_post: { id: 1 }, get_invoice_link: { id: 1 }, find_client: { text: 'ab' } };
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools.filter((x) => x.annotations.readOnlyHint);
   for (const x of tools) {
     const r = await tool(t.access_token, x.name, args[x.name] || {});
-    const expectedMissing = ['get_job', 'job_photos'].includes(x.name);
+    const expectedMissing = ['get_job', 'job_photos', 'get_message', 'get_google_post', 'get_invoice_link'].includes(x.name);
     assert.equal(r.isError, expectedMissing, `${x.name}: ${r.content[0].text.slice(0, 160)}`);
   }
   assert.deepEqual((await tool(t.access_token, 'whoami')).structuredContent.businesses.map((b) => b.slug).sort(), ['ac', 'ati-london', 'dampscan', 'roofing']);

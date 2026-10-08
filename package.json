@@ -16,7 +16,8 @@
     "sweep-blobs": "node db/sweep-blobs.js",
     "build:pages": "node scripts/build-pages.js",
     "build:check": "node scripts/build-check.js",
-    "create-person": "node db/create-person.js"
+    "create-person": "node db/create-person.js",
+    "vapid-keys": "node db/vapid-keys.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",

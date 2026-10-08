@@ -936,3 +936,18 @@ create table if not exists job_miles (
 );
 create index if not exists job_miles_job_idx on job_miles (job_id) where job_id is not null;
 create index if not exists job_miles_person_idx on job_miles (person_id, on_date);
+
+-- ---------------------------------------------------------------------------
+-- Phone notifications (Web Push) to the installed staff app, lib/push.js.
+-- One row per browser that said yes. person_id is null for the shared owners'
+-- login, which hears about every business; a person hears only about the
+-- businesses their grants hold, read at send time.
+-- ---------------------------------------------------------------------------
+create table if not exists push_subscriptions (
+  id          bigserial primary key,
+  person_id   bigint references people (id) on delete cascade,
+  endpoint    text not null unique,
+  keys        jsonb not null,
+  created_at  timestamptz not null default now()
+);
+create index if not exists push_subscriptions_person_idx on push_subscriptions (person_id);

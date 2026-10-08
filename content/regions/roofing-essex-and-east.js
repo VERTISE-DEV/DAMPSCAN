@@ -2,6 +2,8 @@
 export default {
   site: 'roofing',
   slug: 'essex-and-east',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['RM', 'IG', 'CM', 'SS', 'CO'],
   name: 'Essex and east London',
   title: 'Roofers in Essex & East London | Re-roofs, Flat Roofs, Storm Damage | Verge Roofing',
   metaDescription:

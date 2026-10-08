@@ -9,6 +9,7 @@
 import { SITES, distinctiveWordCount } from './area-template.js';
 import { distinctiveWordCount as serviceWords } from './service-template.js';
 import { distinctiveWordCount as guideWords } from './guide-template.js';
+import { distinctiveWordCount as topicWords } from './problem-template.js';
 
 /* A page whose only local content is its name is a doorway page. Google demotes
    those, and it would take the rest of the site down with it, so the build
@@ -85,6 +86,28 @@ export function checkGuide(guide, seen) {
 
   if (!problems.length && guideWords(guide) < MIN_WORDS) {
     problems.push(`only ${guideWords(guide)} words written for this guide, needs ${MIN_WORDS}`);
+  }
+  return problems;
+}
+
+/* A problem or seasonal page meets the same floor. Its slug shares the set of
+   its kind on that site, and every list it renders must be there, because the
+   template prints a heading for each. */
+export function checkTopic(page, seen) {
+  const problems = [];
+  for (const field of ['slug', 'site', 'name', 'title', 'metaDescription', 'h1', 'intro', 'price', 'ctaHeading', 'ctaBody']) {
+    if (!page[field]) problems.push(`missing ${field}`);
+  }
+  for (const field of ['signs', 'causes', 'whatWeDo', 'faq', 'related']) {
+    if (!Array.isArray(page[field]) || !page[field].length) problems.push(`${field} is empty`);
+  }
+  if (!SITES[page.site]) problems.push(`unknown site "${page.site}"`);
+  if (page.slug && !/^[a-z0-9-]+$/.test(page.slug)) problems.push('slug must be lower case and hyphenated');
+  const key = `${page.site}/${page.slug}`;
+  if (seen.has(key)) problems.push('duplicate slug for this site');
+  seen.add(key);
+  if (!problems.length && topicWords(page) < MIN_WORDS) {
+    problems.push(`only ${topicWords(page)} words written for this page, needs ${MIN_WORDS}`);
   }
   return problems;
 }

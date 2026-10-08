@@ -751,6 +751,20 @@ create table if not exists job_photos (
 create index if not exists job_photos_job_idx on job_photos (job_id, id);
 create index if not exists job_photos_public_idx on job_photos (site, published_at desc) where public;
 
+-- A finished job's own page on the website (/our-work/<slug>), written by
+-- staff in the job's photos block. Only these fields reach the page: a title,
+-- the town, the postcode district worked out from the job, and the write-up.
+-- It shows only while the job is finished, has a public photo and the
+-- write-up is long enough (lib/job-pages.js), checked again on every request.
+alter table jobs add column if not exists page_title        text;
+alter table jobs add column if not exists page_town         text;
+alter table jobs add column if not exists page_district     text;
+alter table jobs add column if not exists page_writeup      text;
+alter table jobs add column if not exists page_publish      boolean not null default false;
+alter table jobs add column if not exists page_slug         text;
+alter table jobs add column if not exists page_published_at timestamptz;
+create unique index if not exists jobs_page_slug_idx on jobs (site, page_slug) where page_slug is not null;
+
 -- ---------------------------------------------------------------------------
 -- Connecting an AI assistant (ChatGPT, Claude) to the staff area
 --

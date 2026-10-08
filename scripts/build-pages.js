@@ -36,6 +36,8 @@ import { bookForm } from './book-form.js';
 import { adsTag } from './ads-tag.js';
 import { writeSitemaps } from './sitemaps.js';
 import { writeGalleryShells } from './gallery-shells.js';
+import { writeTopicPages, checkTopics, TOPICS } from './topic-pages.js';
+import { writeSeasonBlocks } from './season.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'public', 'areas');
@@ -189,6 +191,7 @@ async function main() {
     const problems = checkGuide(guide, seenGuides);
     if (problems.length) failures.push(`guide ${guide.slug || '(no slug)'}: ${problems.join(', ')}`);
   }
+  failures.push(...checkTopics());
   if (failures.length) {
     console.error('Page content is not ready to build:\n  ' + failures.join('\n  '));
     process.exit(1);
@@ -210,7 +213,6 @@ async function main() {
     await writeFile(join(OUT, region.site, `${region.slug}.html`), renderService(region, services, hub), 'utf8');
     counts[region.site] = (counts[region.site] || 0) + 1;
   }
-
   /* A hub is written because somebody wrote its copy, not because the loop
      came round. A brand with no area pages should have no areas hub and no nav
      item pointing at one, rather than an empty page saying nothing follows. */
@@ -218,19 +220,20 @@ async function main() {
   const HUB_KINDS = {
     services: (site) => services.filter((s) => s.site === site),
     areas: (site) => [...areas, ...regions].filter((a) => a.site === site),
-    guides: (site) => guides.filter((g) => g.site === site)
+    guides: (site) => guides.filter((g) => g.site === site),
+    problems: (site) => TOPICS.problems.filter((p) => p.site === site),
+    seasonal: (site) => TOPICS.seasonal.filter((p) => p.site === site)
   };
   let hubCount = 0;
   for (const site of Object.keys(SITES)) {
     const dir = join(HUBS_OUT, site);
     await mkdir(dir, { recursive: true });
     for (const [kind, pick] of Object.entries(HUB_KINDS)) {
-      if (!hubs[site] || !hubs[site][kind]) continue;
+      if (!hubs[site] || !hubs[site][kind] || !pick(site).length) continue;
       await writeFile(join(dir, `${kind}.html`), renderHub(kind, site, pick(site)), 'utf8');
       hubCount += 1;
     }
   }
-
   await rm(GUIDES_OUT, { recursive: true, force: true });
   for (const guide of guides) {
     const dir = join(GUIDES_OUT, guide.site);
@@ -265,7 +268,9 @@ async function main() {
     await writeFile(join(dir, `${service.slug}.html`), renderService(service, services), 'utf8');
   }
 
+  const topics = await writeTopicPages(ROOT);
   await writeSitemaps(ROOT);
+  await writeSeasonBlocks(ROOT, HOME);
   await writeBookForm();
   await writeAdsTag();
   await writeHomeLinks();
@@ -280,10 +285,11 @@ async function main() {
   console.log(`${areas.length} area pages written to public/areas`);
   console.log(`${services.length} service pages written to public/service-pages`);
   console.log(`${guides.length} guide pages written to public/guide-pages`);
+  console.log(`${topics.problems} problem and ${topics.seasonal} seasonal pages written`);
   console.log(`${hubCount} hub pages written to public/hubs`);
   console.log(`${pricingCount} pricing pages written to public/pricing`);
   console.log(`${homes.length} home page(s) generated: ${homes.map((h) => h.site).join(', ')}`);
-  console.log('sitemaps, home page links and home page booking forms rewritten');
+  console.log('sitemaps, home page links, season features and booking forms rewritten');
   console.log(`${stamps.files} assets hashed, ${stamps.stamped} pages restamped`);
   console.log(`${galleryCount} gallery frame(s) written to lib/generated/gallery-shells.js`);
   for (const site of Object.keys(HOME)) console.log(reviewsSummary(site));

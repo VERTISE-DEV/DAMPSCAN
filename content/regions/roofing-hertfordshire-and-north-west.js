@@ -2,6 +2,8 @@
 export default {
   site: 'roofing',
   slug: 'hertfordshire-and-north-west',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['AL', 'HP', 'SG', 'WD', 'HA', 'UB', 'LU'],
   name: 'Hertfordshire and north west London',
   title: 'Roofers in Hertfordshire & North West London | Repairs, Re-roofs, Dormers | Verge Roofing',
   metaDescription:

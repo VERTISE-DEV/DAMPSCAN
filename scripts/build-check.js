@@ -49,15 +49,18 @@ function changedPaths() {
     .map((line) => line.slice(3).trim().split(' -> ').pop());
 }
 
-/* True when every line the diff moved was a lastmod. -U0 asks for no context,
-   so the only +/- lines are real changes, and the +++/--- file headers are
-   dropped by the length check. */
+/* True when every line the diff moved is one that is allowed to move with
+   the calendar: a sitemap's lastmod, or the in-season feature, which the
+   build picks for the month it runs in (scripts/season.js keeps all of it on
+   lines carrying data-season-pick for exactly this reason). -U0 asks for no
+   context, so the only +/- lines are real changes, and the +++/--- file
+   headers are dropped by the filter. */
 function onlyTheDateMoved(path) {
   const diff = git('diff', '-U0', '--', path);
   return diff
     .split('\n')
     .filter((line) => /^[+-]/.test(line) && !/^(\+\+\+|---)/.test(line))
-    .every((line) => line.includes('<lastmod>'));
+    .every((line) => (isSitemap(path) && line.includes('<lastmod>')) || line.includes('data-season-pick'));
 }
 
 function main() {
@@ -80,7 +83,7 @@ function main() {
   }
 
   const moved = changedPaths();
-  const stale = moved.filter((path) => !(isSitemap(path) && onlyTheDateMoved(path)));
+  const stale = moved.filter((path) => !onlyTheDateMoved(path));
 
   /* Safe because the tree was verified clean above, so everything being undone
      here was written by the build a moment ago. clean is limited to public/,
@@ -98,7 +101,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`pages are current (${moved.length ? moved.length + ' sitemaps differ only by their date' : 'nothing moved at all'})`);
+  console.log(`pages are current (${moved.length ? moved.length + ' files differ only by their date or season' : 'nothing moved at all'})`);
 }
 
 main();

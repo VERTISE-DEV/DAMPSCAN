@@ -10,6 +10,7 @@
  * sixty-four detail pages hang off nothing. It points at the hub pages now.
  */
 import { adsTag } from './ads-tag.js';
+import { seasonNavItem, buildMonth } from './season.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -87,7 +88,10 @@ function footCall(site) {
   return ` &middot; <a href="tel:${site.phone}">${esc(site.phoneLabel)}</a>`;
 }
 
-export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true, styles = [] }) {
+/* `month` picks the in-season menu item (scripts/season.js). The frames
+   api/gallery.js fills pass 0, which leaves the choice to the browser: they
+   are generated once and served for months. */
+export function shell({ site, url, title, metaDescription, schemas = [], body, aside, scripts, ownFaq = true, styles = [], month = buildMonth() }) {
   return `<!DOCTYPE html>
 <html lang="en-GB" class="no-js" data-site="${site.key}">
 <head>
@@ -129,7 +133,7 @@ ${schemas.map((s) => `<script type="application/ld+json">${s}</script>`).join('\
         </button>
         <ul class="nav-links" id="primary-nav">
 ${nav(ownFaq, site)}
-        </ul>
+${seasonNavItem(site.key, month)}        </ul>
       </nav>
       <div class="nav-cta">
 ${headerCall(site)}        <a href="#book" class="btn btn--primary">${esc(site.ctaLabel)}</a>
@@ -158,6 +162,7 @@ ${whatsappButton(site)}<footer class="afoot">
 </footer>
 ${scripts}
 <script src="/assets/menu.js" defer></script>
+<script src="/assets/season.js" defer></script>
 </body>
 </html>
 `;

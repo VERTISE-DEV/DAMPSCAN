@@ -17,6 +17,9 @@ Disallow: /staff/
 Disallow: /service-pages/
 # Same for the guides, served at /guides/<name>.
 Disallow: /guide-pages/
+# And the problem and seasonal pages, served at /problems and /seasonal.
+Disallow: /problem-pages/
+Disallow: /seasonal-pages/
 # And the hubs, served at /services and /guides.
 Disallow: /hubs/
 # The damp brands' pages share this deployment and must never be indexed on
@@ -27,3 +30,5 @@ Disallow: /pricing/
 Disallow: /london.html
 
 Sitemap: https://vergeroofing.com/sitemap-roofing.xml
+# Finished jobs, each with its own page, listed by the gallery function.
+Sitemap: https://vergeroofing.com/sitemap-work.xml

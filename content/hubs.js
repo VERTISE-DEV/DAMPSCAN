@@ -7,6 +7,8 @@
  * reading in its own right, so each one says something true about the set it
  * introduces rather than announcing that a list follows.
  */
+import { topicHubs } from './topic-hubs.js';
+
 export const hubs = {
   /* CoolRight. No areas hub: the business covers a region rather than writing
      a page per district, and a hub over nothing is worse than no hub. */
@@ -153,3 +155,5 @@ export const hubs = {
     }
   }
 };
+
+for (const [site, kinds] of Object.entries(topicHubs)) Object.assign(hubs[site], kinds);

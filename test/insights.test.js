@@ -124,3 +124,15 @@ test('Google visits come from our own tracking: search and ads, with landing pag
   assert.equal(o.paid.now.visits, 1);
   assert.deepEqual(o.pages.find((p) => p.page === '/roofing-in/essex-and-east'), { page: '/roofing-in/essex-and-east', visits: 1, calls: 0, enquiries: 1 });
 });
+
+test('pages to write next: districts with enquiries and no area page on that brand', async () => {
+  const both = await personWith('both-code', ['dampscan', 'ati-london']);
+  await lead('dampscan', 'ME14 1AA', null); // Maidstone has a DampScan page
+  await lead('dampscan', 'BR6 0AA', null); // Bromley is ATi's page, not DampScan's
+  await lead('dampscan', 'BR6 1AB', null);
+  await lead('ati-london', 'BR6 0AA', null); // ATi has Bromley
+  await lead('ati-london', 'ZE1 0AA', null);
+  const d = await get(both);
+  assert.deepEqual(d.pagesToWrite.map((p) => [p.site, p.district, p.enquiries]),
+    [['dampscan', 'BR6', 2], ['ati-london', 'ZE1', 1]]);
+});

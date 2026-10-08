@@ -45,7 +45,8 @@ export const SITES = {
       { href: '/services', label: 'Services' },
       { href: '/damp-survey', label: 'Areas' },
       { href: '/guides', label: 'Guides' },
-      { href: '/pricing', label: 'Prices' }
+      { href: '/pricing', label: 'Prices' },
+      { href: '/seasonal', label: 'Seasonal advice' }
     ],
     profileUrl: 'https://share.google/kC2SRRJEFz5DqKXC9',
     og: '/assets/dampscan-og.png',
@@ -91,7 +92,8 @@ export const SITES = {
       { href: '/services', label: 'Services' },
       { href: '/damp-survey', label: 'Areas' },
       { href: '/guides', label: 'Guides' },
-      { href: '/pricing', label: 'Prices' }
+      { href: '/pricing', label: 'Prices' },
+      { href: '/seasonal', label: 'Seasonal advice' }
     ],
     profileUrl: 'https://share.google/UR3GLPt8y1SyLr5FV',
     og: '/assets/ati-og.png',
@@ -156,7 +158,9 @@ export const SITES = {
       { href: '/services', label: 'Services' },
       { href: '/our-work', label: 'Our work' },
       { href: '/roofing-in', label: 'Areas' },
-      { href: '/guides', label: 'Guides' }
+      { href: '/guides', label: 'Guides' },
+      { href: '/problems', label: 'Common problems' },
+      { href: '/seasonal', label: 'Seasonal advice' }
     ],
     /* Photographs of finished jobs, published from the staff area and served
        by api/gallery.js; see content/gallery.js for the words around them. */
@@ -215,13 +219,19 @@ export const SITES = {
     nav: [
       { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
+      { label: 'Our work', href: '/our-work' },
       { label: 'Guides', href: '/guides' },
       { label: 'FAQs', href: 'FAQ' }
     ],
     footerLinks: [
       { href: '/services', label: 'Services' },
-      { href: '/guides', label: 'Guides' }
+      { href: '/our-work', label: 'Our work' },
+      { href: '/guides', label: 'Guides' },
+      { href: '/problems', label: 'Common problems' },
+      { href: '/seasonal', label: 'Seasonal advice' }
     ],
+    /* Finished jobs, published from the staff area like Verge's. */
+    galleryPath: '/our-work',
     profileUrl: 'https://share.google/MFCiCldTnpS3VMcVW',
     og: null,
     book: {

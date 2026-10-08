@@ -74,6 +74,7 @@ covered by `npm test`. See "Running the tests".
 | --- | --- | --- |
 | `DATABASE_URL` | yes | Neon **pooled** connection string. |
 | `STAFF_ACCESS_CODE` | yes | The code typed at `/staff`. Under 4 characters and every login is refused, so it cannot be left blank by accident. |
+| `OWNER_NAMES` | no | Comma separated names of the owners who use the shared code (default `Scott`). A to-do set "for Scott" lands on the owners' list. |
 | `SESSION_SECRET` | yes | Signs the staff session cookie. Long random string. Changing it invalidates every active session, which is the fastest way to sign everyone out. |
 | `IP_SALT` | yes | Salt for hashing visitor IPs. Raw addresses are never stored. Changing it resets the throttle counters. |
 | `NTFY_TOPIC` | no | An ntfy topic. With it set, a job saved, a payment recorded or a payout frozen on a quoted business pushes to every phone subscribed to the topic, and `/api/cron/digest` sends a morning summary per business. Nothing pushed carries a customer's details. `NTFY_URL` points at a self-hosted server and `NTFY_TOKEN` authorises a protected topic; both are optional. |

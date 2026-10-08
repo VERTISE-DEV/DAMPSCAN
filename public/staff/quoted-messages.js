@@ -6,7 +6,7 @@
 
   var U = global.DSUI;
   var M = global.DSMSG;
-  var ORDER = ['quote', 'followup', 'reminder', 'invoice', 'review'];
+  var ORDER = ['quote', 'followup', 'reminder', 'invoice', 'rating', 'review', 'yearly'];
 
   var block = document.createElement('section');
   block.className = 'client-block msg-block';
@@ -25,6 +25,17 @@
     var m = j.messages;
     if (!m) return;
     var any = false;
+    /* What the customer said on the "how did we do" page, above the asks. */
+    if (j.rating) {
+      var said = U.node('div', 'msg-item');
+      var top = U.node('div', 'msg-head');
+      top.appendChild(U.node('strong', null, 'Rated ' + j.rating.stars + ' of 5'));
+      top.appendChild(U.node('span', 'tag' + (j.rating.stars === 5 ? ' tag--good' : j.rating.stars <= 3 ? ' tag--accent' : ''), '\u2605'.repeat(j.rating.stars)));
+      top.appendChild(U.node('span', 'who', U.when(j.rating.at)));
+      said.appendChild(top);
+      if (j.rating.comment) said.appendChild(U.node('p', 'panel-note', j.rating.comment));
+      list.appendChild(said);
+    }
     ORDER.forEach(function (kind) {
       var msg = m.ready[kind];
       if (!msg) return;
@@ -39,7 +50,7 @@
       item.appendChild(M.buttons(j.id, msg, function (job) { global.DSQ.replace(job); global.DSQJOB.fill(job); }));
       list.appendChild(item);
     });
-    if (!any) list.appendChild(U.node('p', 'panel-note', 'Make the customer link under Quote to send the quote. Follow-ups, the booking reminder and the review request appear here at their stage.'));
+    if (!any) list.appendChild(U.node('p', 'panel-note', 'Make the customer link under Quote to send the quote. Follow-ups, the booking reminder and the "how did we do" ask appear here at their stage.'));
   }
 
   global.DSQMSG = { fill: fill };

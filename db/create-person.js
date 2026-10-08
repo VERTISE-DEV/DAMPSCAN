@@ -5,6 +5,10 @@
  *   npm run create-person -- --name="Steve" --grants=roofing
  *   npm run create-person -- --name="Ben" --grants=dampscan,ati-london,roofing
  *   npm run create-person -- --name="Scott" --admin --grants=dampscan,ati-london,roofing,ac
+ *   npm run create-person -- --name="Dan" --grants=roofing --rate=18.50
+ *
+ * --rate is the hourly rate in pounds that prices their clocked time on a
+ * job. It can be changed later on any job screen by whoever manages it.
  *
  * The passcode is prompted for and never passed on the command line, where it
  * would sit in shell history. It is hashed with argon2id and only the hash is
@@ -70,10 +74,15 @@ async function main() {
     }
   }
 
+  const rate = args.rate === undefined ? 0 : Math.round(Number(args.rate) * 100);
+  if (!(rate >= 0)) {
+    console.error('--rate is an hourly rate in pounds, such as 18.50.');
+    process.exit(1);
+  }
   const passcodeHash = await hash(passcode, { algorithm: Algorithm.Argon2id });
   const person = await queryOne(
-    'insert into people (name, passcode_hash, is_admin) values ($1, $2, $3) returning id',
-    [name, passcodeHash, isAdmin]
+    'insert into people (name, passcode_hash, is_admin, hourly_rate_pence) values ($1, $2, $3, $4) returning id',
+    [name, passcodeHash, isAdmin, rate]
   );
   for (const slug of grants) {
     await query(

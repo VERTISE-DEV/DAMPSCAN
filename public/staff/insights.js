@@ -171,6 +171,7 @@
     ]);
 
     renderSearch(d);
+    if (global.DSINSJOBS) global.DSINSJOBS.render(d);
     var rate = function (r) { return r.enquiries ? Math.round((100 * r.won) / r.enquiries) + '%' : ''; };
     U.table(el('channels'), [
       { label: 'Channel', get: function (r) { return CHANNEL[r.channel] || r.channel; } },

@@ -810,7 +810,7 @@ alter table jobs add column if not exists invoiced_at    timestamptz;
 alter table jobs add column if not exists invoice_due_on date;
 create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice_number) where invoice_number is not null;
 -- The 'invoice' message kind is allowed by the job_messages check below, with
--- the maintenance plans. The check lives in one place only: re-running this
+-- the maintenance plans (and, later, 'rating', 'yearly' and 'onmyway'). The check lives in one place only: re-running this
 -- file applies every statement in order, and an older, narrower copy of it
 -- would fail against rows a later one allows.
 
@@ -824,7 +824,7 @@ create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice
 -- ---------------------------------------------------------------------------
 alter table service_contracts add column if not exists price_pence integer check (price_pence >= 0);
 alter table job_messages drop constraint if exists job_messages_kind_check;
-alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service'));
+alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service', 'rating', 'yearly', 'onmyway'));
 
 -- ---------------------------------------------------------------------------
 -- VAT registration and the details an invoice prints
@@ -869,3 +869,56 @@ create table if not exists bank_feeds (
   last_error      text,
   updated_at      timestamptz not null default now()
 );
+
+-- ---------------------------------------------------------------------------
+-- Rate us, after the job
+--
+-- Once a job is finished the customer gets a link to a one-question page: how
+-- many stars. Every customer is offered the Google review link on that page,
+-- whatever they choose, so this never filters who may review on Google; a
+-- score below five also opens a private box to say what could be better,
+-- which is kept here for the owner. rating_token is the page's key, made for
+-- every job (existing ones included) so no step can forget to make one.
+-- One rating per job: answering again replaces it.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists rating_token text default replace(gen_random_uuid()::text, '-', '');
+create unique index if not exists jobs_rating_token_idx on jobs (rating_token) where rating_token is not null;
+create table if not exists job_ratings (
+  id          bigserial primary key,
+  job_id      bigint not null references jobs (id) on delete cascade,
+  stars       integer not null check (stars between 1 and 5),
+  comment     text,
+  created_at  timestamptz not null default now()
+);
+create unique index if not exists job_ratings_job_idx on job_ratings (job_id);
+
+-- ---------------------------------------------------------------------------
+-- Time, miles and an hourly rate: what a job really cost
+--
+-- job_time is a clock in and out per person per job; an open row (no
+-- ended_at) is somebody on site now, and a person has at most one open at a
+-- time. job_miles is driving, against a job where there is one. The labour
+-- cost of a job is its hours at each person's hourly rate, which starts at
+-- nought until whoever manages the business sets it.
+-- ---------------------------------------------------------------------------
+alter table people add column if not exists hourly_rate_pence integer not null default 0 check (hourly_rate_pence >= 0);
+create table if not exists job_time (
+  id          bigserial primary key,
+  job_id      bigint not null references jobs (id) on delete cascade,
+  person_id   bigint not null references people (id) on delete cascade,
+  started_at  timestamptz not null default now(),
+  ended_at    timestamptz,
+  check (ended_at is null or ended_at >= started_at)
+);
+create index if not exists job_time_job_idx on job_time (job_id, started_at);
+create unique index if not exists job_time_open_idx on job_time (person_id) where ended_at is null;
+create table if not exists job_miles (
+  id          bigserial primary key,
+  person_id   bigint not null references people (id) on delete cascade,
+  job_id      bigint references jobs (id) on delete set null,
+  on_date     date not null,
+  miles       numeric(7,1) not null check (miles > 0),
+  created_at  timestamptz not null default now()
+);
+create index if not exists job_miles_job_idx on job_miles (job_id) where job_id is not null;
+create index if not exists job_miles_person_idx on job_miles (person_id, on_date);

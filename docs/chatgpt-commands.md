@@ -2,7 +2,7 @@
 
 Once the staff area is connected to ChatGPT (or Claude), you can just talk to it. It sees what you see in the staff area and nothing more: your businesses, and money only where you manage the business. Before it changes anything it reads back what it is about to do and waits for you to say yes. Nothing is ever sent to a customer by itself: messages come back as WhatsApp, text and email links for you to tap.
 
-Use job numbers when you have them ("job 42"). If you only have a name or postcode, it will search first and ask which one you mean.
+Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel BR6"). You never need a job number. If two customers match, it describes them and asks which one you mean.
 
 ## What needs doing
 
@@ -16,53 +16,54 @@ Use job numbers when you have them ("job 42"). If you only have a name or postco
 
 - "Find the client at BR6 0AA." / "Have we done work for anyone called Patel?"
 - "Add a new client for CoolRight: Dev Shah, TN13 1AA, 07700 900456."
-- "Mrs Patel's new number is 07700 900999." / "Fix the spelling of the name on job 42 to Anita Patel."
+- "Mrs Patel's new number is 07700 900999." / "Fix the spelling of the name on Mrs Patel's job to Anita Patel."
 - "Start a new job for Mrs Patel, same details as last time." (it reuses the client, no retyping)
 
 ## Jobs
 
 - "Start a roofing job for Anita Patel, BR6 0AA, 07700 900123, leaking valley."
-- "Book job 42 in for Tuesday the 3rd at half eight."
-- "Move job 42 to completed." / "Mark job 51 as declined, they went elsewhere."
-- "Add a note to job 42: side gate code is 1234."
-- "Add a £240 skip to job 42."
-- "Clock me in on job 42." / "Clock me out."
-- "I did six hours on job 42 yesterday."
-- "I drove 23 miles for job 42 today."
+- "Book Mrs Patel in for Tuesday the 3rd at half eight."
+- "Move Mrs Patel to Thursday at 10." / "Push the Smiths in TN13 back a week." (the date moves, nothing else changes)
+- "Mark Mrs Patel as completed." / "Mark the Jones job in DA1 as declined, they went elsewhere."
+- "Add a note to Mrs Patel: side gate code is 1234."
+- "Add a £240 skip to Mrs Patel."
+- "Clock me in on Mrs Patel." / "Clock me out."
+- "I did six hours on Mrs Patel yesterday."
+- "I drove 23 miles for Mrs Patel today."
 
 ## Quotes
 
 - "What's in the Verge price book?"
-- "Quote job 42: 40 square metres of Redland 49, two days labour, scaffold front and back at £900."
-- "Add a line to job 42: lead flashing, materials, £85."
-- "Take the scaffold line off job 42."
-- "Use the ridge repoint template on job 42."
-- "Give me the quote link for job 42."
+- "Quote Mrs Patel: 40 square metres of Redland 49, two days labour, scaffold front and back at £900."
+- "Add a line to Mrs Patel: lead flashing, materials, £85."
+- "Take the scaffold line off Mrs Patel."
+- "Use the ridge repoint template on Mrs Patel."
+- "Give me the quote link for Mrs Patel."
 
 ## Messages to customers
 
-- "I'm on my way to job 42, about 20 minutes." (you get the words and a WhatsApp link to tap)
-- "Ask job 42 for a rating."
-- "Send the follow-up for job 37."
-- "Remind job 42 they're booked tomorrow."
-- "Send the invoice message for job 42."
-- "Do the yearly check message for job 18."
+- "I'm on my way to Mrs Patel, about 20 minutes." (you get the words and a WhatsApp link to tap)
+- "Ask Mrs Patel for a rating."
+- "Send the follow-up for Dev Shah."
+- "Remind Mrs Patel they're booked tomorrow."
+- "Send the invoice message for Mrs Patel."
+- "Do the yearly check message for the Smiths in TN13."
 - "I've sent it on WhatsApp." (it ticks the message off so Due stops asking)
 
 ## Invoices and money
 
-- "Invoice job 42." / "Invoice job 42, 30 days to pay."
-- "What's the invoice link for job 42?"
-- "Deposit of £2,000 paid on job 42." / "Job 42 is paid in full."
-- "Report sent on job 12." (ATi and DampScan)
+- "Invoice Mrs Patel." / "Invoice Mrs Patel, 30 days to pay."
+- "What's the invoice link for Mrs Patel?"
+- "Deposit of £2,000 paid on Mrs Patel." / "Mrs Patel is paid in full."
+- "Report sent on Mr Khan's survey." (ATi and DampScan)
 - "Which bank payments aren't matched yet?"
-- "Match that £500 from PATEL A to job 42."
+- "Match that £500 from PATEL A to Mrs Patel."
 
 ## Photos and the website
 
-- "Write up job 42 for the website: new roof in Orpington." (it drafts, you approve, it saves)
-- "Publish job 42's page." (it tells you what is missing if it can't go up yet)
-- "Give me the Google post for job 42."
+- "Write up Mrs Patel for the website: new roof in Orpington." (it drafts, you approve, it saves)
+- "Publish Mrs Patel's page." (it tells you what is missing if it can't go up yet)
+- "Give me the Google post for Mrs Patel."
 - "Which area pages should we write next?"
 
 ## How are we doing
@@ -77,8 +78,8 @@ Use job numbers when you have them ("job 42"). If you only have a name or postco
 - "Be honest, how's Verge doing compared with last month?"
 - "Who's our happiest customer this year?"
 - "Plan my Tuesday: what's booked, who needs a message, and what's owed."
-- "Write job 42's page as if it were a nature documentary." (it will still keep the customer's name and street out of it)
-- "I'm stuck in traffic outside Sevenoaks, tell job 42 I'll be 45 minutes, and make it sound cheerful."
+- "Write Mrs Patel's page as if it were a nature documentary." (it will still keep the customer's name and street out of it)
+- "I'm stuck in traffic outside Sevenoaks, tell Mrs Patel I'll be 45 minutes, and make it sound cheerful."
 - "Turn this voice note into a quote: forty metres of Redland, two days, scaffold both sides, skip."
 
 ## Phone notifications

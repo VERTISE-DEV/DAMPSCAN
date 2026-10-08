@@ -106,7 +106,7 @@ test('a person connects, sees only their business, and a code and a refresh toke
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools;
   const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
   assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'book_job', 'build_quote_from_words', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
-    'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'remove_quote_line',
+    'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'move_job', 'remove_quote_line',
     'set_project_page', 'update_client', 'update_job_status']);
   assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');
   assert.ok(tools.every((x) => !('run' in x)));

@@ -263,3 +263,17 @@ test('a brand\'s home file requested on another brand\'s host is sent to its own
   assert.equal(redirect(await call(ROOFING, '/roofing.html')).to, 'https://vergeroofing.com/');
   assert.equal(redirect(await call(AC, '/ac.html')).to, 'https://coolright.co.uk/');
 });
+
+test('problem and seasonal pages, job pages and the job sitemap route per brand', async () => {
+  assert.equal(rewrittenTo(await call(ROOFING, '/problems')), '/hubs/roofing/problems.html');
+  assert.equal(rewrittenTo(await call(ROOFING, '/problems/roof-leaking')), '/problem-pages/roofing/roof-leaking.html');
+  assert.equal(rewrittenTo(await call(KENT, '/seasonal/autumn-condensation-help')), '/seasonal-pages/dampscan/autumn-condensation-help.html');
+  assert.equal(rewrittenTo(await call(LONDON, '/seasonal')), '/hubs/ati/seasonal.html');
+  const job = await call(AC, '/our-work/new-split-system-in-bromley-br1-7');
+  assert.equal(rewrittenTo(job), '/api/gallery');
+  assert.equal(new URL(job.headers.get('x-middleware-rewrite')).searchParams.get('job'), 'new-split-system-in-bromley-br1-7');
+  assert.equal(new URL((await call(ROOFING, '/sitemap-work.xml')).headers.get('x-middleware-rewrite')).searchParams.get('sitemap'), '1');
+  /* The damp brands publish no jobs, so neither path means anything there. */
+  assert.equal(rewrittenTo(await call(KENT, '/our-work/anything')), null);
+  assert.equal(rewrittenTo(await call(KENT, '/sitemap-work.xml')), null);
+});

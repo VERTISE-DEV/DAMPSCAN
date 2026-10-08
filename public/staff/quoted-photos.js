@@ -156,11 +156,16 @@
     button.disabled = false;
     if (!res.ok) { var e = (res.data && res.data.errors) || {}; fail(e[Object.keys(e)[0]] || 'That could not be saved.'); return; }
     draw(res.data.photos);
+    if (global.DSQPAGE) global.DSQPAGE.draw(res.data.page);
     if (body.op === 'update') { status.textContent = 'Saved'; setTimeout(function () { status.textContent = ''; }, 2000); }
   }
 
   async function load(jobId) {
-    try { draw((await U.get('/api/admin/photos?job=' + jobId)).photos || []); } catch (e) { fail('The photos could not be loaded.'); }
+    try {
+      var data = await U.get('/api/admin/photos?job=' + jobId);
+      draw(data.photos || []);
+      if (global.DSQPAGE) global.DSQPAGE.draw(data.page);
+    } catch (e) { fail('The photos could not be loaded.'); }
   }
 
   pick.addEventListener('change', function () { if (pick.files.length) upload(Array.prototype.slice.call(pick.files)); });

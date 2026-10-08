@@ -13,6 +13,8 @@ import { guides } from '../content/guides/index.js';
 import { regions } from '../content/regions/index.js';
 import { pricing } from '../content/pricing.js';
 import { SITES } from './area-template.js';
+import { problems } from '../content/problems/index.js';
+import { seasonal } from '../content/seasonal/index.js';
 
 export function sitemapFor(site, today) {
   const brand = SITES[site];
@@ -32,6 +34,14 @@ export function sitemapFor(site, today) {
     ...services
       .filter((s) => s.site === site)
       .map((s) => ({ loc: `${origin}/services/${s.slug}`, priority: '0.9', changefreq: 'monthly' })),
+    /* A topic hub is listed only when the brand has pages under it, the same
+       rule build-pages.js uses to write it. */
+    ...[['/problems', problems], ['/seasonal', seasonal]].flatMap(([path, list]) => {
+      const mine = list.filter((p) => p.site === site);
+      if (!mine.length) return [];
+      return [{ loc: `${origin}${path}`, priority: '0.7', changefreq: 'monthly' },
+        ...mine.map((p) => ({ loc: `${origin}${path}/${p.slug}`, priority: '0.8', changefreq: 'monthly' }))];
+    }),
     ...[...areas, ...regions]
       .filter((a) => a.site === site)
       .map((a) => ({ loc: `${origin}${brand.areasPath}/${a.slug}`, priority: '0.8', changefreq: 'monthly' }))

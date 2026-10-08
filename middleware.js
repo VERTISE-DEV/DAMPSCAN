@@ -33,7 +33,9 @@ export const config = {
     '/services', '/services/', '/services/:slug',
     '/guides', '/guides/', '/guides/:slug',
     '/pricing', '/pricing/',
-    '/our-work', '/our-work/',
+    '/our-work', '/our-work/', '/our-work/:slug', '/sitemap-work.xml',
+    '/problems', '/problems/', '/problems/:slug',
+    '/seasonal', '/seasonal/', '/seasonal/:slug',
     '/.well-known/oauth-protected-resource', '/.well-known/oauth-protected-resource/:path*',
     '/.well-known/oauth-authorization-server', '/.well-known/oauth-authorization-server/:path*',
     '/.well-known/openid-configuration'
@@ -98,6 +100,7 @@ const SITES = {
       '/llms.txt': '/llms-ac.txt',
       '/': '/ac.html'
     },
+    gallery: true,
     home: true
   }
 };
@@ -194,10 +197,25 @@ export default function middleware(request) {
     if (!site.gallery) return next();
     return rewrite(new URL(`/api/gallery?site=${key}`, request.url));
   }
+  /* A finished job's own page, and the sitemap listing them, both rendered
+     by the gallery function because jobs are published from the staff area. */
+  const work = path.match(/^\/our-work\/([a-z0-9-]+)$/);
+  if (work) {
+    if (!site.gallery) return next();
+    return rewrite(new URL(`/api/gallery?site=${key}&job=${work[1]}`, request.url));
+  }
+  if (path === '/sitemap-work.xml') {
+    if (!site.gallery) return next();
+    return rewrite(new URL(`/api/gallery?site=${key}&sitemap=1`, request.url));
+  }
 
   if (site.areas && path === `${site.areas}/`) return Response.redirect(new URL(site.areas, url), 301);
   if (path === '/services/') return Response.redirect(new URL('/services', url), 301);
   if (path === '/guides/') return Response.redirect(new URL('/guides', url), 301);
+  if (path === '/problems/' || path === '/seasonal/') return Response.redirect(new URL(path.slice(0, -1), url), 301);
+  if (path === '/problems' || path === '/seasonal') return rewrite(new URL(`/hubs/${dir}${path}.html`, request.url));
+  const topic = path.match(/^\/(problems|seasonal)\/([a-z0-9-]+)$/);
+  if (topic) return rewrite(new URL(`/${topic[1] === 'problems' ? 'problem' : 'seasonal'}-pages/${dir}/${topic[2]}.html`, request.url));
   if (site.areas && path === site.areas) return rewrite(new URL(`/hubs/${dir}/areas.html`, request.url));
   if (path === '/services') return rewrite(new URL(`/hubs/${dir}/services.html`, request.url));
   if (path === '/guides') return rewrite(new URL(`/hubs/${dir}/guides.html`, request.url));

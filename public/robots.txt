@@ -19,5 +19,8 @@ Disallow: /areas/
 Disallow: /service-pages/
 # And the guides, served at /guides/<name>.
 Disallow: /guide-pages/
+# And the problem and seasonal pages, served at /problems and /seasonal.
+Disallow: /problem-pages/
+Disallow: /seasonal-pages/
 
 Sitemap: https://dampscan.co.uk/sitemap.xml

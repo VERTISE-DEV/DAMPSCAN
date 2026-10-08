@@ -135,3 +135,6 @@
 .match-pick{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center}
 .feed-box{margin-top:18px}
 .feed-box h3{font-size:14px;margin-bottom:4px}
+/* The project page form under the job's photos (quoted-page.js). */
+.job-page{margin-top:18px;padding-top:14px;border-top:1px solid var(--line-strong);display:flex;flex-direction:column;gap:10px}
+.job-page .photo-field textarea{text-transform:none;letter-spacing:0;font:inherit;font-weight:400;font-size:16px;width:100%;background:var(--slate);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:8px 10px}

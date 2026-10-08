@@ -9,11 +9,13 @@
   'use strict';
 
   var U = global.DSUI;
-  var LABEL = { quote: 'Send the quote', followup: 'Follow up the quote', reminder: 'Remind them of the booking', review: 'Ask for a review', invoice: 'Send the invoice', service: 'Remind them the visit is due' };
+  var LABEL = { quote: 'Send the quote', followup: 'Follow up the quote', reminder: 'Remind them of the booking', review: 'Ask for a review', invoice: 'Send the invoice', service: 'Remind them the visit is due',
+    rating: 'Ask how we did', yearly: 'Time for their yearly check', onmyway: 'On my way' };
   var CHANNELS = [['whatsapp', 'WhatsApp'], ['sms', 'Text'], ['email', 'Email']];
   var SENT = { whatsapp: 'WhatsApp', sms: 'text', email: 'email' };
 
   function label(m) {
+    if (m.kind === 'rating' && m.followupNumber > 1) return 'Chase the rating, once';
     return m.kind === 'followup' && m.followupNumber > 1 ? 'Last follow-up' : LABEL[m.kind];
   }
 

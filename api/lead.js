@@ -10,6 +10,8 @@ import { validateLead } from '../lib/validate.js';
 import { rateLimit, pruneRateHits, LIMITS } from '../lib/ratelimit.js';
 import { siteFor } from '../lib/site.js';
 import { sendLeadEmail } from '../lib/lead-email.js';
+import { pushToStaff } from '../lib/push.js';
+import { brandFor } from '../lib/brands.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -151,6 +153,15 @@ export default async function handler(req, res) {
     } catch (err) {
       console.warn('lead email bookkeeping failed:', err.message);
     }
+  }
+
+  /* A finished enquiry buzzes the phones of whoever holds this business.
+     Once only: a complete row is new once per visit. No customer
+     details, because it lands on a lock screen. */
+  if (value.stage === 'complete' && row.inserted) {
+    const brand = brandFor(site);
+    await pushToStaff({ business: site, title: `${brand ? brand.name : site}: new enquiry`, message: `Enquiry #${id} has just come in. Open the staff area to call them back.`,
+      url: '/staff/dashboard.html', tag: `enquiry-${id}` });
   }
 
   json(res, 200, { ok: true, id, emailed });

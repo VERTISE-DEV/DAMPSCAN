@@ -2,6 +2,8 @@
 export default {
   site: 'roofing',
   slug: 'north-and-east-london',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['N', 'E', 'EC', 'NW', 'EN', 'WC', 'W'],
   name: 'North and east London',
   title: 'Roofers in North & East London | Slate, Butterfly Roofs, Flat Roofs | Verge Roofing',
   metaDescription:

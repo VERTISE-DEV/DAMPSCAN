@@ -3,6 +3,8 @@
 export default {
   site: 'roofing',
   slug: 'sussex-and-berkshire',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['BN', 'RG', 'SL', 'PO'],
   name: 'Sussex and Berkshire',
   title: 'Roofers in Sussex & Berkshire | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
   metaDescription:

@@ -52,6 +52,6 @@ export function render(siteKey) {
     </div>`;
   return shell({
     site, url, title: copy.title, metaDescription: copy.metaDescription, schemas: [crumb],
-    ownFaq: false, body, aside, scripts: bookScripts(site), styles: ['/assets/gallery.css']
+    ownFaq: false, body, aside, scripts: bookScripts(site), styles: ['/assets/gallery.css'], month: 0
   });
 }

@@ -24,7 +24,9 @@ const esc = (value) =>
 export const HUBS = {
   services: { path: '/services', label: 'Services', child: '/services/' },
   areas: { path: '/damp-survey', label: 'Areas', child: '/damp-survey/' },
-  guides: { path: '/guides', label: 'Guides', child: '/guides/' }
+  guides: { path: '/guides', label: 'Guides', child: '/guides/' },
+  problems: { path: '/problems', label: 'Common problems', child: '/problems/' },
+  seasonal: { path: '/seasonal', label: 'Seasonal', child: '/seasonal/' }
 };
 
 function hubFor(kind, site) {
@@ -35,7 +37,9 @@ function hubFor(kind, site) {
 const LIST_HEADING = {
   services: 'Every service, in detail',
   areas: 'Every area, in detail',
-  guides: 'Every guide'
+  guides: 'Every guide',
+  problems: 'Every problem, in detail',
+  seasonal: 'Through the year'
 };
 
 function itemSchema(entries, site, kind) {
@@ -63,7 +67,7 @@ function crumbSchema(site, kind, url) {
 }
 
 /**
- * @param {'services'|'areas'|'guides'} kind
+ * @param {'services'|'areas'|'guides'|'problems'|'seasonal'} kind
  * @param {string} siteKey
  * @param {Array<{slug:string,name:string,metaDescription:string}>} entries
  */

@@ -2,6 +2,8 @@
  * GET  /api/quote?t=<token>
  * GET  /api/quote?t=<token>&doc=invoice   the invoice, once one is issued
  * POST /api/quote  {t, name, agree}     the customer accepts the quote
+ * GET  /api/quote?doc=rate&t=<rating token>          the "how did we do" page
+ * POST /api/quote  {doc: 'rate', t, stars, comment?} its answer (lib/rating.js)
  *
  * The customer's view of one quote, found by the random token in the link
  * staff send them. It returns prices only: each line marked up, the net, VAT
@@ -24,6 +26,7 @@ import { bpOf } from '../lib/splits.js';
 import { brandFor } from '../lib/brands.js';
 import { effectiveVatBp, canInvoice } from '../lib/business-details.js';
 import { invoiceNumber } from '../lib/quote-store.js';
+import { ratingPage, rate } from '../lib/rating.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -118,9 +121,14 @@ export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST'])) return;
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   try {
-    if (req.method === 'POST') return await accept(req, res);
+    if (req.method === 'POST') {
+      const body = await readJson(req);
+      req.body = body;
+      return await (body.doc === 'rate' ? rate(req, res, body) : accept(req, res));
+    }
     const limit = await rateLimit({ ...LIMITS.quote, ipHash: ipHash(req) });
     if (!limit.ok) { json(res, 429, { ok: false, error: 'too_many_requests' }); return; }
+    if (new URL(req.url, 'http://localhost').searchParams.get('doc') === 'rate') return await ratingPage(req, res);
 
     const job = await findJob(new URL(req.url, 'http://localhost').searchParams.get('t') || '');
     const brand = job && brandFor(job.site);

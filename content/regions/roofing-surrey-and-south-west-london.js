@@ -3,6 +3,8 @@
 export default {
   site: 'roofing',
   slug: 'surrey-and-south-west-london',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['SW', 'CR', 'SM', 'KT', 'GU', 'RH', 'TW'],
   name: 'Surrey and south west London',
   title: 'Roofers in Surrey & South West London | Clay Tile, Slate, Flat Roofs | Verge Roofing',
   metaDescription:

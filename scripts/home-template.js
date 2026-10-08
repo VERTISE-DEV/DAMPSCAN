@@ -21,6 +21,7 @@ import { bookForm } from './book-form.js';
 import { reviewsBlock } from './reviews-block.js';
 import { reviews } from '../content/reviews/index.js';
 import { MIN_REVIEWS } from '../lib/google-reviews.js';
+import { seasonFeature, buildMonth } from './season.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -183,6 +184,7 @@ export function render(home, services) {
   <div class="hero">
     <h1>${esc(home.h1)}</h1>
     <p class="lede">${home.lede}</p>${trustList(home)}
+    ${seasonFeature(site.key, buildMonth())}
   </div>
 ${home.reviewsFirst ? reviewsSection(home) : ''}${highlights(home)}${process(home)}${serviceGrid(home, services)}${coverage(home)}${home.reviewsFirst ? '' : reviewsSection(home)}${faqBlock(home)}`;
 

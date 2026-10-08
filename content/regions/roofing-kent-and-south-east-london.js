@@ -2,6 +2,8 @@
 export default {
   site: 'roofing',
   slug: 'kent-and-south-east-london',
+  /* Postcode areas this region answers for: where a finished job is linked from. */
+  postcodes: ['BR', 'DA', 'ME', 'CT', 'TN', 'SE'],
   name: 'Kent and south east London',
   title: 'Roofers in Kent & South East London | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
   metaDescription:

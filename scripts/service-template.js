@@ -112,6 +112,20 @@ function schema(type, extra) {
   return JSON.stringify({ '@context': 'https://schema.org', '@type': type, ...extra });
 }
 
+/* Recent finished jobs in this region, for a regional page of a brand that
+   publishes them. The jobs live in the database and this page is static, so
+   the section ships empty and hidden and /assets/work-near.js fills it from
+   the gallery function; with no jobs yet it simply stays hidden. */
+function workNear(service, site) {
+  if (!service.postcodes || !site.galleryPath) return '';
+  return `  <section class="sec" data-work-near="${esc(service.postcodes.join(' '))}" hidden>
+    <h2>Recent jobs in ${esc(service.name)}</h2>
+    <ul class="chips"></ul>
+    <p><a href="${site.galleryPath}">See all our recent work</a></p>
+  </section>
+`;
+}
+
 /* Services sit under /services. The roofing regional pages share this shape
    and are served under the brand's areas path instead, so the URL, the
    breadcrumb and the area named in the schema follow the hub passed in. */
@@ -172,7 +186,7 @@ ${signsBlock(service)}  ${service.sections.map((s) => `<section class="sec">
     ${s.paras.map((p) => `<p>${p}</p>`).join('\n    ')}${sectionList(s)}
   </section>`).join('\n\n  ')}
 
-${priceBlock(service)}${reviewsBlock(service, site)}  <section class="sec" id="faq">
+${priceBlock(service)}${reviewsBlock(service, site)}${workNear(service, site)}  <section class="sec" id="faq">
     <h2>Questions</h2>
     ${service.faq.map((f) => `<details class="qa"><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n    ')}
   </section>
@@ -202,6 +216,6 @@ ${related.length || reading.length ? `
     schemas: [serviceSchema, crumbSchema, faqSchema],
     body,
     aside,
-    scripts: bookScripts(site)
+    scripts: bookScripts(site) + (workNear(service, site) ? '\n<scr' + 'ipt src="/assets/work-near.js" defer></scr' + 'ipt>' : '')
   });
 }

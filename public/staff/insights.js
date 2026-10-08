@@ -171,6 +171,7 @@
     ]);
 
     renderSearch(d);
+    if (global.DSINSJOBS) global.DSINSJOBS.render(d);
     var rate = function (r) { return r.enquiries ? Math.round((100 * r.won) / r.enquiries) + '%' : ''; };
     U.table(el('channels'), [
       { label: 'Channel', get: function (r) { return CHANNEL[r.channel] || r.channel; } },
@@ -184,6 +185,12 @@
       { label: 'Won', numeric: true, get: function (r) { return U.num(r.won); } },
       { label: 'Rate', numeric: true, get: rate }
     ], d.places, { empty: 'No enquiries in the last year.' });
+    U.table(el('pages-next'), [
+      { label: 'District', get: function (r) { return r.district; } },
+      { label: 'Website', get: function (r) { return r.site; } },
+      { label: 'Enquiries', numeric: true, get: function (r) { return U.num(r.enquiries); } },
+      { label: 'Won', numeric: true, get: function (r) { return U.num(r.won); } }
+    ], d.pagesToWrite || [], { empty: 'Every district with enquiries has a page.' });
     U.table(el('issues'), [
       { label: 'Asked about', wrap: true, get: function (r) { return r.issue; } },
       { label: 'Enquiries', numeric: true, get: function (r) { return U.num(r.count); } }

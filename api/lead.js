@@ -10,7 +10,7 @@ import { validateLead } from '../lib/validate.js';
 import { rateLimit, pruneRateHits, LIMITS } from '../lib/ratelimit.js';
 import { siteFor } from '../lib/site.js';
 import { sendLeadEmail } from '../lib/lead-email.js';
-import { pushToStaff } from '../lib/push.js';
+import { notify } from '../lib/notify.js';
 import { brandFor } from '../lib/brands.js';
 
 export const config = { runtime: 'nodejs' };
@@ -160,8 +160,10 @@ export default async function handler(req, res) {
      details, because it lands on a lock screen. */
   if (value.stage === 'complete' && row.inserted) {
     const brand = brandFor(site);
-    await pushToStaff({ business: site, title: `${brand ? brand.name : site}: new enquiry`, message: `Enquiry #${id} has just come in. Open the staff area to call them back.`,
-      url: '/staff/dashboard.html', tag: `enquiry-${id}` });
+    /* Through notify, so ntfy buzzes as well as the staff app: the one alert
+       that does not depend on the enquiry email arriving. */
+    await notify({ business: site, kind: 'enquiry', ref: id, title: `${brand ? brand.name : site}: new enquiry`,
+      message: `Enquiry #${id} has just come in. Open the staff area to call them back.`, tags: 'telephone_receiver' });
   }
 
   json(res, 200, { ok: true, id, emailed });

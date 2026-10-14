@@ -107,7 +107,7 @@ test('a person connects, sees only their business, and a code and a refresh toke
   const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
   assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'add_todo', 'book_job', 'build_quote_from_words', 'complete_todo', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
     'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'move_job', 'remove_quote_line', 'reopen_todo',
-    'set_project_page', 'update_client', 'update_job_status', 'use_quote_lines_as_price']);
+    'set_awaiting_agent', 'set_project_page', 'update_client', 'update_job_status', 'use_quote_lines_as_price']);
   assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');
   assert.ok(tools.every((x) => !('run' in x)));
 
@@ -142,6 +142,15 @@ test('the three marks work on damp cards and quoted jobs, each audited, and noth
   assert.deepEqual(paid.map((p) => [p.label, Number(p.amount_pence)]), [['deposit', 200000], ['balance', 600000]]);
   assert.equal((await tool(t.access_token, 'mark_paid_in_full', { id: Number(roof) })).isError, true, 'nothing left to pay');
   assert.equal((await tool(t.access_token, 'mark_report_sent', { id: Number(roof) })).isError, true);
+
+  /* Awaiting estate agent confirmation: set, read back, and cleared by a time. */
+  assert.equal((await tool(t.access_token, 'set_awaiting_agent', { id: Number(damp), awaiting: true })).isError, false);
+  const got = await tool(t.access_token, 'get_job', { id: Number(damp) });
+  assert.equal(got.structuredContent.job.awaitingAgent, true);
+  assert.equal(got.structuredContent.job.card.awaitingAgent, true);
+  assert.equal((await tool(t.access_token, 'move_job', { id: Number(damp), time: '10:30' })).isError, false);
+  assert.equal((await pool.query('select awaiting_agent from jobs where id = $1', [damp])).rows[0].awaiting_agent, false, 'a time clears it');
+  assert.equal((await tool(t.access_token, 'set_awaiting_agent', { id: Number(roof) })).isError, true, 'damp only');
 
   const audited = (await pool.query('select person_id from audit where entity_id in ($1, $2)', [damp, roof])).rows;
   assert.ok(audited.length >= 4 && audited.every((a) => Number(a.person_id) === pid), 'under the person\'s name');

@@ -190,7 +190,7 @@ test('"Scott" means the owners\' list when Scott signs in with the owners\' code
   const owners = await scopeFor({ person: false, name: 'Owners' });
   const r = await run(tom, 'add_todo', { text: 'Ring the scaffolder', for: 'Scott' });
   assert.equal(r.status, 200, JSON.stringify(r.data));
-  assert.match(r.data.said, /owners/);
+  assert.equal(r.data.said, 'Added to Scott\'s to-do list.');
   assert.equal((await run(owners, 'add_todo', { text: 'Note to self', for: 'scott' })).status, 200);
   const seen = (await run(owners, 'list_todos', { view: 'open' })).data.todos;
   assert.deepEqual(seen.map((t) => t.text).sort(), ['Note to self', 'Ring the scaffolder']);

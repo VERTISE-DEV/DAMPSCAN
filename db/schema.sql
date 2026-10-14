@@ -992,6 +992,10 @@ alter table todos drop constraint if exists todos_source_check;
 alter table todos add constraint todos_source_check check (source in ('manual', 'assistant', 'failed'));
 create index if not exists todos_open_idx on todos (for_person_id, created_at desc) where done_at is null;
 create index if not exists todos_site_idx on todos (site) where done_at is null;
+-- For the owners' list ("for Scott" when Scott signs in with the shared code,
+-- which has no people row). Kept apart from an unaddressed "everyone" item, so
+-- a note for Scott is not also on the list of whoever set it.
+alter table todos add column if not exists for_owners boolean not null default false;
 
 -- ---------------------------------------------------------------------------
 -- Scheduled phone alerts (lib/daily-alerts.js). Each stamp is when the alert

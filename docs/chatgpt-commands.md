@@ -24,6 +24,7 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "Start a roofing job for Anita Patel, BR6 0AA, 07700 900123, leaking valley."
 - "Book Mrs Patel in for Tuesday the 3rd at half eight."
 - "Move Mrs Patel to Thursday at 10." / "Push the Smiths in TN13 back a week." (the date moves, nothing else changes)
+- "Mark Shuah as awaiting estate agent confirmation." (ATi and DampScan: the card stays in Upcoming until a time is set) / "Shuah's agent has confirmed, take off the wait."
 - "Mark Mrs Patel as completed." / "Mark the Jones job in DA1 as declined, they went elsewhere."
 - "Add a note to Mrs Patel: side gate code is 1234."
 - "Add a £240 skip to Mrs Patel."
@@ -89,6 +90,8 @@ A to-do list shared between staff. Ask the assistant to put something on somebod
 - Tom: "Need to tell Scott about a potential job next week, name Laura." (a to-do for Scott, in Tom's words, set by Tom; Scott's phone buzzes)
 - Scott: "Anything on the to-do list?" (it lists Tom's note, who set it and when; it also checks at the start of every chat)
 - "Remind me to order the lead for Mrs Patel by Friday." / "Put on everyone's list: van MOT on the 20th."
+- "Tell Tom and Dan the van is in for its MOT Thursday." (each gets their own copy)
+- Signed in with the owners' code, "me" and "Scott" both mean the owners' list, and the staff app's For box offers Scott (me). It answers with what it did, for example "Added to Scott's to-do list."
 - "What have I asked other people to do?" / "What did we finish this week?"
 - "I've rung Laura." (it ticks that one off) / "Put the Laura one back on the list."
 

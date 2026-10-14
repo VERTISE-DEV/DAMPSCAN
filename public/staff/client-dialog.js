@@ -85,6 +85,7 @@
 
     el('c-date').value = c.surveyDate || '';
     el('c-time').value = c.surveyTime || '';
+    el('c-agent').checked = Boolean(c.awaitingAgent);
     el('c-note').value = c.note || '';
     el('c-edit').href = '/staff/jobs.html#job-' + c.id;
     el('client-error').classList.remove('is-shown');

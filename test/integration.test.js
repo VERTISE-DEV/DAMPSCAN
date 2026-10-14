@@ -932,6 +932,18 @@ test('moving the survey date forward from the card brings it back onto the board
   assert.equal(c.archived, false);
 });
 
+test('awaiting estate agent keeps a card in upcoming past its date, and a time clears it', async () => {
+  const cookie = await signedInCookie();
+  const { job } = await bookedJob(cookie, { jobDate: daysFromNow(-2) });
+  await call(clientsRoute, { body: { id: job.id, awaitingAgent: true }, headers: { cookie } });
+  const up = (await call(clientsRoute, { method: 'GET', url: '/api/admin/clients?view=upcoming', headers: { cookie } })).json().clients;
+  assert.deepEqual(up.map((c) => [c.id, c.awaitingAgent, c.archived]), [[job.id, true, false]]);
+  await call(clientsRoute, { body: { id: job.id, jobDate: daysFromNow(3), jobTime: '10:00' }, headers: { cookie } });
+  const [c] = (await call(clientsRoute, { method: 'GET', url: '/api/admin/clients?view=upcoming', headers: { cookie } })).json().clients;
+  assert.equal(c.awaitingAgent, false, 'a confirmed time ends the wait');
+  assert.equal(c.surveyTime, '10:00');
+});
+
 test('an unknown view falls back to upcoming rather than erroring', async () => {
   const cookie = await signedInCookie();
   const res = await call(clientsRoute, { method: 'GET', url: '/api/admin/clients?view=nonsense', headers: { cookie } });

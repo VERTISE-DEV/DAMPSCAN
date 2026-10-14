@@ -1001,3 +1001,7 @@ create index if not exists todos_site_idx on todos (site) where done_at is null;
 -- ---------------------------------------------------------------------------
 alter table leads add column if not exists partial_alerted_at timestamptz;
 alter table jobs  add column if not exists overdue_alerted_at timestamptz;
+
+-- A damp survey waiting on the estate agent to confirm the time. It stays in
+-- Upcoming whatever the date says, until the time is set or the tick cleared.
+alter table jobs add column if not exists awaiting_agent boolean not null default false;

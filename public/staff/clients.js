@@ -42,7 +42,7 @@
     var top = U.node('div', 'ccard-top');
     /* "Tomorrow 09:30" reads as one fact, so the hour sits with the day rather
        than in a field of its own. A job with only a day agreed shows the day. */
-    top.appendChild(U.node('span', 'ccard-when', day(c.surveyDate) + (c.surveyTime ? ' ' + c.surveyTime : '')));
+    top.appendChild(U.node('span', 'ccard-when', day(c.surveyDate) + (c.awaitingAgent ? ' · awaiting estate agent' : c.surveyTime ? ' ' + c.surveyTime : '')));
     top.appendChild(U.node('span', 'tag ' + (c.site === 'ati-london' ? 'tag--accent' : 'tag--muted'), SITE[c.site] || c.site));
     b.appendChild(top);
 
@@ -148,6 +148,8 @@
        instruction and saving the notes is not one. */
     var time = el('c-time').value || null;
     if (time !== (c.surveyTime || null)) body.jobTime = time;
+    var agent = el('c-agent').checked;
+    if (agent !== Boolean(c.awaitingAgent)) body.awaitingAgent = agent;
     var note = el('c-note').value.trim();
     if (note !== (c.note || '')) body.note = note;
 

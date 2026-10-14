@@ -11,7 +11,7 @@ import { rateLimit, pruneRateHits, LIMITS } from '../lib/ratelimit.js';
 import { siteFor } from '../lib/site.js';
 import { sendLeadEmail } from '../lib/lead-email.js';
 import { notify } from '../lib/notify.js';
-import { brandFor } from '../lib/brands.js';
+import { enquiryAlert } from '../lib/alert-enquiry.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -53,7 +53,7 @@ const UPSERT = `
     ip_hash         = coalesce(excluded.ip_hash, leads.ip_hash),
     site            = excluded.site,
     notify_beacon_at = coalesce(excluded.notify_beacon_at, leads.notify_beacon_at)
-  returning id, notified_at, (xmax = 0) as inserted`;
+  returning id, notified_at, (xmax = 0) as inserted, first_name, postcode, phone, issues`;
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, 'POST')) return;
@@ -156,14 +156,13 @@ export default async function handler(req, res) {
   }
 
   /* A finished enquiry buzzes the phones of whoever holds this business.
-     Once only: a complete row is new once per visit. No customer
-     details, because it lands on a lock screen. */
+     Once only: a complete row is new once per visit. First name and
+     district only, because it lands on a lock screen; the number rides in
+     the Call button's tel: link and is never shown as text. */
   if (value.stage === 'complete' && row.inserted) {
-    const brand = brandFor(site);
     /* Through notify, so ntfy buzzes as well as the staff app: the one alert
        that does not depend on the enquiry email arriving. */
-    await notify({ business: site, kind: 'enquiry', ref: id, title: `${brand ? brand.name : site}: new enquiry`,
-      message: `Enquiry #${id} has just come in. Open the staff area to call them back.`, tags: 'telephone_receiver' });
+    await notify(enquiryAlert(site, id, row));
   }
 
   json(res, 200, { ok: true, id, emailed });

@@ -2,8 +2,8 @@
  * Pushes to the owner's phone, and the morning digest.
  *
  * ntfy is a stubbed fetch, so every push body is read back and checked for
- * the one rule that matters: a business, a job number, an amount, a member
- * of staff, and never a customer. The rows land whether or not a push goes.
+ * the one rule that matters: a business, an amount, a member of staff and the
+ * customer as first name and district, never more of them. The rows land whether or not a push goes.
  */
 import { test, before, beforeEach, after, mock } from 'node:test';
 import assert from 'node:assert/strict';
@@ -75,9 +75,9 @@ after(async () => { await pool.end(); });
 
 test('a job saved, paid and frozen reaches the phone, with the business and the money and never the customer', async () => {
   const { id, cookie } = await scott();
-  const job = (await post(cookie, { op: 'save', site: 'roofing', customerName: CUSTOMER, customerPostcode: 'BR1 1AA', invoiceNetPence: P(3000), status: 'booked', finderPersonId: id })).json().job;
+  const job = (await post(cookie, { op: 'save', site: 'roofing', customerName: CUSTOMER, customerPostcode: 'BR1 1AA', invoiceNetPence: P(3000), status: 'booked', jobDate: '2026-10-17', jobTime: '09:30', finderPersonId: id })).json().job;
   await post(cookie, { op: 'cost', id: job.id, label: 'Materials', amountPence: P(1000) });
-  await post(cookie, { op: 'save', id: job.id, site: 'roofing', customerName: CUSTOMER, invoiceNetPence: P(3000), status: 'completed' });
+  await post(cookie, { op: 'save', id: job.id, site: 'roofing', customerName: CUSTOMER, customerPostcode: 'BR1 1AA', invoiceNetPence: P(3000), status: 'completed' });
   await post(cookie, { op: 'payment', id: job.id, amountPence: P(1000), label: 'deposit' });
   await post(cookie, { op: 'payment', id: job.id, amountPence: P(2000), label: 'balance' });
   await post(cookie, { op: 'freeze', id: job.id });
@@ -87,17 +87,20 @@ test('a job saved, paid and frozen reaches the phone, with the business and the 
   assert.deepEqual(kinds, ['job_created', 'job_status', 'payment', 'payment', 'payout_frozen', 'payout_reopened'], 'a cost line is routine and says nothing');
   assert.equal(pushes.length, 6);
   assert.ok(pushes.every((p) => p.url === 'https://ntfy.sh' && p.body.topic === 'dampscan-test-topic'));
-  const texts = pushes.map((p) => p.body.title + ' ' + p.body.message);
+  const texts = pushes.map((p) => p.body.title + ' | ' + p.body.message);
   for (const t of texts) {
-    assert.ok(!/priya|sharma|br1/i.test(t), `a push carried customer detail: ${t}`);
-    assert.ok(t.startsWith('Verge Roofing:'), t);
+    assert.ok(!/sharma|1aa/i.test(t), `a push carried more than a first name and district: ${t}`);
+    assert.ok(!/#\d/.test(t), `staff never see job numbers: ${t}`);
+    assert.ok(/: Verge Roofing \|/.test(t), t);
   }
-  assert.match(texts[0], /new job.*Job #1 saved as booked, £3,000\.00 net/);
-  assert.match(texts[1], /job now completed/);
-  assert.match(texts[2], /payment received.*£1,000\.00 on Job #1\. £2,000\.00 still to come/);
-  assert.match(texts[3], /paid in full.*£2,000\.00 on Job #1\. £3,000\.00 received of £3,000\.00/);
-  assert.match(texts[4], /payout frozen.*£81\.00 to pay out across 1 person/);
-  assert.match(texts[5], /payout reopened/);
+  assert.equal(texts[0], 'Booked: Verge Roofing | Priya, BR1 is booked for Sat 17 Oct at 9:30am, £3,000.');
+  assert.equal(texts[1], 'Job done: Verge Roofing | Priya, BR1 is now done, £3,000.');
+  assert.equal(texts[2], 'Payment in: Verge Roofing | £1,000 from Priya, BR1 (Verge). £2,000 left to pay.');
+  assert.equal(texts[3], 'Paid in full: Verge Roofing | Priya, BR1 has paid in full, £3,000. Last payment £2,000.');
+  assert.match(texts[4], /^Payout locked: Verge Roofing \| Priya, BR1: £81 to pay out to 1 person\.$/);
+  assert.match(texts[5], /^Payout reopened: Verge Roofing/);
+  assert.ok(pushes.every((p) => p.body.click === `https://dampscan.co.uk/staff/quoted.html?area=roofing#job-${job.id}`), 'a tap opens the job');
+  assert.ok(pushes.every((p) => p.body.priority === 3 && Array.isArray(p.body.tags)));
   assert.ok((await rows()).every((r) => r.push_sent_at && r.business_slug === 'roofing' && Number(r.ref) === job.id));
 });
 
@@ -140,10 +143,11 @@ test('the morning digest says what is on, what is waiting and what happened, per
   assert.deepEqual(sent.map((s) => s.business), ['roofing'], 'CoolRight and the damp brands had nothing to say');
   assert.equal(pushes.length, 1);
   const text = pushes[0].body.title + ' ' + pushes[0].body.message;
-  assert.ok(text.startsWith('Verge Roofing: this morning'), text);
+  assert.ok(text.startsWith('Good morning: Verge Roofing'), text);
+  assert.equal(pushes[0].body.click, 'https://dampscan.co.uk/staff/due.html?area=roofing');
   assert.match(text, /1 job tomorrow\./);
   assert.match(text, /1 quote out over a week with no answer\./);
-  assert.match(text, /£500\.00 outstanding on 1 completed job\./);
+  assert.match(text, /£500 outstanding on 1 completed job\./);
   assert.match(text, /Since the last digest: 3 jobs saved, 1 payment received\./);
   assert.ok(!/priya|sharma|another|old quote/i.test(text), text);
   assert.ok((await rows()).every((r) => r.digest_sent_at), 'everything summarised is stamped');

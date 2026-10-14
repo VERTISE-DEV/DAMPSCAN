@@ -101,8 +101,9 @@ test('a customer accepts with their name and a tick, once, and the price stops m
 
   const told = (await pool.query("select title, message from notifications where kind = 'quote_accepted'")).rows;
   assert.equal(told.length, 1);
-  assert.match(told[0].message, /^Job #\d+, £1,500\.00 net, accepted online/);
-  assert.ok(!/Patel|BR6/.test(told[0].title + told[0].message), 'no customer on a lock screen');
+  assert.equal(told[0].title, 'Quote accepted: Verge Roofing');
+  assert.equal(told[0].message, 'A customer in BR6 accepted the £1,500 quote online. Call to book a start date.');
+  assert.ok(!/Patel|0AA/.test(told[0].title + told[0].message), 'a surname or full postcode never goes on a lock screen');
 });
 
 test('a declined, expired, unpriced or unknown quote cannot be accepted', async () => {

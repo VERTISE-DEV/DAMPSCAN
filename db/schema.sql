@@ -992,3 +992,12 @@ alter table todos drop constraint if exists todos_source_check;
 alter table todos add constraint todos_source_check check (source in ('manual', 'assistant', 'failed'));
 create index if not exists todos_open_idx on todos (for_person_id, created_at desc) where done_at is null;
 create index if not exists todos_site_idx on todos (site) where done_at is null;
+
+-- ---------------------------------------------------------------------------
+-- Scheduled phone alerts (lib/daily-alerts.js). Each stamp is when the alert
+-- went, so a rerun of the daily job never sends it twice. A half-finished
+-- form is told once; an overdue invoice is told at a day overdue and then
+-- weekly while it stays owing.
+-- ---------------------------------------------------------------------------
+alter table leads add column if not exists partial_alerted_at timestamptz;
+alter table jobs  add column if not exists overdue_alerted_at timestamptz;

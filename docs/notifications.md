@@ -45,9 +45,35 @@ Words are built in `lib/alert-words.js`.
 | A ChatGPT change that failed | 📝 memo | 3 | Change failed: Tom via ChatGPT | A change Tom asked ChatGPT for did not go through. It is on their to-do list. | To-do list |
 | Morning digest, per business (`lib/digest.js`) | 🌅 sunrise | 3 | Good morning: Verge Roofing | 1 job tomorrow. 1 quote out over a week with no answer. £500 outstanding on 1 completed job. | Due page |
 | Morning digest, general to-dos | 🌅📝 | 3 | Good morning: to-do list | 3 open to-dos (Scott 2, Tom 1), 1 overdue. | To-do list |
+| Half-finished form: step 1 left over an hour with no finished enquiry from the same visit or email (`lib/daily-alerts.js`; the morning and evening runs, and whenever a new partial arrives for that business) | ⏳ hourglass | 3 | Half-finished: Verge Roofing | Sarah in BR6 started a quote but didn't finish. Tap to follow up. | Leads page |
+| Invoice a day or more past due with money owing; again weekly while owed (morning run) | ⌛ hourglass_flowing_sand | 3 | Overdue: Verge Roofing | Sarah, BR6 is 7 days past due on £3,941. Tap to send a reminder. | Job |
+| Tomorrow's booked jobs and surveys, one per business (evening run) | 🗓️ spiral_calendar | 3 | Tomorrow: Verge Roofing | 9:30am Sarah, BR6. 2pm Dev, DA1. | Calendar |
+| Monday summary, per business (morning run on a London Monday, `lib/weekly-summary.js`) | 📊 bar_chart | 3 | Last week: Verge Roofing | 3 enquiries, 1 half-finished form. 2 jobs won, £4,200 in. 1 new rating, averaging 5 stars. 1 invoice overdue. 2 open to-dos. | Insights |
 
 The staff app's own buzz for a to-do set for you: "New to-do from Tom" /
 "Open the to-do list to read it."
+
+## Scheduled alerts
+
+The hosting plan runs each scheduled job at most once a day, so the clock
+driven alerts share two runs in `vercel.json`, both through
+`api/cron/[task].js`:
+
+- **digest**, 06:30 UTC: the morning digest, then half-finished forms,
+  overdue invoices and, on a Monday in London, the weekly summary.
+- **evening**, 17:00 UTC (6pm in summer, 5pm in winter; the plan may start it
+  any time in that hour): tomorrow's diary, and half-finished forms again.
+
+Nothing is sent twice. A half-finished form is stamped
+(`leads.partial_alerted_at`) and told once; only forms from the last three
+days are looked at, so a first run does not dig up old ones. An overdue
+invoice is stamped (`jobs.overdue_alerted_at`) and told again after a week, or
+sooner if it was reissued with a new due date. The diary and the weekly
+summary are looked up in `notifications` by business, kind and day.
+
+All four are recorded through `notify()`, so they are in the notifications
+table, and are left out of the digest's "Since the last digest" line because
+each was already its own push. Amounts in them are whole pounds.
 
 ## Privacy note on the Call button
 

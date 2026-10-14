@@ -130,12 +130,12 @@ test('each person hears only about their businesses, the owners hear everything,
   assert.equal(await saveSubscription(roofer, { endpoint: 'http://insecure.example', keys: phones.rob.sub.keys }), false);
 
   answer = (url) => (String(url).endsWith('/own') ? 410 : 201);
-  const r = await pushToStaff({ business: 'roofing', title: 'Verge Roofing: new enquiry', message: 'Enquiry #9.' });
+  const r = await pushToStaff({ business: 'roofing', title: 'New enquiry: Verge Roofing', message: 'Sarah in BR6 needs help with flat roof.' });
   assert.deepEqual(sent.map((s) => s.url).sort(), ['https://push.example.com/own', 'https://push.example.com/rob']);
   assert.deepEqual(r, { sent: 1, removed: 1 });
   const robs = sent.find((s) => s.url.endsWith('/rob'));
   assert.equal(robs.init.headers['Content-Encoding'], 'aes128gcm');
-  assert.equal(phones.rob.open(Buffer.from(robs.init.body)).title, 'Verge Roofing: new enquiry');
+  assert.equal(phones.rob.open(Buffer.from(robs.init.body)).title, 'New enquiry: Verge Roofing');
   assert.deepEqual((await pool.query('select endpoint from push_subscriptions order by id')).rows.map((x) => x.endpoint.split('/').pop()), ['rob', 'cat', 'gus'], 'the 410 phone is gone');
 });
 

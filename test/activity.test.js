@@ -82,12 +82,15 @@ test('a cost added on the screen is one alert naming who, the job and the amount
   assert.equal(pushes.length, 1, 'the new job has its own alert, not a second one');
   pushes = [];
   await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip for Priya Sharma', amountPence: P(260) });
-  assert.deepEqual(said(), [`Tom added a cost to job #${job.id} (£260.00).`]);
-  assert.equal(pushes[0].body.title, 'Verge Roofing: change by Tom');
+  assert.deepEqual(said(), ['Tom added a £260 cost to Priya, BR1.']);
+  assert.equal(pushes[0].body.title, 'Tom made a change: Verge Roofing');
+  assert.equal(pushes[0].body.priority, 2, 'routine staff activity lands quietly');
+  assert.deepEqual(pushes[0].body.tags, ['receipt']);
+  assert.equal(pushes[0].body.click, `https://dampscan.co.uk/staff/quoted.html?area=roofing#job-${job.id}`);
   pushes = [];
   await post(tom.cookie, { op: 'payment', id: job.id, amountPence: P(100), paidOn: '2026-01-01' });
   assert.equal(pushes.length, 1, 'a payment is told once, by its own alert');
-  assert.ok(pushes.every((p) => !JSON.stringify(p.body).includes('Priya') && !JSON.stringify(p.body).includes('BR1')));
+  assert.ok(pushes.every((p) => !JSON.stringify(p.body).includes('Sharma') && !JSON.stringify(p.body).includes('1AA')));
 });
 
 test('the assistant\'s changes are marked, and ntfy being down never fails a save', async () => {
@@ -97,7 +100,7 @@ test('the assistant\'s changes are marked, and ntfy being down never fails a sav
   const scope = { ...(await scopeFor({ person: true, sub: tom.id })), viaAssistant: true };
   const r = await callRoute(quoted, scope, { method: 'POST', url: '/api/admin/quoted', body: { op: 'qline', id: job.id, kind: 'materials', description: 'Tiles', costPence: P(1000) } });
   assert.equal(r.status, 200);
-  assert.deepEqual(said(), [`Tom (via ChatGPT) added a quote line to job #${job.id} (£1,000.00).`]);
+  assert.deepEqual(said(), ['Tom (via ChatGPT) added a £1,000 quote line to Priya.']);
   ntfyDown = true;
   assert.equal((await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip', amountPence: P(260) })).statusCode, 200);
 });
@@ -110,6 +113,8 @@ test('to-dos say who did what for whom, never the words', async () => {
   const { todo } = await addTodo(tomScope, { text: 'Ring Priya Sharma about the gutter', forPersonId: scott.id });
   await setDone(scottScope, todo.id, true);
   await setDone(scottScope, todo.id, false);
-  assert.deepEqual(said(), ['Tom added a to-do for Scott.', 'Scott ticked off a to-do set by Tom.', 'Scott reopened a to-do set by Tom.']);
+  assert.deepEqual(pushes.map((p) => p.body.title), ['To-do for Scott from Tom', 'To-do done: Scott', 'To-do reopened: Scott']);
+  assert.deepEqual(said(), ['Open the to-do list to read it.', 'Scott ticked off a to-do set by Tom.', 'Scott reopened a to-do set by Tom.']);
+  assert.ok(pushes.every((p) => p.body.click.startsWith('https://dampscan.co.uk/staff/todo.html')));
   assert.ok(!JSON.stringify(pushes).includes('Priya'));
 });

@@ -19,6 +19,7 @@
 import { query, queryOne } from '../lib/db.js';
 import { json, requireMethod, ipHash, readJson, str } from '../lib/http.js';
 import { notify } from '../lib/notify.js';
+import { money, customer, jobPage } from '../lib/alert-words.js';
 import { rateLimit, LIMITS } from '../lib/ratelimit.js';
 import { loadQuoteLines, priceFollowsLines } from '../lib/quote-store.js';
 import { quoteTotals } from '../lib/quote.js';
@@ -64,7 +65,6 @@ async function figures(job) {
 }
 
 const expired = (job) => Date.now() - new Date(job.created_at).getTime() > (VALID_DAYS + 1) * 86400000;
-const pounds = (p) => `£${(p / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 /* The invoice: the agreed lines, any VAT, and what has been paid against it.
    Nothing until one has been issued, and nothing while the business's
@@ -116,8 +116,9 @@ async function accept(req, res) {
     `update jobs set quote_accepted_at = now(), quote_accepted_name = $2, quote_accepted_ip_hash = $3, invoice_net_pence = $4, price_fixed = true, updated_at = now()
       where id = $1 and status = 'quoted' and quote_accepted_at is null returning id`, [job.id, name, ipHash(req), f.netPence]);
   if (!done) { json(res, 409, { ok: false, error: 'not_open', message: 'This quote has already been accepted.' }); return; }
-  await notify({ business: job.site, kind: 'quote_accepted', ref: job.id, tags: 'white_check_mark',
-    title: `${brand.name}: quote accepted`, message: `Job #${job.id}, ${pounds(f.netPence)} net, accepted online. Book a start date.` });
+  await notify({ business: job.site, kind: 'quote_accepted', ref: job.id, tags: 'handshake', priority: 4, path: jobPage(job.site, job.id),
+    title: `Quote accepted: ${brand.name}`,
+    message: `${customer(job.customer_name, job.customer_postcode)} accepted the ${money(f.netPence)} quote online. Call to book a start date.` });
   json(res, 200, { ok: true });
 }
 

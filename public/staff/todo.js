@@ -56,10 +56,19 @@
     return li;
   }
 
-  function fillPeople(people, me) {
+  function fillPeople(people, me, owners) {
     if (state.filled) return;
     state.filled = true;
     var sel = el('for');
+    /* The owners' code has no row in the people list, so its own list is
+       offered by name and chosen by default, as "me" is for anyone else. */
+    if (owners) {
+      var mine = document.createElement('option');
+      mine.value = 'owners';
+      mine.textContent = owners + ' (me)';
+      sel.insertBefore(mine, sel.firstChild);
+      sel.value = 'owners';
+    }
     people.forEach(function (p) {
       var o = document.createElement('option');
       o.value = p.id;
@@ -73,7 +82,7 @@
     el('state').textContent = 'Loading…';
     try {
       var data = await U.get('/api/admin/todos?view=' + state.view);
-      fillPeople(data.people || [], data.me);
+      fillPeople(data.people || [], data.me, data.owners);
       /* Under one company, its to-dos and the general ones only. */
       var todos = (data.todos || []).filter(function (t) { return !A.sites.length || !t.site || A.sites.indexOf(t.site) !== -1; });
       var list = el('list');

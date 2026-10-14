@@ -140,6 +140,8 @@ test('the morning digest says what is on, what is waiting and what happened, per
   const res = await call(digest, { method: 'GET', url: '/api/cron/digest', headers: { authorization: 'Bearer a-cron-secret-that-is-long-enough' } });
   assert.equal(res.statusCode, 200, res.body);
   const sent = res.json().sent;
+  /* On a Monday the same run also sends the weekly summary (tested in scheduled-alerts). */
+  pushes = pushes.filter((p) => p.body.title.startsWith('Good morning'));
   assert.deepEqual(sent.map((s) => s.business), ['roofing'], 'CoolRight and the damp brands had nothing to say');
   assert.equal(pushes.length, 1);
   const text = pushes[0].body.title + ' ' + pushes[0].body.message;
@@ -154,6 +156,7 @@ test('the morning digest says what is on, what is waiting and what happened, per
 
   pushes = [];
   const quiet = await call(digest, { method: 'GET', url: '/api/cron/digest', headers: { authorization: 'Bearer a-cron-secret-that-is-long-enough' } });
+  pushes = pushes.filter((p) => p.body.title.startsWith('Good morning'));
   assert.equal(quiet.json().sent.length, 1, 'tomorrow\'s job and the unpaid one are still worth saying');
   assert.ok(!/Since the last digest/.test(pushes[0].body.message), 'but nothing new happened');
 });

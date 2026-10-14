@@ -12,6 +12,7 @@ import { siteFor } from '../lib/site.js';
 import { sendLeadEmail } from '../lib/lead-email.js';
 import { notify } from '../lib/notify.js';
 import { enquiryAlert } from '../lib/alert-enquiry.js';
+import { alertPartials } from '../lib/daily-alerts.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -163,6 +164,14 @@ export default async function handler(req, res) {
     /* Through notify, so ntfy buzzes as well as the staff app: the one alert
        that does not depend on the enquiry email arriving. */
     await notify(enquiryAlert(site, id, row));
+  }
+
+  /* There is no frequent schedule to catch a form left half done, so a new
+     partial is the moment to tell the owner about this business's earlier
+     ones that have sat over an hour unfinished. Never blocks the reply on
+     failure; the daily run catches whatever this misses. */
+  if (value.stage === 'partial' && row.inserted) {
+    try { await alertPartials(site); } catch (err) { console.warn('partial alerts failed:', err.message); }
   }
 
   json(res, 200, { ok: true, id, emailed });

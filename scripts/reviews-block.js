@@ -75,9 +75,18 @@ export function cardsFor(list) {
   return out;
 }
 
-/* The marquee translates one track by half its width, so it needs two copies of
-   the cards to loop without a gap. The second copy is decoration. */
-const track = (list) => { const c = cardsFor(list).join(''); return c + c; };
+/**
+ * The two rows, one copy of each. The looping copies are added in the browser
+ * by public/assets/reviews.js, which knows how wide the window is; a fixed two
+ * copies left a gap on a wide screen and was the cause of a row running dry.
+ * Four or more cards are split between the rows, so the second row shows
+ * different reviews; fewer than that and both rows carry them all.
+ */
+export function rowsFor(list) {
+  const cards = cardsFor(list);
+  if (cards.length < 4) return [cards.join(''), cards.slice().reverse().join('')];
+  return [0, 1].map((r) => cards.filter((c, i) => i % 2 === r).join(''));
+}
 
 /**
  * @param {string} site key into SITES
@@ -92,13 +101,10 @@ export function reviewsBlock(site) {
     ? ` <a href="${esc(url)}" rel="noopener" target="_blank">Read them on Google</a>`
     : '';
 
+  const [a, b] = show ? rowsFor(list) : ['', ''];
   return `${START}
-  <div class="carousel" aria-label="Customer reviews"${hide}><div class="carousel-track" id="track-a">${
-    show ? track(list) : ''
-  }</div></div>
-  <div class="carousel" aria-hidden="true"${hide}><div class="carousel-track rev" id="track-b">${
-    show ? track(list.slice().reverse()) : ''
-  }</div></div>
+  <div class="carousel" aria-label="Customer reviews"${hide}><div class="carousel-track" id="track-a">${a}</div></div>
+  <div class="carousel" aria-label="More customer reviews"${hide}><div class="carousel-track rev" id="track-b">${b}</div></div>
   <div class="container">
     <p class="reviews-source" id="reviews-source"${hide}>Reviews from our Google Business Profile.${link}</p>
   </div>

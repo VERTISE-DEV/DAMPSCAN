@@ -131,11 +131,6 @@
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .reviews-wall .carousel+.carousel{margin-top:20px}
-.reviews-wall .carousel-track{display:flex;gap:20px;width:max-content;animation:reviews-marquee 52s linear infinite}
-.reviews-wall .carousel-track.rev{animation-direction:reverse;animation-duration:64s}
-.reviews-wall .carousel:hover .carousel-track{animation-play-state:paused}
-@keyframes reviews-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.reviews-wall .carousel-track{animation:none}}
 .reviews-wall .review{flex:0 0 330px;background:var(--card);border:1px solid var(--line);border-radius:14px;
   padding:22px;display:flex;flex-direction:column;gap:11px;min-height:180px}
 .reviews-wall .review .stars{color:var(--accent);letter-spacing:2px;font-size:14px}
@@ -146,3 +141,25 @@
 .reviews-wall .src{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
   border:1px solid var(--accent);border-radius:999px;padding:3px 9px;white-space:nowrap}
 .reviews-wall .reviews-source{margin-top:16px;font-size:13px;color:var(--muted-2)}
+
+/* ---------- The rows, on all four home pages ----------
+   reviews.js fills each row with copies and sets --shift (one set's width) and
+   --dur (that width at a fixed speed), then adds .is-looping. Until then, and
+   always for anyone who asked for less motion, a row is a still strip that
+   can be swiped, so nothing ever depends on the animation running. Cards
+   stretch to the row, so every card in it is the same height. */
+.carousel-track{display:flex;gap:20px;width:max-content;align-items:stretch}
+.carousel-track.is-looping{will-change:transform;
+  animation:reviews-loop var(--dur,60s) linear infinite}
+.carousel-track.rev.is-looping{animation-direction:reverse}
+@keyframes reviews-loop{from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(calc(-1 * var(--shift,0px)),0,0)}}
+.carousel:hover .carousel-track,.carousel.is-held .carousel-track{animation-play-state:paused}
+.carousel:not(:has(.is-looping)){overflow-x:auto;scroll-snap-type:x mandatory;
+  overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel:not(:has(.is-looping)) .review{scroll-snap-align:start}
+.carousel .review{flex:0 0 min(330px,82vw)}
+@media (prefers-reduced-motion:reduce){
+  .carousel-track.is-looping{animation:none}
+  .carousel{-webkit-mask-image:none;mask-image:none;padding-inline:16px}
+}

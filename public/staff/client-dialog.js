@@ -87,6 +87,10 @@
     el('c-time').value = c.surveyTime || '';
     el('c-agent').checked = Boolean(c.awaitingAgent);
     el('c-note').value = c.note || '';
+    /* What the card shows, the job's own or else the enquiry's. A changed
+       value is kept on the job, for jobs booked by phone with no enquiry. */
+    el('c-phone').value = c.phone || '';
+    el('c-email').value = c.email || '';
     el('c-edit').href = '/staff/jobs.html#job-' + c.id;
     el('client-error').classList.remove('is-shown');
     el('c-saved').textContent = '';

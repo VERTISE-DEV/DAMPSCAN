@@ -4,7 +4,6 @@ export default {
   slug: 'sutton',
   site: 'ati',
   name: 'Sutton',
-  title: 'Damp Surveys in Sutton | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Sutton, SM1 to SM7. Written reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Sutton',

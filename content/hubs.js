@@ -16,7 +16,7 @@ export const hubs = {
     services: {
       title: 'Air Conditioning, Heating & Ventilation | CoolRight',
       metaDescription:
-        'Installation, repairs, servicing, multi-split, heat pumps, commercial systems and ventilation across London and the South East. What each job involves and what moves its price.',
+        'Installation, repairs, servicing, multi-split, heat pumps, commercial systems and ventilation across London and the South East, and what moves each price.',
       h1: 'What we install, and what we tell you not to',
       intro:
         'Almost every callout we attend on somebody else\'s system traces back to the installation rather than the equipment. A unit sized from a room\'s floor area instead of its heat load, condensate routed with too little fall, a pipe run nobody pressure tested. None of it shows on the day it is handed over.',
@@ -28,7 +28,7 @@ export const hubs = {
     guides: {
       title: 'Air Conditioning Guides | CoolRight',
       metaDescription:
-        'What air conditioning costs and why, how to compare two quotes, and which problems cooling does not solve.',
+        'What air conditioning costs and why, how to compare two quotes, and which problems cooling does not solve. Plain guides from F-Gas registered engineers.',
       h1: 'Read this before you accept a quote',
       intro:
         'The questions people ask before spending money on cooling are mostly about price, and they are hard to answer well because every install is a building rather than a product.',
@@ -42,9 +42,9 @@ export const hubs = {
      work and who does it, and say what is true of the roofs in each region. */
   roofing: {
     services: {
-      title: 'Roofing Services | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
+      title: 'Roofing Services | Re-roofs, Repairs | Verge Roofing',
       metaDescription:
-        'Re-roofs, roof repairs, flat roofing, EPDM, leadwork, chimneys, guttering and conservatory roofs across London and the South East. Carried out by our own team. Free quotes, fixed in writing.',
+        'Re-roofs, repairs, flat roofs, EPDM, leadwork, chimneys, guttering and conservatory roofs across London and the South East. Our own team, fixed quotes.',
       h1: 'Roofing services across London and the South East',
       intro:
         'Pitched roofs in tile and slate, flat roofs in felt and EPDM rubber, leadwork, chimneys, gutters and conservatory roof conversions. Every job is carried out by our own team, with thirty years in the trade behind it, and every job is priced after a free visit with the figure fixed in writing.',
@@ -54,9 +54,9 @@ export const hubs = {
       ]
     },
     areas: {
-      title: 'Areas We Cover | Roofers in London & the South East | Verge Roofing',
+      title: 'Areas We Cover | Roofers in London & SE | Verge Roofing',
       metaDescription:
-        'Roofing across London, Kent, Surrey, Essex, Hertfordshire, Sussex and Berkshire. What the roofs in each region are made of, how they fail, and the towns our own team covers.',
+        'Roofing across London, Kent, Surrey, Essex, Herts, Sussex and Berkshire: what the roofs in each region are made of, how they fail, and towns we cover.',
       h1: 'Where we work, and what the roofs are like there',
       intro:
         'Our own team covers every London borough and the whole of the South East. The roofs are not the same everywhere: Victorian slate behind a parapet in Hackney, interwar concrete tile in Bexley, Kent peg on a village cottage and Regency slate on the Brighton seafront all fail in different ways.',
@@ -92,7 +92,7 @@ export const hubs = {
       ]
     },
     areas: {
-      title: 'Areas We Cover | Damp Surveys in Kent & the South East',
+      title: 'Damp Surveys by Area: Kent, Surrey & Sussex | DampScan',
       metaDescription:
         'Damp, mould and timber surveys across Kent, Surrey, Sussex and the South East. Local guides to the housing stock in each district we cover.',
       h1: 'Where we work, and what the housing does there',
@@ -130,7 +130,7 @@ export const hubs = {
       ]
     },
     areas: {
-      title: 'London Coverage | ATi Damp Survey',
+      title: 'Damp Surveys in Every London Borough | ATi Damp Survey',
       metaDescription:
         'Damp and timber surveys across every London borough. Local guides to the building stock, construction eras and failure patterns in each one.',
       h1: 'Every London borough, and how each one gets wet',

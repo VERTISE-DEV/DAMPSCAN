@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "loft-conversion-roofs",
   "name": "Loft conversion and dormer roofs",
-  "title": "Loft Conversion & Dormer Roofs in London & the South East | Verge Roofing",
-  "metaDescription": "Roofing for loft conversions and dormers across London and the South East: tiled and slate roofs, flat dormer roofs in EPDM or felt, roof windows, valleys and leadwork. Recent loft conversion roof in Bexley.",
+  "title": "Loft Conversion & Dormer Roofs | Verge Roofing",
+  "metaDescription": "Roofing for loft conversions and dormers: tile and slate roofs, EPDM or felt dormer roofs, roof windows, valleys and leadwork. London and the South East.",
   "h1": "Roofing for loft conversions and dormers",
   "intro": "A loft conversion is only as dry as its new roof. We roof loft conversions and dormers for homeowners and builders, from the tiles and the dormer cheeks to the roof windows, valleys and leadwork. A recent job was a loft conversion roof in Bexley in Mini Stonewold tiles.",
   "sections": [

@@ -4,7 +4,6 @@ export default {
   slug: 'dover',
   site: 'dampscan',
   name: 'Dover',
-  title: 'Damp & Mould Surveys in Dover | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Dover, Deal and the surrounding villages, CT14 to CT17. Written, evidence-based reports.',
   h1: 'Damp and mould surveys in Dover',

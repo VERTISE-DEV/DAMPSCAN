@@ -5,9 +5,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['AL', 'HP', 'SG', 'WD', 'HA', 'UB', 'LU'],
   name: 'Hertfordshire and north west London',
-  title: 'Roofers in Hertfordshire & North West London | Repairs, Re-roofs, Dormers | Verge Roofing',
+  title: 'Roofers in Hertfordshire & North West London | Verge Roofing',
   metaDescription:
-    'Roofing across Hertfordshire and the north west suburbs: 1930s semis, bay roofs, valleys, dormer flat roofs and re-roofs in Watford, St Albans, Hemel Hempstead, Borehamwood, Hatfield and Enfield. Free quotes.',
+    'Re-roofs, bay roofs, valleys and dormer flat roofs on 1930s semis in Watford, St Albans, Hemel Hempstead, Borehamwood and Hatfield. Free fixed quotes.',
   h1: 'Roofing in Hertfordshire and the north west suburbs',
   intro:
     'Watford, St Albans, Hemel Hempstead, Borehamwood, Hatfield and Enfield are largely interwar suburbia with a lot of mature planting, and both of those facts show up on the roofs.',

@@ -12,6 +12,7 @@ import { orCall } from './page-shell.js';
 import { SITES, bookScripts, verifiedBadge, shell } from './area-template.js';
 import { bookForm } from './book-form.js';
 import { hubs } from '../content/hubs.js';
+import { areaGroups } from '../content/area-groups.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -77,12 +78,32 @@ export function render(kind, siteKey, entries) {
   const hub = hubFor(kind, site);
   const url = `${site.origin}${hub.path}`;
 
-  const list = entries
-    .map((e) => `      <li>
+  const item = (e) => `      <li>
         <a href="${hub.child}${e.slug}">${esc(e.name)}</a>
         <span>${esc(e.metaDescription)}</span>
-      </li>`)
-    .join('\n');
+      </li>`;
+  const list = entries.map(item).join('\n');
+
+  /* The damp areas hub is laid out by district, so somebody in Sidcup finds
+     south east London rather than reading thirty boroughs alphabetically. An
+     area missing from every group still gets listed, under "Also covered",
+     so a new town file cannot silently drop off the hub. */
+  const groups = kind === 'areas' && areaGroups[siteKey] ? areaGroups[siteKey].groups : null;
+  let listing = `    <ul class="hub-list">
+${list}
+    </ul>`;
+  if (groups) {
+    const placed = new Set(groups.flatMap((g) => g.slugs));
+    const rest = entries.filter((e) => !placed.has(e.slug));
+    const all = [...groups, ...(rest.length ? [{ name: 'Also covered', slugs: rest.map((e) => e.slug) }] : [])];
+    listing = all.map((g) => {
+      const members = g.slugs.map((slug) => entries.find((e) => e.slug === slug)).filter(Boolean);
+      return members.length ? `    <h3>${esc(g.name)}</h3>
+    <ul class="hub-list">
+${members.map(item).join('\n')}
+    </ul>` : '';
+    }).filter(Boolean).join('\n');
+  }
 
   const body = `
   <p class="crumb"><a href="/">Home</a> / ${esc(hub.label)}</p>
@@ -98,9 +119,7 @@ export function render(kind, siteKey, entries) {
 
   <section class="sec">
     <h2>${LIST_HEADING[kind]}</h2>
-    <ul class="hub-list">
-${list}
-    </ul>
+${listing}
   </section>`;
 
   const aside = `

@@ -4,7 +4,6 @@ export default {
   slug: 'medway',
   site: 'dampscan',
   name: 'Medway',
-  title: 'Damp & Mould Surveys in Medway | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Rochester, Chatham, Gillingham and Strood, ME1 to ME8. Cause diagnosed before a quote, written report in 24 hours.',
   h1: 'Damp and mould surveys across Medway',

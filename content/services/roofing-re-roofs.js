@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "re-roofs",
   "name": "Re-roofing",
-  "title": "Re-roofing in London & the South East | New Tiled & Slate Roofs | Verge Roofing",
-  "metaDescription": "Full re-roofs in tile and natural slate across London and the South East: strip, new breathable membrane and treated battens, new tiles or slates, dry hip and ridge, new lead. Fixed price in writing, scaffolding included.",
+  "title": "Re-roofing in London & the South East | Verge Roofing",
+  "metaDescription": "Full re-roofs in tile and natural slate: new membrane, battens, tiles or slates, dry hip and ridge and new lead. Scaffolding included, fixed in writing.",
   "h1": "Re-roofing: a new roof, stripped back to the rafters",
   "intro": "When a roof is beyond repair we strip it back to the rafters and build it again properly. Recent re-roofs include Redland 49 tiles in Orpington, Milton and Blackfen, and natural slate in Petts Wood.",
   "sections": [

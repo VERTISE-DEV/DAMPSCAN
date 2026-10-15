@@ -19,6 +19,8 @@ import { areaServed } from './home-template.js';
 import { priceGuide } from '../content/price-guide.js';
 import { reviews } from '../content/reviews/index.js';
 import { MIN_REVIEWS } from '../lib/google-reviews.js';
+import { areas } from '../content/areas/index.js';
+import { topAreas } from '../content/area-groups.js';
 
 
 const esc = (value) =>
@@ -108,6 +110,25 @@ function reviewsBlock(service, site) {
 `;
 }
 
+/* Links from each damp service page to the town pages Google already shows
+   most, and to the hub. Town pages sit at positions 30 to 50; links from
+   relevant pages are what tell a crawler they matter. Only on the brands with
+   town pages, and not on the roofing regional pages that share this template. */
+function whereBlock(service, site, hub) {
+  if (hub !== SERVICES_HUB) return '';
+  const top = topAreas(site.key, areas, 6);
+  if (!top.length) return '';
+  return `
+  <section class="sec">
+    <h2>Where we survey</h2>
+    <ul class="chips">
+      ${top.map((a) => `<li><a href="/damp-survey/${a.slug}">${esc(a.name)}</a></li>`).join('\n      ')}
+    </ul>
+    <p><a href="${site.areasPath || '/damp-survey'}">Every area we cover</a></p>
+  </section>
+`;
+}
+
 function schema(type, extra) {
   return JSON.stringify({ '@context': 'https://schema.org', '@type': type, ...extra });
 }
@@ -186,7 +207,7 @@ ${signsBlock(service)}  ${service.sections.map((s) => `<section class="sec">
     ${s.paras.map((p) => `<p>${p}</p>`).join('\n    ')}${sectionList(s)}
   </section>`).join('\n\n  ')}
 
-${priceBlock(service)}${reviewsBlock(service, site)}${workNear(service, site)}  <section class="sec" id="faq">
+${priceBlock(service)}${reviewsBlock(service, site)}${workNear(service, site)}${whereBlock(service, site, hub)}  <section class="sec" id="faq">
     <h2>Questions</h2>
     ${service.faq.map((f) => `<details class="qa"><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n    ')}
   </section>

@@ -8,9 +8,9 @@ export default {
   slug: "multi-split-systems",
   site: 'ac',
   name: "Multi-Split Systems",
-  title: "Multi-Split Air Conditioning Systems | London and the South East | CoolRight",
+  title: "Multi-Split Air Conditioning, London & SE | CoolRight",
   metaDescription:
-    "Multi-split systems serving two to five rooms from one outdoor unit. Sized on simultaneous load, installed and commissioned by F-Gas registered engineers across the South East.",
+    "One outdoor unit serving two to five rooms, sized on simultaneous load and installed by F-Gas registered engineers across London and the South East.",
   h1: "Multi-split air conditioning: several rooms, one outdoor unit",
   intro:
     "A multi-split runs two to five indoor units from a single outdoor condenser. For a whole house, or a flat where roof and balcony space is limited and a condenser per room is out of the question, it is usually the right answer and sometimes the only one a freeholder will agree to.",

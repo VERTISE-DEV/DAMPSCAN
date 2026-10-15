@@ -6,7 +6,7 @@ export default {
   name: "Repair or replace: how to decide",
   title: "Repair or replace: how to decide | Verge Roofing",
   metaDescription:
-    "How to tell a roof with years left from one at the end of its life, and how to stop paying for the same repair twice.",
+    "How to tell a roof with years left in it from one at the end of its life, and how to stop paying for the same repair twice. Worth reading before any quote.",
   h1: "Repair or replace: how to decide",
   published: "2026-09-18",
   intro:

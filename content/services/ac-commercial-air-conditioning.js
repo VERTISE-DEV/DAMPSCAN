@@ -8,9 +8,9 @@ export default {
   slug: "commercial-air-conditioning",
   site: 'ac',
   name: "Commercial Air Conditioning",
-  title: "Commercial Air Conditioning Installation and Maintenance | CoolRight",
+  title: "Commercial Air Conditioning, London & SE | CoolRight",
   metaDescription:
-    "Offices, retail, hospitality, gyms and comms rooms across London and the South East. Out of hours installation, F-Gas leak checking and logging, priority breakdown response.",
+    "Offices, shops, hospitality, gyms and comms rooms across London and the South East. Out of hours installs, F-Gas leak checks, priority breakdown response.",
   h1: "Commercial air conditioning, where downtime costs money",
   intro:
     "Offices, salons, restaurants, retail units, gyms, managed blocks, and the server and comms rooms that cannot be allowed to get warm at all. The equipment overlaps with domestic work, but the priorities do not: resilience, noise limits, consents, compliance, and working around the hours the business trades.",

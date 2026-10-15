@@ -2,9 +2,9 @@ export default {
   site: 'roofing',
   slug: 'slipped-or-missing-tiles',
   name: 'Slipped or missing tiles',
-  title: 'Slipped or Missing Roof Tiles and Slates | Repairs | Verge Roofing',
+  title: 'Slipped or Missing Roof Tiles & Slates | Verge Roofing',
   metaDescription:
-    'Why roof tiles and slates slip or blow off, what it means for the rest of the roof, and how we refix or replace them so they stay put. Free quotes, fixed in writing.',
+    'Why tiles and slates slip or blow off, what it means for the rest of the roof, and how we refix or replace them so they stay put. Free fixed quotes.',
   h1: 'Slipped or missing tiles and slates',
   intro:
     'A tile on the lawn or a gap in a row of slates is the most visible roof problem there is, and usually one of the simplest to fix. What matters is why it went: one tile that cracked is a small job, but a row that is sliding because the fixings have rusted through is telling you something about the whole slope.',

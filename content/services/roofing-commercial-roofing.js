@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "commercial-roofing",
   "name": "Commercial roofing",
-  "title": "Commercial Roofing in London & the South East | Flat Roofs, Repairs, Refurbishment | Verge Roofing",
-  "metaDescription": "Commercial roofing across London and the South East: flat roof replacement in felt and EPDM, roof repairs, gutter lining and planned maintenance for offices, shops, warehouses, schools and managed blocks.",
+  "title": "Commercial Roofing, London & South East | Verge Roofing",
+  "metaDescription": "Commercial flat roof replacement in felt and EPDM, repairs, gutter lining and planned maintenance for offices, shops, warehouses and managed blocks.",
   "h1": "Commercial roofing for businesses, landlords and managing agents",
   "intro": "Offices, shops and parades, warehouses and industrial units, schools and managed residential blocks. A failing commercial roof costs trading as well as repairs, so we plan the work around the building and the people in it.",
   "sections": [

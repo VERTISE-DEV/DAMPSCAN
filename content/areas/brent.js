@@ -4,7 +4,6 @@ export default {
   slug: 'brent',
   site: 'ati',
   name: 'Brent',
-  title: 'Damp Surveys in Brent | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Brent, NW2, NW6, NW9, NW10, HA0 and HA9. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Brent',

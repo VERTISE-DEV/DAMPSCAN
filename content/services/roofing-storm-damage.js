@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "storm-damage",
   "name": "Storm damage and insurance work",
-  "title": "Storm Damage Roof Repairs in London & the South East | Insurance Work | Verge Roofing",
-  "metaDescription": "Roof repairs after storms and high winds across London and the South East: lifted tiles, fallen ridges, damaged chimneys and flat roofs. Photographed and quoted line by line for your insurer. Free quotes.",
+  "title": "Storm Damage Roof Repairs, London & SE | Verge Roofing",
+  "metaDescription": "Lifted tiles, fallen ridges, damaged chimneys and flat roofs after storms. Photographed and quoted line by line for your insurer. Free quotes.",
   "h1": "Storm damage repairs and insurance work",
   "intro": "Tiles lifted by a gale, a ridge blown off, a flat roof torn, a chimney pot through the roof. We repair the damage properly and give you what your insurer needs to settle the claim.",
   "sections": [

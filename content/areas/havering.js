@@ -4,7 +4,6 @@ export default {
   slug: 'havering',
   site: 'ati',
   name: 'Havering',
-  title: 'Damp Surveys Romford, Hornchurch, Upminster | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Romford, Hornchurch, Upminster and the rest of Havering, RM1 to RM14. Written, evidence-based reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Romford, Hornchurch and Upminster',

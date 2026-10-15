@@ -2,7 +2,7 @@ export default {
   site: 'roofing',
   slug: 'winter-roof-checks',
   name: 'Winter roof checks',
-  title: 'Winter Roof Checks | Get Your Roof Ready Before the Storms | Verge Roofing',
+  title: 'Winter Roof Checks Before the Storms | Verge Roofing',
   metaDescription:
     'A roof check in autumn finds the slipped tile, blocked gutter and loose flashing before a winter storm turns them into a leak. What we check, and what it costs.',
   h1: 'Winter roof checks: fix it before the weather does',

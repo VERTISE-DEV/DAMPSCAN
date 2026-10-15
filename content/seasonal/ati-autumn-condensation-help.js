@@ -2,9 +2,9 @@ export default {
   site: 'ati',
   slug: 'autumn-condensation-help',
   name: 'Autumn condensation in London',
-  title: 'Condensation and Mould This Autumn | London Damp Surveys | ATi',
+  title: 'Autumn Condensation & Mould in London | ATi Damp Survey',
   metaDescription:
-    'Mould appearing as the heating goes on in a London flat or house? How to tell condensation from damp, what landlords and tenants should record, and when an independent survey helps.',
+    'Mould appearing as the heating goes on? How to tell condensation from damp, what landlords and tenants should record, and when an independent survey helps.',
   h1: 'Autumn condensation in London homes',
   intro:
     'London flats are small, well sealed and often heated by people out all day, which makes them some of the most condensation prone homes in the country. When the heating comes on in October and the windows stay shut, mould follows. For tenants and landlords alike, the first question is not how to treat it but what is actually causing it, and who is responsible.',

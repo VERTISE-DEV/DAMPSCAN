@@ -38,6 +38,7 @@ import { writeSitemaps } from './sitemaps.js';
 import { writeGalleryShells } from './gallery-shells.js';
 import { writeTopicPages, checkTopics, TOPICS } from './topic-pages.js';
 import { writeSeasonBlocks } from './season.js';
+import { writeHomeLinks } from './home-links.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'public', 'areas');
@@ -45,13 +46,9 @@ const SERVICES_OUT = join(ROOT, 'public', 'service-pages');
 const HUBS_OUT = join(ROOT, 'public', 'hubs');
 const GUIDES_OUT = join(ROOT, 'public', 'guide-pages');
 
-/* The home pages carry the links into the area pages. A page nothing links to
-   is a page Google treats as unimportant, so this is not decoration: it is the
-   difference between the area pages being crawled and being ignored. Written
-   between markers so adding an area updates both sites automatically. */
+/* The two hand written home pages. Generated blocks are written into them
+   between markers: see home-links.js for why the area links matter. */
 const HOME = { dampscan: 'public/index.html', ati: 'public/london.html' };
-const START = '<!-- area-links:start, filled by scripts/build-pages.js -->';
-const END = '<!-- area-links:end -->';
 
 /* The booking form on the two home pages. It lived there as hand written markup
    and every other page generated its own from scripts/book-form.js, which is two
@@ -91,50 +88,6 @@ async function writeBookForm() {
     if (from === -1 || to === -1) throw new Error(`${file}: book form markers missing`);
     const block = `${BF_START}\n${bookForm(site)}\n    ${BF_END}`;
     await writeFile(path, html.slice(0, from) + block + html.slice(to + BF_END.length), 'utf8');
-  }
-}
-
-async function writeHomeLinks() {
-  for (const [site, file] of Object.entries(HOME)) {
-    const path = join(ROOT, file);
-    const html = await readFile(path, 'utf8');
-    const from = html.indexOf(START);
-    const to = html.indexOf(END);
-    if (from === -1 || to === -1) throw new Error(`${file}: area link markers missing`);
-
-    const areaLinks = areas
-      .filter((a) => a.site === site)
-      .map((a) => `        <li><a href="/damp-survey/${a.slug}">Damp surveys in ${a.name}</a></li>`)
-      .join('\n');
-
-    const serviceLinks = services
-      .filter((s) => s.site === site)
-      .map((s) => `        <li><a href="/services/${s.slug}">${s.name}</a></li>`)
-      .join('\n');
-
-    const guideLinks = guides
-      .filter((g) => g.site === site)
-      .map((g) => `        <li><a href="/guides/${g.slug}">${g.name}</a></li>`)
-      .join('\n');
-
-    const block = `${START}
-    <div class="area-links">
-      <h3>Area guides</h3>
-      <ul>
-${areaLinks}
-      </ul>
-      <h3 style="margin-top:22px">Guides by problem</h3>
-      <ul>
-${serviceLinks}
-      </ul>
-      <h3 style="margin-top:22px">Before you pay for treatment</h3>
-      <ul>
-${guideLinks}
-      </ul>
-    </div>
-    ${END}`;
-
-    await writeFile(path, html.slice(0, from) + block + html.slice(to + END.length), 'utf8');
   }
 }
 
@@ -273,7 +226,7 @@ async function main() {
   await writeSeasonBlocks(ROOT, HOME);
   await writeBookForm();
   await writeAdsTag();
-  await writeHomeLinks();
+  await writeHomeLinks(ROOT, HOME);
   await writeReviews();
   const stamps = await stampAllPages();
   const galleryCount = await writeGalleryShells(ROOT);

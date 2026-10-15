@@ -4,7 +4,6 @@ export default {
   slug: 'thanet',
   site: 'dampscan',
   name: 'Thanet',
-  title: 'Damp & Mould Surveys in Thanet | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Thanet, CT7 to CT12. Margate, Ramsgate, Broadstairs and the surrounding villages.',
   h1: 'Damp and mould surveys in Thanet',

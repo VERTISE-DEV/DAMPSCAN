@@ -6,7 +6,7 @@ export default {
   name: "How to read a roofing quote",
   title: "How to read a roofing quote | Verge Roofing",
   metaDescription:
-    "What a fair quote states, what a vague one leaves out, and the questions that separate two numbers that look the same.",
+    "What a roofing quote should name, the lines most often left off, and how to compare two quotes that do not describe the same job. Read before you sign.",
   h1: "How to read a roofing quote",
   published: "2026-09-18",
   intro:

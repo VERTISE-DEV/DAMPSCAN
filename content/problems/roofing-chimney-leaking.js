@@ -2,7 +2,7 @@ export default {
   site: 'roofing',
   slug: 'chimney-leaking',
   name: 'Chimney leaking',
-  title: 'Chimney Leaking? Flashing, Flaunching and Pointing | Verge Roofing',
+  title: 'Chimney Leaking? Flashing & Pointing Repairs | Verge Roofing',
   metaDescription:
     'Damp on a chimney breast or a leak beside the stack. The four places a chimney lets water in, how we find which one it is, and how we fix it for good.',
   h1: 'Chimney leaking: the four ways in',

@@ -4,7 +4,6 @@ export default {
   slug: 'hammersmith-and-fulham',
   site: 'ati',
   name: 'Hammersmith and Fulham',
-  title: 'Damp Surveys in Hammersmith and Fulham | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Hammersmith and Fulham, W6, W12, W14 and SW6. Evidence-based written reports for owners and buyers.',
   h1: 'Independent damp surveys in Hammersmith and Fulham',

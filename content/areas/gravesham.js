@@ -4,7 +4,6 @@ export default {
   slug: 'gravesham',
   site: 'dampscan',
   name: 'Gravesham',
-  title: 'Damp & Mould Surveys in Gravesham | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Gravesham, DA11, DA12 and DA13. Written report within 24 hours of the visit.',
   h1: 'Damp and mould surveys in Gravesham',

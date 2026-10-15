@@ -2,7 +2,7 @@ export default {
   site: 'roofing',
   slug: 'flat-roof-leaking',
   name: 'Flat roof leaking',
-  title: 'Flat Roof Leaking? Repair or Replace | Felt, EPDM, GRP | Verge Roofing',
+  title: 'Flat Roof Leaking? Repair or Replace | Verge Roofing',
   metaDescription:
     'Why flat roofs leak, how to tell a repairable split from a covering at the end of its life, and what we do about it on felt, EPDM rubber and older roofs.',
   h1: 'Flat roof leaking',

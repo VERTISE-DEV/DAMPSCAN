@@ -4,7 +4,6 @@ export default {
   slug: 'kensington-and-chelsea',
   site: 'ati',
   name: 'Kensington and Chelsea',
-  title: 'Damp Surveys in Kensington and Chelsea | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Kensington and Chelsea, SW3, SW5, SW7, SW10, W8, W10 and W11. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Kensington and Chelsea',

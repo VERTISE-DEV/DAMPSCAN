@@ -10,7 +10,7 @@ export default {
   name: "Air Conditioning Servicing",
   title: "Air Conditioning Servicing and Maintenance Plans | CoolRight",
   metaDescription:
-    "Annual and six-monthly air conditioning servicing across London and the South East. Filter and coil cleaning, drain treatment, refrigerant and electrical checks, readings recorded.",
+    "Annual and six-monthly air con servicing across London and the South East: filters and coils cleaned, drains treated, refrigerant and electrics checked.",
   h1: "Air conditioning servicing, before the hottest day of the year finds the fault",
   intro:
     "An air conditioning system that is never serviced does not fail suddenly. It loses efficiency quietly for several years, costs a little more to run every season, and then stops on the hottest day of the year, which is also the day every engineer in the region is already booked.",

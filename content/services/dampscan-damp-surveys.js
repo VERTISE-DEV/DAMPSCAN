@@ -4,9 +4,9 @@ export default {
   slug: 'damp-surveys',
   site: 'dampscan',
   name: 'Damp Surveys',
-  title: 'Damp Surveys | Kent & the South East | DampScan',
+  title: 'Damp Surveys in Kent | Report in 24 Hours | DampScan',
   metaDescription:
-    'Damp survey with calibrated readings, full external inspection and a written report within 24 hours, across Kent and the South East.',
+    'Damp survey by a qualified surveyor: calibrated readings, full external inspection and a written report in 24 hours. No sales reps. 5-star Google reviews.',
   h1: 'Damp surveys: the diagnosis comes before the quote',
   intro:
     'A damp survey should tell you what is wrong, why, and what to do about it, in enough detail that you could take the report to anybody. Most of what gets called a damp survey is an inspection carried out by a firm that sells the remedy, which is a different thing with a different incentive. We diagnose first and quote second, and the report stands on its own either way.',

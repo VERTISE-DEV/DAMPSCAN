@@ -6,9 +6,9 @@
 export const topicHubs = {
   roofing: {
     problems: {
-      title: 'Common Roof Problems | Leaks, Slipped Tiles, Chimneys | Verge Roofing',
+      title: 'Common Roof Problems: Leaks, Tiles | Verge Roofing',
       metaDescription:
-        'The roof problems we are called out to most: leaks, slipped and missing tiles, flat roofs, chimneys and moss. The signs, the causes, what we do and how it is priced.',
+        'The roof problems we are called to most: leaks, slipped tiles, flat roofs, chimneys and moss. The signs, the causes, and what we do about each one.',
       h1: 'Common roof problems, and what they mean',
       intro:
         'Most people do not call a roofer about a service. They call because there is a stain on the ceiling, a tile on the lawn or water coming in round the chimney. These pages start from what you can see.',
@@ -17,7 +17,7 @@ export const topicHubs = {
       ]
     },
     seasonal: {
-      title: 'Seasonal Roofing Advice | Winter Checks and Storm Damage | Verge Roofing',
+      title: 'Seasonal Roofing Advice | Verge Roofing',
       metaDescription:
         'What to do about your roof as the seasons change: winter checks before the storms, storm damage repairs, and clearing moss and gutters in spring.',
       h1: 'Roofing through the year',
@@ -30,7 +30,7 @@ export const topicHubs = {
   },
   ac: {
     problems: {
-      title: 'Common Air Conditioning Problems | Not Cooling, Leaks, Noise | CoolRight',
+      title: 'Air Con Problems: Not Cooling, Leaks, Noise | CoolRight',
       metaDescription:
         'Air con not cooling, leaking water, making a noise or smelling musty. What each fault usually means, what you can check first, and what an engineer does.',
       h1: 'Common air conditioning problems',
@@ -41,9 +41,9 @@ export const topicHubs = {
       ]
     },
     seasonal: {
-      title: 'Seasonal Air Conditioning Advice | Spring Servicing, Summer Installs | CoolRight',
+      title: 'Seasonal Air Conditioning Advice | CoolRight',
       metaDescription:
-        'When to service your air conditioning, when to book an installation, and how the same system heats the house in winter.',
+        'When to service your air conditioning, when to book an installation before the summer rush, and how the same system heats the house in winter.',
       h1: 'Air conditioning through the year',
       intro:
         'The worst time to find a fault, or to book an installation, is the first hot week of the year. These pages are about getting the timing right.',
@@ -54,7 +54,7 @@ export const topicHubs = {
   },
   dampscan: {
     seasonal: {
-      title: 'Seasonal Damp Advice | Autumn Condensation and Mould | DampScan',
+      title: 'Seasonal Damp & Mould Advice | DampScan',
       metaDescription:
         'Damp and mould advice for the time of year, starting with condensation and black mould as the heating goes on in autumn, across Kent and the South East.',
       h1: 'Damp and mould through the year',
@@ -67,7 +67,7 @@ export const topicHubs = {
   },
   ati: {
     seasonal: {
-      title: 'Seasonal Damp Advice for London | Autumn Condensation | ATi Damp Survey',
+      title: 'Seasonal Damp Advice for London | ATi Damp Survey',
       metaDescription:
         'Condensation and mould in London homes as the heating goes on: how to tell it from damp, what to record, and when an independent survey helps.',
       h1: 'Damp and mould in London, through the year',

@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "slate-roofing",
   "name": "Natural slate roofing",
-  "title": "Natural Slate Roofing in London & the South East | New Slate Roofs & Repairs | Verge Roofing",
-  "metaDescription": "Natural slate roofs, re-slating and slate repairs across London and the South East. Slates nailed or hooked to a proper gauge, lead valleys and new battens. Recent natural slate roof in Petts Wood. Free quotes.",
+  "title": "Natural Slate Roofing, London & South East | Verge Roofing",
+  "metaDescription": "Natural slate roofs, re-slating and slate repairs, nailed or hooked to a proper gauge with lead valleys and new battens. Free quotes, fixed in writing.",
   "h1": "Natural slate roofing: new slate roofs, re-slating and repairs",
   "intro": "Natural slate is the most traditional roof on Victorian and Edwardian houses, and one of the best-looking roofs on a new one. We re-slate tired roofs, lay new slate roofs, and repair slipped and broken slates properly. A recent job was a full natural slate roof in Petts Wood.",
   "sections": [

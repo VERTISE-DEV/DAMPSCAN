@@ -4,7 +4,6 @@ export default {
   slug: 'greenwich',
   site: 'ati',
   name: 'Greenwich',
-  title: 'Damp Surveys in Greenwich | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Greenwich, SE3, SE7, SE9, SE10 and SE18. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Greenwich',

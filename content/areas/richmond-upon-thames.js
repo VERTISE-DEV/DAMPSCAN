@@ -4,7 +4,6 @@ export default {
   slug: 'richmond-upon-thames',
   site: 'ati',
   name: 'Richmond upon Thames',
-  title: 'Damp Surveys in Richmond upon Thames | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Richmond upon Thames, TW1, TW2, TW9 to TW11, SW13 and SW14. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Richmond upon Thames',

@@ -4,7 +4,6 @@ export default {
   slug: 'lewisham',
   site: 'ati',
   name: 'Lewisham',
-  title: 'Damp Surveys in Lewisham | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Lewisham, SE4, SE6, SE12, SE13 and SE23. Reports for owners, leaseholders, landlords and disrepair cases.',
   h1: 'Independent damp surveys in Lewisham',

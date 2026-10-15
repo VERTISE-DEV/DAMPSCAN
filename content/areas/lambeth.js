@@ -4,7 +4,6 @@ export default {
   slug: 'lambeth',
   site: 'ati',
   name: 'Lambeth',
-  title: 'Damp Surveys in Lambeth | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Lambeth, SW2, SW4, SW8, SW9, SE11, SE24 and SE27. Reports for owners, leaseholders and landlords.',
   h1: 'Independent damp surveys in Lambeth',

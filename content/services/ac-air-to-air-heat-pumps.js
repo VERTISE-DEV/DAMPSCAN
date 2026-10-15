@@ -8,9 +8,9 @@ export default {
   slug: "air-to-air-heat-pumps",
   site: 'ac',
   name: "Heating and Air to Air Heat Pumps",
-  title: "Air to Air Heat Pumps and Air Conditioning Heating | CoolRight",
+  title: "Air to Air Heat Pumps & Air Con Heating | CoolRight",
   metaDescription:
-    "Modern inverter air conditioning is a reversible air to air heat pump. Sized for the heating load as well as the cooling load, installed across London and the South East.",
+    "Modern inverter air conditioning is a reversible air to air heat pump. Sized for heating as well as cooling, installed across London and the South East.",
   h1: "Air to air heat pumps: the cheapest way to heat a room you already own",
   intro:
     "Every inverter air conditioning system we install is a reversible air to air heat pump. Run in reverse it takes heat from outside, even on a cold day, and moves it into the room. Because it is moving heat rather than making it, it delivers roughly three to four units of heat for every unit of electricity, where a panel heater delivers one. A great many of our clients come to us for cooling and end up using the system mostly in winter.",

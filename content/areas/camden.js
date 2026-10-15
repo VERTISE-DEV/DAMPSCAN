@@ -4,7 +4,6 @@ export default {
   slug: 'camden',
   site: 'ati',
   name: 'Camden',
-  title: 'Damp Surveys in Camden | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Camden, NW1, NW3, NW5 and WC1. Reports for buyers, owners, leaseholders and solicitors.',
   h1: 'Independent damp surveys in Camden',

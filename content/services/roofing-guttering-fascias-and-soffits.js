@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "guttering-fascias-and-soffits",
   "name": "Guttering, fascias and soffits",
-  "title": "Guttering, Fascias & Soffits in London & the South East | Verge Roofing",
-  "metaDescription": "New uPVC fascias, soffits and guttering, gutter repairs and replacement, and PVC cladding across London and the South East. Rotten boards replaced, not covered over. Free quotes, fixed in writing.",
+  "title": "Guttering, Fascias & Soffits, London & SE | Verge Roofing",
+  "metaDescription": "New uPVC fascias, soffits and guttering, plus gutter repairs, across London and the South East. Rotten boards replaced, not covered over. Free quotes.",
   "h1": "Guttering, fascias, soffits and cladding",
   "intro": "Gutters that overflow, fascias that have rotted and soffits that have come loose. We replace the lot in low-maintenance uPVC, fix the timber behind it properly, and make sure the water ends up in the downpipe rather than down your wall.",
   "sections": [

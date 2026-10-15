@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "roof-repairs",
   "name": "Roof repairs",
-  "title": "Roof Repairs in London & the South East | Leaks, Slipped Tiles | Verge Roofing",
-  "metaDescription": "Roof leak repairs, slipped and broken tiles and slates, ridge and valley repairs across London and the South East. We find where the water is getting in and fix it at the source. Free quotes, fixed in writing.",
+  "title": "Roof Repairs in London & the South East | Verge Roofing",
+  "metaDescription": "Roof leaks, slipped tiles and slates, ridge and valley repairs across London and the South East. We find where the water gets in and fix it at source.",
   "h1": "Roof repairs across London and the South East",
   "intro": "Leaks, slipped and broken tiles, cracked ridges, failed valleys and lifted flashings. We find where the water is actually getting in, fix it with the right materials, and show you the photographs before and after.",
   "sections": [

@@ -5,9 +5,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['RM', 'IG', 'CM', 'SS', 'CO'],
   name: 'Essex and east London',
-  title: 'Roofers in Essex & East London | Re-roofs, Flat Roofs, Storm Damage | Verge Roofing',
+  title: 'Roofers in Essex & East London | Verge Roofing',
   metaDescription:
-    'Roofing across Essex and east London: concrete tile re-roofs, extension flat roofs, leadwork and storm repairs in Romford, Brentwood, Basildon, Chelmsford, Ilford, Grays and Southend. Free quotes.',
+    'Re-roofs, extension flat roofs, leadwork and storm repairs in Romford, Brentwood, Basildon, Chelmsford, Ilford and Southend. Free quotes, fixed in writing.',
   h1: 'Roofing in Essex and east London',
   intro:
     'Romford, Brentwood, Basildon, Chelmsford, Ilford, Grays and Southend are dominated by postwar housing, and the work here follows the way that stock was built.',

@@ -4,7 +4,6 @@ export default {
   slug: 'kingston-upon-thames',
   site: 'ati',
   name: 'Kingston upon Thames',
-  title: 'Damp Surveys in Kingston upon Thames | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Kingston upon Thames, KT1 to KT6. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Kingston upon Thames',

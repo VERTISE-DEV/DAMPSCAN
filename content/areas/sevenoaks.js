@@ -4,7 +4,6 @@ export default {
   slug: 'sevenoaks',
   site: 'dampscan',
   name: 'Sevenoaks',
-  title: 'Damp & Timber Surveys in Sevenoaks | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Sevenoaks, TN13 to TN15. Period cottages, weatherboarding and oast houses a speciality.',
   h1: 'Damp and timber surveys in Sevenoaks',

@@ -4,7 +4,6 @@ export default {
   slug: 'croydon',
   site: 'ati',
   name: 'Croydon',
-  title: 'Damp Surveys in Croydon | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Croydon, CR0, CR2, CR7 and SE25. Written reports for owners, buyers, landlords and agents.',
   h1: 'Independent damp surveys in Croydon',

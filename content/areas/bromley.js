@@ -4,7 +4,6 @@ export default {
   slug: 'bromley',
   site: 'ati',
   name: 'Bromley',
-  title: 'Damp Surveys Bromley, Orpington & Beckenham | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Bromley, Orpington, Beckenham and Chislehurst, BR1 to BR7. Evidence-based written reports with no remedial work to sell.',
   h1: 'Independent damp surveys in Bromley, Orpington and Beckenham',

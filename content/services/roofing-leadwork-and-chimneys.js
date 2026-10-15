@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "leadwork-and-chimneys",
   "name": "Leadwork and chimneys",
-  "title": "Leadwork & Chimney Repairs in London & the South East | Verge Roofing",
-  "metaDescription": "Lead flashings, chimney flashings, lead valleys, coping caps and chimney repairs across London and the South East. Code 4 and Code 5 lead, properly dressed and fixed. Free quotes, fixed in writing.",
+  "title": "Leadwork & Chimney Repairs, London & SE | Verge Roofing",
+  "metaDescription": "Lead flashings, valleys, coping caps and chimney repairs across London and the South East, in Code 4 and Code 5 lead, properly dressed. Free fixed quotes.",
   "h1": "Leadwork, flashings and chimney repairs",
   "intro": "Where a roof meets a chimney, a wall or a valley, lead keeps the water out. Most leaks we find start at one of these details, and most can be fixed without touching the rest of the roof.",
   "sections": [

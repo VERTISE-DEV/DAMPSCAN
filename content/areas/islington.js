@@ -4,7 +4,6 @@ export default {
   slug: 'islington',
   site: 'ati',
   name: 'Islington',
-  title: 'Damp Surveys in Islington | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Islington, N1, N5, N7, N19 and EC1. We carry out no remedial work, so the report has nothing to sell you.',
   h1: 'Independent damp surveys in Islington',

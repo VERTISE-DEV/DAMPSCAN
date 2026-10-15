@@ -4,7 +4,6 @@ export default {
   slug: 'wandsworth',
   site: 'ati',
   name: 'Wandsworth',
-  title: 'Damp Surveys in Wandsworth | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Wandsworth, SW11, SW12, SW17 and SW18. Written, evidence-based reports with nothing to sell.',
   h1: 'Independent damp surveys in Wandsworth',

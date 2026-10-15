@@ -22,6 +22,7 @@ import business from '../../lib/routes/admin/business.js';
 import calendar from '../../lib/routes/admin/calendar.js';
 import clients from '../../lib/routes/admin/clients.js';
 import contracts from '../../lib/routes/admin/contracts.js';
+import coolright from '../../lib/routes/admin/coolright.js';
 import due from '../../lib/routes/admin/due.js';
 import insights from '../../lib/routes/admin/insights.js';
 import jobs from '../../lib/routes/admin/jobs.js';
@@ -45,7 +46,7 @@ import usage from '../../lib/routes/admin/usage.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, roofing, search, snooze, summary, surveys, todos, usage };
+const ROUTES = { attachment, bank, business, calendar, clients, contracts, coolright, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, roofing, search, snooze, summary, surveys, todos, usage };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;

@@ -42,3 +42,24 @@
 .rp-row input,.rp-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:7px 9px;font:inherit;font-size:16px;min-height:38px;max-width:100%}
 .rp-row input[type="text"]{flex:1 1 120px;min-width:0}
 .rp-row .rp-cost{width:100px}
+/* CoolRight: seven stages instead of nine, the unit list and the service round. */
+@media (min-width:760px){.ac-board{grid-template-columns:repeat(7,minmax(240px,1fr))}}
+.ac-units{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.ac-unit{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ac-unit p{margin:0;overflow-wrap:anywhere}
+.ac-form{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media (min-width:600px){.ac-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ac-form label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.ac-form input,.ac-form select,.sv-round input,.sv-round select{background:var(--navy);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:9px 10px;font:inherit;font-size:16px;min-height:44px;max-width:100%;min-width:0}
+.ac-form .ac-wide{grid-column:1/-1}
+.sv-district{margin-top:14px}
+.sv-district h2{font-size:16px;margin:0 0 8px}
+.sv-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;margin-bottom:8px;min-width:0}
+.sv-item.is-picked{border-color:var(--accent)}
+.sv-pick{display:flex;gap:10px;align-items:flex-start;min-height:44px;cursor:pointer}
+.sv-pick input{width:24px;height:24px;flex:0 0 auto;margin-top:2px}
+.sv-pick span{overflow-wrap:anywhere}
+.sv-round{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 72px);background:var(--navy-2,var(--navy));border:1px solid var(--line-strong);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:5;margin-top:12px}
+@media (min-width:760px){.sv-round{bottom:12px}}
+.sv-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sv-row .pill,.sv-row .btn{min-height:44px}

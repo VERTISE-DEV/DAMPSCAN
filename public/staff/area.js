@@ -30,7 +30,7 @@
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
-      tabs: [['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
+      tabs: [['Installs', 'coolright.html'], ['Services', 'service.html'], ['Leads', 'dashboard.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
     }
   };
   var ORDER = ['damp', 'roofing', 'ac'];
@@ -43,9 +43,9 @@
      to-do list now live in Today and keep working for old links and alerts,
      and the bank is Money, one level up. */
   var EXTRA = ['due.html', TODO, MONEY];
-  /* Pages a company keeps reachable without a tab: Verge's old pipeline,
-     which its new board replaced, stays for anyone with it bookmarked. */
-  var ALSO = { roofing: ['pipeline.html'] };
+  /* Pages a company keeps reachable without a tab: the old pipeline, which
+     Verge's and CoolRight's new boards replaced, stays for anyone with it bookmarked. */
+  var ALSO = { roofing: ['pipeline.html'], ac: ['pipeline.html'] };
 
   function stored() { try { return global.localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(a) { try { global.localStorage.setItem(KEY, a); } catch (e) {} }
@@ -207,6 +207,6 @@
     first: first,
     /* The routes that narrow by company. The calendar asks for every company
        the person holds, so nothing is added to its requests. */
-    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights|surveys|roofing)\b/
+    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights|surveys|roofing|coolright)\b/
   };
 })(window);

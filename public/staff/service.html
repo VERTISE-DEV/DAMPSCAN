@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Services | DampScan</title>
+<meta name="theme-color" content="#0c1a2b" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/shell.css" /><link rel="stylesheet" href="/staff/board.css" /><link rel="stylesheet" href="/staff/survey.css" /><link rel="stylesheet" href="/staff/roofing.css" />
+<script>
+/* Both sites share this staff area, so the hostname decides whose name is on
+   it. This runs in the head, before anything is painted, so neither brand ever
+   flashes the other's. The markup carries both lockups; staff.css hides one. */
+(function brand(){
+  var ati = /(^|\.)atidampsurvey\.co\.uk$/i.test(location.hostname);
+  if (!ati) return;
+  document.documentElement.setAttribute('data-brand', 'ati');
+  document.title = document.title.replace('DampScan', 'ATi Damp Survey');
+  var icon = document.querySelector('link[rel="icon"]');
+  if (icon) { icon.type = 'image/png'; icon.href = '/assets/ati-mark.png'; }
+})();
+</script>
+</head>
+<body>
+
+<header class="top">
+  <a href="/" class="logo brand-dampscan" aria-label="DampScan home">
+    <span class="logo-type">
+      <span class="logo-word">Damp<span class="scan">Scan</span></span>
+      <span class="logo-tag">Survey Specialists</span>
+    </span>
+  </a>
+  <a href="/" class="logo brand-ati" aria-label="ATi Damp Survey home">
+    <span class="logo-type">
+      <span class="logo-word">ATi <span class="scan">Damp</span></span>
+      <span class="logo-tag">Survey Practice</span>
+    </span>
+  </a>
+  <nav class="tabs" aria-label="Sections">
+    <a href="/staff/due.html">Due</a>
+    <a href="/staff/dashboard.html">Dashboard</a>
+    <a href="/staff/jobs.html">Jobs</a>
+    <a href="/staff/quoted.html">Quotes</a>
+    <a href="/staff/clients.html">Clients</a>
+    <a href="/staff/bank.html">Bank</a>
+  </nav>
+  <div class="top-end">
+    <button class="btn btn--ghost btn--sm" id="refresh">Refresh</button>
+    <button class="btn btn--ghost btn--sm" id="logout">Sign out</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="sr-only">CoolRight service round</h1>
+  <div class="sv-bar">
+    <label class="sr-only" for="sv-q">Search services</label>
+    <input id="sv-q" class="sv-input" type="search" placeholder="Name, postcode" />
+    <a class="btn btn--ghost btn--sm" href="/staff/coolright.html?area=ac">Installs</a>
+    <button class="btn btn--ghost btn--sm" type="button" id="summer-toggle" aria-expanded="false">Before summer list</button>
+  </div>
+  <section class="panel" id="summer" hidden aria-labelledby="h-summer">
+    <h2 id="h-summer">Before summer</h2>
+    <p class="panel-note">Past customers with no service plan, or whose service falls due by the end of June. Send the message from your phone; tapping a channel marks it sent, or tick it by hand.</p>
+    <div id="summer-list"></div>
+  </section>
+  <div class="state" id="state">Loading…</div>
+  <div id="content" hidden>
+    <p class="panel-note">Services due this month and next, and any overdue, grouped by postcode district so a day's visits sit close together.
+      Tick the ones for a day, then book them all for that day, or set each one's date and time. Serviced records today and moves the next due date on.</p>
+    <div id="districts"></div>
+    <div class="sv-round" id="round" hidden>
+      <strong id="round-count"></strong>
+      <label class="sr-only" for="round-date">Day of the round</label>
+      <input type="date" id="round-date" />
+      <button class="btn btn--primary btn--sm" type="button" id="round-book">Book ticked for this day</button>
+      <button class="btn btn--ghost btn--sm" type="button" id="round-clear">Clear</button>
+    </div>
+  </div>
+</main>
+
+<script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
+<script src="/staff/messages.js"></script><script src="/staff/roof-common.js"></script><script src="/staff/ac-common.js"></script><script src="/staff/service.js"></script>
+</body>
+</html>

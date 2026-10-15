@@ -4,7 +4,7 @@ export default {
   slug: 'penetrating-damp',
   site: 'dampscan',
   name: 'Penetrating Damp',
-  title: 'Penetrating Damp Surveys & Repairs | DampScan',
+  title: 'Penetrating Damp Surveys in Kent | DampScan',
   metaDescription:
     'Penetrating damp traced to where the water actually enters, across Kent and the South East. The stain is rarely above the defect.',
   h1: 'Penetrating damp: finding where the water actually gets in',
@@ -38,7 +38,7 @@ export default {
       h2: 'Putting it right',
       paras: [
         'The repairs are usually building repairs rather than damp treatments: clearing and realigning gutters, renewing a flashing, repointing in a mortar suited to the wall, cutting out and replacing failed render in a permeable system, or replacing slipped tiles and the felt behind them. On solid walls the material matters, because a cement repair on a lime built wall solves this year and causes the next problem.',
-        'Where DampScan carries out the repair it is covered by an insured workmanship guarantee. Where the right answer is a roofer or a drainage contractor, the report says that instead, and you are under no obligation to use us for anything.',
+        'DampScan does not carry out the repair, so the report names the trade that should: very often a roofer, a gutter cleaner or a drainage contractor rather than a damp proofing firm. It lists the defects in order so each one can be priced separately.',
       ]
     },
   ],

@@ -26,6 +26,11 @@ export default {
     'We survey across the borough on both banks, from Barnes and Mortlake through Richmond and Twickenham to Hampton and Teddington.',
   places: ['Richmond', 'Twickenham', 'Teddington', 'Barnes', 'Mortlake', 'Kew', 'Hampton', 'East Sheen', 'Whitton'],
   districts: ['TW1', 'TW2', 'TW9', 'TW10', 'TW11', 'SW13', 'SW14'],
+  towns: [
+    { name: 'Richmond and Twickenham', text: 'Georgian and Victorian houses, many listed, near the river and the park. Lime built walls, cellars and riverside groundwater recur, and conservation controls shape recommendations.' },
+    { name: 'Barnes and Mortlake', text: 'Victorian terraces and older riverside houses on low ground in a bend of the Thames. Groundwater, flood resilience and terrace faults are typical.' },
+    { name: 'Teddington and Hampton', text: 'Victorian and Edwardian houses and interwar suburbs. Rainwater, extensions and drives over the course dominate.' }
+  ],
   faq: [
     {
       q: 'How should a period house be reinstated after a flood?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Only with interpretation. Conductivity meters respond to salts as well as to water, and any masonry that has been repeatedly wetted by river water holds salts that draw moisture from the air. A dried out wall can read as high as a wet one. On this stretch of the river a bare reading proves very little on its own, and taking it at face value is how people are sold treatment for damp they do not have.'
     },
+    { q: 'Our Barnes house floods occasionally. Will damp proofing help?', a: 'No. Flood resilience is a different subject: materials and details that recover quickly. The survey can map how wet the fabric is and when it is dry enough to reinstate.' },
+    { q: 'Our listed Richmond house has damp. What can be done?', a: 'Lime repairs, rainwater and drainage work are usually appropriate. The report notes where consent may be needed.' },
+    { q: 'Do you survey houseboats or riverside buildings?', a: 'We survey buildings. For a riverside house or flat, groundwater and flood history are part of the survey.' }
   ],
   nearby: ['kingston-upon-thames', 'hounslow']
 };

@@ -26,6 +26,11 @@ export default {
     'We survey residential property throughout the City and the streets immediately around it.',
   places: ['Barbican', 'Golden Lane', 'Smithfield', 'Blackfriars', 'Aldgate', 'Farringdon', 'Fleet Street', 'Moorgate', 'Bank'],
   districts: ['EC1', 'EC2', 'EC3', 'EC4'],
+  towns: [
+    { name: 'The Barbican and Golden Lane', text: 'Large post war residential estates with concrete frames, podiums and many flats. Damp here is usually from podium and roof waterproofing, balcony details or condensation on cold concrete, and responsibility often sits with the estate management rather than the flat.' },
+    { name: 'Clerkenwell edge and Smithfield', text: 'Older warehouses and commercial buildings converted into flats. Thick brick walls, old roofs and shared drainage are the recurring themes, along with basements that were never designed to be lived in.' },
+    { name: 'Riverside and the eastern City', text: 'Modern blocks and conversions near the Thames and towards Aldgate. Mechanical ventilation, construction moisture in newer buildings and leaks from roof terraces are what we are typically asked to look at.' }
+  ],
   faq: [
     {
       q: 'Can anything be done about condensation in a listed concrete flat?',
@@ -37,6 +42,9 @@ export default {
       a:
         'In a stronger position than it feels, provided the path is documented. Roofs, parapets, valley gutters, lightwells and communal stacks are normally the freeholder\'s responsibility and are funded through the service charge. What is missing in most of these disputes is not goodwill but evidence about where the water is actually entering. Our report supplies that, with readings and photographs, which is what turns a complaint into a repair instruction.'
     },
+    { q: 'Our Barbican flat has damp near the balcony. Is that ours to fix?', a: 'Balconies, podiums and the external envelope on large estates are commonly the responsibility of the estate or freeholder. The report identifies whether the water is coming through those elements.' },
+    { q: 'Do you survey commercial buildings in the City?', a: 'We survey residential properties and mixed use buildings where flats are affected. For purely commercial premises, ask and we will say whether we can help.' },
+    { q: 'Our converted warehouse flat has condensation on the windows every morning. Is that normal?', a: 'Some is normal in cold weather. Heavy, daily condensation with mould suggests too little ventilation for the moisture produced. We measure and report what will make the biggest difference.' }
   ],
   nearby: ['westminster', 'islington']
 };

@@ -4,9 +4,9 @@ export default {
   slug: 'ventilation',
   site: 'dampscan',
   name: 'Ventilation',
-  title: 'Ventilation Surveys & Installation | DampScan',
+  title: 'Ventilation and Condensation Surveys | DampScan',
   metaDescription:
-    'Ventilation assessed, designed and installed across Kent and the South East. Most modern homes are over-sealed and under-ventilated.',
+    'Independent ventilation surveys across Kent and the South East: fan flow rates measured, condensation traced, and a clear specification. We sell no fans.',
   h1: 'Ventilation: the reason so many sound houses are damp',
   intro:
     'Britain has spent forty years making homes airtight and rather less effort making them ventilated. Double glazing, draught proofing and insulation all removed the uncontrolled air leakage that used to dry a house out by accident. Where nothing replaced it, the moisture a household generates has nowhere to go, and mould appears in buildings with nothing structurally wrong with them.',
@@ -38,8 +38,8 @@ export default {
     {
       h2: 'Installation and commissioning',
       paras: [
-        'Every system we install is sized for the property, ducted properly and commissioned, which means the flow rate is measured after installation and recorded rather than assumed. An uncommissioned system is a system nobody has checked, and a substantial proportion of the ones we inspect have never moved the air they were specified to move.',
-        'The work is covered by an insured workmanship guarantee. Where a survey concludes that the existing fan simply needs reducting to outside, that is what the report will say, and it is a common outcome.',
+        'Whatever is recommended should be sized for the property, ducted properly and commissioned, which means the flow rate is measured after installation and recorded rather than assumed. We can come back and measure it for you. An uncommissioned system is a system nobody has checked, and a substantial proportion of the ones we inspect have never moved the air they were specified to move.',
+        'DampScan does not supply or install ventilation, so nothing in the report is there to sell a unit. Where a survey concludes that the existing fan simply needs reducting to outside, that is what the report will say, and it is a common outcome.',
       ]
     },
   ],

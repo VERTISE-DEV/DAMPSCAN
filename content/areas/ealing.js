@@ -26,6 +26,11 @@ export default {
     'We cover the borough and the streets around it, from Acton and Hanwell out to Greenford and Northolt.',
   places: ['Ealing', 'West Ealing', 'Acton', 'Hanwell', 'Northfields', 'Greenford', 'Perivale', 'Southall', 'Northolt'],
   districts: ['W3', 'W5', 'W7', 'W13', 'UB1', 'UB5', 'UB6'],
+  towns: [
+    { name: 'Ealing and Ealing Common', text: 'Victorian and Edwardian villas, many converted, and interwar suburbs. Valley gutters, bays and extensions recur.' },
+    { name: 'Acton', text: 'Victorian and Edwardian terraces, conversions and the Bedford Park edge. Rear additions, yards and conversions dominate.' },
+    { name: 'Southall and Hanwell', text: 'Victorian terraces and interwar housing, with busy households and extensions. Condensation and extension junctions are typical.' }
+  ],
   faq: [
     {
       q: 'There is a damp patch upstairs but nothing looks wrong outside. Where do you start?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It is arguably more useful, because the report is what moves the conversation on. It establishes where the water is entering, the route it takes and which part of the building it passes through, with readings and photographs behind it. That is what a freeholder, a managing agent or an insurer will actually respond to, and it is what stops the discussion being one leaseholder\'s word against another\'s.'
     },
+    { q: 'Our Ealing extension joins the house with a damp patch. Why?', a: 'Usually a floor set above the original course or a missing cavity tray at the roof junction.' },
+    { q: 'Our Southall house has mould in every room. Why?', a: 'Often busy households, limited extraction and cold walls together. Measurements show what will help most.' },
+    { q: 'Do you survey conversions in Ealing for buyers?', a: 'Yes, and the report identifies whether damp comes from the flat or the building.' }
   ],
   nearby: ['camden', 'wandsworth']
 };

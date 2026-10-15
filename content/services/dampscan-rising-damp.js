@@ -4,12 +4,12 @@ export default {
   slug: 'rising-damp',
   site: 'dampscan',
   name: 'Rising Damp',
-  title: 'Rising Damp Surveys & Treatment | DampScan',
+  title: 'Rising Damp Surveys in Kent | DampScan',
   metaDescription:
     'Rising damp diagnosed before it is treated, across Kent and the South East. Most walls sent to us for a damp proof course do not need one.',
   h1: 'Rising damp: diagnosed first, treated only if that is what it is',
   intro:
-    'Rising damp is real, and it is diagnosed far more often than it occurs. Groundwater drawn up through porous masonry produces a distinctive set of signs, and at least four other faults produce signs that look identical. We survey before we quote, and a good share of the walls sent to us for a damp proof course turn out not to need one.',
+    'Rising damp is real, and it is diagnosed far more often than it occurs. Groundwater drawn up through porous masonry produces a distinctive set of signs, and at least four other faults produce signs that look identical. We survey and sell no treatment, and a good share of the walls sent to us for a damp proof course turn out not to need one.',
   signsHeading: 'What rising damp actually looks like',
   signs: [
     'A tide mark of staining that stops at a consistent height, usually up to about a metre above floor level',
@@ -39,7 +39,7 @@ export default {
       h2: 'What treatment involves, when it is needed',
       paras: [
         'A genuine rising damp problem in a solid wall with no working course is normally treated with a chemical damp proof course injected at the correct height, followed by replastering in a suitable salt resistant system. The replastering matters as much as the injection: salts already in the wall will come through an ordinary finish and the work will look like it has failed.',
-        'DampScan carries out that work where it is what the survey found, and it is covered by an insured workmanship guarantee, with documentation you can pass to a buyer or an insurer. The term depends on the treatment and it is stated on the quote before anything is agreed. Where the survey finds something else, we say so, and a report that concludes no damp proofing is required is a perfectly normal outcome here.',
+        'DampScan does not install damp proof courses. Where one is genuinely needed, the report specifies where, at what height and with what replastering, so you can get comparable quotes and check the guarantee offered covers the wall that was treated. Where the survey finds something else, we say so, and a report that concludes no damp proofing is required is a perfectly normal outcome here.',
       ]
     },
   ],

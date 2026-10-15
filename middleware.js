@@ -29,6 +29,7 @@ export const config = {
     '/', '/index.html', '/london.html', '/roofing.html', '/ac.html',
     '/robots.txt', '/sitemap.xml', '/llms.txt',
     '/damp-survey', '/damp-survey/', '/damp-survey/:slug',
+    '/damp-proofing', '/damp-proofing/', '/damp-proofing/:slug',
     '/roofing-in', '/roofing-in/', '/roofing-in/:slug',
     '/services', '/services/', '/services/:slug',
     '/guides', '/guides/', '/guides/:slug',
@@ -219,6 +220,15 @@ export default function middleware(request) {
   if (site.areas && path === site.areas) return rewrite(new URL(`/hubs/${dir}/areas.html`, request.url));
   if (path === '/services') return rewrite(new URL(`/hubs/${dir}/services.html`, request.url));
   if (path === '/guides') return rewrite(new URL(`/hubs/${dir}/guides.html`, request.url));
+
+  /* "damp proofing <place>" pages, on the two damp brands only. Neither
+     sells damp proofing; these pages say why to survey first. The bare path
+     has no hub of its own and goes to the damp proofing service page. */
+  if (site.areas === '/damp-survey') {
+    if (path === '/damp-proofing' || path === '/damp-proofing/') return Response.redirect(new URL('/services/damp-proofing', url), 301);
+    const proof = path.match(/^\/damp-proofing\/([a-z0-9-]+)$/);
+    if (proof) return rewrite(new URL(`/proofing-pages/${dir}/${proof[1]}.html`, request.url));
+  }
 
   const area = site.areas && path.match(new RegExp(`^${site.areas}/([a-z0-9-]+)$`));
   if (area) return rewrite(new URL(`/areas/${dir}/${area[1]}.html`, request.url));

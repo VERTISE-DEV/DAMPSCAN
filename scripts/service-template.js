@@ -4,9 +4,9 @@
  * The two sites cover the same eight subjects and must not say the same thing
  * about them, because two pages on two domains you own competing for one query
  * means Google picks one and buries the other. They are written from the two
- * businesses' actual positions instead: DampScan diagnoses and then carries out
- * the work under an insured guarantee, ATi surveys only and writes for buyers,
- * solicitors and disrepair. Same subject, two genuinely different documents.
+ * businesses' actual positions instead: DampScan writes for Kent homeowners and
+ * buyers with a practical, house by house voice, ATi writes for London buyers,
+ * solicitors and disrepair. Both survey only. Same subject, two genuinely different documents.
  *
  * The shared page shell and site details come from area-template.js, so the
  * area and service pages stay visually identical without a second copy of it.

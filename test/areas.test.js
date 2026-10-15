@@ -13,6 +13,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { areas } from '../content/areas/index.js';
+import { towns } from '../content/kent-towns.js';
 import { render, distinctiveWordCount, SITES } from '../scripts/area-template.js';
 import { assetHashes, stampAssets } from '../scripts/asset-version.js';
 
@@ -86,7 +87,10 @@ test('each page canonicals to its own public URL, not to the file path', async (
 test('nearby links only point at pages that exist on the same site', () => {
   for (const area of areas) {
     for (const slug of area.nearby || []) {
-      const target = areas.find((a) => a.slug === slug && a.site === area.site);
+      /* A DampScan district may point at a Kent town page, which replaced
+         the district page of the same name. */
+      const target = areas.find((a) => a.slug === slug && a.site === area.site)
+        || (area.site === 'dampscan' && towns.find((t) => t.slug === slug));
       assert.ok(target, `${area.slug} links to ${slug}, which is not an area on ${area.site}`);
     }
   }

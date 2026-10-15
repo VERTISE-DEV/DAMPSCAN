@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Highgate and Muswell Hill down through Harringay and Wood Green to Tottenham.',
   places: ['Crouch End', 'Muswell Hill', 'Harringay', 'Wood Green', 'Tottenham', 'Hornsey', 'Finsbury Park', 'Highgate', 'Seven Sisters'],
   districts: ['N4', 'N6', 'N8', 'N10', 'N15', 'N17', 'N22'],
+  towns: [
+    { name: 'Crouch End and Muswell Hill', text: 'Late Victorian and Edwardian houses and mansion flats on hilly ground, many converted. Sloping streets mean retained ground at the rear and water running at uphill walls; valley gutters and bays add their share.' },
+    { name: 'Tottenham and Seven Sisters', text: 'Victorian terraces and large post war estates. Rear yards and closet wings on the terraces; condensation and cold structure on the estates.' },
+    { name: 'Wood Green and Hornsey', text: 'Victorian and Edwardian terraces, with conversions and some interwar housing. Bridged courses, rear additions and mould in converted flats are typical.' }
+  ],
   faq: [
     {
       q: 'The damp is in our flat but the leak seems to be upstairs. What now?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Close up inspection of the elevation, which means access equipment rather than looking up from the garden, combined with internal readings that show where the water is arriving and in what pattern. Slipped, cracked and frost damaged tiles are perfectly visible once you are at them. Where the felt and battens behind are in question, that needs a small area lifted, and the report specifies exactly where rather than recommending the whole elevation comes off.'
     },
+    { q: 'Our Muswell Hill lower ground flat is damp at the back. Why?', a: 'On the hill, the rear wall often retains ground, and water arrives sideways after rain. That needs drainage and, for habitable rooms, a below ground system, not injection.' },
+    { q: 'Our Tottenham terrace has damp in the kitchen. Is it rising damp?', a: 'More often a concreted yard, a downpipe or a leaking rear addition roof. The survey checks those first.' },
+    { q: 'Do you survey mansion flats in Haringey?', a: 'Yes. Damp in one flat often comes from a shared roof, gutter or stack, and the report traces it back.' }
   ],
   nearby: ['islington', 'hackney']
 };

@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Barking and the riverside out through Dagenham and the Becontree estate.',
   places: ['Barking', 'Dagenham', 'Becontree', 'Chadwell Heath', 'Rush Green', 'Marks Gate', 'Creekmouth', 'Castle Green', 'Goresbrook'],
   districts: ['IG11', 'RM8', 'RM9', 'RM10'],
+  towns: [
+    { name: 'Becontree', text: 'One of the largest interwar council estates ever built, now largely in mixed ownership. Cottage style houses with cavity or solid walls, many altered with replacement windows, render and extensions. Mould and condensation, failed render and bridged courses at the base of walls are what we usually find.' },
+    { name: 'Barking town centre', text: 'Victorian terraces near the station alongside large recent developments and tower blocks. The terraces need their yards and rear additions looked at; the newer flats need their ventilation working.' },
+    { name: 'Dagenham and the riverside', text: 'Post war housing and new developments near the Thames on low ground. Floors on the lowest streets can be affected by groundwater, and newer flats see construction moisture and ventilation issues.' }
+  ],
   faq: [
     {
       q: 'Everyone in our street has the same damp. Is that a coincidence?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It is most often the underfloor void having stopped being ventilated. These houses have suspended timber floors over a void that airbricks were meant to keep dry. Block those with a patio, an extension or render and the void becomes still and damp, the joist ends built into the wall stay wet, and decay follows. It is a serious finding because it is structural, and it is also usually cheap to arrest once identified.'
     },
+    { q: 'Our Becontree house has rendered walls and damp inside. Is the render the problem?', a: 'It can be. Cracked or impermeable render holds water against the wall and stops it drying outwards. The survey checks the render closely and the pattern of damp inside.' },
+    { q: 'Our flat in a new Barking development has mould. Who is responsible?', a: 'If ventilation is not working as designed or water is getting in at a detail, it may be a defect for the developer or managing agent. The report measures and records the cause.' },
+    { q: 'Do you survey for tenants and landlords in Barking and Dagenham?', a: 'Yes. The report separates building defects from condensation, which helps landlords meet their duties and helps tenants show what needs fixing.' }
   ],
   nearby: ['havering', 'newham']
 };

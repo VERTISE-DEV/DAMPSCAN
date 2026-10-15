@@ -1,19 +1,18 @@
 /* Damp Proofing, dampscan. Kent is searched as "damp proofing kent" far more
-   than as "damp survey kent", and the home page was showing for it with nothing
-   to click through to. DampScan does carry out damp proofing, so this page can
-   say so, but only in the order the business actually works: survey, cause,
-   then a fixed quote for the work that cause needs, which is often not a damp
-   proof course at all. */
+   than as "damp survey kent". DampScan is survey only and sells no treatment,
+   so this page answers that search honestly: get the cause found
+   independently before paying anybody for damp proofing, which is often not a
+   damp proof course at all. */
 export default {
   slug: 'damp-proofing',
   site: 'dampscan',
   name: 'Damp Proofing',
-  title: 'Damp Proofing in Kent | Cause Found First | DampScan',
+  title: 'Damp Proofing in Kent? Get a Survey First | DampScan',
   metaDescription:
-    'Damp proofing across Kent, done in the right order: a qualified surveyor finds the cause first, then a fixed quote for only the work it needs. No sales reps.',
-  h1: 'Damp proofing in Kent, after the cause is found',
+    'Thinking about damp proofing in Kent? An independent survey finds the cause first, so you only pay a contractor for work the wall needs. We sell no treatment.',
+  h1: 'Damp proofing in Kent: get the cause found before you pay',
   intro:
-    'Damp proofing is a set of remedies, not one product, and the expensive mistakes in this trade nearly all come from choosing the remedy before finding the cause. We survey first. A qualified surveyor establishes why the wall is wet, writes it down, and only then do we quote for the work that cause needs. Often that is a damp proof course. Often it is a drainage channel, a lowered path or a repaired gutter, and the report says so.',
+    'Damp proofing is a set of remedies, not one product, and the expensive mistakes in this trade nearly all come from choosing the remedy before finding the cause. We are independent surveyors and we do not carry out damp proofing, so we have nothing to sell you afterwards. A qualified surveyor establishes why the wall is wet and writes it down. Sometimes the answer is a damp proof course. Often it is a drainage channel, a lowered path or a repaired gutter, and the report says so.',
   signsHeading: 'Before you pay for damp proofing',
   signs: [
     'You have a quote for injection and replastering and nobody has explained why the wall is wet',
@@ -44,21 +43,21 @@ export default {
       ]
     },
     {
-      h2: 'How the work is done',
+      h2: 'What happens after the survey',
       paras: [
-        'You get the written report within 24 hours of the survey, with photographs, readings and the cause. Where remedial work is needed and you want us to do it, a fixed price quote comes with the report, and the work we carry out is covered by an insured workmanship guarantee with documents you can pass to a buyer or your insurer.',
-        'You are under no obligation to use us. The report is written so that any competent contractor could work from it.',
+        'You get the written report within 24 hours of the survey, with photographs, readings and the cause. Where work is needed, the report sets it out as a plain specification that contractors can price like for like, so you are comparing quotes for the same job rather than three different diagnoses.',
+        'We do not take commission from contractors and we do not bid for the work. If a quote you receive goes beyond what the report found, we will say so.',
       ]
     },
   ],
-  ctaHeading: 'Book a survey before the work',
+  ctaHeading: 'Book an independent survey before the work',
   ctaBody:
-    'Same day response to every enquiry and a written report within 24 hours of the visit. If damp proofing is needed, the fixed quote comes with it; if it is not, the report says that.',
+    'Same day response to every enquiry and a written report within 24 hours of the visit. If damp proofing is needed the report specifies it; if it is not, the report says that.',
   faq: [
     {
       q: 'Do you carry out damp proofing or just surveys?',
       a:
-        'Both, in that order. We survey and report first, and where remedial work is needed we quote a fixed price for it, covered by an insured workmanship guarantee. A survey that concludes no damp proofing is needed is a routine outcome here, not a lost sale.'
+        'Surveys and reports only. We do not install damp proof courses, tanking or any other treatment, so a survey that concludes no damp proofing is needed costs us nothing to write. Where work is needed, the report specifies it for whichever contractor you choose.'
     },
     {
       q: 'Is injecting a damp proof course always the answer for a tide mark?',

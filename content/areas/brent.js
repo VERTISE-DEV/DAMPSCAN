@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Kilburn and Willesden out through Wembley and Kingsbury to Harlesden and Neasden.',
   places: ['Wembley', 'Willesden', 'Kilburn', 'Harlesden', 'Kingsbury', 'Neasden', 'Queens Park', 'Cricklewood', 'Preston'],
   districts: ['NW2', 'NW6', 'NW9', 'NW10', 'HA0', 'HA9'],
+  towns: [
+    { name: 'Kilburn and Queen\'s Park', text: 'Victorian terraces and conversions. Rear additions, front areas and shared roofs recur.' },
+    { name: 'Willesden and Harlesden', text: 'Victorian and Edwardian terraces, conversions and estates. Condensation and conversions dominate.' },
+    { name: 'Wembley and Kingsbury', text: 'Interwar suburbs and large new developments near the stadium. Drives over the course and ventilation in new flats are typical.' }
+  ],
   faq: [
     {
       q: 'Can a 1930s semi have rising damp?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It can be, and it should be checked rather than assumed either way. Retrofit fill can settle over time and leave the upper part of the wall uninsulated, or bridge the cavity so water crosses from the outer leaf to the inner one. The pattern is telling: damp on the elevation that takes the weather, appearing after driving rain and drying between, rather than constant damp at low level. We inspect for it directly and the report says what we found.'
     },
+    { q: 'Our Kilburn lower ground flat is damp. Whose problem is it?', a: 'It depends on the lease and source. Front areas, external walls and shared drains are often the freeholder\'s.' },
+    { q: 'Our new Wembley flat has mould. Is it a defect?', a: 'It can be, if ventilation is not working. The report measures it.' },
+    { q: 'Do you survey for landlords in Brent?', a: 'Yes. The report separates building defects from condensation.' }
   ],
   nearby: ['harrow', 'ealing']
 };

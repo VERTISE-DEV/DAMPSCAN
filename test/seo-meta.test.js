@@ -13,7 +13,9 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { areas } from '../content/areas/index.js';
 import { areaGroups, topAreas } from '../content/area-groups.js';
-import { areaTitle, areaDescription, fiveStar } from '../scripts/seo-meta.js';
+import { areaTitle, areaDescription, fiveStar, townTitle, proofingTitle } from '../scripts/seo-meta.js';
+import { towns } from '../content/kent-towns.js';
+import { proofingPages } from '../scripts/proofing-pages.js';
 
 const PUBLIC = new URL('../public/', import.meta.url).pathname;
 const un = (s) => s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
@@ -71,10 +73,10 @@ test('area titles lead with the query and end with the brand', () => {
 test('each brand only claims what it is', () => {
   for (const a of areas) {
     const text = areaTitle(a) + ' ' + areaDescription(a);
-    /* DampScan also quotes for the work, so it is not independent. */
-    if (a.site === 'dampscan') assert.doesNotMatch(text, /independent/i, a.slug);
-    /* ATi carries out no remedial work, so it never offers damp proofing. */
-    if (a.site === 'ati') assert.doesNotMatch(text, /damp proofing/i, a.slug);
+    /* Neither brand carries out remedial work, so a survey page's snippet
+       never offers damp proofing; the /damp-proofing pages answer that search
+       with "survey first". */
+    assert.doesNotMatch(text, /damp proofing/i, a.slug);
   }
 });
 
@@ -88,7 +90,24 @@ test('every damp area sits in exactly one hub group, and every top area exists',
   for (const [site, g] of Object.entries(areaGroups)) {
     const slugs = g.groups.flatMap((x) => x.slugs);
     assert.equal(new Set(slugs).size, slugs.length, `${site}: an area is in two groups`);
-    for (const a of areas.filter((x) => x.site === site)) assert.ok(slugs.includes(a.slug), `${site}/${a.slug} is in no group`);
+    for (const a of [...areas, ...towns].filter((x) => x.site === site)) assert.ok(slugs.includes(a.slug), `${site}/${a.slug} is in no group`);
     assert.equal(topAreas(site, areas).length, g.top.length, `${site}: a top area has no page`);
+  }
+});
+
+test('town titles lead with the query and the town, and end with the brand', () => {
+  for (const t of towns) {
+    const title = townTitle(t);
+    assert.ok(title.startsWith(`Damp Survey in ${t.name.replace(/ and /g, ' & ')}`), title);
+    assert.ok(title.endsWith('| DampScan'), title);
+  }
+});
+
+test('damp proofing titles always say survey first, never offer the work', () => {
+  for (const p of proofingPages) {
+    const title = proofingTitle(p);
+    assert.match(title, /^Damp Proofing/, title);
+    assert.match(title, /Survey First/, title);
+    assert.ok(title.length <= 60, `${title} is ${title.length}`);
   }
 });

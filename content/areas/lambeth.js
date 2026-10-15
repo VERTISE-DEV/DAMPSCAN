@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Waterloo and Kennington out through Brixton and Clapham to Streatham and West Norwood.',
   places: ['Brixton', 'Clapham', 'Streatham', 'Kennington', 'Vauxhall', 'Herne Hill', 'West Norwood', 'Stockwell', 'Tulse Hill'],
   districts: ['SW2', 'SW4', 'SW8', 'SW9', 'SE11', 'SE24', 'SE27'],
+  towns: [
+    { name: 'Brixton and Herne Hill', text: 'Victorian terraces and large houses, many converted, and post war estates. Conversions, rear additions and condensation recur.' },
+    { name: 'Kennington and Vauxhall', text: 'Georgian and early Victorian terraces with basements, many listed, and modern riverside towers. Front areas, vaults and parapets dominate in the terraces.' },
+    { name: 'Streatham and West Norwood', text: 'Victorian and Edwardian houses and mansion blocks, with interwar streets. Bays, valley gutters and drives over the course are typical.' }
+  ],
   faq: [
     {
       q: 'Our neighbour has damp in the same place we do. What does that mean?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Very. Flat roofs over rear extensions have a service life, and a lot of Lambeth conversion work is now well past it. So are the felt, the flashings and the boxed in stacks that were installed at the same time. When several details reach the end of their life together, a building that was fine for thirty years develops three leaks in two winters. Knowing the conversion date changes where we look first.'
     },
+    { q: 'Our Kennington basement flat is damp under the front window. Why?', a: 'Front lower ground walls retain the pavement and vaults. A blocked area drain or leaking vault puts water against them.' },
+    { q: 'Our Brixton council flat has mould. Is damp proofing needed?', a: 'No. Mould is condensation on cold surfaces. Social landlords must act on damp and mould within set timescales, and the report records the cause.' },
+    { q: 'Do you survey Streatham mansion flats?', a: 'Yes. Damp in one flat often comes from shared roofs or stacks, and the report traces it.' }
   ],
   nearby: ['southwark', 'wandsworth']
 };

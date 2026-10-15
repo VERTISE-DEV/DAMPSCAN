@@ -11,6 +11,7 @@
  */
 import { adsTag } from './ads-tag.js';
 import { seasonNavItem, buildMonth } from './season.js';
+import { footerAreas } from './footer-areas.js';
 
 const esc = (value) =>
   String(value == null ? '' : value)
@@ -156,8 +157,9 @@ ${barCall(site)}  <a href="#book" class="btn btn--primary">${esc(site.barLabel)}
 
 ${whatsappButton(site)}<footer class="afoot">
   <div class="wrap">
-    <span>${esc(site.brand)}. ${esc(site.strap)}.</span>
-    <span><a href="/">Home</a>${(site.footerLinks || []).map((l) => ` &middot; <a href="${l.href}">${esc(l.label)}</a>`).join('')}${(site.socials || []).map((l) => ` &middot; <a href="${l.href}" rel="noopener me" target="_blank">${esc(l.label)}</a>`).join('')}${footCall(site)} &middot; <a href="mailto:${site.email}">${esc(site.email)}</a></span>
+${footerAreas(site.key) ? `  ${footerAreas(site.key)}
+` : ''}    <span>${esc(site.brand)}. ${esc(site.strap)}.</span>
+    <span><a href="/">Home</a>${(site.footerLinks || []).map((l) => ` &middot; <a href="${l.href}">${esc(l.label)}</a>`).join('')}${(site.socials || []).map((l) => ` &middot; <a href="${l.href}" rel="noopener me" target="_blank">${esc(l.label)}</a>`).join('')}${footCall(site)}${site.locality ? ` &middot; ${esc(site.locality)}` : ''} &middot; <a href="mailto:${site.email}">${esc(site.email)}</a></span>
   </div>
 </footer>
 ${scripts}

@@ -18,7 +18,10 @@ export const SITES = {
     email: 'tom@atidampsurvey.co.uk',
     schemaType: 'LocalBusiness',
     served: 'Kent and the South East of England',
-    strap: 'Damp, mould and timber surveys across Kent and the South East',
+    strap: 'Independent damp, mould and timber surveys across Kent and the South East',
+    /* The Business Profile is a service area business with the street hidden,
+       so the site shows the locality and postcode district only. */
+    locality: 'East Malling, Kent ME19',
     surveyMateSlug: 'dampscan',
     /* The mobile action bar. Kept as the literal it always was. */
     barLabel: 'Book a survey',

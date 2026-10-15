@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Spitalfields and Whitechapel out through Bow and Poplar to the Isle of Dogs.',
   places: ['Whitechapel', 'Spitalfields', 'Bethnal Green', 'Bow', 'Poplar', 'Canary Wharf', 'Limehouse', 'Mile End', 'Isle of Dogs'],
   districts: ['E1', 'E2', 'E3', 'E14'],
+  towns: [
+    { name: 'Bow and Mile End', text: 'Victorian terraces, many converted, and post war estates. Concreted yards, closet wing roofs and condensation are the usual causes.' },
+    { name: 'Wapping and Limehouse', text: 'Converted riverside warehouses and modern developments by the Thames. Thick brick walls sealed internally, roof terraces and balcony details are common sources of damp.' },
+    { name: 'Isle of Dogs and Canary Wharf', text: 'Large modern towers and developments on former docks. Mechanical ventilation, construction details and condensation dominate.' }
+  ],
   faq: [
     {
       q: 'Our flat is two years old and has mould. How is that possible?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Yes, and it is written on the assumption that it will be read by somebody looking for holes in it. That means calibrated readings recorded by location, the mould pattern mapped against the structure, ventilation performance measured rather than described, and the external condition that explains the entry point. We carry out no remedial work, so we have no interest in what the remedy turns out to be, which is the point of instructing us rather than a contractor.'
     },
+    { q: 'Our Wapping warehouse flat has damp on an outside wall. Why?', a: 'Thick brick walls take in rain, and if the conversion sealed the inner face they cannot dry. The survey looks at the wall build up and the external condition.' },
+    { q: 'Our tower flat has mould. Is it a building defect?', a: 'It can be, if ventilation is not working or a detail lets water in. We measure and report the cause.' },
+    { q: 'Do you survey for social housing tenants in Tower Hamlets?', a: 'Yes. Social landlords must investigate and act on damp and mould within fixed timescales under Awaab\'s Law, and an independent report helps both sides.' }
   ],
   nearby: ['hackney', 'newham']
 };

@@ -26,6 +26,11 @@ export default {
     'We survey across the City of Westminster, from Pimlico and Belgravia up through Mayfair and Marylebone to St John\'s Wood and Maida Vale.',
   places: ['Marylebone', 'Mayfair', 'Pimlico', 'Belgravia', 'Bayswater', 'Maida Vale', 'St John\'s Wood', 'Victoria', 'Soho'],
   districts: ['W1', 'W2', 'W9', 'SW1', 'NW8'],
+  towns: [
+    { name: 'Pimlico and Belgravia', text: 'Stucco terraces built in the nineteenth century, many listed and divided into flats, with basements and vaults under the pavement. Cracked stucco, front area drains and parapet gutters account for most of the damp, and responsibility is usually shared between freeholder and leaseholders.' },
+    { name: 'Marylebone and Fitzrovia', text: 'Georgian and Victorian terraces, mansion blocks and mixed use buildings. Old roofs with many valleys and parapets, and flats above shops, mean damp often originates in a part of the building the occupant does not control.' },
+    { name: 'Maida Vale and Bayswater', text: 'Mansion blocks and stucco terraces, with many lower ground flats. Lightwells, vaults and shared soil stacks recur, and condensation in basement flats with limited ventilation is common.' }
+  ],
   faq: [
     {
       q: 'Who is responsible for a damp vault under the pavement?',
@@ -37,6 +42,9 @@ export default {
       a:
         'No. A report that specifies external wall insulation or replacement windows on a listed terrace is worthless, however accurate the diagnosis. We survey knowing the constraint and concentrate on what can be delivered: lime based repairs to render and pointing, drainage and rainwater goods, internal breathable finishes, ventilation and heating. Where consent will be needed, we say so and say for what.'
     },
+    { q: 'Our Pimlico basement flat has damp under the front window. Why?', a: 'Front lower ground walls usually retain the pavement and vaults, and a blocked area drain or a leaking vault puts water straight against them. The survey checks the front area and vaults before anything internal is considered.' },
+    { q: 'Who is responsible for damp in a Westminster mansion block?', a: 'It depends on the lease. Roofs, external walls and shared services are commonly the freeholder\'s or management company\'s. The report identifies the source, which is the basis for a claim under the lease.' },
+    { q: 'Can you survey a listed building in Westminster?', a: 'Yes. Surveys are non invasive by default, and recommendations are written with listed building and conservation area controls in mind.' }
   ],
   nearby: ['kensington-and-chelsea', 'camden']
 };

@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Golders Green and Hendon up through Finchley and Mill Hill to High Barnet.',
   places: ['Finchley', 'Hendon', 'Mill Hill', 'Golders Green', 'Whetstone', 'Edgware', 'High Barnet', 'Totteridge', 'Hampstead Garden Suburb'],
   districts: ['N2', 'N3', 'N11', 'N12', 'N20', 'NW4', 'NW7', 'EN4', 'EN5'],
+  towns: [
+    { name: 'Finchley and Whetstone', text: 'Interwar semis and terraces, with Victorian streets near the centres. Driveways paved above the damp proof course and extensions with floors set too high are the most common causes of damp.' },
+    { name: 'Hendon, Golders Green and Mill Hill', text: 'A mix of Edwardian, interwar and post war housing, some on slopes. Sloping plots send water at the uphill wall, and London clay holds it there through winter.' },
+    { name: 'Hampstead Garden Suburb', text: 'Arts and Crafts houses in a conservation area with covenants managed by the Trust. Repairs must respect the design, and damp is usually rainwater, ground level or ventilation rather than anything that needs damp proofing.' }
+  ],
   faq: [
     {
       q: 'We are in Hampstead Garden Suburb. Does that change the survey?',
@@ -37,6 +42,9 @@ export default {
       a:
         'A persistent, localised damp patch on a ground floor that does not respond to anything done to the walls very often means water below the slab, and on this borough\'s clay the usual reason is a fractured or displaced drain. Clay moves seasonally and mature tree roots find joints. It is worth lifting the manhole covers and checking the runs before anyone specifies a floor treatment, because a treatment over a live leak will simply fail again.'
     },
+    { q: 'Does London clay make damp worse in Barnet?', a: 'It can. Clay drains slowly, so gardens stay wet and water lingers against walls, especially where ground levels have risen. It also moves with the seasons, which can crack drains. The survey checks ground levels and drainage first.' },
+    { q: 'Do we need the Trust\'s consent to fix damp in Hampstead Garden Suburb?', a: 'Many external changes need consent from the Trust and the council. The report flags where that is likely, and favours repairs that are generally acceptable, such as like for like rainwater and drainage work.' },
+    { q: 'Our bungalow in Edgware has mould on the ceilings. Why?', a: 'Often cold spots at the ceiling edge where loft insulation stops short of the eaves, together with humidity. Measurements show how much is the building and what will help.' }
   ],
   nearby: ['enfield', 'harrow']
 };

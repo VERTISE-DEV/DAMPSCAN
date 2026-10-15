@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Uxbridge and Ruislip out through Hayes and Yiewsley to West Drayton and Northwood.',
   places: ['Uxbridge', 'Ruislip', 'Hayes', 'Northwood', 'Ickenham', 'Eastcote', 'West Drayton', 'Yiewsley', 'Harefield'],
   districts: ['UB3', 'UB4', 'UB7', 'UB8', 'UB9', 'UB10', 'HA4', 'HA6'],
+  towns: [
+    { name: 'Uxbridge and Hillingdon', text: 'Interwar and post war suburbs with older buildings near the centres. Drives, extensions and condensation recur.' },
+    { name: 'Ruislip and Northwood', text: 'Interwar suburbs, many with Metro-land character, and older village cores. Rainwater under mature trees and drives over the course dominate.' },
+    { name: 'Hayes and West Drayton', text: 'Victorian and interwar housing and newer developments near the canal and the Colne valley. Groundwater on low ground and ventilation in new homes are typical.' }
+  ],
   faq: [
     {
       q: 'Is rising damp ever the right diagnosis?',
@@ -37,6 +42,9 @@ export default {
       a:
         'More than most people expect. Free draining gravel over clay lets water move down easily and then stops it, so it can perch on the clay and travel sideways toward a building rather than continuing down. That produces lateral water at foundation level, which behaves nothing like rising damp and does not respond to the same remedies. It also means drainage runs matter, because a leaking drain in that ground disperses less readily than it would in chalk.'
     },
+    { q: 'Do Ruislip semis need damp proofing?', a: 'Rarely. Their courses usually work; drives and patios are the common cause.' },
+    { q: 'Our West Drayton house is near the river. Is it groundwater?', a: 'On low ground near the Colne it can be. The survey separates causes.' },
+    { q: 'Do you survey bungalows in Hillingdon?', a: 'Yes, including roof spaces, sub floors and ventilation.' }
   ],
   nearby: ['harrow', 'hounslow']
 };

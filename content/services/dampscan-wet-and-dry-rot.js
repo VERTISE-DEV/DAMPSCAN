@@ -4,7 +4,7 @@ export default {
   slug: 'wet-and-dry-rot',
   site: 'dampscan',
   name: 'Wet and Dry Rot',
-  title: 'Wet & Dry Rot Surveys & Treatment | DampScan',
+  title: 'Wet & Dry Rot Surveys in Kent | DampScan',
   metaDescription:
     'Wet and dry rot identified and treated across Kent and the South East. Dry rot spreads through masonry; wet rot stops when the wall dries.',
   h1: 'Wet and dry rot: two very different problems',
@@ -37,7 +37,7 @@ export default {
       h2: 'Putting it right',
       paras: [
         'Every case starts the same way: find and stop the water. A rot treatment applied to timber that is still being wetted is a temporary measure with a certificate attached to it. Then the affected timber is cut back beyond the visible decay and replaced, with any adjacent masonry treated where dry rot is confirmed, and the structure ventilated so it stays dry.',
-        'DampScan carries out this work under an insured workmanship guarantee, and where it is a repair to a roof, a gutter or a drain rather than a timber treatment, we will say so. Getting the water dealt with is the part that determines whether it comes back.',
+        'DampScan does not carry out timber repairs or treatment, so the report simply states what the decay is, how far it goes and what is wetting it, and where the job is a roof, a gutter or a drain rather than a timber treatment, it says so. Getting the water dealt with is the part that determines whether it comes back.',
       ]
     },
   ],

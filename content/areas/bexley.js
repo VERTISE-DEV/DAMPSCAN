@@ -51,6 +51,9 @@ export default {
       a:
         'Usually because something has been done to one of them and not the other. Ground level is the most common: one house has had three layers of drive laid over eighty years and the other has not. Blocked airbricks, a rear extension, a conservatory across a wall, or retrofit cavity fill in one and not the other will all do it. Identical houses do not have identical histories, and the history is generally where the answer is.'
     },
+    { q: 'Our Bexleyheath semi has damp along the front wall. Is that rising damp?', a: 'In interwar houses it is usually the drive or path laid above the damp proof course. The repair is at the ground.' },
+    { q: 'Do you survey bungalows in Bexley?', a: 'Yes. Bungalows have large roof and wall areas for their size, and mould on ceilings and corners is common. We measure surface temperatures and humidity.' },
+    { q: 'Is damp near the Thames in Erith groundwater?', a: 'On the lowest ground it can be, particularly in floors. The survey separates groundwater from other causes.' }
   ],
   nearby: ['greenwich', 'havering']
 };

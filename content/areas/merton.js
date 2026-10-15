@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Wimbledon and Raynes Park through Mitcham to Morden and Colliers Wood.',
   places: ['Wimbledon', 'Raynes Park', 'Morden', 'Mitcham', 'Colliers Wood', 'Wimbledon Park', 'South Wimbledon', 'Motspur Park', 'Pollards Hill'],
   districts: ['SW19', 'SW20', 'CR4', 'SM4'],
+  towns: [
+    { name: 'Wimbledon', text: 'Large Victorian and Edwardian houses on the hill and in the village, terraces in South Wimbledon, many conversions. Valley gutters, basements and lower ground floors on slopes recur.' },
+    { name: 'Mitcham and Morden', text: 'Interwar estates, including the large estates around Morden, and older housing around Mitcham. Drives, condensation and extension junctions are typical.' },
+    { name: 'Colliers Wood and Raynes Park', text: 'Victorian terraces and interwar streets. Rear additions, yards and bays dominate.' }
+  ],
   faq: [
     {
       q: 'Why does damp show up on a wall nowhere near the leak?',
@@ -37,6 +42,9 @@ export default {
       a:
         'No, and on this borough\'s older streets it is frequently a drain. Clay drainage laid a century ago cracks and displaces, particularly where there are mature trees or made ground, and a leak beneath a solid floor produces a localised damp patch that stays put and responds to nothing done to the walls. It is worth lifting the covers and checking the runs before anyone specifies a floor treatment over a live leak.'
     },
+    { q: 'Our Wimbledon basement flat is damp. Does it need tanking?', a: 'It may need a below ground system, chosen after the water is understood. Drainage outside and the front area should be checked first.' },
+    { q: 'Do interwar houses in Morden need damp proofing?', a: 'Rarely. Bridging by drives and patios is the usual cause of low level damp.' },
+    { q: 'Do you survey near the River Wandle?', a: 'Yes. Low ground near the river can have a high water table, and the survey separates that from other causes.' }
   ],
   nearby: ['sutton', 'wandsworth']
 };

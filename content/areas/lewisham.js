@@ -26,6 +26,11 @@ export default {
     'We survey across the borough and the neighbouring streets, from New Cross and Deptford out to Sydenham and Grove Park.',
   places: ['Lewisham', 'Brockley', 'Catford', 'Forest Hill', 'Sydenham', 'Deptford', 'New Cross', 'Blackheath', 'Grove Park'],
   districts: ['SE4', 'SE6', 'SE8', 'SE12', 'SE13', 'SE14', 'SE23', 'SE26'],
+  towns: [
+    { name: 'Brockley and Ladywell', text: 'Large Victorian houses, many converted into flats, in conservation areas. Valley gutters, rear additions and lower ground floors retaining sloping gardens are common.' },
+    { name: 'Catford and Bellingham', text: 'Victorian and Edwardian terraces and the interwar Bellingham estate. Drives and yards bridging courses, and condensation, recur.' },
+    { name: 'Sydenham and Forest Hill', text: 'Hilly streets with large Victorian houses and conversions. Sloping plots send water at uphill walls, and basements retain ground.' }
+  ],
   faq: [
     {
       q: 'We are bringing a disrepair claim. What does an independent report need to show?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Sometimes it is part of the picture, and on its own it is rarely the whole one. If a surface is cold enough, moisture will condense on it at humidity levels that occur in any occupied home, and no reasonable amount of window opening will change that. If an extract fan moves too little air, or discharges into a void, ventilation is not being provided regardless of behaviour. We measure both, and the report says which factors are actually driving it.'
     },
+    { q: 'Our Brockley lower ground flat is damp at the back. Why?', a: 'The rear wall often retains a sloping garden. Water arrives sideways and needs drainage and, for habitable rooms, a below ground system.' },
+    { q: 'Our Catford terrace has damp in the back room. Is it rising damp?', a: 'More often a concreted yard, a downpipe or a rear addition roof. The survey checks those first.' },
+    { q: 'Do you survey conversions in Lewisham for buyers?', a: 'Yes, and the report identifies whether any damp comes from the flat or the building.' }
   ],
   nearby: ['wandsworth', 'bromley']
 };

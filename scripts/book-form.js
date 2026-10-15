@@ -14,8 +14,8 @@
 import { enquiryFor } from '../lib/enquiry.js';
 
 /* The wording is the only thing that differs between the sites, because the
-   businesses differ. DampScan books a survey and then does the remedial work;
-   ATi is survey only and issues a report, so it requests rather than books. */
+   businesses differ. Both are survey only now; DampScan books a visit in a
+   Kent voice and ATi requests a report in a London one. */
 const COPY = {
   dampscan: {
     heading: 'Book your survey',

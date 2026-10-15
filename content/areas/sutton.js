@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Sutton and Cheam through Carshalton and Wallington to Worcester Park and Belmont.',
   places: ['Sutton', 'Carshalton', 'Wallington', 'Cheam', 'Worcester Park', 'Belmont', 'Hackbridge', 'Beddington', 'Rosehill'],
   districts: ['SM1', 'SM2', 'SM3', 'SM4', 'SM5', 'SM6', 'SM7'],
+  towns: [
+    { name: 'Sutton and Cheam', text: 'Victorian and Edwardian houses near the centres and large interwar suburbs beyond. Drives over the course, extensions and bay windows recur.' },
+    { name: 'Carshalton', text: 'An older village core with listed buildings and ponds fed by springs, surrounded by interwar housing. Older walls need lime; springs and the water table affect low ground.' },
+    { name: 'Wallington and Worcester Park', text: 'Interwar and post war suburbs. Mould in bedrooms, extension junctions and paved drives make up most surveys.' }
+  ],
   faq: [
     {
       q: 'Our cellar is wet this winter and was dry last year. What changed?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Only once it is clear what the water is doing, because the right answer differs completely. Tanking a below ground room against occasional surface water is reasonable. Tanking against a seasonally rising water table, without drainage and pumping sized for it, transfers the pressure elsewhere and frequently fails. We establish which situation you are in first, and we carry out no remedial work, so we have nothing to gain from the more expensive answer.'
     },
+    { q: 'Our Carshalton cottage is near the ponds and damp. Is it groundwater?', a: 'Possibly. Carshalton\'s ponds are spring fed, and the water table on low ground can be high. The survey separates groundwater from rainwater and building defects.' },
+    { q: 'Does a 1930s house in Cheam need a damp proof course?', a: 'Rarely. The original course usually works; bridging by drives and patios is the common cause.' },
+    { q: 'Do you survey for buyers in Sutton?', a: 'Yes. The report is ready within 24 hours of the visit.' }
   ],
   nearby: ['merton', 'kingston-upon-thames']
 };

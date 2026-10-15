@@ -4,10 +4,10 @@ export default {
   slug: 'basement-waterproofing',
   site: 'dampscan',
   name: 'Basement Waterproofing',
-  title: 'Basement & Cellar Waterproofing | DampScan',
+  title: 'Basement & Cellar Damp Surveys in Kent | DampScan',
   metaDescription:
-    'Basement and cellar waterproofing across Kent and the South East, designed for the water that is actually there rather than to a standard specification.',
-  h1: 'Basement and cellar waterproofing, designed for the water that is there',
+    'Independent basement and cellar surveys across Kent: what the water is actually doing, and which waterproofing, if any, it needs. We sell no systems.',
+  h1: 'Basement and cellar surveys: find out what the water is doing first',
   intro:
     'A below ground room is holding back the ground and everything in it. Getting that right starts with establishing what the water is actually doing: whether it arrives with rainfall and drains away, sits against the structure as a water table, or is simply surface water that could be dealt with outside for a fraction of the cost.',
   signsHeading: 'What we establish first',
@@ -35,10 +35,10 @@ export default {
       ]
     },
     {
-      h2: 'Design, installation and maintenance',
+      h2: 'What our survey gives you',
       paras: [
-        'We survey the water before specifying the system, including the outside, and we say when the answer is drainage rather than waterproofing. Where a system is right, it is designed for the property, installed with proper attention to penetrations and junctions, and handed over with a maintenance schedule that says what needs servicing and how often.',
-        'The work carries an insured workmanship guarantee, with documentation you can hand to a buyer. Every project is documented so that future works to the room, a new radiator, a socket, a floor covering, do not compromise the waterproofing without anybody realising.',
+        'We survey the water before anyone specifies a system, including the outside, and we say when the answer is drainage rather than waterproofing. We do not design, sell or install waterproofing systems, so the report has no product to steer you towards. Where a system is right, it sets out the type, the details that matter at penetrations and junctions, and the maintenance any installer should hand over with it.',
+        'If you already hold a waterproofing quote, we will check it against what we found and tell you plainly where it goes beyond the water that is there. After installation we can return to inspect the work, so you have an independent record before the room is finished and a guarantee is relied on.',
       ]
     },
   ],
@@ -59,7 +59,7 @@ export default {
     {
       q: 'Does a waterproofed basement need maintaining?',
       a:
-        'A cavity drainage system certainly does, and a great many owners are never told so. Channels need clearing, sumps need checking, pumps need servicing and battery backups need testing. An annual check costs very little and prevents the kind of failure that gets diagnosed as the waterproofing having failed. Any system we install is handed over with a schedule setting out what needs doing and when.'
+        'A cavity drainage system certainly does, and a great many owners are never told so. Channels need clearing, sumps need checking, pumps need servicing and battery backups need testing. An annual check costs very little and prevents the kind of failure that gets diagnosed as the waterproofing having failed. If you are buying a house with an existing system, our report says what servicing records to ask the seller for.'
     },
   ],
   related: ['rising-damp', 'penetrating-damp', 'damp-surveys']

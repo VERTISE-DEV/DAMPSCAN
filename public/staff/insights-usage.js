@@ -6,7 +6,7 @@
 
   var U = global.DSUI;
   var AREA = { damp: 'ATi & DampScan', roofing: 'Verge Roofing', ac: 'CoolRight' };
-  var PAGE = { 'calendar.html': 'Today', 'dashboard.html': 'Leads', 'jobs.html': 'Jobs', 'clients.html': 'Clients', 'pipeline.html': 'Pipeline',
+  var PAGE = { 'calendar.html': 'Today', 'dashboard.html': 'Leads', 'jobs.html': 'Jobs', 'clients.html': 'Clients', 'pipeline.html': 'Pipeline', 'roofing.html': 'Verge pipeline', 'week.html': 'Week board',
     'quoted.html': 'Quotes and jobs', 'insights.html': 'Insights', 'bank.html': 'Money', 'settings.html': 'Settings', 'due.html': 'Due (old)', 'todo.html': 'To-do (old)' };
 
   U.get('/api/admin/usage?days=30').then(function (d) {

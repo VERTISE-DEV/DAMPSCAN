@@ -38,6 +38,18 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "I did six hours on Mrs Patel yesterday."
 - "I drove 23 miles for Mrs Patel today."
 
+## Verge Roofing pipeline and planner
+
+- "Show me the Verge pipeline." / "What's stuck on the Verge board?" (each job's stage, next action, days in stage and what is missing)
+- "Book a site visit at Mrs Patel's for Thursday."
+- "Mrs Patel has said yes." / "Book Mrs Patel in to start Monday the 3rd." / "The crew have started on Mrs Patel." / "The Jones roof is finished." / "We lost the Smiths in TN13."
+- "Scaffold booked for Mrs Patel Monday with Acme, £450." (the £450 becomes one cost on the job; saying a new figure later changes it, never adds a second)
+- "Scaffold is up at Mrs Patel's." / "Scaffold down at the Joneses."
+- "Materials ordered for Mrs Patel from Travis Perkins, £1,230." / "Materials delivered for Mrs Patel."
+- "Skip on site at the Smiths, £240." / "No skip needed for Mrs Patel."
+- "Put Tom and Ben on Mrs Patel." / "Take Ben off Mrs Patel." / "Mrs Patel is a three day job."
+- "What's on the roofing week?" / "Any weather warnings for next week's roofs?"
+
 ## Quotes
 
 - "What's in the Verge price book?"

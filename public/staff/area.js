@@ -26,7 +26,7 @@
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
-      tabs: [['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
+      tabs: [['Pipeline', 'roofing.html'], ['Week', 'week.html'], ['Leads', 'dashboard.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
@@ -43,6 +43,9 @@
      to-do list now live in Today and keep working for old links and alerts,
      and the bank is Money, one level up. */
   var EXTRA = ['due.html', TODO, MONEY];
+  /* Pages a company keeps reachable without a tab: Verge's old pipeline,
+     which its new board replaced, stays for anyone with it bookmarked. */
+  var ALSO = { roofing: ['pipeline.html'] };
 
   function stored() { try { return global.localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(a) { try { global.localStorage.setItem(KEY, a); } catch (e) {} }
@@ -58,7 +61,7 @@
 
   function href(a, file) { return '/staff/' + file + '?area=' + a; }
   function first(a) { return AREAS[a].tabs[0][1]; }
-  function hasPage(a, file) { return EXTRA.indexOf(file) !== -1 || AREAS[a].tabs.some(function (t) { return t[1] === file; }); }
+  function hasPage(a, file) { return EXTRA.indexOf(file) !== -1 || (ALSO[a] || []).indexOf(file) !== -1 || AREAS[a].tabs.some(function (t) { return t[1] === file; }); }
 
   /* A page this company does not have, such as Jobs under Verge, goes to the
      company's first section rather than showing another business's screen. */
@@ -204,6 +207,6 @@
     first: first,
     /* The routes that narrow by company. The calendar asks for every company
        the person holds, so nothing is added to its requests. */
-    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights|surveys)\b/
+    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights|surveys|roofing)\b/
   };
 })(window);

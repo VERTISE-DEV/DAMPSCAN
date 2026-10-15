@@ -14,7 +14,7 @@
   var W = global.DSWORK;
   var el = function (id) { return document.getElementById(id); };
   var DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  var BADGE = { messages: 'Message', deposits: 'Deposit', payments: 'Unpaid', invoices: 'Overdue', payouts: 'Payout', reports: 'Report', remedial: 'Remedial', agent: 'Agent', quotes: 'Chase', budget: 'Budget', todos: 'To-do' };
+  var BADGE = { messages: 'Message', deposits: 'Deposit', payments: 'Unpaid', invoices: 'Overdue', payouts: 'Payout', reports: 'Report', remedial: 'Remedial', agent: 'Agent', quotes: 'Chase', budget: 'Budget', todos: 'To-do', prep: 'Prep', finish: 'Finish' };
   var today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
   var VIEW_KEY = 'ds_cal_view';
   var stored = function () { try { return global.localStorage.getItem(VIEW_KEY); } catch (e) { return null; } };

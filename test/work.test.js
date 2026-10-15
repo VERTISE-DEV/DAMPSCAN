@@ -114,7 +114,7 @@ test('the owner sees every action, grouped in order, with badges on the calendar
   assert.deepEqual(group(d.work, 'todos').map((i) => [i.what, i.overdue]), [['Ring the skip firm', true]]);
   assert.equal(d.work.total, d.work.groups.reduce((s, g) => s + g.count, 0));
   const ev = d.events.find((e) => e.id === w.unpaid.id);
-  assert.deepEqual(ev.flags, ['messages', 'payments']);
+  assert.deepEqual(ev.flags, ['messages', 'payments', 'finish'], 'a finished roof also has its finishing steps to do');
   assert.equal(d.events.find((e) => e.id === w.agent).awaitingAgent, true);
   assert.deepEqual(d.events.find((e) => e.id === w.deposit).flags, ['deposits']);
   assert.ok(Array.isArray(d.todayEvents));
@@ -172,5 +172,5 @@ test('what_needs_doing is the same list the calendar shows', async () => {
   const roofing = await TOOLS.find((t) => t.name === 'what_needs_doing').run(scope, { area: 'roofing' });
   assert.ok(roofing.data.actionNeeded.every((g) => g.items.every((i) => ['roofing', null].includes(i.site))));
   const flags = flagsByJob(await actionsFor(scope, ['roofing']));
-  assert.deepEqual(flags.get(w.late.id), ['messages', 'invoices'], 'a job carries every group it sits in');
+  assert.deepEqual(flags.get(w.late.id), ['messages', 'invoices', 'finish'], 'a job carries every group it sits in');
 });

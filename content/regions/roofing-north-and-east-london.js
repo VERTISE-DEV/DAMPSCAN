@@ -5,9 +5,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['N', 'E', 'EC', 'NW', 'EN', 'WC', 'W'],
   name: 'North and east London',
-  title: 'Roofers in North & East London | Slate, Butterfly Roofs, Flat Roofs | Verge Roofing',
+  title: 'Roofers in North & East London | Verge Roofing',
   metaDescription:
-    'Roofing across north and east London: slate re-roofs, butterfly roofs, parapet gutters and rear extension flat roofs in Islington, Hackney, Walthamstow, Tottenham and Leyton. Free quotes.',
+    'Slate re-roofs, butterfly roofs, parapet gutters and extension flat roofs in Islington, Hackney, Walthamstow, Tottenham and Leyton. Free fixed quotes.',
   h1: 'Roofing in north and east London',
   intro:
     'The terraces of Islington, Hackney, Walthamstow, Tottenham and Leyton share a roof type that behaves in a way almost nothing built since does, and most of the work here follows from it.',

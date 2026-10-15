@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "porch-and-bay-roofs",
   "name": "Porch and bay roofs",
-  "title": "Porch & Bay Window Roofs in London & the South East | Verge Roofing",
-  "metaDescription": "New porch roofs and bay window roofs across London and the South East: plain tiles with dry verge and ridge, EPDM bay roofs, lead bays, and PVC cladding to gables. Small roofs done properly. Free quotes.",
+  "title": "Porch & Bay Window Roofs, London & SE | Verge Roofing",
+  "metaDescription": "New porch and bay window roofs: plain tiles with dry verge and ridge, EPDM or lead bays, and PVC gable cladding. Small roofs done properly. Free quotes.",
   "h1": "Porch roofs and bay window roofs",
   "intro": "Small roofs leak just as much as big ones, and porches and bays are where a lot of front-of-house leaks start. We build new porch roofs, re-cover bay roofs and put right the ones that were done quickly.",
   "sections": [

@@ -4,7 +4,6 @@ export default {
   slug: 'westminster',
   site: 'ati',
   name: 'Westminster',
-  title: 'Damp Surveys in Westminster | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Westminster, W1, SW1, W2 and NW8. Reports for owners, leaseholders, buyers and solicitors.',
   h1: 'Independent damp surveys in Westminster',

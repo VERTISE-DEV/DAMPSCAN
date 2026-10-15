@@ -2,9 +2,9 @@ export default {
   site: 'ac',
   slug: 'summer-air-con-installation',
   name: 'Summer air con installation',
-  title: 'Summer Air Conditioning Installation | Book Before the Heat | CoolRight',
+  title: 'Summer Air Con Installation | Book Early | CoolRight',
   metaDescription:
-    'Planning air conditioning for the summer? When to book, how long an install takes, what a site visit covers, and how to avoid the June rush for units and engineers.',
+    'Planning air conditioning for summer? When to book, how long an install takes, what a site visit covers, and how to avoid the June rush for engineers.',
   h1: 'Air conditioning for the summer: book before the heat',
   intro:
     'Every year the first properly hot week sends demand through the roof. Installers fill their diaries for a month, popular units sell out and people spend the warmest weeks waiting. The homes that are comfortable in July are usually the ones that booked a survey in the spring.',

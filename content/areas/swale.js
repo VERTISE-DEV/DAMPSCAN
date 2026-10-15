@@ -4,7 +4,6 @@ export default {
   slug: 'swale',
   site: 'dampscan',
   name: 'Swale',
-  title: 'Damp & Mould Surveys in Swale | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Swale, ME9 to ME13. Sittingbourne, Faversham, Sheerness and the Isle of Sheppey.',
   h1: 'Damp and mould surveys in Swale',

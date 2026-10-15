@@ -6,9 +6,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['BN', 'RG', 'SL', 'PO'],
   name: 'Sussex and Berkshire',
-  title: 'Roofers in Sussex & Berkshire | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
+  title: 'Roofers in Sussex & Berkshire | Verge Roofing',
   metaDescription:
-    'Roofing across Sussex and Berkshire: re-roofs, repairs, slate and tile, flat roofs and chimneys in Crawley, Horsham, Brighton, Slough, Windsor and Reading. Free quotes, fixed in writing.',
+    'Re-roofs, repairs, slate and tile, flat roofs and chimneys in Crawley, Horsham, Brighton, Slough, Windsor and Reading. Free quotes, fixed in writing.',
   h1: 'Roofing in Sussex and Berkshire',
   intro:
     'Two counties at opposite ends of our patch, with roofs that have little in common: a new town of postwar concrete tile, a seafront of Regency slate, and the Victorian red-brick terraces of Reading. Our own team covers all of it.',

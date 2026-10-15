@@ -4,7 +4,7 @@ export default {
   name: 'Autumn condensation help',
   title: 'Autumn Condensation and Black Mould Help | Kent | DampScan',
   metaDescription:
-    'Condensation and black mould start as soon as the heating goes on. Why autumn is when it appears, what you can do this week, and when a survey is worth it in Kent.',
+    'Condensation and black mould start as the heating goes on. Why autumn is when it appears, what you can do this week, and when a Kent survey is worth it.',
   h1: 'Condensation and mould as the weather turns',
   intro:
     'Every autumn our phones follow the same pattern. The windows close, the heating goes on, the washing dries indoors, and within a few weeks the first black spots appear behind wardrobes and in the corners of bedrooms. Most of it is condensation rather than damp coming in from outside, and most of it can be controlled. The trick is being sure that is what it is.',

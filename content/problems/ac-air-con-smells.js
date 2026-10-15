@@ -2,9 +2,9 @@ export default {
   site: 'ac',
   slug: 'air-con-smells',
   name: 'Air con smells',
-  title: 'Air Conditioning Smells Musty or Odd? Causes and Fixes | CoolRight',
+  title: 'Air Con Smells Musty or Odd? Causes & Fixes | CoolRight',
   metaDescription:
-    'A musty, damp, burning or chemical smell from your air conditioning. What each one usually means, which need the unit switching off, and how we clean and fix it.',
+    'A musty, damp, burning or chemical smell from your air con. What each usually means, which need the unit switched off, and how we clean and fix it.',
   h1: 'When your air conditioning smells',
   intro:
     'An air conditioner draws the air of the room through a cold, wet coil all summer, which is a perfect place for mould and bacteria to grow if it is not cleaned. A musty smell when the unit starts is therefore common and fixable. Other smells, burning in particular, mean something different and need a different response.',

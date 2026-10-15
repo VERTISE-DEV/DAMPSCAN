@@ -8,7 +8,7 @@ export default {
   slug: "ventilation-and-mvhr",
   site: 'ac',
   name: "Ventilation and MVHR",
-  title: "Ventilation, Extract and MVHR Installation | London and the South East | CoolRight",
+  title: "Ventilation, Extract & MVHR Installation | CoolRight",
   metaDescription:
     "Extract ventilation, positive input ventilation and whole-house MVHR installed and commissioned across London and the South East by CoolRight.",
   h1: "Ventilation and heat recovery: the problem cooling does not solve",

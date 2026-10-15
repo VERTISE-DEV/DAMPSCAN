@@ -4,7 +4,6 @@ export default {
   slug: 'tunbridge-wells',
   site: 'dampscan',
   name: 'Tunbridge Wells',
-  title: 'Damp & Mould Surveys in Tunbridge Wells | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Tunbridge Wells, TN1 to TN4. The cause diagnosed before anyone recommends a treatment.',
   h1: 'Damp and mould surveys in Tunbridge Wells',

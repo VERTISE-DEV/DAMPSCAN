@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "roof-maintenance",
   "name": "Roof maintenance",
-  "title": "Roof Maintenance in London & the South East | Gutter Clearing & Roof Checks | Verge Roofing",
-  "metaDescription": "Planned roof maintenance across London and the South East: gutters and valleys cleared, slipped tiles refixed, flashings checked, with dated photographs every visit. For homeowners, landlords and managing agents.",
+  "title": "Roof Maintenance & Gutter Clearing | Verge Roofing",
+  "metaDescription": "Planned roof maintenance across London and the South East: gutters cleared, slipped tiles refixed, flashings checked, dated photos every visit.",
   "h1": "Roof maintenance: small jobs now instead of big ones later",
   "intro": "Most big roofing bills start as a slipped tile or a blocked valley that nobody noticed. A maintenance visit clears and fixes the small things before they turn into the expensive ones.",
   "sections": [

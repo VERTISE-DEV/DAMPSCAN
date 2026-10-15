@@ -7,9 +7,9 @@
    owners' choice, and there is no emergency call-out service to promise. */
 export default {
   site: 'roofing',
-  title: 'Roofers in London & the South East | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
+  title: 'Roofers in London & the South East | Verge Roofing',
   metaDescription:
-    'Roofing contractors covering London, Kent, Surrey, Essex, Sussex, Hertfordshire and Berkshire. Re-roofs, roof repairs, flat roofs, EPDM, leadwork and conservatory roofs. Thirty years in the trade. Free quotes, fixed in writing.',
+    'Re-roofs, roof repairs, flat roofs, leadwork and conservatory roofs across London and the South East. Thirty years in the trade. Free fixed quotes.',
   h1: 'Re-roofs, repairs and flat roofs across London and the South East',
   lede:
     'Pitched roofs in tile and natural slate, felt and EPDM rubber flat roofs, leadwork, chimneys, box gutters and conservatory roof conversions. Carried out by our own team, with thirty years in the trade behind it. Tell us what the roof needs and we will come out, price it for free and put a fixed figure in writing.',

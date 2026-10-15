@@ -4,7 +4,6 @@ export default {
   slug: 'merton',
   site: 'ati',
   name: 'Merton',
-  title: 'Damp Surveys in Merton | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Merton, SW19, SW20, CR4 and SM4. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Merton',

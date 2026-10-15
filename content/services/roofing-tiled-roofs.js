@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "tiled-roofs",
   "name": "Tiled roofs",
-  "title": "Tiled Roofs in London & the South East | Redland 49, Plain & Stonewold Tiles | Verge Roofing",
-  "metaDescription": "New tiled roofs and tile replacement across London and the South East in concrete interlocking tiles such as Redland 49, Mini Stonewold, plain tiles and clay. Dry hip, ridge and verge. Free quotes, fixed in writing.",
+  "title": "Tiled Roofs: Concrete, Plain & Clay Tiles | Verge Roofing",
+  "metaDescription": "New tiled roofs and tile replacement in interlocking concrete, plain and clay tiles, across London and the South East. Dry hip and ridge. Fixed quotes.",
   "h1": "Tiled roofs: new roofs and re-tiling in concrete, clay and plain tiles",
   "intro": "Most houses across London and the South East are tiled, and most of the re-roofs we do are tile. We strip, re-batten and re-tile in the tile that suits the house, with dry-fixed hips, ridges and verges that do not need repointing every few years.",
   "sections": [

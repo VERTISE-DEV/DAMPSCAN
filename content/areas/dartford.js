@@ -4,7 +4,6 @@ export default {
   slug: 'dartford',
   site: 'dampscan',
   name: 'Dartford',
-  title: 'Damp & Mould Surveys in Dartford | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Dartford, DA1 to DA4 and DA9. The cause diagnosed before anyone recommends a treatment.',
   h1: 'Damp and mould surveys in Dartford',

@@ -6,7 +6,7 @@ export default {
   site: 'ac',
   title: 'Air Conditioning in London & the South East | CoolRight',
   metaDescription:
-    'F-Gas registered air conditioning, heating and ventilation across London and the South East. Free quote visit, fixed written price, and sizing done from the heat load rather than the floor area.',
+    'F-Gas registered air conditioning, heating and ventilation across London and the South East. Free quote visit, fixed written price, sized to the heat load.',
   h1: 'Air conditioning, sized properly and fitted to spec.',
   lede:
     'Cooling in summer, cheap heat in winter, and a system quiet enough that you forget it is there. We work out what the room actually gains before anybody quotes a unit for it, because almost every fault we are called to was decided on the day of the installation.',

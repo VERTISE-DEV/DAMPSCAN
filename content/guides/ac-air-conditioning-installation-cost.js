@@ -19,9 +19,9 @@ export default {
   slug: 'air-conditioning-installation-cost',
   site: 'ac',
   name: 'What air conditioning installation costs',
-  title: 'Air Conditioning Installation Cost: What Moves the Price | CoolRight',
+  title: 'Air Con Installation Cost: What Moves the Price | CoolRight',
   metaDescription:
-    'What actually drives the cost of installing air conditioning, what a quote should name, and how to compare two quotes that look different. Written to be read before you commit.',
+    'What drives the cost of installing air conditioning, what a quote should name, and how to compare two quotes that look different. Read before you commit.',
   h1: 'What air conditioning installation costs, and what moves it',
   published: '2026-09-20',
   intro:

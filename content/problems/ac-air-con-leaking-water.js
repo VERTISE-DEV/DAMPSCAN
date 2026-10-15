@@ -2,9 +2,9 @@ export default {
   site: 'ac',
   slug: 'air-con-leaking-water',
   name: 'Air con leaking water',
-  title: 'Air Conditioning Leaking Water Indoors? Causes and Fixes | CoolRight',
+  title: 'Air Con Leaking Water Indoors? Causes & Fixes | CoolRight',
   metaDescription:
-    'Water dripping from an indoor air con unit is almost always the condensate drain. Why it happens, what you can check, and how we fix it properly so it stays fixed.',
+    'Water dripping from an indoor air con unit is almost always the condensate drain. Why it happens, what you can check, and how we fix it so it stays fixed.',
   h1: 'Air conditioning leaking water indoors',
   intro:
     'An air conditioner pulls a surprising amount of water out of the air when it cools: several litres a day in a humid British summer. All of it has to drain away through a small pipe or a pump. When water drips from the indoor unit or runs down the wall, it is nearly always because that water has nowhere to go.',

@@ -4,7 +4,6 @@ export default {
   slug: 'enfield',
   site: 'ati',
   name: 'Enfield',
-  title: 'Damp Surveys in Enfield | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Enfield, EN1, EN2, EN3, N9, N13, N14, N18 and N21. Reports for owners, landlords and buyers.',
   h1: 'Independent damp surveys in Enfield',

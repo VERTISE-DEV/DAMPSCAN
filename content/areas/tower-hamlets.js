@@ -4,7 +4,6 @@ export default {
   slug: 'tower-hamlets',
   site: 'ati',
   name: 'Tower Hamlets',
-  title: 'Damp Surveys in Tower Hamlets | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Tower Hamlets, E1, E2, E3 and E14. Reports for leaseholders, landlords, agents and disrepair cases.',
   h1: 'Independent damp surveys in Tower Hamlets',

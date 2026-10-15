@@ -4,7 +4,7 @@ export default {
   name: 'Air con not cooling',
   title: 'Air Conditioning Not Cooling? Causes and Fixes | CoolRight',
   metaDescription:
-    'Air con running but not cooling? The usual causes, from blocked filters to low refrigerant and failed parts, what you can check yourself, and what an engineer does.',
+    'Air con running but not cooling? The usual causes, from blocked filters to low refrigerant, what you can check yourself, and what an engineer does.',
   h1: 'Air conditioning running but not cooling',
   intro:
     'The unit is on, the fan is blowing, and the room is no cooler. It is the commonest call we get in the first hot week of the year, and in a fair share of cases the cause is something simple. In the rest it is a fault that needs an engineer with gauges, and guessing at it costs more than finding it.',

@@ -4,7 +4,6 @@ export default {
   slug: 'haringey',
   site: 'ati',
   name: 'Haringey',
-  title: 'Damp Surveys in Haringey | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Haringey, N4, N8, N15, N17 and N22. Written reports for owners, leaseholders, landlords and agents.',
   h1: 'Independent damp surveys in Haringey',

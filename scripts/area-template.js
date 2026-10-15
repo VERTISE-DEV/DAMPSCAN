@@ -10,6 +10,9 @@
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
 import { SITES } from './sites.js';
+import { areaTitle, areaDescription } from './seo-meta.js';
+import { reviews } from '../content/reviews/index.js';
+import { MIN_REVIEWS } from '../lib/google-reviews.js';
 
 /* The booking form needs the same per site values the home pages set inline.
    A static page cannot read environment variables, so they live in SITES.
@@ -68,11 +71,32 @@ export function distinctiveWordCount(area) {
   ].join(' '));
 }
 
+/* One question every town page answers the same way, because the honest answer
+   is the same everywhere: what happens about treatment after the survey. It is
+   what "damp proofing <town>" searchers want to know, and it is the one place
+   the two brands differ most, so each gets its own. Added to the town's own
+   questions rather than replacing any. */
+const BRAND_FAQ = {
+  dampscan: (n) => ({
+    q: `Do I have to use you for damp proofing in ${n}?`,
+    a: 'No. The survey and report come first and stand on their own, written so that any competent contractor could work from them. Where remedial work is needed we quote a fixed price for it alongside the report, covered by an insured workmanship guarantee, and declining it changes nothing about what the report says. A survey concluding that no damp proofing is needed is a routine outcome.'
+  }),
+  ati: (n) => ({
+    q: `Will you try to sell me damp proofing in ${n}?`,
+    a: 'No. We carry out no remedial work, so there is nothing to sell after the survey. The report states the cause, the work that would actually fix it and an outline of what that work should reasonably cost, so you can get like for like quotes from contractors of your choice, or put it to a seller, landlord or freeholder.'
+  })
+};
+
+export function faqFor(area) {
+  const extra = BRAND_FAQ[area.site];
+  return extra ? [...area.faq, extra(area.name)] : area.faq;
+}
+
 function faqSchema(area) {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: area.faq.map((f) => ({
+    mainEntity: faqFor(area).map((f) => ({
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a }
@@ -80,17 +104,66 @@ function faqSchema(area) {
   });
 }
 
-function businessSchema(area, site, url) {
+/* A Service with the business as provider, rather than a second copy of the
+   LocalBusiness on every town page: the business is described once, on the
+   home page, and each town page says what is offered where. No rating here:
+   Google does not show stars for a business's reviews of itself, and repeating
+   an aggregate on every page invites a manual action for nothing. */
+function serviceSchema(area, site, url, description) {
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': site.schemaType,
-    name: site.brand,
+    '@type': 'Service',
+    name: `Damp survey in ${area.name}`,
+    serviceType: 'Damp survey',
     url,
-    telephone: site.phone || undefined,
-    email: site.email,
-    areaServed: { '@type': 'Place', name: area.name },
-    description: area.metaDescription
+    description,
+    provider: {
+      '@type': site.schemaType,
+      name: site.brand,
+      url: site.origin + '/',
+      telephone: site.phone || undefined,
+      email: site.email
+    },
+    areaServed: [{ '@type': 'AdministrativeArea', name: area.name },
+      ...area.places.filter((p) => p !== area.name).map((name) => ({ '@type': 'Place', name }))]
   });
+}
+
+/* Two real reviews, words exactly as written. Which two rotates with the
+   page's place in the list, so thirty town pages do not all open the same
+   quote: the reviews are about the firm, not the town, and we do not pretend
+   otherwise by captioning them with a place. */
+function reviewsSection(area, allAreas) {
+  const held = reviews[area.site] || [];
+  const list = held.filter((r) => String(r.text || '').trim());
+  if (held.length < MIN_REVIEWS || list.length < 2) return '';
+  const i = Math.max(0, allAreas.filter((a) => a.site === area.site).indexOf(area));
+  const pick = [list[i % list.length], list[(i + 1) % list.length]];
+  return `
+  <section class="sec quotes" id="reviews">
+    <h2>What customers say about us</h2>
+    ${pick.map((r) => `<blockquote class="quote-card"><p>${esc(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
+  </section>
+`;
+}
+
+/* The closing call to action, in the body as well as the aside, because on a
+   phone the aside sits below everything and a reader who has just finished
+   the questions should not have to scroll back up for a number. */
+function ctaSection(area, site) {
+  const call = site.phone
+    ? ` or call <a href="tel:${site.phone}">${esc(site.phoneLabel)}</a>`
+    : '';
+  const what = area.site === 'ati'
+    ? 'We survey and report only, with no treatment to sell, so what the report says is the whole of our interest.'
+    : 'A qualified surveyor finds the cause first, and nothing is quoted until it is found.';
+  return `
+  <section class="sec">
+    <h2>Book a damp survey in ${esc(area.name)}</h2>
+    <p>${what} Same day response to every enquiry, and a written report with photographs within 24 hours of the visit.</p>
+    <p><a class="btn btn--primary" href="#book">Book a survey</a>${call}</p>
+  </section>
+`;
 }
 
 /* The middle rung is /damp-survey/, a real page, rather than an anchor on the
@@ -111,6 +184,8 @@ export function render(area, allAreas) {
   const site = SITES[area.site];
   if (!site) throw new Error(`${area.slug}: unknown site "${area.site}"`);
   const url = `${site.origin}/damp-survey/${area.slug}`;
+  const title = areaTitle(area);
+  const description = areaDescription(area);
 
   const nearby = (area.nearby || [])
     .map((slug) => allAreas.find((a) => a.slug === slug && a.site === area.site))
@@ -155,9 +230,10 @@ ${area.towns && area.towns.length ? `
     </ul>
   </section>
 
+${reviewsSection(area, allAreas)}
   <section class="sec" id="faq">
     <h2>${esc(area.name)} questions</h2>
-    ${area.faq.map((f) => `<details class="qa"><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n    ')}
+    ${faqFor(area).map((f) => `<details class="qa"><summary>${esc(f.q)}</summary><p>${f.a}</p></details>`).join('\n    ')}
   </section>
 ${nearby.length ? `
   <section class="sec">
@@ -165,8 +241,9 @@ ${nearby.length ? `
     <ul class="chips">
       ${nearby.map((n) => `<li><a href="/damp-survey/${n.slug}">${esc(n.name)}</a></li>`).join('\n      ')}
     </ul>
+    <p><a href="/damp-survey">Every area we cover</a></p>
   </section>
-` : ''}`;
+` : ''}${ctaSection(area, site)}`;
 
   const aside = `
     <div class="booking">
@@ -180,9 +257,9 @@ ${nearby.length ? `
   return shell({
     site,
     url,
-    title: area.title,
-    metaDescription: area.metaDescription,
-    schemas: [businessSchema(area, site, url), breadcrumbSchema(area, site, url), faqSchema(area)],
+    title,
+    metaDescription: description,
+    schemas: [serviceSchema(area, site, url, description), breadcrumbSchema(area, site, url), faqSchema(area)],
     body,
     aside,
     scripts: bookScripts(site)

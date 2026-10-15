@@ -32,7 +32,7 @@ const ati = {
   slug: 'pricing',
   title: 'Damp Survey Prices in London | ATi Damp Survey',
   metaDescription:
-    'What an independent damp survey costs in London. Four fixed price bands from £215, what each includes, and what is never added afterwards.',
+    'What an independent damp survey costs in London: four fixed price bands, what each includes, and what is never added afterwards. Report in 24 hours.',
   h1: 'What a survey costs, and what decides it',
   intro:
     'Most damp surveys in London are free, and that is the problem with them. A free survey is paid for by the work it recommends, which is why so many of them recommend work. We sell no remedial work at all, so the survey is the whole transaction and the price can simply be published.',
@@ -137,7 +137,7 @@ const dampscan = {
   slug: 'pricing',
   title: 'Damp Survey Prices in Kent and the South East | DampScan',
   metaDescription:
-    'What a damp survey costs across Kent and the South East. Four fixed price bands from £215, what each includes, and what is never added afterwards.',
+    'What a damp survey costs across Kent and the South East: four fixed price bands, what each includes, and what is never added afterwards.',
   h1: 'What a survey costs, and what decides it',
 
   /* The hard sentence, and it goes first on purpose. DampScan does the works,

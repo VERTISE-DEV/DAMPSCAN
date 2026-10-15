@@ -4,7 +4,6 @@ export default {
   slug: 'folkestone-and-hythe',
   site: 'dampscan',
   name: 'Folkestone and Hythe',
-  title: 'Damp & Mould Surveys in Folkestone and Hythe | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Folkestone, Hythe and Romney Marsh, CT18 to CT21 and TN28 to TN29.',
   h1: 'Damp and mould surveys in Folkestone and Hythe',

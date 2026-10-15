@@ -4,7 +4,7 @@ export default {
   slug: "scaffolding-and-access",
   site: 'roofing',
   name: "Scaffolding and access",
-  title: "Scaffolding and access: why it is in the price | Verge Roofing",
+  title: "Scaffolding & Access: Why It Is in the Price | Verge Roofing",
   metaDescription:
     "When a roof job genuinely needs a scaffold, what a tower or a ladder can safely do, and why access is the line most often left off a quote.",
   h1: "Scaffolding and access: why it is in the price",

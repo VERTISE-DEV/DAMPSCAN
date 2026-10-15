@@ -4,7 +4,6 @@ export default {
   slug: 'barking-and-dagenham',
   site: 'ati',
   name: 'Barking and Dagenham',
-  title: 'Damp Surveys in Barking and Dagenham | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Barking and Dagenham, IG11, RM8, RM9 and RM10. Reports for owners, landlords, agents and disrepair cases.',
   h1: 'Independent damp surveys in Barking and Dagenham',

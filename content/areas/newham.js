@@ -4,7 +4,6 @@ export default {
   slug: 'newham',
   site: 'ati',
   name: 'Newham',
-  title: 'Damp Surveys in Newham | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Newham, E6, E7, E12, E13, E15 and E16. Reports for landlords, agents, leaseholders and disrepair cases.',
   h1: 'Independent damp surveys in Newham',

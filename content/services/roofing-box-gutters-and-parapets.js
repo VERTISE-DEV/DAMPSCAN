@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "box-gutters-and-parapets",
   "name": "Box gutters and parapets",
-  "title": "Box Gutter Replacement & Parapet Roofing in London & the South East | Verge Roofing",
-  "metaDescription": "Lead and EPDM box gutter replacement, valley gutters, lead coping caps and parapet repairs across London and the South East, including central London terraces. Free quotes, fixed in writing.",
+  "title": "Box Gutter & Parapet Roofing, London & SE | Verge Roofing",
+  "metaDescription": "Lead and EPDM box gutters, valley gutters, coping caps and parapet repairs across London and the South East. Our own team, free quotes fixed in writing.",
   "h1": "Box gutters, valley gutters and parapets",
   "intro": "Box gutters and parapets are hidden from the street and full of leaves, which is why they fail without anyone noticing. Recent jobs include a lead box gutter replacement with lead coping caps in central London and an EPDM rubber box gutter between two pitched roofs.",
   "sections": [

@@ -4,7 +4,6 @@ export default {
   slug: 'southwark',
   site: 'ati',
   name: 'Southwark',
-  title: 'Damp Surveys in Southwark | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Southwark, SE1, SE5, SE15, SE16, SE17 and SE22. Written, evidence-based reports with nothing to sell.',
   h1: 'Independent damp surveys in Southwark',

@@ -4,9 +4,9 @@ export default {
   slug: "signs-your-roof-needs-work",
   site: 'roofing',
   name: "Signs your roof needs work",
-  title: "Signs your roof needs work, and signs it does not | Verge Roofing",
+  title: "Does Your Roof Need Work? Signs to Look For | Verge Roofing",
   metaDescription:
-    "What to look for from the ground and from the loft, what is harmless, and what genuinely warrants a call.",
+    "What to look for from the ground and from the loft, which signs are harmless, and which genuinely mean your roof needs a roofer to look at it.",
   h1: "Signs your roof needs work, and signs it does not",
   published: "2026-09-18",
   intro:

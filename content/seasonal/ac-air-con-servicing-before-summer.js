@@ -2,7 +2,7 @@ export default {
   site: 'ac',
   slug: 'air-con-servicing-before-summer',
   name: 'Air con servicing before summer',
-  title: 'Air Conditioning Service Before Summer | Spring Service | CoolRight',
+  title: 'Air Con Servicing Before Summer | CoolRight',
   metaDescription:
     'Why a spring service is the best time to look after your air conditioning: what we check, what it prevents, and why it beats waiting for the first hot day.',
   h1: 'Service your air con before the summer, not during it',

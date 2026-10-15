@@ -2,9 +2,9 @@ export default {
   site: 'ac',
   slug: 'noisy-air-con',
   name: 'Noisy air con unit',
-  title: 'Noisy Air Conditioning Unit? Rattles, Hums and Clicks | CoolRight',
+  title: 'Noisy Air Con? Rattles, Hums & Clicks Explained | CoolRight',
   metaDescription:
-    'What the noise from your air conditioner is telling you: rattles, buzzing, squeals, clicking and water sounds, which are normal, which need an engineer, and what we do.',
+    'Rattles, buzzing, squeals, clicks and water sounds from your air conditioner: which are normal, which need an engineer, and what we do about them.',
   h1: 'Noisy air conditioning: what the sound means',
   intro:
     'A modern split system should be quiet enough to sleep beside. When it starts to rattle, hum or squeal, the sound is usually a good clue to the cause, and catching it early is often the difference between a small repair and a failed fan motor or compressor. Some noises are normal, though, and it helps to know which.',

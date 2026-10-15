@@ -4,7 +4,6 @@ export default {
   slug: 'ashford',
   site: 'dampscan',
   name: 'Ashford',
-  title: 'Damp & Mould Surveys in Ashford | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Ashford, TN23 to TN26. The cause diagnosed before anyone quotes, for period homes and new build estates alike.',
   h1: 'Damp and mould surveys in Ashford',

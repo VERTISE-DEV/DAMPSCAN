@@ -4,7 +4,6 @@ export default {
   slug: 'hounslow',
   site: 'ati',
   name: 'Hounslow',
-  title: 'Damp Surveys in Hounslow | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Hounslow, TW3 to TW8, TW13, TW14 and W4. Written reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Hounslow',

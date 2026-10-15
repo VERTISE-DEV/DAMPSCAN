@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "conservatory-roof-replacement",
   "name": "Conservatory roof replacement",
-  "title": "Conservatory Roof Replacement in London & the South East | Solid Tiled Roofs | Verge Roofing",
-  "metaDescription": "Replace a polycarbonate or glass conservatory roof with a solid, insulated tiled roof across London and the South East. Warmer in winter, cooler in summer, quieter in the rain. Free quotes, fixed in writing.",
+  "title": "Conservatory Roof Replacement, London & SE | Verge Roofing",
+  "metaDescription": "Swap a polycarbonate or glass conservatory roof for a solid, insulated tiled roof. Warmer in winter, cooler in summer. Free quotes, fixed in writing.",
   "h1": "Conservatory roof replacement: from polycarbonate to a solid tiled roof",
   "intro": "Most conservatories are too hot in summer, too cold in winter and too loud in the rain, and the roof is the reason. We take the old polycarbonate or glass roof off and build a solid, insulated, tiled roof in its place, so the room becomes one you use all year.",
   "sections": [

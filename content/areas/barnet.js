@@ -4,7 +4,6 @@ export default {
   slug: 'barnet',
   site: 'ati',
   name: 'Barnet',
-  title: 'Damp Surveys in Barnet | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Barnet, N2, N3, N12, N20, NW4, NW7, EN4 and EN5. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Barnet',

@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "epdm-rubber-roofing",
   "name": "EPDM rubber roofing",
-  "title": "EPDM Rubber Roofing in London & the South East | Flat Roofs, Bays & Box Gutters | Verge Roofing",
-  "metaDescription": "EPDM rubber roofs across London and the South East: flat roof extensions, garages, dormers, bay roofs and EPDM box gutters. Laid as a single sheet with proper edges and upstands. Free quotes, fixed in writing.",
+  "title": "EPDM Rubber Roofing, London & South East | Verge Roofing",
+  "metaDescription": "EPDM rubber roofs on extensions, garages, dormers, bays and box gutters, laid as one sheet with proper edges and upstands. Free quotes, fixed in writing.",
   "h1": "EPDM rubber roofing for flat roofs, bays and box gutters",
   "intro": "EPDM is a synthetic rubber membrane laid as one sheet, usually with no joins on a house roof. We use it on extensions, garages, dormers and bay roofs, and to line box gutters, and we regularly replace EPDM roofs that somebody else laid badly.",
   "sections": [

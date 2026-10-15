@@ -4,7 +4,6 @@ export default {
   slug: 'harrow',
   site: 'ati',
   name: 'Harrow',
-  title: 'Damp Surveys in Harrow | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Harrow, HA1, HA2, HA3, HA5, HA6 and HA7. Written reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Harrow',

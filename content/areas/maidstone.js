@@ -4,7 +4,6 @@ export default {
   slug: 'maidstone',
   site: 'dampscan',
   name: 'Maidstone',
-  title: 'Damp & Mould Surveys in Maidstone | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Maidstone and the Medway valley, ME14 to ME17. We diagnose the cause before anyone recommends a treatment.',
   h1: 'Damp and mould surveys in Maidstone',

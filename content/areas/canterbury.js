@@ -4,7 +4,6 @@ export default {
   slug: 'canterbury',
   site: 'dampscan',
   name: 'Canterbury',
-  title: 'Damp & Timber Surveys in Canterbury | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Canterbury, CT1 to CT4. Specialist experience with listed and timber framed buildings.',
   h1: 'Damp and timber surveys in Canterbury',

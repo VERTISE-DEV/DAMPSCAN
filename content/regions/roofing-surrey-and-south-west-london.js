@@ -6,9 +6,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['SW', 'CR', 'SM', 'KT', 'GU', 'RH', 'TW'],
   name: 'Surrey and south west London',
-  title: 'Roofers in Surrey & South West London | Clay Tile, Slate, Flat Roofs | Verge Roofing',
+  title: 'Roofers in Surrey & South West London | Verge Roofing',
   metaDescription:
-    'Roofing across Surrey and south west London: clay tile and slate re-roofs, tile hanging, valleys, dormers and flat roofs in Croydon, Kingston, Sutton, Epsom, Guildford, Woking and Reigate. Free quotes.',
+    'Clay tile and slate re-roofs, tile hanging, dormers and flat roofs in Croydon, Kingston, Sutton, Epsom, Guildford, Woking and Reigate. Free fixed quotes.',
   h1: 'Roofing in Surrey and south west London',
   intro:
     'From the Victorian terraces of Wandsworth and Wimbledon to the interwar avenues of Sutton and Cheam and the large tiled houses of the Surrey hills, this is the widest mix of roofs anywhere we work. Our own team re-roofs, repairs and maintains all of them.',

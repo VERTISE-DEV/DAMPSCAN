@@ -4,7 +4,6 @@ export default {
   slug: 'tonbridge-and-malling',
   site: 'dampscan',
   name: 'Tonbridge and Malling',
-  title: 'Damp & Mould Surveys in Tonbridge and Malling | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Tonbridge and Malling, TN9 to TN12 and ME6, ME18 and ME19.',
   h1: 'Damp and mould surveys in Tonbridge and Malling',

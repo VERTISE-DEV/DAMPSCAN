@@ -4,7 +4,6 @@ export default {
   slug: 'bexley',
   site: 'ati',
   name: 'Bexley',
-  title: 'Damp Surveys Bexleyheath, Sidcup & Welling | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Bexleyheath, Sidcup, Welling and the rest of Bexley, DA1 to DA16. Written reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Bexleyheath, Sidcup and Welling',

@@ -4,7 +4,6 @@ export default {
   slug: 'guildford',
   site: 'dampscan',
   name: 'Guildford',
-  title: 'Damp & Mould Surveys in Guildford | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Guildford, GU1 to GU5. The cause diagnosed first, with a written report within 24 hours of the visit.',
   h1: 'Damp and mould surveys in Guildford',

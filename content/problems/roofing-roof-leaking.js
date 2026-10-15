@@ -2,9 +2,9 @@ export default {
   site: 'roofing',
   slug: 'roof-leaking',
   name: 'Roof leaking',
-  title: 'Roof Leaking? Finding and Fixing the Real Cause | Verge Roofing',
+  title: 'Roof Leaking? Finding the Real Cause | Verge Roofing',
   metaDescription:
-    'A roof leak rarely starts where the stain is. How we trace a leak to its source, the usual causes on tiled, slate and flat roofs, and what a proper repair involves.',
+    'A roof leak rarely starts where the stain is. How we trace a leak to its source on tiled, slate and flat roofs, and what a proper repair involves.',
   h1: 'Roof leaking: find the cause, not just the stain',
   intro:
     'Water that gets through a roof travels before it shows. It runs along a batten, down a rafter or across the top of a ceiling, and the brown ring you can see is often a metre or more from the actual hole. That is why a leak patched where the stain is so often comes back with the next heavy rain.',

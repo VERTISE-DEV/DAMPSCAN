@@ -5,9 +5,9 @@ export default {
   /* Postcode areas this region answers for: where a finished job is linked from. */
   postcodes: ['BR', 'DA', 'ME', 'CT', 'TN', 'SE'],
   name: 'Kent and south east London',
-  title: 'Roofers in Kent & South East London | Re-roofs, Repairs, Flat Roofs | Verge Roofing',
+  title: 'Roofers in Kent & South East London | Verge Roofing',
   metaDescription:
-    'Roofing across Kent and south east London: re-roofs, repairs, flat roofs, chimneys and leadwork in Bromley, Bexley, Dartford, Sevenoaks, Maidstone and Medway. Free quotes, fixed in writing.',
+    'Re-roofs, repairs, flat roofs, chimneys and leadwork in Bromley, Bexley, Dartford, Sevenoaks, Maidstone and Medway. Free quotes, fixed in writing.',
   h1: 'Roofing in Kent and south east London',
   intro:
     'Bromley, Bexley, Dartford, Sevenoaks, Maidstone, Medway and Gravesend cover two very different roof populations, and they fail in different ways. Our own team works right across them, on re-roofs, repairs, flat roofs and chimneys.',

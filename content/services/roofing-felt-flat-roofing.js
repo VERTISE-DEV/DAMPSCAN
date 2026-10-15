@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "felt-flat-roofing",
   "name": "Felt flat roofing",
-  "title": "Felt Flat Roofs in London & the South East | Torch-On Felt Replacement & Overlays | Verge Roofing",
-  "metaDescription": "Torch-on felt flat roofs across London and the South East: full replacements on new timber decks, felt overlays on sound roofs, and felt flashings over parapets and copings. Free quotes, fixed in writing.",
+  "title": "Felt Flat Roofs, Torch-On Replacement | Verge Roofing",
+  "metaDescription": "Torch-on felt flat roofs across London and the South East: full replacements on new decks, overlays on sound roofs and felt flashings. Free fixed quotes.",
   "h1": "Felt flat roofs: replacements, overlays and repairs",
   "intro": "Modern torch-on felt is nothing like the felt of forty years ago. Laid as a two or three layer system with a mineral cap, it is tough, easy to repair and often the best answer on larger roofs and roofs with lots of details.",
   "sections": [

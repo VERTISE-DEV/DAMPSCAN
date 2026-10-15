@@ -4,7 +4,6 @@ export default {
   slug: 'city-of-london',
   site: 'ati',
   name: 'City of London',
-  title: 'Damp Surveys in City of London | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys in the City of London, EC1 to EC4. Reports for leaseholders, owners and managing agents.',
   h1: 'Independent damp surveys in City of London',

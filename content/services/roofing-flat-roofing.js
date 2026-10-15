@@ -5,8 +5,8 @@ export default {
   "site": "roofing",
   "slug": "flat-roofing",
   "name": "Flat roofing",
-  "title": "Flat Roofing in London & the South East | EPDM, Felt & GRP | Verge Roofing",
-  "metaDescription": "New flat roofs and flat roof replacements across London and the South East in EPDM rubber and torch-on felt, on extensions, garages, dormers and bays. New timber decks and proper falls. Free quotes, fixed in writing.",
+  "title": "Flat Roofing in London & the South East | Verge Roofing",
+  "metaDescription": "New and replacement flat roofs in EPDM rubber and torch-on felt on extensions, garages, dormers and bays. New decks, proper falls, fixed quotes in writing.",
   "h1": "Flat roofing: replacements, new decks and repairs",
   "intro": "Extensions, garages, dormers, bays and porches. We strip failed flat roofs, build new timber decks where the old one has gone, and lay EPDM rubber or high-performance felt to proper falls so water runs off instead of sitting there.",
   "sections": [

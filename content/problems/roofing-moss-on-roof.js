@@ -2,9 +2,9 @@ export default {
   site: 'roofing',
   slug: 'moss-on-roof',
   name: 'Moss on the roof',
-  title: 'Moss on Your Roof: When It Matters and What to Do | Verge Roofing',
+  title: 'Moss on Your Roof: When It Matters | Verge Roofing',
   metaDescription:
-    'Moss on roof tiles is mostly cosmetic, until it blocks gutters, lifts tiles or holds water. When it is worth removing, how we do it safely, and why we do not pressure wash.',
+    'Moss on roof tiles is mostly cosmetic until it blocks gutters, lifts tiles or holds water. When to remove it, how we do it, and why we never pressure wash.',
   h1: 'Moss on the roof: when it matters',
   intro:
     'A bit of moss on a north facing slope is normal in the South East, especially under trees, and on its own it does not mean the roof is failing. It becomes a problem when it is thick enough to hold water against the tiles, lift their edges or wash down and block the gutters.',

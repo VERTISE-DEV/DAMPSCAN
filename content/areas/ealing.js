@@ -4,7 +4,6 @@ export default {
   slug: 'ealing',
   site: 'ati',
   name: 'Ealing',
-  title: 'Damp Surveys in Ealing | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Ealing, W5, W13, W3, W7 and UB1. Written, evidence-based reports for owners, buyers and landlords.',
   h1: 'Independent damp surveys in Ealing',

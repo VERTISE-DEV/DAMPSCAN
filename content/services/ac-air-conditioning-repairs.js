@@ -8,7 +8,7 @@ export default {
   slug: "air-conditioning-repairs",
   site: 'ac',
   name: "Air Conditioning Repairs and Regas",
-  title: "Air Conditioning Repair and Regas | London and the South East | CoolRight",
+  title: "Air Conditioning Repair & Regas, London & SE | CoolRight",
   metaDescription:
     "Not cooling, leaking, tripping out or noisy. Leak detection, component replacement and recharge to the correct weighed-in charge, by F-Gas registered engineers.",
   h1: "Air conditioning repairs: diagnosed before it is quoted",

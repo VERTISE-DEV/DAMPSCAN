@@ -4,7 +4,6 @@ export default {
   slug: 'waltham-forest',
   site: 'ati',
   name: 'Waltham Forest',
-  title: 'Damp Surveys in Waltham Forest | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Waltham Forest, E4, E10, E11 and E17. Written reports for owners, leaseholders and landlords.',
   h1: 'Independent damp surveys in Waltham Forest',

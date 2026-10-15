@@ -8,9 +8,9 @@ export default {
   slug: "air-conditioning-installation",
   site: 'ac',
   name: "Air Conditioning Installation",
-  title: "Air Conditioning Installation | London and the South East | CoolRight",
+  title: "Air Conditioning Installation, London & SE | CoolRight",
   metaDescription:
-    "Wall-mounted split air conditioning installed by F-Gas registered engineers across London and the South East. Free quote visit, fixed written price, warranty registered for you.",
+    "Split air con installed by F-Gas registered engineers across London and the South East. Free quote visit, fixed written price, warranty registered.",
   h1: "Air conditioning installation, priced properly and fitted to spec",
   intro:
     "A single wall-mounted split is the most common air conditioning installation in a British home: one indoor unit, one outdoor condenser, and a small core drilled through the wall between them. Fitted well it is quiet, unobtrusive and surprisingly cheap to run. Fitted badly it drips, rattles, cools one corner of the room and costs more to run every year it stays in.",

@@ -18,7 +18,7 @@ const MIN_WORDS = 250;
 
 export function check(area, seen) {
   const problems = [];
-  const required = ['slug', 'site', 'name', 'title', 'h1', 'intro', 'coverage'];
+  const required = ['slug', 'site', 'name', 'h1', 'intro', 'coverage'];
   for (const field of required) {
     if (!area[field]) problems.push(`missing ${field}`);
   }

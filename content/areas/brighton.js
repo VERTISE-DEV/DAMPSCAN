@@ -4,7 +4,6 @@ export default {
   slug: 'brighton',
   site: 'dampscan',
   name: 'Brighton',
-  title: 'Damp & Mould Surveys in Brighton & Hove | DampScan',
   metaDescription:
     'Damp, mould and timber surveys across Brighton and Hove, BN1 to BN3. Regency stucco, bungaroosh and basement flats a speciality.',
   h1: 'Damp and mould surveys in Brighton and Hove',

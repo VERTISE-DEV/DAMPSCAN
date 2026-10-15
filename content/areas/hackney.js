@@ -4,7 +4,6 @@ export default {
   slug: 'hackney',
   site: 'ati',
   name: 'Hackney',
-  title: 'Damp Surveys in Hackney | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Hackney, E5, E8, E9, N1 and N16. Evidence-based written reports with no remedial work to sell.',
   h1: 'Independent damp surveys in Hackney',

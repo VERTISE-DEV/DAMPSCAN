@@ -4,7 +4,6 @@ export default {
   slug: 'redbridge',
   site: 'ati',
   name: 'Redbridge',
-  title: 'Damp Surveys in Redbridge | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Redbridge, IG1 to IG8, E11 and E18. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Redbridge',

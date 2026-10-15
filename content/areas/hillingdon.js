@@ -4,7 +4,6 @@ export default {
   slug: 'hillingdon',
   site: 'ati',
   name: 'Hillingdon',
-  title: 'Damp Surveys in Hillingdon | ATi Damp Survey',
   metaDescription:
     'Independent damp and timber surveys across Hillingdon, UB3 to UB10, HA4 and HA6. Written, evidence-based reports.',
   h1: 'Independent damp surveys in Hillingdon',

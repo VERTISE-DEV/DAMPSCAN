@@ -146,7 +146,7 @@ test('the morning digest says what is on, what is waiting and what happened, per
   assert.equal(pushes.length, 1);
   const text = pushes[0].body.title + ' ' + pushes[0].body.message;
   assert.ok(text.startsWith('Good morning: Verge Roofing'), text);
-  assert.equal(pushes[0].body.click, 'https://dampscan.co.uk/staff/due.html?area=roofing');
+  assert.equal(pushes[0].body.click, 'https://dampscan.co.uk/staff/calendar.html?area=roofing');
   assert.match(text, /1 job tomorrow\./);
   assert.match(text, /1 quote out over a week with no answer\./);
   assert.match(text, /£500 outstanding on 1 completed job\./);

@@ -187,6 +187,23 @@
     el('c-saved').textContent = 'Saved';
   }
 
+  /* The header search and Today link to one card as #job-N. Opened once, then
+     the hash goes so a refresh does not reopen it; a card outside the view
+     pressed is looked up among every client. */
+  async function openFromHash() {
+    var m = /^#job-(\d+)$/.exec(location.hash);
+    if (!m) return;
+    history.replaceState(null, '', location.pathname + location.search);
+    var id = Number(m[1]);
+    var find = function (list) { return (list || []).filter(function (c) { return c.id === id; })[0]; };
+    var c = find(state.clients);
+    if (!c) {
+      try { state.all = state.all || (await U.get('/api/admin/clients?view=all')).clients || []; } catch (e) { return; }
+      c = find(state.all);
+    }
+    if (c) open(c, null);
+  }
+
   /* ---------- loading and wiring ---------- */
   async function refresh() {
     var siteQs = state.site ? '&site=' + state.site : '';
@@ -198,6 +215,7 @@
       state.all = null;
       if (state.query) state.all = (await U.get('/api/admin/clients?view=all' + siteQs)).clients || [];
       render();
+      await openFromHash();
       el('state').hidden = true;
       el('content').hidden = false;
     } catch (err) {

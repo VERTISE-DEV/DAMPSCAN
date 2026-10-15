@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0c1a2b" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
-<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/board.css" />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/shell.css" /><link rel="stylesheet" href="/staff/board.css" />
 <script>
 /* Both sites share this staff area, so the hostname decides whose name is on
    it. This runs in the head, before anything is painted, so neither brand ever
@@ -115,10 +115,15 @@
       <h2 id="h-business">Business details and VAT</h2>
       <div id="business"></div>
     </section>
+    <section class="panel" aria-labelledby="h-usage" id="p-usage" hidden>
+      <h2 id="h-usage">Most used pages (last 30 days)</h2>
+      <div id="usage"></div>
+      <p class="panel-note">Staff pages opened, across every company: who and which page, never where from. Admins only.</p>
+    </section>
   </div>
 </main>
 
 <script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
-<script src="/staff/insights-jobs.js"></script><script src="/staff/insights.js"></script><script src="/staff/insights-business.js"></script>
+<script src="/staff/insights-jobs.js"></script><script src="/staff/insights.js"></script><script src="/staff/insights-business.js"></script><script src="/staff/insights-usage.js"></script>
 </body>
 </html>

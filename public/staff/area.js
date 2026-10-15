@@ -1,10 +1,12 @@
 /* The staff site's two levels of navigation.
 
-   Across the top: the companies, ATi & DampScan, Verge Roofing and CoolRight,
-   and the Calendar, which is one view of every company's work together.
-   Underneath, once a company is chosen: its own sections (Due, Leads,
-   Pipeline and the rest), which differ because the businesses work
-   differently. Every page shows only the chosen company's data.
+   Across the top: Today (the calendar, with everything due and the to-do
+   list), then the companies, ATi & DampScan, Verge Roofing and CoolRight,
+   then Money (the bank, filtered by company) and the Settings cog.
+   Underneath, once a company is chosen: its own sections (Leads, Pipeline
+   and the rest), which differ because the businesses work differently.
+   Every company page shows only the chosen company's data. On a phone the
+   top row becomes a bar along the bottom (shell.js draws it).
 
    The company comes from ?area= in the address, then from the last one used
    on this device, then the first the signed in person holds. A person sees
@@ -20,40 +22,47 @@
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
+      tabs: [['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
+      tabs: [['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
     },
     ac: {
       name: 'CoolRight', sites: ['ac'], books: 'ac',
-      tabs: [['Due', 'due.html'], ['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html'], ['To-do', 'todo.html'], ['Bank', 'bank.html']]
+      tabs: [['Leads', 'dashboard.html'], ['Pipeline', 'pipeline.html'], ['Quotes and jobs', 'quoted.html'], ['Insights', 'insights.html']]
     }
   };
   var ORDER = ['damp', 'roofing', 'ac'];
   var KEY = 'ds_staff_area';
   var CALENDAR = 'calendar.html';
   var TODO = 'todo.html';
+  var MONEY = 'bank.html';
+  var SETTINGS = 'settings.html';
+  /* Pages every company has but which are not section tabs: Due and the
+     to-do list now live in Today and keep working for old links and alerts,
+     and the bank is Money, one level up. */
+  var EXTRA = ['due.html', TODO, MONEY];
 
   function stored() { try { return global.localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(a) { try { global.localStorage.setItem(KEY, a); } catch (e) {} }
 
-  var page = global.location.pathname.split('/').pop() || 'due.html';
+  var page = global.location.pathname.split('/').pop() || CALENDAR;
   var fromUrl = new URLSearchParams(global.location.search).get('area');
-  /* The calendar belongs to no one company: it shows them all together. The
-     to-do list is both: under a company it is that company's list, and from
-     the top bar (no company in the address) it is everything. */
-  var overall = page === CALENDAR || (page === TODO && !AREAS[fromUrl]);
+  /* Today and Settings belong to no one company: they show them all. The
+     to-do list is both: under a company it is that company's list, and with
+     no company in the address it is everything. */
+  var overall = page === CALENDAR || page === SETTINGS || (page === TODO && !AREAS[fromUrl]);
   var area = AREAS[fromUrl] ? fromUrl : (AREAS[stored()] ? stored() : 'damp');
   if (!overall) remember(area);
 
   function href(a, file) { return '/staff/' + file + '?area=' + a; }
-  function hasPage(a, file) { return AREAS[a].tabs.some(function (t) { return t[1] === file; }); }
+  function first(a) { return AREAS[a].tabs[0][1]; }
+  function hasPage(a, file) { return EXTRA.indexOf(file) !== -1 || AREAS[a].tabs.some(function (t) { return t[1] === file; }); }
 
   /* A page this company does not have, such as Jobs under Verge, goes to the
      company's first section rather than showing another business's screen. */
-  if (!overall && !hasPage(area, page)) { global.location.replace(href(area, AREAS[area].tabs[0][1])); return; }
+  if (!overall && !hasPage(area, page)) { global.location.replace(href(area, first(area))); return; }
 
   var root = document.documentElement;
   if (!overall) root.setAttribute('data-area', area);
@@ -67,26 +76,42 @@
     return a;
   }
 
-  /* The top bar: one link per company, then the Calendar and the To-do list. */
+  /* The top bar: Today, one link per company, Money and the Settings cog. */
   function drawCompanies(allowed) {
     var nav = document.querySelector('nav.tabs');
     if (!nav) return;
     nav.textContent = '';
-    nav.setAttribute('aria-label', 'Companies');
-    allowed.forEach(function (a) { nav.appendChild(link(AREAS[a].name, href(a, 'due.html'), !overall && a === area, 'co-tab co-tab--' + a)); });
-    nav.appendChild(link('Calendar', '/staff/' + CALENDAR, overall && page === CALENDAR, 'co-tab co-tab--calendar'));
-    nav.appendChild(link('To-do', '/staff/' + TODO, overall && page === TODO, 'co-tab co-tab--calendar'));
+    nav.setAttribute('aria-label', 'Main');
+    nav.appendChild(link('Today', '/staff/' + CALENDAR, page === CALENDAR || page === 'due.html' || page === TODO, 'co-tab co-tab--today'));
+    allowed.forEach(function (a) {
+      nav.appendChild(link(AREAS[a].name, href(a, first(a)), !overall && a === area && EXTRA.indexOf(page) === -1, 'co-tab co-tab--' + a));
+    });
+    nav.appendChild(link('Money', href(allowed.indexOf(area) !== -1 ? area : allowed[0], MONEY), page === MONEY, 'co-tab co-tab--money'));
+    var cog = link('\u2699', '/staff/' + SETTINGS, page === SETTINGS, 'co-tab co-tab--settings');
+    cog.setAttribute('aria-label', 'Settings');
+    cog.title = 'Settings';
+    nav.appendChild(cog);
+    held = allowed;
   }
+  var held = ORDER;
 
-  /* The row under it: the chosen company's own sections. */
+  /* The row under it: the chosen company's own sections. On Money it is the
+     company filter instead, since the books are kept per company. */
   function drawSections() {
-    if (overall) return;
+    if (overall || page === 'due.html' || page === TODO) return;
     var header = document.querySelector('header.top');
     if (!header) return;
+    var old = document.querySelector('nav.section-tabs');
+    if (old) old.remove();
     var bar = document.createElement('nav');
     bar.className = 'section-tabs';
-    bar.setAttribute('aria-label', AREAS[area].name + ' sections');
-    AREAS[area].tabs.forEach(function (t) { bar.appendChild(link(t[0], href(area, t[1]), t[1] === page, 'section-tab')); });
+    if (page === MONEY) {
+      bar.setAttribute('aria-label', 'Money for');
+      held.forEach(function (a) { bar.appendChild(link(AREAS[a].name, href(a, MONEY), a === area, 'section-tab')); });
+    } else {
+      bar.setAttribute('aria-label', AREAS[area].name + ' sections');
+      AREAS[area].tabs.forEach(function (t) { bar.appendChild(link(t[0], href(area, t[1]), t[1] === page, 'section-tab')); });
+    }
     header.parentNode.insertBefore(bar, header.nextSibling);
   }
 
@@ -145,8 +170,12 @@
     (me.businesses || []).forEach(function (b) { held[b.slug] = true; });
     var allowed = ORDER.filter(function (a) { return AREAS[a].sites.some(function (s) { return held[s]; }); });
     if (!allowed.length) return;
-    if (!overall && allowed.indexOf(area) === -1) { remember(allowed[0]); global.location.replace(href(allowed[0], 'due.html')); return; }
+    if (!overall && allowed.indexOf(area) === -1) { remember(allowed[0]); global.location.replace(href(allowed[0], first(allowed[0]))); return; }
     drawCompanies(allowed);
+    if (page === MONEY) drawSections();
+    global.DSAREA.held = allowed.slice();
+    global.DSAREA.me = me;
+    document.dispatchEvent(new CustomEvent('ds:me', { detail: me }));
   }
 
   drawCompanies(ORDER);
@@ -154,18 +183,25 @@
   if (!overall) { drawLogo(); trimPills(); }
   trimCompanies();
 
-  /* Phone notifications: its own file, so a page that never needs it costs
-     one small request and nothing else. */
-  var pushScript = document.createElement('script');
-  pushScript.src = '/staff/push.js';
-  pushScript.defer = true;
-  document.head.appendChild(pushScript);
+  /* Phone notifications and the shared shell (search, the + button, the
+     phone's bottom bar and the page-view count): their own files, loaded
+     after the page so neither holds it up. */
+  ['/staff/push.js', '/staff/shell.js'].forEach(function (src) {
+    var tag = document.createElement('script');
+    tag.src = src;
+    tag.defer = true;
+    document.head.appendChild(tag);
+  });
 
   global.DSAREA = {
     area: overall ? null : area,
     name: overall ? 'All companies' : AREAS[area].name,
     sites: overall ? [] : AREAS[area].sites.slice(),
     books: overall ? null : AREAS[area].books,
+    page: page,
+    held: ORDER.slice(),
+    names: { damp: AREAS.damp.name, roofing: AREAS.roofing.name, ac: AREAS.ac.name },
+    first: first,
     /* The routes that narrow by company. The calendar asks for every company
        the person holds, so nothing is added to its requests. */
     scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights)\b/

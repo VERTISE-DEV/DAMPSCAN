@@ -145,11 +145,12 @@
     ], state.jobs, { empty: 'No quoted jobs in this period.' });
   }
 
-  /* A link from the Due page names a job in the hash. Opened once, then the
-     hash is cleared so a refresh does not reopen it. Jobs outside the range
-     pills' window are fetched by id. */
+  /* A link from Today or the search names a job in the hash. Opened once, then
+     the hash is cleared so a refresh does not reopen it. Jobs outside the range
+     pills' window are fetched by id. "-cost" (the + button's Add cost) lands
+     on the cost line, ready to type. */
   async function openFromHash() {
-    var m = /^#job-(\d+)$/.exec(location.hash);
+    var m = /^#job-(\d+)(-cost)?$/.exec(location.hash);
     if (!m) return;
     history.replaceState(null, '', location.pathname);
     var id = Number(m[1]);
@@ -161,6 +162,7 @@
       renderJobs();
     }
     openJob(job, document.querySelector('#jobs button[data-id="' + id + '"]'));
+    if (m[2] && el('w-cost-label')) { el('w-cost-label').scrollIntoView({ block: 'center' }); el('w-cost-label').focus(); }
   }
 
   function openJob(job, opener) {

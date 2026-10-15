@@ -35,12 +35,15 @@ import push from '../../lib/routes/admin/push.js';
 import pricebook from '../../lib/routes/admin/pricebook.js';
 import quoted from '../../lib/routes/admin/quoted.js';
 import rates from '../../lib/routes/admin/rates.js';
+import search from '../../lib/routes/admin/search.js';
+import snooze from '../../lib/routes/admin/snooze.js';
 import summary from '../../lib/routes/admin/summary.js';
 import todos from '../../lib/routes/admin/todos.js';
+import usage from '../../lib/routes/admin/usage.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, summary, todos };
+const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, search, snooze, summary, todos, usage };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;

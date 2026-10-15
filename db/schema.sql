@@ -1009,3 +1009,33 @@ alter table jobs  add column if not exists overdue_alerted_at timestamptz;
 -- A damp survey waiting on the estate agent to confirm the time. It stays in
 -- Upcoming whatever the date says, until the time is set or the tick cleared.
 alter table jobs add column if not exists awaiting_agent boolean not null default false;
+
+-- ---------------------------------------------------------------------------
+-- Staff page views (lib/routes/admin/usage.js): which staff pages get used,
+-- so the redesign keeps what people reach for. One row per page load: the
+-- person (or the owners' shared code, which has no people row), the page and
+-- the company area. Never an IP address or anything about the device.
+-- ---------------------------------------------------------------------------
+create table if not exists staff_page_views (
+  id         bigserial primary key,
+  person_id  bigint references people (id) on delete set null,
+  owners     boolean not null default false,
+  page       text not null,
+  area       text,
+  viewed_at  timestamptz not null default now()
+);
+create index if not exists staff_page_views_at_idx on staff_page_views (viewed_at desc);
+
+-- ---------------------------------------------------------------------------
+-- Snoozed action items on Today (lib/routes/admin/snooze.js). An item is its
+-- group and id from lib/work.js; snoozing is per person (0 for the owners'
+-- code), so hiding something from my list leaves it on everyone else's.
+-- ---------------------------------------------------------------------------
+create table if not exists action_snoozes (
+  kind        text not null,
+  ref         text not null,
+  person_key  bigint not null default 0,
+  until_on    date not null,
+  created_at  timestamptz not null default now(),
+  primary key (kind, ref, person_key)
+);

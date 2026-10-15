@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Settings | DampScan</title>
+<meta name="theme-color" content="#0c1a2b" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/shell.css" />
+<script>
+/* Both sites share this staff area, so the hostname decides whose name is on
+   it. This runs in the head, before anything is painted, so neither brand ever
+   flashes the other's. The markup carries both lockups; staff.css hides one. */
+(function brand(){
+  var ati = /(^|\.)atidampsurvey\.co\.uk$/i.test(location.hostname);
+  if (!ati) return;
+  document.documentElement.setAttribute('data-brand', 'ati');
+  document.title = document.title.replace('DampScan', 'ATi Damp Survey');
+  var icon = document.querySelector('link[rel="icon"]');
+  if (icon) { icon.type = 'image/png'; icon.href = '/assets/ati-mark.png'; }
+})();
+</script>
+</head>
+<body>
+
+<header class="top">
+  <a href="/" class="logo brand-dampscan" aria-label="DampScan home">
+    <span class="logo-type">
+      <span class="logo-word">Damp<span class="scan">Scan</span></span>
+      <span class="logo-tag">Survey Specialists</span>
+    </span>
+  </a>
+  <a href="/" class="logo brand-ati" aria-label="ATi Damp Survey home">
+    <span class="logo-type">
+      <span class="logo-word">ATi <span class="scan">Damp</span></span>
+      <span class="logo-tag">Survey Practice</span>
+    </span>
+  </a>
+  <nav class="tabs" aria-label="Sections">
+    <a href="/staff/due.html">Due</a>
+    <a href="/staff/dashboard.html">Dashboard</a>
+    <a href="/staff/jobs.html">Jobs</a>
+    <a href="/staff/quoted.html">Quotes</a>
+    <a href="/staff/clients.html">Clients</a>
+    <a href="/staff/bank.html">Bank</a>
+  </nav>
+  <div class="top-end">
+    <button class="btn btn--ghost btn--sm" id="refresh">Refresh</button>
+    <button class="btn btn--ghost btn--sm" id="logout">Sign out</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Settings</h1>
+  <p class="panel-note">Where each setting lives. Most are kept beside the work they change, so this page points to them.</p>
+  <div class="settings-grid">
+    <section class="panel" aria-labelledby="h-people">
+      <h2 id="h-people">People</h2>
+      <p class="panel-note">Who can sign in, and which companies they hold. People and passcodes are added by the owners with <code>npm run create-person</code> and changed with <code>npm run set-user</code>.</p>
+      <ul id="people"><li>Loading…</li></ul>
+    </section>
+    <section class="panel" aria-labelledby="h-rates">
+      <h2 id="h-rates">Rates</h2>
+      <ul>
+        <li><a href="/staff/jobs.html?area=damp#h-rates">ATi &amp; DampScan rate card</a> (survey prices and surveyor fees, admin only)</li>
+        <li>Hourly rates for clocked time: on a job in <a href="/staff/quoted.html?area=roofing">Verge</a> or <a href="/staff/quoted.html?area=ac">CoolRight</a> Quotes and jobs, under the time block.</li>
+      </ul>
+    </section>
+    <section class="panel" aria-labelledby="h-book">
+      <h2 id="h-book">Price book and templates</h2>
+      <p class="panel-note">Inside any job's Quote block, under "Price book and templates".</p>
+      <ul>
+        <li><a href="/staff/quoted.html?area=roofing">Verge Roofing jobs</a></li>
+        <li><a href="/staff/quoted.html?area=ac">CoolRight jobs</a></li>
+      </ul>
+    </section>
+    <section class="panel" aria-labelledby="h-biz">
+      <h2 id="h-biz">Business details and VAT</h2>
+      <p class="panel-note">What an invoice prints, and whether quotes charge VAT. On each company's Insights page, for whoever manages it.</p>
+      <ul>
+        <li><a href="/staff/insights.html?area=damp#p-business">ATi &amp; DampScan</a></li>
+        <li><a href="/staff/insights.html?area=roofing#p-business">Verge Roofing</a></li>
+        <li><a href="/staff/insights.html?area=ac#p-business">CoolRight</a></li>
+      </ul>
+    </section>
+    <section class="panel" aria-labelledby="h-notify">
+      <h2 id="h-notify">Notifications</h2>
+      <p class="panel-note">On a phone, add the staff area to the home screen, then tap "Turn on notifications" at the top of any staff page. Each phone is turned on separately. Which alerts go, and when, is set out in
+        <a href="https://github.com/emstrad/DAMPSCAN/blob/main/docs/notifications.md" target="_blank" rel="noopener">the alerts guide</a>.</p>
+      <p class="panel-note" id="push-state"></p>
+    </section>
+    <section class="panel" aria-labelledby="h-gpt">
+      <h2 id="h-gpt">ChatGPT and Claude</h2>
+      <p class="panel-note">Add a connector in ChatGPT (or Claude) with this address, then sign in with your own staff code when it asks. It sees what you see here and nothing more.</p>
+      <p><code id="mcp-url">/api/admin/mcp</code></p>
+      <p class="panel-note"><a href="https://github.com/emstrad/DAMPSCAN/blob/main/docs/chatgpt-commands.md" target="_blank" rel="noopener">What you can ask it</a></p>
+    </section>
+    <section class="panel" aria-labelledby="h-usage" id="p-usage" hidden>
+      <h2 id="h-usage">Which pages get used</h2>
+      <p class="panel-note"><a href="/staff/insights.html#p-usage">Most used pages, last 30 days</a>, on Insights (admins only).</p>
+    </section>
+  </div>
+</main>
+
+<script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
+<script src="/staff/settings.js"></script>
+</body>
+</html>

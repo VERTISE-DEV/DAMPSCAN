@@ -4,11 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Calendar | DampScan</title>
+<title>Today | DampScan</title>
 <meta name="theme-color" content="#0c1a2b" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="manifest" href="/staff/manifest.webmanifest" /><link rel="apple-touch-icon" href="/staff/icon-180.png" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="mobile-web-app-capable" content="yes" />
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/plus-jakarta-sans-var.woff2" crossorigin />
-<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/board.css" />
+<link rel="stylesheet" href="/staff/staff.css" /><link rel="stylesheet" href="/staff/area.css" /><link rel="stylesheet" href="/staff/shell.css" /><link rel="stylesheet" href="/staff/board.css" />
 <script>
 /* Both sites share this staff area, so the hostname decides whose name is on
    it. This runs in the head, before anything is painted, so neither brand ever
@@ -53,11 +53,11 @@
 </header>
 
 <main class="wrap work">
-  <h1 class="sr-only">Calendar</h1>
+  <h1 class="sr-only">Today</h1>
   <div class="state" id="state">Loading…</div>
   <div id="content" class="work-grid" hidden>
     <aside class="today-panel" aria-labelledby="today-h">
-      <h2 id="today-h">Today</h2>
+      <div class="todo-drawer-head"><h2 id="today-h">Today</h2><button type="button" class="btn btn--ghost btn--sm" id="todo-open" aria-controls="todo-drawer">To-do list</button></div>
       <div class="today-visits" id="today-visits"></div>
       <h2 class="act-h">Action needed <span class="act-count" id="act-total"></span></h2>
       <div id="actions"></div>
@@ -106,6 +106,6 @@
 
 <script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
 <script src="/staff/messages.js"></script><script src="/staff/calendar-actions.js"></script>
-<script src="/staff/calendar.js"></script>
+<script src="/staff/calendar.js"></script><script src="/staff/today-todo.js"></script>
 </body>
 </html>

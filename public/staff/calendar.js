@@ -14,11 +14,11 @@
   var W = global.DSWORK;
   var el = function (id) { return document.getElementById(id); };
   var DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  var BADGE = { messages: 'Message', deposits: 'Deposit', payments: 'Unpaid', invoices: 'Overdue', reports: 'Report', agent: 'Agent', quotes: 'Chase', budget: 'Budget', todos: 'To-do' };
+  var BADGE = { messages: 'Message', deposits: 'Deposit', payments: 'Unpaid', invoices: 'Overdue', payouts: 'Payout', reports: 'Report', agent: 'Agent', quotes: 'Chase', budget: 'Budget', todos: 'To-do' };
   var today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
   var VIEW_KEY = 'ds_cal_view';
   var stored = function () { try { return global.localStorage.getItem(VIEW_KEY); } catch (e) { return null; } };
-  var state = { view: ['month', 'week', 'day'].indexOf(stored()) !== -1 ? stored() : 'month', cursor: today, area: '', events: [], todayEvents: [], work: null };
+  var state = { view: ['month', 'week', 'day'].indexOf(stored()) !== -1 ? stored() : 'month', cursor: today, area: (['damp', 'roofing', 'ac'].indexOf(new URLSearchParams(location.search).get('area')) !== -1 ? new URLSearchParams(location.search).get('area') : ''), events: [], todayEvents: [], work: null };
 
   /* Dates are YYYY-MM-DD strings read at noon UTC, so no clock change can
      move an event onto the next or previous day. */
@@ -73,13 +73,11 @@
     }
     return a;
   }
-
   function byDay() {
     var map = {};
     state.events.forEach(function (e) { (map[e.date] = map[e.date] || []).push(e); });
     return map;
   }
-
   function items() {
     var all = [];
     ((state.work && state.work.groups) || []).forEach(function (g) { all = all.concat(g.items); });
@@ -295,5 +293,6 @@
     });
     if (document.querySelectorAll('[data-area-filter]').length <= 2) el('filters').hidden = true;
   });
+  global.DSTODAY = { refresh: load };
   load();
 })(window);

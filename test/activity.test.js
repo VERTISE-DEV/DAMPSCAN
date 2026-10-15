@@ -115,6 +115,6 @@ test('to-dos say who did what for whom, never the words', async () => {
   await setDone(scottScope, todo.id, false);
   assert.deepEqual(pushes.map((p) => p.body.title), ['To-do for Scott from Tom', 'To-do done: Scott', 'To-do reopened: Scott']);
   assert.deepEqual(said(), ['Open the to-do list to read it.', 'Scott ticked off a to-do set by Tom.', 'Scott reopened a to-do set by Tom.']);
-  assert.ok(pushes.every((p) => p.body.click.startsWith('https://dampscan.co.uk/staff/todo.html')));
+  assert.ok(pushes.every((p) => p.body.click.startsWith('https://dampscan.co.uk/staff/calendar.html')));
   assert.ok(!JSON.stringify(pushes).includes('Priya'));
 });

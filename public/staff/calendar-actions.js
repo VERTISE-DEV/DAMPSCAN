@@ -37,14 +37,39 @@
     return b;
   }
 
+  /* After a one-tap action, five seconds to take it back: the toast's Undo
+     sends the opposite through the same route, so nothing needs an "are you
+     sure" first. One toast at a time; a new action replaces the last. */
+  var toast = null;
+  function offerUndo(words, undo, done) {
+    if (toast) toast.remove();
+    toast = U.node('div', 'undo-toast');
+    toast.setAttribute('role', 'status');
+    toast.appendChild(U.node('span', null, words));
+    var box = toast;
+    var timer = setTimeout(function () { box.remove(); }, 5000);
+    var b = U.node('button', null, 'Undo');
+    b.type = 'button';
+    b.addEventListener('click', async function () {
+      clearTimeout(timer);
+      box.remove();
+      try { await undo(); } catch (e) { /* the refresh shows the truth either way */ }
+      if (done) done();
+    });
+    toast.appendChild(b);
+    document.body.appendChild(toast);
+  }
+
   /* One write, then the item goes. A refused write puts the reason on the
-     item rather than in an alert, which a phone shows as a page-wide popup. */
-  async function act(row, path, body, done) {
+     item rather than in an alert, which a phone shows as a page-wide popup.
+     `reverse` is the body that undoes it, when there is one. */
+  async function act(row, path, body, done, reverse, words) {
     row.classList.add('is-busy');
     try {
       var r = await U.send(path, body);
       if (!r.ok) throw new Error((r.data && (r.data.message || r.data.error || JSON.stringify(r.data.errors || {}))) || 'Not saved');
       row.classList.add('is-done');
+      if (reverse) offerUndo(words || 'Done.', function () { return U.send(reverse.path || path, reverse.body, reverse.method); }, done);
       setTimeout(function () { row.remove(); if (done) done(); }, 250);
     } catch (e) {
       row.classList.remove('is-busy');
@@ -63,7 +88,8 @@
     form.lastChild.type = 'submit';
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      act(row, '/api/admin/' + (it.quoted ? 'quoted' : 'clients'), moveBody(it, d.value, t.value), onDone);
+      var path = '/api/admin/' + (it.quoted ? 'quoted' : 'clients');
+      act(row, path, moveBody(it, d.value, t.value), onDone, it.date ? { body: moveBody(it, it.date, it.time) } : null, 'Date set.');
     });
     return form;
   }
@@ -86,11 +112,11 @@
         add(linkBtn('Call', 'tel:' + String(it.phone).replace(/[^\d+]/g, '')));
         if (it.whatsapp) add(linkBtn('WhatsApp', it.whatsapp, 'msg-whatsapp'));
       }
-      if (a === 'deposit') add(button('Deposit paid', function () { act(row, '/api/admin/clients', { id: it.jobId, depositPaid: true }, onDone); }, 'act-main'));
-      if (a === 'paid') add(button('Paid in full', function () { act(row, '/api/admin/clients', { id: it.jobId, paid: true }, onDone); }));
-      if (a === 'report') add(button('Report sent', function () { act(row, '/api/admin/clients', { id: it.jobId, surveySent: true }, onDone); }, 'act-main'));
-      if (a === 'todo') add(button('Done', function () { act(row, '/api/admin/todos', { op: 'done', id: it.id }, onDone); }, 'act-main'));
-      if (a === 'contacted') add(button('Reminded', function () { act(row, '/api/admin/contracts', { op: 'contacted', id: it.id }, onDone); }));
+      if (a === 'deposit') add(button('Deposit paid', function () { act(row, '/api/admin/clients', { id: it.jobId, depositPaid: true }, onDone, { body: { id: it.jobId, depositPaid: false } }, 'Deposit marked paid.'); }, 'act-main'));
+      if (a === 'paid') add(button('Paid in full', function () { act(row, '/api/admin/clients', { id: it.jobId, paid: true }, onDone, { body: { id: it.jobId, paid: false } }, 'Marked paid in full.'); }));
+      if (a === 'report') add(button('Report sent', function () { act(row, '/api/admin/clients', { id: it.jobId, surveySent: true }, onDone, { body: { id: it.jobId, surveySent: false } }, 'Report marked sent.'); }, 'act-main'));
+      if (a === 'todo') add(button('Done', function () { act(row, '/api/admin/todos', { op: 'done', id: it.id }, onDone, { body: { op: 'reopen', id: it.id } }, 'To-do ticked off.'); }, 'act-main'));
+      if (a === 'contacted') add(button('Reminded', function () { act(row, '/api/admin/contracts', { op: 'contacted', id: it.id }, onDone, { body: { op: 'uncontacted', id: it.id, on: it.lastContactedOn || '' } }, 'Marked reminded.'); }));
       if (a === 'date') add(button('Set date', function () {
         var open = row.querySelector('.act-date');
         if (open) { open.remove(); return; }
@@ -98,8 +124,25 @@
         row.querySelector('.act-date input').focus();
       }));
     });
+    /* Snooze takes the item off my Today until tomorrow or next Monday. */
+    add(button('Snooze', function () {
+      var open = row.querySelector('.snooze-pick');
+      if (open) { open.remove(); return; }
+      var pick = U.node('div', 'snooze-pick');
+      var snooze = function (until, words) {
+        act(row, '/api/admin/snooze', { kind: it.group, ref: String(it.id), until: until }, onDone,
+          { method: 'DELETE', body: { kind: it.group, ref: String(it.id) } }, words);
+      };
+      pick.appendChild(button('Tomorrow', function () { snooze(dayAfter(1), 'Snoozed till tomorrow.'); }));
+      pick.appendChild(button('Next week', function () { snooze(nextMonday(), 'Snoozed till next week.'); }));
+      row.appendChild(pick);
+    }, 'act-snooze'));
     return bar;
   }
+
+  var londonToday = function () { return new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' }); };
+  function dayAfter(n, from) { var d = new Date((from || londonToday()) + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  function nextMonday() { var t = londonToday(); var dow = new Date(t + 'T12:00:00Z').getUTCDay(); return dayAfter(((8 - dow) % 7) || 7, t); }
 
   function itemRow(it, onDone) {
     var row = U.node('li', 'act-item ev--' + it.site + (it.overdue ? ' is-overdue' : ''));
@@ -139,5 +182,5 @@
     });
   }
 
-  global.DSWORK = { render: render, itemRow: itemRow, jobHref: jobHref, moveBody: moveBody, NAME: NAME, AREA_OF: AREA_OF };
+  global.DSWORK = { render: render, itemRow: itemRow, jobHref: jobHref, moveBody: moveBody, offerUndo: offerUndo, NAME: NAME, AREA_OF: AREA_OF };
 })(window);

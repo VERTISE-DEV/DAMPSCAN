@@ -13,15 +13,15 @@ self.addEventListener('push', function (e) {
     icon: '/staff/icon-192.png',
     badge: '/staff/icon-192.png',
     tag: data.tag || undefined,
-    data: { url: data.url || '/staff/due.html' }
+    data: { url: data.url || '/staff/calendar.html' }
   }));
 });
 
 self.addEventListener('notificationclick', function (e) {
   e.notification.close();
-  var url = (e.notification.data && e.notification.data.url) || '/staff/due.html';
+  var url = (e.notification.data && e.notification.data.url) || '/staff/calendar.html';
   /* Only ever somewhere inside the staff area. */
-  if (url.indexOf('/staff/') !== 0) url = '/staff/due.html';
+  if (url.indexOf('/staff/') !== 0) url = '/staff/calendar.html';
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].url.indexOf('/staff/') !== -1 && 'focus' in list[i]) { list[i].navigate(url); return list[i].focus(); }

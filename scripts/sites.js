@@ -32,15 +32,17 @@ export const SITES = {
     headSolid: '#081321',
     /* The wordmark, matching the home page exactly. */
     lockup: '<span class="logo"><span class="logo-type"><span class="logo-word">Damp<span class="scan">Scan</span></span><span class="logo-tag">Survey Specialists</span></span></span>',
+    /* Five links on the bar. Eight plus the seasonal one ran the Book button
+       off the edge of a 1000px window; `extra` items only show in the menu. */
     nav: [
-      { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
       { label: 'Prices', href: '/pricing' },
-      { label: 'Guides', href: '/guides' },
-      { label: 'What you get', href: '/#reviews' },
-      { label: 'Landlords', href: '/#landlords' },
       { label: 'Areas', href: '/damp-survey' },
-      { label: 'FAQs', href: 'FAQ' }
+      { label: 'Guides', href: '/guides' },
+      { label: 'FAQs', href: 'FAQ' },
+      { label: 'How It Works', href: '/#how', extra: true },
+      { label: 'What you get', href: '/#reviews', extra: true },
+      { label: 'Landlords', href: '/#landlords', extra: true }
     ],
     // The Business Profile share link: credits Google where the reviews came
     // from, and goes into sameAs so search can tie the site to the profile.
@@ -82,14 +84,14 @@ export const SITES = {
     headSolid: '#f5f5f3',
     lockup: '<span class="logo"><img src="/assets/ati-mark.png" alt="" /><span class="logo-tag">Independent Damp Surveys &amp; Reports</span></span>',
     nav: [
-      { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
       { label: 'Prices', href: '/pricing' },
+      { label: 'Areas', href: '/damp-survey' },
       { label: 'Guides', href: '/guides' },
-      { label: 'The report', href: '/#reviews' },
-      { label: 'Landlords', href: '/#landlords' },
-      { label: 'London Coverage', href: '/damp-survey' },
-      { label: 'FAQs', href: 'FAQ' }
+      { label: 'FAQs', href: 'FAQ' },
+      { label: 'How It Works', href: '/#how', extra: true },
+      { label: 'The report', href: '/#reviews', extra: true },
+      { label: 'Landlords', href: '/#landlords', extra: true }
     ],
     footerLinks: [
       { href: '/services', label: 'Services' },
@@ -148,12 +150,12 @@ export const SITES = {
        joins this list when content/reviews/roofing.js holds enough to show:
        until then the section is hidden and the link would go nowhere. */
     nav: [
-      { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
       { label: 'Our work', href: '/our-work' },
       { label: 'Areas', href: '/roofing-in' },
       { label: 'Guides', href: '/guides' },
-      { label: 'FAQs', href: 'FAQ' }
+      { label: 'FAQs', href: 'FAQ' },
+      { label: 'How It Works', href: '/#how', extra: true }
     ],
     /* No Prices: every roof is quoted. A footer that lists pages a brand does
        not have is a dead link on every page of it. */
@@ -220,11 +222,11 @@ export const SITES = {
     headSolid: '#0f172a',
     lockup: '<span class="logo"><span class="logo-type"><span class="logo-word">Cool<span class="scan">Right</span></span><span class="logo-tag">Climate control. Done right.</span></span></span>',
     nav: [
-      { label: 'How It Works', href: '/#how' },
       { label: 'Services', href: '/services' },
       { label: 'Our work', href: '/our-work' },
       { label: 'Guides', href: '/guides' },
-      { label: 'FAQs', href: 'FAQ' }
+      { label: 'FAQs', href: 'FAQ' },
+      { label: 'How It Works', href: '/#how', extra: true }
     ],
     footerLinks: [
       { href: '/services', label: 'Services' },

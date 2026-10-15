@@ -73,16 +73,11 @@
   }
 
   /**
-   * The marquee needs two copies of the list to loop without a gap, and there
-   * are two tracks, so every review is on screen up to four times. Only the
-   * first copy of the first track should be reachable by tab: the rest is the
-   * same content again, and four identical buttons in the tab order is a worse
-   * experience than none.
+   * The loop copies (see loop() below) are the same content again, so only the
+   * real cards are reachable by tab.
    */
   function focusable(track, card){
-    if (track.closest('[aria-hidden="true"]')) return false;
-    const cards = Array.from(track.children);
-    return cards.indexOf(card) < cards.length / 2;
+    return !card.hasAttribute('data-clone');
   }
 
   function scan(){
@@ -112,23 +107,83 @@
     }
   }
 
+  /* ---------- The loop ----------
+     Owners saw it run too fast, flash, and leave the second row empty. The
+     causes: a fixed duration (so speed depended on how many reviews there
+     were), exactly two copies (a wide screen could see past the end of them),
+     and tracks rebuilt on every resize, which mobile Safari fires each time
+     the address bar moves, restarting the animation mid scroll.
+
+     Now each row holds its real cards once, plus as many hidden copies as it
+     takes to cover the window twice, and moves by exactly one set's width at
+     a steady speed. It is only rebuilt when the cards change or the window
+     width really changes. Someone who has asked for less motion gets a still
+     row they can swipe instead, which is all CSS. */
+  const SPEED = 32; /* px per second, slow enough to read along */
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function loop(track){
+    track.querySelectorAll('[data-clone]').forEach((n) => n.remove());
+    const real = Array.from(track.children);
+    const box = track.parentElement;
+    box.hidden = box.hidden || !real.length;
+    track.classList.remove('is-looping');
+    if (!real.length || still.matches) return;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    const set = real.reduce((w, n) => w + n.getBoundingClientRect().width + gap, 0);
+    if (!set) return;
+    const copies = Math.ceil(box.clientWidth / set) + 1;
+    for (let c = 0; c < copies; c++) {
+      for (const n of real) {
+        const k = n.cloneNode(true);
+        k.setAttribute('data-clone', '');
+        k.setAttribute('aria-hidden', 'true');
+        k.inert = true;
+        track.appendChild(k);
+      }
+    }
+    track.style.setProperty('--shift', set + 'px');
+    track.style.setProperty('--dur', Math.max(20, set / SPEED) + 's');
+    track.classList.add('is-looping');
+  }
+
+  /* Mutation records arrive after the fact, so the copies this adds would
+     trigger another build forever; they are taken off the queue instead. */
+  let watch = null;
+  function build(){ tracks.forEach(loop); scan(); if (watch) watch.takeRecords(); }
+
+  /* A finger on a row holds it, and it carries on a moment after lifting, so
+     a review can be read or its button tapped without chasing it. */
+  for (const track of tracks) {
+    const box = track.parentElement;
+    let t = null;
+    box.addEventListener('pointerdown', () => { clearTimeout(t); box.classList.add('is-held'); });
+    const release = () => { clearTimeout(t); t = setTimeout(() => box.classList.remove('is-held'), 2500); };
+    box.addEventListener('pointerup', release);
+    box.addEventListener('pointercancel', release);
+  }
+
   /* Fonts land after first paint and change where the text wraps, so a single
      measurement on load can be taken against the fallback font and be wrong.
      A second pass once the real fonts are in costs nothing. */
-  scan();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(scan);
+  build();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
 
-  /* The card width does not change with the viewport, but the font size can,
-     and a rotated phone re-wraps. Cheap enough to redo. */
+  /* Width only: a height change is the phone's address bar, and rebuilding
+     for it is exactly the restart that read as flashing. */
   let timer = null;
+  let width = window.innerWidth;
   window.addEventListener('resize', () => {
+    if (Math.abs(window.innerWidth - width) < 40) return;
+    width = window.innerWidth;
     clearTimeout(timer);
-    timer = setTimeout(scan, 200);
+    timer = setTimeout(build, 200);
   });
+  if (still.addEventListener) still.addEventListener('change', build);
 
   /* The page replaces the whole track when /api/reviews returns a live set.
      Watching for that beats asking the page's own script to call us, which
      would mean the same call written into both home pages by hand. */
-  const watch = new MutationObserver(() => scan());
+  watch = new MutationObserver(build);
   for (const track of tracks) watch.observe(track, { childList: true });
 })();

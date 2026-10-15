@@ -25,7 +25,8 @@ function nav(ownFaq, site) {
   return site.nav
     .map((item) => {
       const href = item.href === 'FAQ' ? (ownFaq ? '#faq' : '/#faq') : item.href;
-      return `          <li><a href="${href}">${esc(item.label)}</a></li>`;
+      // `extra` items are menu only: header.css hides them on the full bar.
+      return `          <li${item.extra ? ' class="nav-extra"' : ''}><a href="${href}">${esc(item.label)}</a></li>`;
     })
     .join('\n');
 }
@@ -68,7 +69,7 @@ export function whatsappButton(site) {
 
 function headerCall(site) {
   if (!site.phone) return '';
-  return `        <a href="tel:${site.phone}" class="call-link">${CALL_SVG(15)}${esc(site.phoneLabel)}</a>\n`;
+  return `        <a href="tel:${site.phone}" class="call-link" aria-label="Call ${esc(site.phoneLabel)}">${CALL_SVG(15)}<span class="call-num">${esc(site.phoneLabel)}</span></a>\n`;
 }
 
 function barCall(site) {

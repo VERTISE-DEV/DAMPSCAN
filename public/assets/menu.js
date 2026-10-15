@@ -1,7 +1,7 @@
 /**
  * The mobile menu on the two home pages.
  *
- * Below 980px the header nav was set to display:none with nothing to replace
+ * Below 980px (now 1140px, see header.css) the header nav was set to display:none with nothing to replace
  * it, so a phone got a header with no navigation at all. This is that
  * replacement, and it is deliberately not a library.
  *
@@ -39,7 +39,7 @@
   }
   measure();
   window.addEventListener('resize', measure);
-  const mq = window.matchMedia('(max-width: 980px)');
+  const mq = window.matchMedia('(max-width: 1140px)');
   let open = false;
   let lastFocus = null;
 

@@ -174,11 +174,12 @@ test('a carousel is visible only where the site is at or above the floor', () =>
       assert.equal(/\shidden\b/.test(tag), !enough, `${name}: wrong visibility for ${reviews[site].length} reviews`);
     }
     const cards = (markup.match(/<article class="review[^"]*">/g) || []).length;
-    /* Not one card per review any more: ratings with no words are paired. Two
-       tracks, and each carries the list twice because the marquee loops on two
-       copies. */
+    /* Not one card per review any more: ratings with no words are paired. One
+       copy per row (the loop copies are added in the browser); four or more
+       cards are split across the two rows, fewer are shown on both. */
     const perCopy = cardsFor(reviews[site]).length;
-    assert.equal(cards, enough ? perCopy * 4 : 0, `${name}: unexpected card count`);
+    const expected = perCopy >= 4 ? perCopy : perCopy * 2;
+    assert.equal(cards, enough ? expected : 0, `${name}: unexpected card count`);
   }
 });
 

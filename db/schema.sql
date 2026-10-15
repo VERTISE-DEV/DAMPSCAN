@@ -1039,3 +1039,30 @@ create table if not exists action_snoozes (
   created_at  timestamptz not null default now(),
   primary key (kind, ref, person_key)
 );
+
+-- ---------------------------------------------------------------------------
+-- The damp survey board (lib/surveys.js). Estate agents are kept once and
+-- linked from each survey they arrange, so the agents tab can count their
+-- jobs and chase the ones waiting on them. One agent serves both damp brands,
+-- so the table has no business column; who may see an agent follows from the
+-- jobs in their scope. Remedial work after the report: none until somebody
+-- decides, quoting with the figure quoted, then won (its value goes into
+-- remedial_pence, which the payout reads) or declined.
+-- ---------------------------------------------------------------------------
+create table if not exists estate_agents (
+  id          bigserial primary key,
+  created_at  timestamptz not null default now(),
+  name        text not null,
+  branch      text,
+  phone       text,
+  email       text
+);
+create unique index if not exists estate_agents_name_idx on estate_agents (lower(name), lower(coalesce(branch, '')));
+alter table jobs add column if not exists estate_agent_id bigint references estate_agents (id) on delete set null;
+create index if not exists jobs_estate_agent_idx on jobs (estate_agent_id) where estate_agent_id is not null;
+alter table jobs add column if not exists remedial_status text not null default 'none';
+alter table jobs drop constraint if exists jobs_remedial_status_check;
+alter table jobs add constraint jobs_remedial_status_check check (remedial_status in ('none', 'quoting', 'won', 'declined'));
+alter table jobs add column if not exists remedial_quote_pence integer check (remedial_quote_pence >= 0);
+-- The address of a survey booked by phone, with no web enquiry to carry it.
+alter table jobs add column if not exists customer_address text;

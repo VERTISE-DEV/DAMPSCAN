@@ -40,7 +40,7 @@
 
   function jobLink(j, cost) {
     var area = AREA_OF[j.site];
-    if (area === 'damp' && !cost) return '/staff/clients.html?area=damp#job-' + j.id;
+    if (area === 'damp' && !cost) return '/staff/surveys.html?area=damp#job-' + j.id;
     return '/staff/quoted.html?area=' + area + '#job-' + j.id + (cost ? '-cost' : '');
   }
 
@@ -134,7 +134,7 @@
     b.addEventListener('click', function () { closeSheet(); onClick(); });
     sheet.appendChild(b);
   }
-  function newWork(a) { return a === 'damp' ? '/staff/jobs.html?area=damp#new' : '/staff/quoted.html?area=' + a + '#new'; }
+  function newWork(a) { return a === 'damp' ? '/staff/surveys.html?area=damp#new' : '/staff/quoted.html?area=' + a + '#new'; }
   function showSheet(anchor, fill) {
     if (!sheet.hidden && sheet.dataset.for === anchor.dataset.shell) { closeSheet(); return; }
     sheet.textContent = '';

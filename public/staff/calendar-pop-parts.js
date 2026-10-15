@@ -1,0 +1,138 @@
+/* The sections of the job sheet (calendar-pop.js) that a surveyor uses on the
+   doorstep: where the job is and how to get there, who to ring, and the
+   pictures. Kept apart from the sheet itself so each file stays readable.
+   Navigation links open the app on the phone; Waze is first because it is
+   what the surveyors drive with. */
+(function (global) {
+  'use strict';
+
+  var U = global.DSUI;
+  var FULL = 1600;
+  var THUMB = 400;
+
+  function big(text, href, cls) {
+    var a = U.node('a', 'sheet-big ' + (cls || ''), text);
+    a.href = href;
+    if (/^https:/.test(href)) { a.target = '_blank'; a.rel = 'noopener'; }
+    return a;
+  }
+
+  /* Where: the address in full, three ways to drive there, and the customer's
+     phone and email. A job booked by phone or the assistant carries its own
+     address; an enquiry's comes from the form (lib/calendar-job.js). */
+  function where(j, s) {
+    var addr = (j.address || []).join(', ');
+    s.appendChild(U.node('p', 'sheet-addr', addr || 'No address on file' + (j.postcode ? ', postcode ' + j.postcode : '') + '.'));
+    var q = encodeURIComponent(addr || j.postcode || '');
+    if (q) {
+      var nav = U.node('div', 'sheet-grid');
+      nav.appendChild(big('Waze', 'https://waze.com/ul?q=' + q + '&navigate=yes', 'is-main'));
+      nav.appendChild(big('Google Maps', 'https://www.google.com/maps/dir/?api=1&destination=' + q));
+      nav.appendChild(big('Apple Maps', 'https://maps.apple.com/?daddr=' + q));
+      s.appendChild(nav);
+    }
+    var tel = j.phone ? String(j.phone).replace(/[^\d+]/g, '') : '';
+    var talk = U.node('div', 'sheet-grid');
+    if (tel) {
+      talk.appendChild(big('Call ' + j.phone, 'tel:' + tel, 'is-main'));
+      talk.appendChild(big('WhatsApp', 'https://wa.me/' + tel.replace(/^\+/, '').replace(/^0/, '44')));
+      talk.appendChild(big('Text', 'sms:' + tel));
+    }
+    if (j.email) talk.appendChild(big('Email', 'mailto:' + j.email));
+    if (talk.children.length) s.appendChild(talk);
+    else s.appendChild(U.node('p', 'panel-note', 'No phone or email on file.'));
+  }
+
+  /* Label and value pairs, skipping the empty ones. */
+  function facts(s, pairs) {
+    var dl = U.node('dl', 'sheet-facts');
+    pairs.forEach(function (p) {
+      if (p[1] == null || p[1] === '') return;
+      dl.appendChild(U.node('dt', null, p[0]));
+      var dd = U.node('dd', null, '');
+      if (p[1].nodeType) dd.appendChild(p[1]); else dd.textContent = String(p[1]);
+      dl.appendChild(dd);
+    });
+    if (dl.children.length) s.appendChild(dl);
+  }
+
+  function agentLine(a) {
+    if (!a) return null;
+    var span = U.node('span', null, a.name + (a.branch ? ', ' + a.branch : ''));
+    if (a.phone) { span.appendChild(document.createTextNode(' ')); span.appendChild(big('Call agent', 'tel:' + String(a.phone).replace(/[^\d+]/g, ''), 'is-inline')); }
+    if (a.email) { span.appendChild(document.createTextNode(' ')); span.appendChild(big('Email agent', 'mailto:' + a.email, 'is-inline')); }
+    return span;
+  }
+
+  async function shrink(file, max, quality) {
+    var bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    var scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+    var canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    if (bitmap.close) bitmap.close();
+    var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/jpeg', quality); });
+    return { blob: blob, width: canvas.width, height: canvas.height };
+  }
+  async function sendImage(url, blob) {
+    var res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'image/jpeg', Accept: 'application/json' }, body: blob });
+    var data = await res.json().catch(function () { return null; });
+    if (!res.ok || !data || !data.ok) throw new Error((data && data.message) || 'The photo could not be uploaded.');
+    return data.photo;
+  }
+
+  function thumb(src, full, label) {
+    var a = U.node('a', 'sheet-thumb');
+    a.href = full; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', label);
+    var img = document.createElement('img');
+    img.src = src; img.alt = label; img.loading = 'lazy';
+    a.appendChild(img);
+    return a;
+  }
+
+  /* Photos and files: what the customer sent with the enquiry (private blobs,
+     read through the attachment route) and the job's own photos, each a
+     thumbnail that opens full size. Shrunk on the phone before upload, as on
+     the day sheet, so it goes up on a weak signal. */
+  function pictures(j, s, changed) {
+    var grid = U.node('div', 'sheet-thumbs');
+    (j.files || []).forEach(function (f) {
+      var href = '/api/admin/attachment?path=' + encodeURIComponent(f.path);
+      if (f.image) grid.appendChild(thumb(href, href, 'Enquiry photo ' + f.name));
+      else { var a = big(f.name, href, 'sheet-file'); grid.appendChild(a); }
+    });
+    (j.photos || []).forEach(function (p) {
+      var full = '/api/admin/photos?img=' + p.id + '&size=full';
+      grid.appendChild(thumb(p.thumb ? '/api/admin/photos?img=' + p.id + '&size=thumb' : full, full, p.caption || 'Job photo ' + p.id));
+    });
+    if (grid.children.length) s.appendChild(grid);
+    else s.appendChild(U.node('p', 'panel-note', 'No photos or files yet.'));
+    var label = U.node('label', 'sheet-big');
+    var pick = document.createElement('input');
+    pick.type = 'file'; pick.accept = 'image/*'; pick.multiple = true; pick.className = 'sr-only';
+    label.appendChild(document.createTextNode('Add photos'));
+    label.appendChild(pick);
+    var status = U.node('p', 'panel-note');
+    status.setAttribute('role', 'status');
+    pick.addEventListener('change', async function () {
+      var files = Array.prototype.slice.call(pick.files);
+      for (var i = 0; i < files.length; i++) {
+        status.textContent = 'Uploading ' + (i + 1) + ' of ' + files.length + '…';
+        try {
+          var full = await shrink(files[i], FULL, 0.82);
+          var small = await shrink(files[i], THUMB, 0.76);
+          var p = await sendImage('/api/admin/photos?job=' + j.id + '&stage=during&w=' + full.width + '&h=' + full.height, full.blob);
+          await sendImage('/api/admin/photos?photo=' + p.id + '&size=thumb', small.blob);
+        } catch (e) { status.textContent = e.message; pick.value = ''; return; }
+      }
+      pick.value = '';
+      changed();
+    });
+    s.appendChild(label);
+    s.appendChild(status);
+  }
+
+  global.DSPOPX = { where: where, facts: facts, agentLine: agentLine, pictures: pictures, big: big };
+})(window);

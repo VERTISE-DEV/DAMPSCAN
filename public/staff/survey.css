@@ -29,6 +29,11 @@
 .sv-tick.is-on{border-color:rgba(37,211,102,.6);color:var(--text);background:rgba(37,211,102,.14)}
 .sv-card .pill.act{min-height:36px;padding:6px 11px;font-size:12.5px}
 .sv-back{opacity:.75}
+.sv-card.is-compact{cursor:pointer;gap:4px}
+.sv-marks{display:flex;gap:4px 10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted-2)}
+.sv-mark.is-on{color:rgba(37,211,102,.95)}
+.sv-mark.is-warn{color:var(--text);font-weight:700}
+.sv-mark.is-late{color:var(--warn);font-weight:700}
 .sv-remedial{border-top:1px solid var(--line);padding-top:8px}
 .sv-remedial.is-nudge{border-top-color:var(--warn)}
 .sv-amount{width:110px;min-height:36px;padding:6px 8px}

@@ -23,14 +23,6 @@
     return hay.indexOf(state.q) !== -1;
   }
 
-  function tick(s, what, label, on) {
-    var b = U.node('button', 'sv-tick' + (on ? ' is-on' : ''), (on ? '✓ ' : '') + label);
-    b.type = 'button';
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.addEventListener('click', function () { run(b, { op: 'tick', id: s.id, what: what, on: !on }, label + (on ? ' unticked.' : ' ticked.')); });
-    return b;
-  }
-
   async function run(node, body, words) {
     var card = node.closest('.sv-card');
     if (card) card.classList.add('is-busy');
@@ -64,33 +56,48 @@
     return box;
   }
 
+  /* Small status marks: a tick when done, a dot when not, readable aloud. */
+  function marks(s) {
+    var row = U.node('div', 'sv-marks');
+    [['Deposit', s.deposit], ['Paid', s.paid], ['Report', s.reportSent]].forEach(function (m) {
+      var x = U.node('span', 'sv-mark' + (m[1] ? ' is-on' : ''), (m[1] ? '✓ ' : '○ ') + m[0]);
+      x.setAttribute('aria-label', m[0] + (m[1] ? ' done' : ' not yet'));
+      row.appendChild(x);
+    });
+    if (s.awaitingAgent) row.appendChild(U.node('span', 'sv-mark is-warn', 'Agent'));
+    if (s.reportDays != null) row.appendChild(U.node('span', 'sv-mark' + (s.reportLate ? ' is-late' : ''), 'Report ' + s.reportDays + 'd'));
+    return row;
+  }
+
+  /* A card is a glance: who, where, when, and the one next step for its
+     stage. Everything else (ticks, messages, agent, notes, photos, moving
+     back) lives in the job sheet a tap away (calendar-pop.js). */
   function surveyCard(s) {
-    var c = U.node('article', 'sv-card ev--' + s.site);
+    var c = U.node('article', 'sv-card is-compact');
     c.id = 'job-' + s.id;
     c.draggable = true;
+    c.tabIndex = 0;
+    c.setAttribute('role', 'button');
+    c.setAttribute('aria-label', 'Open ' + (s.name || s.firstName || 'job'));
     var top = U.node('div', 'card-top');
-    top.appendChild(U.node('span', 'card-name', [s.firstName || 'No name', s.postcode].filter(Boolean).join(', ')));
+    top.appendChild(U.node('span', 'card-name', [s.name || s.firstName || 'No name', s.postcode].filter(Boolean).join(', ')));
     top.appendChild(U.node('span', 'act-biz', S.BRAND[s.site]));
     c.appendChild(top);
-    c.appendChild(U.node('p', 'card-meta', [s.surveyLabel, S.cap(s.surveyor), s.date ? S.shortDate(s.date) + (s.time ? ' ' + s.time : '') : ''].filter(Boolean).join(' · ')));
-    if (s.awaitingAgent) c.appendChild(U.node('p', 'sv-badge sv-badge--agent', 'Time to confirm with ' + (s.agent ? s.agent.name : 'the agent')));
-    else if (s.agent) c.appendChild(U.node('p', 'card-meta', 'Agent: ' + s.agent.name + (s.agent.branch ? ', ' + s.agent.branch : '')));
-    if (s.reportDays != null) c.appendChild(U.node('p', 'sv-badge' + (s.reportLate ? ' sv-badge--late' : ''), 'Report owed ' + s.reportDays + ' day' + (s.reportDays === 1 ? '' : 's')));
-    var ticks = U.node('div', 'sv-ticks');
-    ticks.appendChild(tick(s, 'deposit', 'Deposit', s.deposit));
-    ticks.appendChild(tick(s, 'paid', 'Paid', s.paid));
-    ticks.appendChild(tick(s, 'report', 'Report', s.reportSent));
-    c.appendChild(ticks);
-    var bar = U.node('div', 'card-actions');
-    if (NEXT[s.stage]) bar.appendChild(S.button(NEXT[s.stage][1], function () { run(bar, { op: 'move', id: s.id, to: NEXT[s.stage][0] }, 'Moved on.'); }, 'act-main'));
-    if (s.stage === 'booked') bar.appendChild(S.button(s.awaitingAgent ? 'Agent confirmed' : 'Waiting on agent', function () {
-      run(bar, { op: 'agent', id: s.id, awaitingAgent: !s.awaitingAgent }, s.awaitingAgent ? 'Agent wait cleared.' : 'Marked waiting on the agent.');
-    }));
-    if (s.phone) bar.appendChild(S.link('Call', S.tel(s.phone)));
-    bar.appendChild(S.button('Messages', function () { openMessages(s.id); }));
-    if (PREV[s.stage]) bar.appendChild(S.button('Back', function () { run(bar, { op: 'move', id: s.id, to: PREV[s.stage] }, 'Moved back.'); }, 'sv-back'));
-    c.appendChild(bar);
-    if (s.stage === 'sent') c.appendChild(remedialPrompt(s));
+    c.appendChild(U.node('p', 'card-meta', [s.date ? S.shortDate(s.date) + (s.time ? ' ' + s.time : '') : 'No date', s.surveyLabel, S.cap(s.surveyor)].filter(Boolean).join(' · ')));
+    c.appendChild(marks(s));
+    var step = s.stage === 'booked' && s.awaitingAgent ? ['agent', 'Agent confirmed'] : NEXT[s.stage];
+    if (step) {
+      var bar = U.node('div', 'card-actions');
+      bar.appendChild(S.button(step[1], function () {
+        run(bar, step[0] === 'agent' ? { op: 'agent', id: s.id, awaitingAgent: false } : { op: 'move', id: s.id, to: step[0] }, step[0] === 'agent' ? 'Agent wait cleared.' : 'Moved on.');
+      }, 'act-main'));
+      c.appendChild(bar);
+    }
+    if (s.stage === 'sent' && s.remedial.status !== 'declined' && s.remedial.status !== 'won') c.appendChild(remedialPrompt(s));
+    else if (s.stage === 'sent') c.appendChild(U.node('p', 'card-meta', s.remedial.status === 'won' ? 'Remedial work won: ' + U.money(s.remedial.wonPence) : 'No remedial work wanted.'));
+    var open = function () { if (global.DSPOP) global.DSPOP.open(s.id, { onChange: load }); };
+    c.addEventListener('click', function (e) { if (!e.target.closest('button,a,input,select,label,textarea')) open(); });
+    c.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target === c) { e.preventDefault(); open(); } });
     c.addEventListener('dragstart', function (e) { state.dragging = s; c.classList.add('is-dragging'); e.dataTransfer.setData('text/plain', String(s.id)); });
     c.addEventListener('dragend', function () { state.dragging = null; c.classList.remove('is-dragging'); });
     if (state.focus === s.id) c.classList.add('is-focus');
@@ -143,14 +150,6 @@
     if (f) { f.scrollIntoView({ block: 'center' }); state.focus = null; }
   }
 
-  async function openMessages(id) {
-    var dlg = el('msg-dialog');
-    dlg.textContent = 'Loading…';
-    dlg.showModal();
-    var data = await U.get('/api/admin/surveys?view=messages&id=' + id);
-    global.DSBOOK.drawMessages(dlg, data);
-  }
-
   async function load() {
     try {
       state.data = await U.get('/api/admin/surveys');
@@ -174,7 +173,7 @@
   var refresh = el('refresh');
   if (refresh) refresh.addEventListener('click', load);
   var m = /^#job-(\d+)/.exec(global.location.hash);
-  if (m) state.focus = Number(m[1]);
+  if (m) { state.focus = Number(m[1]); if (global.DSPOP) global.DSPOP.open(state.focus, { onChange: load }); }
   if (global.location.hash === '#new') global.DSBOOK.open(null, load);
   load();
 })(window);

@@ -216,6 +216,18 @@
     todos(j);
 
     foot.appendChild(link(j.quoted ? 'Open job page' : 'Open full card', W.jobHref(j.site, j.id, j.quoted), 'act-main'));
+    /* Deleting cannot be undone, so it asks once, by name, before it goes. */
+    var del = U.node('button', 'pill act-delete', 'Delete job');
+    del.type = 'button';
+    del.addEventListener('click', async function () {
+      if (!global.confirm('Delete ' + (j.customerName || 'this job') + '? This removes the job and everything on it, and cannot be undone.')) return;
+      del.disabled = true;
+      var r = await U.send('/api/admin/jobs', { id: j.id }, 'DELETE');
+      if (r.ok) { global.location.reload(); return; }
+      del.disabled = false;
+      global.alert(r.status === 404 ? 'Only a manager can delete jobs for this business.' : 'Could not delete this job.');
+    });
+    foot.appendChild(del);
   }
 
   async function load() {

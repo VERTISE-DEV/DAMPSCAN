@@ -92,6 +92,7 @@
 .act-date input{background:var(--slate);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:6px 8px;font:inherit;font-size:16px;max-width:100%}
 .pill.act{padding:7px 12px;font-size:13px;color:var(--text);text-decoration:none;min-height:36px;display:inline-flex;align-items:center}
 .pill.act-main{border-color:var(--accent)}
+.pill.act-delete{border-color:var(--bad, #e5484d);color:var(--bad, #e5484d);margin-left:auto}
 .act-err{color:var(--warn);font-size:12.5px;margin-top:6px}
 .act-item .msg{margin-bottom:8px}
 .cal-main{min-width:0}

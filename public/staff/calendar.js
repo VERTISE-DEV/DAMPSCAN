@@ -90,7 +90,11 @@
     var r = range();
     var days = byDay();
     var wrap = U.node('div', 'tl');
+    var shown = 0;
     for (var d = r.from; d <= r.to; d = addDays(d, 1)) {
+      /* An empty day is hidden, except today, so the week reads as what is on. */
+      if (!(days[d] || []).length && d !== today) continue;
+      shown += 1;
       var list = (days[d] || []).slice().sort(function (a, b) { return String(a.time || '').localeCompare(String(b.time || '')); });
       var box = U.node('section', 'tl-day' + (d === today ? ' is-today' : '') + (d < today ? ' is-past' : ''));
       var h = U.node('h3', 'tl-head');
@@ -107,6 +111,7 @@
       if (!list.length) box.appendChild(U.node('p', 'tl-empty', 'Nothing booked'));
       wrap.appendChild(box);
     }
+    if (!shown) wrap.appendChild(U.node('p', 'tl-empty', 'Nothing booked this week.'));
     mount.appendChild(wrap);
   }
 

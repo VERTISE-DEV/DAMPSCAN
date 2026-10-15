@@ -851,7 +851,7 @@ create unique index if not exists jobs_invoice_number_idx on jobs (site, invoice
 -- ---------------------------------------------------------------------------
 alter table service_contracts add column if not exists price_pence integer check (price_pence >= 0);
 alter table job_messages drop constraint if exists job_messages_kind_check;
-alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service', 'rating', 'yearly', 'onmyway'));
+alter table job_messages add constraint job_messages_kind_check check (kind in ('quote', 'followup', 'reminder', 'review', 'invoice', 'service', 'rating', 'yearly', 'onmyway', 'summer'));
 
 -- ---------------------------------------------------------------------------
 -- VAT registration and the details an invoice prints
@@ -1140,3 +1140,44 @@ begin
 end $$;
 drop trigger if exists jobs_date_set_trg on jobs;
 create trigger jobs_date_set_trg before insert or update on jobs for each row execute function jobs_date_set();
+
+-- ---------------------------------------------------------------------------
+-- CoolRight: the kit on the wall and the paperwork that goes with it
+--
+-- ac_units is one row per indoor or outdoor unit fitted on a job, so the
+-- serial, refrigerant and warranty are on file when the customer rings in
+-- three years' time. The commissioning and F-gas facts live on the job
+-- itself, as the roofing planner's facts do: commissioned_on is what moves a
+-- CoolRight card from Installed to Commissioned, and fgas_ref is the record
+-- an engineer must keep for any system holding refrigerant.
+-- booked_on and booked_time on a service plan are the day a service visit
+-- was agreed, which the calendar shows instead of the due date; servicing
+-- clears them. summer_asked_on is the last "Before summer" message, so the
+-- seasonal list does not ask the same customer twice in a year.
+-- ---------------------------------------------------------------------------
+create table if not exists ac_units (
+  id               bigserial primary key,
+  job_id           bigint not null references jobs (id) on delete cascade,
+  side             text not null default 'indoor' check (side in ('indoor', 'outdoor')),
+  make             text,
+  model            text,
+  serial           text,
+  refrigerant      text,
+  charge_kg        numeric(6,2) check (charge_kg is null or charge_kg >= 0),
+  installed_on     date,
+  warranty_until   date,
+  location         text,
+  note             text,
+  created_at       timestamptz not null default now(),
+  updated_at       timestamptz not null default now()
+);
+create index if not exists ac_units_job_idx on ac_units (job_id);
+create index if not exists ac_units_warranty_idx on ac_units (warranty_until);
+alter table jobs add column if not exists commissioned_on     date;
+alter table jobs add column if not exists commission_engineer text;
+alter table jobs add column if not exists fgas_ref            text;
+alter table jobs add column if not exists leak_check_on       date;
+alter table jobs add column if not exists pressure_test       text;
+alter table jobs add column if not exists summer_asked_on     date;
+alter table service_contracts add column if not exists booked_on   date;
+alter table service_contracts add column if not exists booked_time time;

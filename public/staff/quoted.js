@@ -150,7 +150,7 @@
      pills' window are fetched by id. "-cost" (the + button's Add cost) lands
      on the cost line, ready to type. */
   async function openFromHash() {
-    var m = /^#job-(\d+)(-(cost|photos|page|contract|plan))?$/.exec(location.hash);
+    var m = /^#job-(\d+)(-(cost|photos|page|contract|plan|coolright))?$/.exec(location.hash);
     if (!m) return;
     history.replaceState(null, '', location.pathname);
     var id = Number(m[1]);
@@ -164,7 +164,7 @@
     openJob(job, document.querySelector('#jobs button[data-id="' + id + '"]'));
     if (m[3] === 'cost' && el('w-cost-label')) { el('w-cost-label').scrollIntoView({ block: 'center' }); el('w-cost-label').focus(); }
     /* The Verge board's finishing steps land on the block they are about. */
-    var to = { photos: 'h-photos', page: 'h-page', contract: 'h-contract', plan: 'rf-plan' }[m[3]];
+    var to = { photos: 'h-photos', page: 'h-page', contract: 'h-contract', plan: 'rf-plan', coolright: 'ac-kit' }[m[3]];
     if (to && el(to)) setTimeout(function () { el(to).scrollIntoView({ block: 'start' }); }, 150);
   }
 

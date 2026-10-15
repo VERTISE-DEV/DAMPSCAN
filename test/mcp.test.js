@@ -105,7 +105,7 @@ test('a person connects, sees only their business, and a code and a refresh toke
   assert.equal(init.serverInfo.name, 'staff-area');
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools;
   const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
-  assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'add_todo', 'book_job', 'build_quote_from_words', 'complete_todo', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
+  assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'add_todo', 'book_job', 'build_quote_from_words', 'complete_todo', 'coolright_commissioning', 'coolright_service_plan', 'coolright_unit', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
     'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'move_job', 'remove_quote_line', 'reopen_todo',
     'set_awaiting_agent', 'set_estate_agent', 'set_project_page', 'set_remedial_status', 'set_roofing_stage', 'update_client', 'update_job_status', 'update_roofing_plan', 'use_quote_lines_as_price']);
   assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');

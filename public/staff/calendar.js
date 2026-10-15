@@ -26,7 +26,9 @@
   var state = { view: stored() === 'month' ? 'month' : 'week', cursor: today, area: ['damp', 'roofing', 'ac'].indexOf(qs.get('area')) !== -1 ? qs.get('area') : '',
     events: [], unbooked: [], work: null };
   /* The three groups Today lists, each built from the server's groups. */
-  var NEEDS = [['deposit', 'Collect deposit', ['deposits']], ['paid', 'Collect paid in full', ['payments', 'invoices']], ['report', 'Send survey report', ['reports']]];
+  var NEEDS = [['deposit', 'Collect deposit', ['deposits']], ['paid', 'Collect paid in full', ['payments', 'invoices']], ['report', 'Send survey report', ['reports']],
+    /* CoolRight only, and only when a unit's warranty ends within 60 days. */
+    ['warranty', 'Warranty ending', ['warranty']]];
 
   function at(iso) { return new Date(iso + 'T12:00:00Z'); }
   function iso(d) { return d.toISOString().slice(0, 10); }
@@ -48,7 +50,8 @@
 
   var popOpts = { work: function () { return state.work; }, onChange: function () { return load(); } };
   function open(e) {
-    if (e.kind === 'service') { var h = W.jobHref(e.site, e.jobId, true); if (h) location.href = h; return; }
+    /* A service on a plan made from a job opens that job's pop-up, plan and kit included. */
+    if (e.kind === 'service' && !e.jobId) { location.href = '/staff/' + (e.site === 'ac' ? 'service.html?area=ac' : 'quoted.html?area=' + e.site); return; }
     global.DSPOP.open(e.jobId || e.id, popOpts);
   }
   function outstanding(e) {

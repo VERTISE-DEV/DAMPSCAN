@@ -212,6 +212,7 @@
     if (global.DSQPHOTOS) global.DSQPHOTOS.fill(j);
     if (global.DSQGLANCE) global.DSQGLANCE.fill(j);
     if (global.DSQPLAN) global.DSQPLAN.fill(j);
+    if (global.DSQAC) global.DSQAC.fill(j);
     ['w-cost-error', 'w-days-error', 'w-pay-error', 'w-details-error'].forEach(function (id) { el(id).classList.remove('is-shown'); });
   }
 

@@ -152,7 +152,8 @@
         ['Owed on finished work', U.money(d.money.owedPence)],
         ['Booked in', U.money(d.money.bookedPence)],
         ['Quoted, waiting', U.money(d.money.quotedPence)]
-      ]);
+      ].concat(d.recurring ? [['Service plans', U.money(d.recurring.monthlyPence) + ' a month',
+        d.recurring.plans + ' active, ' + U.money(d.recurring.annualPence) + ' a year' + (d.recurring.plans > d.recurring.priced ? ', ' + (d.recurring.plans - d.recurring.priced) + ' with no price' : ''), true]] : []));
     }
     var count = function (n) { return U.num(n); };
     chart(el('chart-leads'), d.months, { key: 'enquiries', label: 'Enquiries', show: count }, { key: 'won', label: 'Jobs won', show: count });

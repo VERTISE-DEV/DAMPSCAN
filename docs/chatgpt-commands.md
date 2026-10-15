@@ -50,6 +50,14 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "Put Tom and Ben on Mrs Patel." / "Take Ben off Mrs Patel." / "Mrs Patel is a three day job."
 - "What's on the roofing week?" / "Any weather warnings for next week's roofs?"
 
+## CoolRight installs, equipment and service plans
+
+- "Add a Daikin indoor unit to Mrs Patel's job: model FTXM25R, serial 1234567, R32, 0.75 kg, main bedroom, warranty to 2031-10-15." (coolright_unit)
+- "And the outdoor unit: Daikin RXM25R, serial 7654321, rear wall." / "Change the warranty on that unit to 2033-10-15." / "Take the second unit off."
+- "Mrs Patel's system was commissioned today by Sam, F-gas ref FG-2291, leak check today, pressure test 38 bar held 30 minutes." (coolright_commissioning, moves it to Commissioned)
+- "Put Mrs Patel on a yearly service plan at £120." / "Make it every six months." (coolright_service_plan)
+- "Which services are due in ME this month?" / "Services due in TN13?" (coolright_services_due, grouped by postcode district)
+
 ## Quotes
 
 - "What's in the Verge price book?"

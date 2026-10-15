@@ -160,6 +160,8 @@
       p.appendChild(link('Record a payment', W.jobHref(j.site, j.id, true), 'act-main'));
     }
 
+    if (j.coolright && global.DSPOPAC) global.DSPOPAC.render(j, section, changed);
+
     var c = section('Contact');
     var row = U.node('div', 'act-bar');
     if (j.phone) row.appendChild(link('Call ' + j.phone, 'tel:' + String(j.phone).replace(/[^\d+]/g, '')));

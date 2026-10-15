@@ -57,7 +57,9 @@
       if (done) done();
     });
     toast.appendChild(b);
-    document.body.appendChild(toast);
+    /* Inside an open dialog it must sit in the dialog, the top layer, or the
+       backdrop would cover it and Undo could not be tapped. */
+    (document.querySelector('dialog[open]') || document.body).appendChild(toast);
   }
 
   /* One write, then the item goes. A refused write puts the reason on the

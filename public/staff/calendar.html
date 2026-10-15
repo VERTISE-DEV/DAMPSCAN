@@ -55,13 +55,7 @@
 <main class="wrap work">
   <h1 class="sr-only">Today</h1>
   <div class="state" id="state">Loading…</div>
-  <div id="content" class="work-grid" hidden>
-    <aside class="today-panel" aria-labelledby="today-h">
-      <div class="todo-drawer-head"><h2 id="today-h">Today</h2><button type="button" class="btn btn--ghost btn--sm" id="todo-open" aria-controls="todo-drawer">To-do list</button></div>
-      <div class="today-visits" id="today-visits"></div>
-      <h2 class="act-h">Action needed <span class="act-count" id="act-total"></span></h2>
-      <div id="actions"></div>
-    </aside>
+  <div id="content" class="today" hidden>
     <section class="cal-main" aria-labelledby="title">
       <div class="pills cal-filters" id="filters" role="group" aria-label="Company">
         <button type="button" class="pill" data-area-filter="">All</button>
@@ -69,43 +63,36 @@
         <button type="button" class="pill" data-area-filter="roofing">Verge Roofing</button>
         <button type="button" class="pill" data-area-filter="ac">CoolRight</button>
       </div>
-      <details class="strip strip--overdue" id="overdue" hidden>
-        <summary>Overdue <span class="strip-count"></span></summary><ul class="act-list"></ul>
-      </details>
-      <details class="strip strip--confirm" id="confirm" hidden>
-        <summary>Date to confirm <span class="strip-count"></span></summary><ul class="act-list"></ul>
-      </details>
       <div class="cal-bar">
         <h2 id="title" aria-live="polite"></h2>
-        <div class="pills" role="group" aria-label="View">
-          <button type="button" class="pill" data-view="month">Month</button>
-          <button type="button" class="pill" data-view="week">Week</button>
-          <button type="button" class="pill" data-view="day">Day</button>
-        </div>
         <div class="cal-nav">
           <button class="btn btn--ghost btn--sm" id="prev" aria-label="Previous">&larr;</button>
-          <button class="btn btn--ghost btn--sm" id="today">Today</button>
+          <button class="btn btn--ghost btn--sm" id="today">This week</button>
           <button class="btn btn--ghost btn--sm" id="next" aria-label="Next">&rarr;</button>
+        </div>
+        <div class="pills" role="group" aria-label="View">
+          <button type="button" class="pill" data-view="week">Week</button>
+          <button type="button" class="pill" data-view="month">Month</button>
         </div>
       </div>
       <div id="cal-view"></div>
-      <p class="panel-note">Each company in its own colour; service visits are dashed. Badges show what is still outstanding on a job. Tap a day to see it with its actions.
-        Drag a job to another day to move it, or use Move. <button class="linkish" id="ics" type="button">Add to my calendar</button> downloads what is on screen as a file your phone or Outlook can open.</p>
     </section>
+    <div class="today-lists">
+      <section class="today-panel" aria-labelledby="unbooked-h">
+        <h2 id="unbooked-h">Not booked in yet <span class="act-count" id="unbooked-count"></span></h2>
+        <ul class="tl-list" id="unbooked"></ul>
+      </section>
+      <section class="today-panel" aria-labelledby="needs-h">
+        <h2 id="needs-h">Needs doing</h2>
+        <div id="needs"></div>
+        <p class="panel-note"><a href="/staff/due.html">Everything outstanding</a> is on the Due page. <button class="linkish" id="ics" type="button">Add this week to my calendar</button></p>
+      </section>
+    </div>
   </div>
-  <dialog class="book-dialog" id="move-dialog">
-    <form method="dialog">
-      <h2>Move <span id="move-who"></span></h2>
-      <label class="photo-field">Date<input type="date" id="move-date" required /></label>
-      <label class="photo-field">Time (optional)<input type="time" id="move-time" /></label>
-      <p class="panel-note">Remember to let the customer know.</p>
-      <div class="card-actions"><button class="btn btn--sm" value="move">Move</button><button class="btn btn--ghost btn--sm" value="cancel" formnovalidate>Cancel</button></div>
-    </form>
-  </dialog>
 </main>
 
 <script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
 <script src="/staff/messages.js"></script><script src="/staff/calendar-actions.js"></script>
-<script src="/staff/calendar.js"></script><script src="/staff/today-todo.js"></script>
+<script src="/staff/calendar-pop.js"></script><script src="/staff/calendar.js"></script><script src="/staff/today-todo.js"></script>
 </body>
 </html>

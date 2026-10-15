@@ -108,7 +108,7 @@ test('the owner sees every action, grouped in order, with badges on the calendar
   assert.deepEqual(group(d.work, 'nodate').map((i) => [i.jobId, i.date]), [[w.accepted.id, null]]);
   assert.deepEqual(group(d.work, 'agent').map((i) => i.jobId), [w.agent]);
   assert.deepEqual(group(d.work, 'reports').map((i) => [i.jobId, i.overdue]), [[w.report, true]]);
-  assert.deepEqual(group(d.work, 'deposits').map((i) => i.jobId), [w.deposit], 'the agent wait is its own group, not a deposit too');
+  assert.deepEqual(group(d.work, 'deposits').filter((i) => !i.quoted).map((i) => i.jobId), [w.deposit], 'the agent wait is its own group, not a deposit too');
   assert.deepEqual(group(d.work, 'payments').map((i) => [i.jobId, i.owedPence]), [[w.unpaid.id, P(800)]]);
   assert.deepEqual(group(d.work, 'invoices').map((i) => [i.jobId, i.overdue]), [[w.late.id, true]], 'unpaid past the cut-off is an overdue invoice');
   assert.deepEqual(group(d.work, 'todos').map((i) => [i.what, i.overdue]), [['Ring the skip firm', true]]);
@@ -157,7 +157,7 @@ test('acting on an item takes it off the list', async () => {
   const d = await work(w.boss);
   for (const k of ['reports', 'nodate', 'agent']) assert.deepEqual(group(d.work, k), [], k);
   assert.ok(!group(d.work, 'messages').some((i) => i.jobId === w.tomorrow.id), 'the reminder went');
-  assert.deepEqual(group(d.work, 'deposits').map((i) => i.jobId), [w.agent], 'once the agent confirms, the deposit is next');
+  assert.deepEqual(group(d.work, 'deposits').filter((i) => !i.quoted).map((i) => i.jobId), [w.agent], 'once the agent confirms, the deposit is next');
   assert.equal(d.events.find((e) => e.id === w.accepted.id).date, D.tomorrow, 'the accepted quote is now on the calendar');
 });
 
@@ -173,4 +173,50 @@ test('what_needs_doing is the same list the calendar shows', async () => {
   assert.ok(roofing.data.actionNeeded.every((g) => g.items.every((i) => ['roofing', null].includes(i.site))));
   const flags = flagsByJob(await actionsFor(scope, ['roofing']));
   assert.deepEqual(flags.get(w.late.id), ['messages', 'invoices', 'finish'], 'a job carries every group it sits in');
+});
+
+test('Verge and CoolRight deposits: accepted or booked work with nothing received', async () => {
+  const w = await world();
+  const d = await work(w.boss);
+  const q = group(d.work, 'deposits').filter((i) => i.quoted).map((i) => i.jobId).sort((a, b) => a - b);
+  assert.deepEqual(q, [w.tomorrow.id, w.accepted.id].sort((a, b) => a - b));
+  await post(w.boss, { op: 'payment', id: w.tomorrow.id, amountPence: P(300), label: 'deposit', paidOn: D.today });
+  const after = await work(w.boss);
+  assert.ok(!group(after.work, 'deposits').some((i) => i.jobId === w.tomorrow.id), 'a payment clears it');
+  assert.deepEqual(group(await work(w.steve).then((x) => x.work), 'deposits'), [], 'deposits are money');
+});
+
+test('date_set: a defaulted date is "not booked in yet", a chosen one is a real day', async () => {
+  const w = await world();
+  const set = async (id) => (await pool.query('select date_set from jobs where id = $1', [id])).rows[0].date_set;
+  const undated = (await post(w.boss, { op: 'save', site: 'ac', customerName: 'Nora Nodate', invoiceNetPence: P(500), status: 'booked' })).json().job;
+  assert.equal(await set(undated.id), false, 'no date given');
+  assert.equal(await set(w.tomorrow.id), true, 'a date given on create');
+  const today = (await post(w.boss, { op: 'save', site: 'ac', customerName: 'Tia Today', invoiceNetPence: P(500), status: 'booked', jobDate: D.today })).json().job;
+  assert.equal(await set(today.id), true, 'today, typed in, is a real date');
+  let d = await work(w.boss);
+  assert.deepEqual(d.unbooked.map((e) => e.id).sort((a, b) => a - b), [w.accepted.id, undated.id].sort((a, b) => a - b));
+  assert.equal(d.events.find((e) => e.id === undated.id).dateSet, false);
+  /* Re-saving the form with the date it showed does not count as choosing it. */
+  const j = (await post(w.boss, { op: 'save', id: undated.id, site: 'ac', customerName: 'Nora Nodate', invoiceNetPence: P(500), status: 'booked', jobDate: D.today })).json().job;
+  assert.equal(j.id, undated.id);
+  assert.equal(await set(undated.id), false);
+  await post(w.boss, { op: 'status', id: undated.id, status: 'booked', jobDate: D.today });
+  assert.equal(await set(undated.id), true, 'a move, even to the same day, sets it');
+  const dampUndated = await damp({ name: 'Una Undated' });
+  assert.equal(await set(dampUndated), false);
+  await call(clients, { body: { id: dampUndated, jobTime: '09:30' }, headers: { cookie: w.boss } });
+  assert.equal(await set(dampUndated), true, 'a time means the day was agreed');
+  d = await work(w.boss);
+  assert.ok(!d.unbooked.some((e) => e.id === undated.id || e.id === dampUndated));
+});
+
+test('one job for the pop-up, with money only for a manager', async () => {
+  const w = await world();
+  const get = (cookie, id) => call(calendar, { method: 'GET', url: `/api/admin/calendar?view=job&id=${id}`, headers: { cookie } });
+  const boss = (await get(w.boss, w.deposit)).json().job;
+  assert.deepEqual([boss.customerName, boss.quoted, boss.depositPaid, boss.money.depositPence], ['Dee Deposit', false, false, 15000]);
+  const steve = (await get(w.steve, w.tomorrow.id)).json().job;
+  assert.equal(steve.money, null);
+  assert.equal((await get(w.steve, w.deposit)).statusCode, 404, 'not his business');
 });

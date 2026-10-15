@@ -7,9 +7,6 @@
 @media (min-width:760px){.rf-board{grid-template-columns:repeat(9,minmax(250px,1fr));overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}
   .rf-col{scroll-snap-align:start}}
 .rf-col{min-height:0}
-.rf-card{border-left-color:#e0703a}
-.rf-card.rf-done,.rf-card.rf-paid,.rf-card.rf-reviewed{border-left-color:rgba(37,211,102,.7)}
-.rf-card.rf-enquiry{border-left-color:var(--muted-2)}
 .rf-next{font-weight:700;font-size:14px;margin:0}
 .rf-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .rf-badges{display:flex;flex-wrap:wrap;gap:6px}

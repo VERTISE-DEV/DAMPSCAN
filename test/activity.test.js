@@ -84,7 +84,7 @@ test('a cost added on the screen is one alert naming who, the job and the amount
   await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip for Priya Sharma', amountPence: P(260) });
   assert.deepEqual(said(), ['Tom added a £260 cost to Priya, BR1.']);
   assert.equal(pushes[0].body.title, 'Tom made a change: Verge Roofing');
-  assert.equal(pushes[0].body.priority, 2, 'routine staff activity lands quietly');
+  assert.equal(pushes[0].body.priority, 3, 'staff activity shows as a normal alert');
   assert.deepEqual(pushes[0].body.tags, ['receipt']);
   assert.equal(pushes[0].body.click, `https://dampscan.co.uk/staff/quoted.html?area=roofing#job-${job.id}`);
   pushes = [];

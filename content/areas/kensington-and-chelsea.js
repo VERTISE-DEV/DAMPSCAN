@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Chelsea and South Kensington up through Notting Hill to North Kensington.',
   places: ['Chelsea', 'South Kensington', 'Notting Hill', 'Holland Park', 'Earls Court', 'Kensal Green', 'World\'s End', 'Brompton', 'Ladbroke Grove'],
   districts: ['SW3', 'SW5', 'SW7', 'SW10', 'W8', 'W10', 'W11'],
+  towns: [
+    { name: 'Chelsea and South Kensington', text: 'Stucco terraces and garden squares, many with deep modern basements beneath. Basement drainage systems that have not been serviced, cracked stucco and leaking front vaults account for most of the damp we see.' },
+    { name: 'Notting Hill and Holland Park', text: 'Large Victorian villas and terraces, many divided into flats, alongside some of the borough\'s largest houses. Valley gutters, parapets and the junctions of later rear extensions are common sources of water.' },
+    { name: 'North Kensington and Kensal Green', text: 'Victorian terraces and large post war estates near the Westway. The terraces need their yards and rear additions looked at; the estates see condensation and mould on cold structure.' }
+  ],
   faq: [
     {
       q: 'Our basement is leaking. Does the whole waterproofing system need replacing?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It is a reason to find out what it is before you commit, which is a different thing. A homebuyer report will flag elevated meter readings and recommend a specialist, because that is what it is required to do; it does not diagnose. The outcome is often something modest, such as ground levels or a gutter. Occasionally it is something serious enough to reprice on. Either way the number you need is a diagnosis and a cost, which is what an independent survey gives you before exchange rather than after.'
     },
+    { q: 'How often should a basement drainage system be serviced?', a: 'Most manufacturers and installers recommend at least an annual service of pumps, float switches, battery backups and channels. A system that has never been serviced is the most common reason for a basement leak in this borough.' },
+    { q: 'Our neighbour is digging a basement. Could it cause damp in our house?', a: 'Excavation next door can change how water moves around the party wall and foundations. If damp appears during or after the works, the report records it with readings and photographs, which is useful evidence under a party wall award.' },
+    { q: 'Do you survey for buyers of basement flats?', a: 'Yes. The report covers the condition of the system, servicing records to ask for and any evidence of past water entry, which a buyer needs before exchange.' }
   ],
   nearby: ['westminster', 'hammersmith-and-fulham']
 };

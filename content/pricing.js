@@ -1,24 +1,11 @@
 /**
  * Published survey prices, per site.
  *
- * Both practices publish, and they publish for opposite reasons, which is why
- * this is two sets of words rather than one set with the brand swapped.
- *
- * ATi carries out no remedial work, so the survey is the entire transaction and
- * the fee is simply the price of the thing being sold.
- *
- * DampScan does carry out the work, which makes publishing harder rather than
- * easier: a firm that surveys and then quotes has an obvious reason to find
- * something. Its page has to say that out loud and answer it, or it is worth
- * less than saying nothing. It answers it with the report, which shows the
- * readings behind every conclusion and can be taken to anybody.
- *
- * What neither page says is whether the survey fee comes off the works, in
- * either direction. It is settled with the customer case by case, so a page
- * that ruled it in would promise something not always on offer and a page that
- * ruled it out would refuse something sometimes given. Anything added here
- * about the fee and a later invoice becomes a published commitment, so do not
- * add it without being asked to.
+ * Both practices are survey only and carry out no remedial work, so for both
+ * the survey is the entire transaction and the fee is simply the price of the
+ * thing being sold. The two pages are still two sets of words, because they
+ * serve different places (London, and Kent and the South East) and must not
+ * read as copies of each other.
  *
  * Both pages state that the figure shown is the figure paid, without going into
  * why. If either practice's tax position ever changes so that something does
@@ -140,13 +127,10 @@ const dampscan = {
     'What a damp survey costs across Kent and the South East: four fixed price bands, what each includes, and what is never added afterwards.',
   h1: 'What a survey costs, and what decides it',
 
-  /* The hard sentence, and it goes first on purpose. DampScan does the works,
-     so a reader is right to wonder whether the survey exists to sell them.
-     Saying so before they think it is the only way the rest of the page is
-     worth reading. What it does not do is set out any arrangement between the
-     fee and a later invoice: see the note at the top of this file. */
+  /* The point of paying for a survey in Kent, where most damp firms offer a
+     free one: we sell no treatment, so the fee is the whole of our interest. */
   intro:
-    'We carry out the remedial work as well as the survey, so you are entitled to ask whether the survey exists to sell you the work. It does not. What you are paying for here is the diagnosis and the written report, and that report tells you what does not need doing as plainly as what does.',
+    'Plenty of Kent damp firms will survey for nothing, and then quote for the treatment. We do it the other way: you pay a published fee for the survey and the written report, and we carry out no remedial work, so there is nothing to sell you afterwards. The report tells you what does not need doing as plainly as what does.',
 
   priceLead: 'The price you see is the price you pay.',
   fixedFee: 'The survey fee is agreed in writing before we attend and does not change afterwards, whatever we find. There is one optional extra, an invasive inspection, and it is never carried out unless you agree to it on the day.',
@@ -199,7 +183,7 @@ const dampscan = {
     'External inspection: ground levels, drainage, gutters, pointing, roof junctions and anything else feeding water into the building',
     'A written report within 24 hours of the visit, with photographs and the readings behind every conclusion',
     'A clear statement of what does not need doing, and where a quote you are holding goes beyond the defect',
-    'A specification detailed enough to take to other contractors, whether or not you ask us to price the work'
+    'A specification detailed enough for contractors to price like for like. We never bid for the work ourselves'
   ],
 
   notIncluded: [
@@ -219,13 +203,8 @@ const dampscan = {
 
   faq: [
     {
-      /* The question the whole page turns on. Anything less than a direct
-         answer here reads as evasion, and evasion is what the reader already
-         suspects. The answer is deliberately about the report rather than
-         about the fee: what the fee does or does not do against a later
-         invoice is a conversation for the customer, not a published policy. */
-      q: 'You do the works as well. What stops the survey finding something?',
-      a: 'A report you can check. Every conclusion in it is shown with the readings and the photographs it rests on, so a finding you did not expect is one you can put in front of another surveyor and have tested. It also says plainly what does not need doing, and where a quote you are already holding goes further than the defect. You are never obliged to use us for the remedial work, and the specification is written to be priced by anybody.'
+      q: 'Other Kent firms survey for free. Why pay you?',
+      a: 'Because a free survey is usually paid for by the treatment it recommends. We carry out no remedial work at all, so finding something earns us nothing, and finding nothing costs us nothing. Every conclusion in the report is shown with the readings and photographs it rests on, it says plainly what does not need doing, and where a quote you already hold goes further than the defect it says that too.'
     },
     {
       q: 'I have damp in one room of a four bedroom house. Which band?',

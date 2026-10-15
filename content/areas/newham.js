@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Stratford and West Ham out through East Ham and Forest Gate to Beckton and the Royal Docks.',
   places: ['Stratford', 'East Ham', 'Forest Gate', 'Plaistow', 'Canning Town', 'Beckton', 'Manor Park', 'Royal Docks', 'West Ham'],
   districts: ['E6', 'E7', 'E12', 'E13', 'E15', 'E16', 'E20'],
+  towns: [
+    { name: 'Forest Gate and Manor Park', text: 'Long streets of Victorian and Edwardian terraces, many converted into flats or let. Rear additions, concreted yards and condensation in busy households are the most common causes of damp.' },
+    { name: 'Stratford and the Olympic Park', text: 'Large recent developments and towers alongside older terraces. New flats need their mechanical ventilation commissioned and working; older houses see the usual terrace faults.' },
+    { name: 'Canning Town and the Royal Docks', text: 'Post war estates and extensive new development on former dock land, on low ground near the Thames. Ventilation, construction moisture and, on the lowest ground, groundwater are the main themes.' }
+  ],
   faq: [
     {
       q: 'The property is overcrowded. Does that make the damp the tenant\'s fault?',
@@ -37,6 +42,9 @@ export default {
       a:
         'A great deal, particularly before a claim rather than after one. It establishes the actual condition, distinguishes defects you are responsible for from those you are not, and gives you a costed picture of what needs doing. If a claim follows, you already hold a contemporaneous, independent report rather than commissioning one under pressure. We carry out no remedial work, which is what makes the report credible to the other side.'
     },
+    { q: 'Our Forest Gate terrace has mould in every bedroom. Why?', a: 'Often a combination of busy households, limited ventilation and cold external walls. We measure humidity, surface temperatures and extraction so the report can say what will help most.' },
+    { q: 'Is our new build flat in Stratford still under warranty?', a: 'Many new homes have a warranty with a period when the developer is responsible for defects. If damp is a defect, an independent report gives the evidence to raise it.' },
+    { q: 'Do you survey HMOs in Newham?', a: 'Yes. Houses in multiple occupation must meet housing standards on damp and mould. The report identifies causes and what needs doing.' }
   ],
   nearby: ['tower-hamlets', 'waltham-forest']
 };

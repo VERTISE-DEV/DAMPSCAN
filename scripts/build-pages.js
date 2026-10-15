@@ -39,6 +39,10 @@ import { writeGalleryShells } from './gallery-shells.js';
 import { writeTopicPages, checkTopics, TOPICS } from './topic-pages.js';
 import { writeSeasonBlocks } from './season.js';
 import { writeHomeLinks } from './home-links.js';
+import { writeTownPages, checkTowns } from './town-pages.js';
+import { writeProofingPages } from './proofing-pages.js';
+import { towns } from '../content/kent-towns.js';
+import { townDescription } from './seo-meta.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'public', 'areas');
@@ -145,6 +149,7 @@ async function main() {
     if (problems.length) failures.push(`guide ${guide.slug || '(no slug)'}: ${problems.join(', ')}`);
   }
   failures.push(...checkTopics());
+  failures.push(...checkTowns());
   if (failures.length) {
     console.error('Page content is not ready to build:\n  ' + failures.join('\n  '));
     process.exit(1);
@@ -166,13 +171,15 @@ async function main() {
     await writeFile(join(OUT, region.site, `${region.slug}.html`), renderService(region, services, hub), 'utf8');
     counts[region.site] = (counts[region.site] || 0) + 1;
   }
+  const townCount = await writeTownPages(ROOT);
+  const proofingCount = await writeProofingPages(ROOT);
   /* A hub is written because somebody wrote its copy, not because the loop
      came round. A brand with no area pages should have no areas hub and no nav
      item pointing at one, rather than an empty page saying nothing follows. */
   await rm(HUBS_OUT, { recursive: true, force: true });
   const HUB_KINDS = {
     services: (site) => services.filter((s) => s.site === site),
-    areas: (site) => [...areas, ...regions].filter((a) => a.site === site),
+    areas: (site) => [...areas, ...regions, ...towns.map((t) => ({ ...t, metaDescription: townDescription(t) }))].filter((a) => a.site === site),
     guides: (site) => guides.filter((g) => g.site === site),
     problems: (site) => TOPICS.problems.filter((p) => p.site === site),
     seasonal: (site) => TOPICS.seasonal.filter((p) => p.site === site)
@@ -235,7 +242,8 @@ async function main() {
     const built = await readdir(join(OUT, site));
     console.log(`${site}: ${built.length} pages`);
   }
-  console.log(`${areas.length} area pages written to public/areas`);
+  console.log(`${areas.length} area pages and ${townCount} Kent town pages written to public/areas`);
+  console.log(`${proofingCount} damp proofing pages written to public/proofing-pages`);
   console.log(`${services.length} service pages written to public/service-pages`);
   console.log(`${guides.length} guide pages written to public/guide-pages`);
   console.log(`${topics.problems} problem and ${topics.seasonal} seasonal pages written`);

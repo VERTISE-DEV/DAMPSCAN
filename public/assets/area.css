@@ -254,3 +254,11 @@ body{padding-top:92px}
 /* The in-season feature (scripts/season.js). */
 .season-feature{margin-top:18px;padding:12px 16px;border-left:3px solid currentColor;background:rgba(127,127,127,.08);border-radius:6px}
 .season-feature a{margin-right:6px}
+
+/* Footer list of every area page, grouped (scripts/footer-areas.js). */
+.foot-areas{flex-basis:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px 26px;padding:0 0 22px;margin-bottom:18px;border-bottom:1px solid var(--line);font-size:13px}
+.foot-areas ul{list-style:none;margin:0;padding:0}
+.foot-areas li{margin:3px 0}
+.foot-areas-h{font-weight:600;margin:0 0 6px;color:var(--text)}
+.steps{padding-left:1.2em}
+.steps li{margin:6px 0}

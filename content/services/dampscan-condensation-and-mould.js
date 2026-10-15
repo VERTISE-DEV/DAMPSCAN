@@ -38,7 +38,7 @@ export default {
       paras: [
         'Ventilation sized and commissioned properly, which means humidity sensing extract in the kitchen and bathroom ducted to outside air, trickle ventilation in habitable rooms, and in some houses a whole house system such as positive input ventilation where the layout suits it. What does not work is a fan that is quiet because it is not moving anything.',
         'Then the cold surfaces, treated where they are: insulating a lintel or a reveal, dealing with slumped cavity fill, or improving the thermal performance of a specific cold spot rather than the whole envelope. And heating that runs steadily enough to keep fabric temperatures up rather than in short bursts, because a cold wall reheated once a day will collect moisture every night in between.',
-        'DampScan carries out ventilation installation and the associated works where that is what the survey found, under an insured workmanship guarantee. Where the answer is simply a fan that needs reducting to outside, we will tell you that too.',
+        'DampScan does not sell or fit fans, ventilation units or insulation, so the report recommends whatever the readings support, including the cheapest answer. Very often that is simply a fan that needs reducting to outside.',
       ]
     },
   ],

@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Ilford and Seven Kings up through Wanstead and Woodford to Barkingside and Hainault.',
   places: ['Ilford', 'Wanstead', 'Woodford', 'South Woodford', 'Barkingside', 'Gants Hill', 'Seven Kings', 'Chigwell', 'Hainault'],
   districts: ['IG1', 'IG2', 'IG3', 'IG4', 'IG5', 'IG6', 'IG8', 'E11', 'E18'],
+  towns: [
+    { name: 'Ilford', text: 'Victorian and Edwardian terraces near the centre, with interwar streets beyond and many conversions. Rear additions, bays and condensation in busy households recur.' },
+    { name: 'Woodford and Wanstead', text: 'Larger Victorian and Edwardian houses and interwar suburbs near Epping Forest. Mature trees blocking gutters, extensions and drives over the course are typical.' },
+    { name: 'Gants Hill, Barkingside and Hainault', text: 'Interwar and post war suburbs. Paved drives bridging courses, extension junctions and mould in bedrooms make up most surveys.' }
+  ],
   faq: [
     {
       q: 'We had a loft conversion and now the ceiling below is damp. Why?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Both, and the roof is often where the answer is. Damp appearing on an upper floor or a ceiling usually originates above it, and the causes are rarely visible from the ground: slipped hanging tiles, a lifted flashing, a blocked valley, or a loft conversion that closed off a ventilation path. We take internal readings to establish where the water is arriving and then work upward and outward to find where it is entering.'
     },
+    { q: 'Our Woodford house has damp high on the wall. Is that rising damp?', a: 'No. Damp at upper levels is usually rainwater from a gutter, hopper or valley, often blocked by leaves from mature trees. The survey traces the source.' },
+    { q: 'Our Ilford conversion has damp in the lower flat. Whose problem is it?', a: 'It depends on the lease and the source. External walls, roofs and shared drains are often the freeholder\'s responsibility.' },
+    { q: 'Do interwar houses in Redbridge need damp proofing?', a: 'Rarely. They usually have working courses. Damp at low level is normally bridging by drives, patios or extension floors.' }
   ],
   nearby: ['waltham-forest', 'havering']
 };

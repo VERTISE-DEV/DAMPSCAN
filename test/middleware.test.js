@@ -277,3 +277,20 @@ test('problem and seasonal pages, job pages and the job sitemap route per brand'
   assert.equal(rewrittenTo(await call(KENT, '/our-work/anything')), null);
   assert.equal(rewrittenTo(await call(KENT, '/sitemap-work.xml')), null);
 });
+
+/* "damp proofing <place>" pages: both damp brands, each from its own folder,
+   and no other brand answers the path at all. */
+test('a damp proofing page resolves to the right site directory', () => {
+  assert.equal(rewrittenTo(call(KENT, '/damp-proofing/sevenoaks')), '/proofing-pages/dampscan/sevenoaks.html');
+  assert.equal(rewrittenTo(call(LONDON, '/damp-proofing/croydon')), '/proofing-pages/ati/croydon.html');
+});
+
+test('the bare damp proofing path goes to the damp proofing service page', () => {
+  const res = call(KENT, '/damp-proofing');
+  assert.equal(res.status, 301);
+  assert.equal(new URL(res.headers.get('location')).pathname, '/services/damp-proofing');
+});
+
+test('a damp proofing path on the roofing site is not routed', () => {
+  assert.equal(rewrittenTo(call('vergeroofing.com', '/damp-proofing/sevenoaks')), null);
+});

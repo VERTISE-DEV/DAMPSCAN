@@ -26,6 +26,11 @@ export default {
     'We survey across the borough and the streets around it, from Battersea and Clapham Junction out to Earlsfield and Tooting.',
   places: ['Battersea', 'Clapham Junction', 'Balham', 'Tooting', 'Earlsfield', 'Southfields', 'Putney', 'Wandsworth Common', 'Nine Elms'],
   districts: ['SW11', 'SW12', 'SW15', 'SW17', 'SW18'],
+  towns: [
+    { name: 'Battersea and Clapham Junction', text: 'Long streets of Victorian terraces, many converted, and large modern riverside developments. Closet wings, yards and conversions dominate in the terraces; ventilation in the new flats.' },
+    { name: 'Putney and Southfields', text: 'Victorian and Edwardian houses and mansion flats. Bays, valley gutters and shared roofs recur.' },
+    { name: 'Tooting and Balham', text: 'Victorian and Edwardian terraces, with the Totterdown Fields estate in Tooting. Rear additions, yards and bridged courses are typical.' }
+  ],
   faq: [
     {
       q: 'We have been quoted for a chemical damp proof course. Should we get a second opinion?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Usually not. Most of the failures we see in Wandsworth basements are in the maintainable parts rather than the waterproofing itself: a silted perimeter channel, a sump pump that has never been serviced, or a detail around a service penetration. Those are a fraction of the cost of a re tank. We inspect the whole system, including the parts a re tanking quote tends not to mention, and say what has actually failed.'
     },
+    { q: 'Our Battersea terrace has damp in the back room. Is it rising damp?', a: 'More often a concreted yard, a leaking closet wing roof or a downpipe. The survey checks those first.' },
+    { q: 'Our Putney mansion flat has damp after rain. Whose problem is it?', a: 'Rain related damp usually comes through the roof, gutters or walls, commonly the freeholder\'s responsibility.' },
+    { q: 'Do you survey new riverside flats in Wandsworth?', a: 'Yes. We measure ventilation and look at construction details, and the report can support a warranty claim.' }
   ],
   nearby: ['croydon', 'lewisham']
 };

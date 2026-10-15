@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Bankside and Bermondsey out through Camberwell and Peckham to Dulwich.',
   places: ['Bermondsey', 'Peckham', 'Camberwell', 'Walworth', 'Dulwich', 'Rotherhithe', 'Elephant and Castle', 'Nunhead', 'Bankside'],
   districts: ['SE1', 'SE5', 'SE15', 'SE16', 'SE17', 'SE21', 'SE22'],
+  towns: [
+    { name: 'Bermondsey and Borough', text: 'Converted warehouses, Georgian and Victorian terraces and large estates near the river. Sealed warehouse walls, roof terraces and condensation recur.' },
+    { name: 'Peckham and Camberwell', text: 'Victorian terraces and villas, many converted, and post war estates. Rear additions, conversions and mould are typical.' },
+    { name: 'Dulwich', text: 'Victorian and Edwardian houses on larger plots and the Dulwich Estate, which has its own management scheme. Rainwater under mature trees and extension junctions dominate.' }
+  ],
   faq: [
     {
       q: 'What is interstitial condensation and why does it matter in a warehouse conversion?',
@@ -37,6 +42,9 @@ export default {
       a:
         'No, because condensation is a symptom rather than a cause. Moisture condenses where a surface is below the dew point of the air, and a surface can be cold because of a cold bridge, a panel joint or missing insulation, all of which are defects. Ventilation that does not work is also a defect. Our report measures surface conditions, records where the mould actually is relative to the structure, and tests whether the ventilation performs, which is what distinguishes the two.'
     },
+    { q: 'Our Bermondsey warehouse flat has damp walls. Why?', a: 'Thick brick walls sealed internally cannot dry, so rain getting in shows inside. The survey looks at the wall build up.' },
+    { q: 'Do we need Dulwich Estate approval to fix damp?', a: 'Some external work needs approval under the estate\'s scheme of management. The report flags where that is likely.' },
+    { q: 'Our Peckham flat is damp on the party wall. Is it ours?', a: 'Party wall damp in conversions often comes from next door. The report records it as evidence.' }
   ],
   nearby: ['lewisham', 'lambeth']
 };

@@ -28,7 +28,7 @@ const esc = (value) =>
    The em dash goes out as an entity. A reviewer is entitled to type one and it
    must reach the page exactly as written, but the repository bans the literal
    character and this output is committed, so the entity satisfies both. */
-const body = (text) =>
+export const body = (text) =>
   esc(text).split('\n').join('<br />').replace(/\u2014/g, '&mdash;');
 
 const words = (list) => list.filter((r) => String(r.text || '').trim());

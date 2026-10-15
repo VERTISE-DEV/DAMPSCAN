@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Greenwich and Blackheath out through Charlton and Woolwich to Eltham and Thamesmead.',
   places: ['Greenwich', 'Blackheath', 'Charlton', 'Woolwich', 'Eltham', 'Thamesmead', 'Plumstead', 'Kidbrooke', 'Abbey Wood'],
   districts: ['SE3', 'SE7', 'SE9', 'SE10', 'SE18', 'SE28'],
+  towns: [
+    { name: 'Greenwich and Blackheath', text: 'Georgian and Victorian houses, many listed, on the hill and around the park. Lime built walls, parapets, basements and cement repairs recur.' },
+    { name: 'Woolwich and Plumstead', text: 'Victorian terraces, former military buildings converted into flats and large new developments. Conversions, condensation and terrace faults dominate.' },
+    { name: 'Eltham', text: 'Interwar suburbs and older houses, including the Progress Estate. Drives over the course, extensions and mould are typical.' }
+  ],
   faq: [
     {
       q: 'Our flat is in a concrete block and the mould follows straight lines. Why?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It changes what to look for rather than simply making it worse. Near the river the ground is lower, the water table is higher and below ground spaces are more exposed to it, so ground water genuinely is a factor for basements and solid floors in a way it is not on the higher ground at Blackheath. Above ground, exposure to wind driven rain off the water matters more than the water itself. Both are things we survey for rather than assume.'
     },
+    { q: 'Our Blackheath house is listed and damp. What can be done?', a: 'Lime repairs, rainwater work and drainage are usually appropriate and often acceptable. The report flags where consent may be needed.' },
+    { q: 'Our flat in a Woolwich conversion has damp. Whose problem is it?', a: 'It depends on the lease and the source. The report identifies where the water comes from.' },
+    { q: 'Do Eltham semis need damp proofing?', a: 'Rarely. Bridging by drives and patios is the usual cause.' }
   ],
   nearby: ['bexley', 'lewisham']
 };

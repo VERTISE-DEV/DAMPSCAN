@@ -35,7 +35,7 @@ export default {
     {
       q: 'Do you carry out the remedial work you recommend?',
       a:
-        'DampScan does carry out remedial work where a client wants us to, and every survey is written so it stands on its own regardless. We diagnose before we quote, we say plainly when no work is needed, and you are under no obligation to use us for anything the report identifies. If you would prefer a report from a practice that does no remedial work at all, our London arm ATi Damp Survey is survey only, though it covers London rather than Surrey.'
+        'No. DampScan is a survey and report practice only. We say plainly when no work is needed, and where it is, the report is written as a specification you can take to any Guildford contractor for a like for like price. Because we sell no treatment, nothing in the report is there to create work for us.'
     },
   ],
   nearby: ['brighton', 'tunbridge-wells']

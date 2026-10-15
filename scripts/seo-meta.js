@@ -8,10 +8,11 @@
  * pick this result, then the brand, and fall back to shorter forms when a long
  * place name would push the title past what Google shows (about 60 characters).
  *
- * Every claim here is one the site already makes in its own copy: DampScan's
- * qualified surveyor, no sales reps and 24 hour report; ATi's independence and
- * no remedial work. DampScan is not called independent, because it also
- * quotes for the work. No prices: the owners asked for none in results.
+ * Every claim here is one the site already makes in its own copy: a qualified
+ * surveyor, a 24 hour report, and, for both brands now, independence and no
+ * remedial work. The two brands still word it differently (Kent and London),
+ * so the two sites never show the same snippet. No prices: the owners asked
+ * for none in results.
  */
 import { reviews } from '../content/reviews/index.js';
 import { MIN_REVIEWS } from '../lib/google-reviews.js';
@@ -35,9 +36,9 @@ export function fiveStar(site) {
 
 const TITLES = {
   dampscan: (n) => [
-    `Damp Survey & Damp Proofing in ${n} | DampScan`,
-    `Damp Survey in ${n} | Report in 24 Hours | DampScan`,
-    `Damp Survey in ${n} | DampScan`
+    `Damp Surveys in ${n}, Kent | Independent | DampScan`,
+    `Damp Surveys in ${n} | Independent | DampScan`,
+    `Damp Surveys in ${n} | DampScan`
   ],
   ati: (n) => [
     `Damp Survey in ${n} | Independent, 24h Report | ATi Damp Survey`,
@@ -46,10 +47,9 @@ const TITLES = {
   ]
 };
 
-/* First candidate that fits wins. The first DampScan form carries "damp
-   proofing" because that is what Kent towns are actually searched with
-   (damp proofing sevenoaks, guildford, sittingbourne), and DampScan does carry
-   out that work after the survey. ATi does not, so its titles never say it. */
+/* First candidate that fits wins. Neither brand sells damp proofing, so a
+   survey title never offers it: the searches for it are answered by the
+   /damp-proofing/<place> pages, whose titles say "survey first". */
 export function areaTitle(area) {
   const make = TITLES[area.site];
   if (!make) return area.title;
@@ -58,7 +58,7 @@ export function areaTitle(area) {
 }
 
 const LEADS = {
-  dampscan: (n) => `Damp and mould survey in ${n} by a qualified surveyor. Cause found before any quote, no sales reps, report in 24h.`,
+  dampscan: (n) => `Damp and mould surveys across ${n} by an independent Kent surveyor. No treatment sold, report in 24h.`,
   ati: (n) => `Independent damp and mould survey in ${n}. We sell no treatment, so no hard sell. Written report in 24h.`
 };
 
@@ -80,4 +80,47 @@ export function areaDescription(area) {
     if ((out + ' ' + s).length <= DESC_MAX) { out += ' ' + s; break; }
   }
   return out;
+}
+
+/* ------------------------------------------------ town and proofing pages */
+
+const fit = (list) => list.find((t) => t.length <= TITLE_MAX) || list[list.length - 1];
+
+/** A DampScan town survey page. "Damp Survey in <town>" is the query. */
+export function townTitle(t) {
+  const n = short(t.name);
+  return fit([`Damp Survey in ${n}, Kent | Independent | DampScan`, `Damp Survey in ${n} | Independent | DampScan`, `Damp Survey in ${n} | DampScan`]);
+}
+
+function withPlaces(out, places, name) {
+  const list = (places || []).filter((p) => p !== name);
+  for (let k = Math.min(3, list.length); k >= 1; k--) {
+    const l = list.slice(0, k);
+    const s = `Covering ${l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l[l.length - 1] : l[0]}.`;
+    if ((out + ' ' + s).length <= DESC_MAX) return out + ' ' + s;
+  }
+  return out;
+}
+
+export function townDescription(t) {
+  let out = `Damp survey in ${t.name} by an independent surveyor: cause found with readings, no treatment sold, written report in 24h.`;
+  if (fiveStar('dampscan') && (out + ' 5-star Google reviews.').length <= DESC_MAX) out += ' 5-star Google reviews.';
+  return withPlaces(out, t.places, t.name);
+}
+
+/** "damp proofing <place>" pages: always "survey first", never an offer of
+    the work, because neither brand does it. */
+export function proofingTitle(p) {
+  const n = short(p.name);
+  if (p.site === 'ati') {
+    return fit([`Damp Proofing in ${n}? Survey First | ATi Damp Survey`, `Damp Proofing ${n}? Survey First | ATi Damp Survey`, `Damp Proofing ${n}? Survey First | ATi`]);
+  }
+  return fit([`Damp Proofing in ${n}? Get a Survey First | DampScan`, `Damp Proofing in ${n}? Survey First | DampScan`, `Damp Proofing ${n}? Survey First | DampScan`]);
+}
+
+export function proofingDescription(p) {
+  const out = p.site === 'ati'
+    ? `Quoted for damp proofing in ${p.name}? An independent London survey finds the cause first. We do no remedial work. Report in 24h.`
+    : `Thinking of damp proofing in ${p.name}? Get an independent survey first. We sell no treatment, so you only pay for what the wall needs.`;
+  return withPlaces(out, p.places, p.name);
 }

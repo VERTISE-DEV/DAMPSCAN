@@ -16,6 +16,9 @@ import { areas } from '../content/areas/index.js';
 import { services } from '../content/services/index.js';
 import { guides } from '../content/guides/index.js';
 import { topAreas } from '../content/area-groups.js';
+import { towns } from '../content/kent-towns.js';
+import { proofingPages } from './proofing-pages.js';
+import { footerAreas, FOOT_START, FOOT_END, FOOT_CSS } from './footer-areas.js';
 
 export const START = '<!-- area-links:start, filled by scripts/build-pages.js -->';
 export const END = '<!-- area-links:end -->';
@@ -23,7 +26,7 @@ export const END = '<!-- area-links:end -->';
 /** Area links for one site: the busiest first, then everything else. */
 export function orderedAreas(site) {
   const top = topAreas(site, areas);
-  const rest = areas.filter((a) => a.site === site && !top.includes(a));
+  const rest = [...areas, ...towns].filter((a) => a.site === site && !top.includes(a));
   return [...top, ...rest];
 }
 
@@ -34,6 +37,12 @@ export function linkBlock(site) {
   const serviceLinks = services
     .filter((s) => s.site === site)
     .map((s) => `        <li><a href="/services/${s.slug}">${s.name}</a></li>`)
+    .join('\n');
+  /* The "damp proofing <place>" pages for the busiest places, so the home
+     page passes them weight too. The rest are linked from their survey page. */
+  const proofLinks = topAreas(site, areas)
+    .filter((a) => proofingPages.some((p) => p.site === site && p.slug === a.slug))
+    .map((a) => `        <li><a href="/damp-proofing/${a.slug}">Damp proofing in ${a.name}? Survey first</a></li>`)
     .join('\n');
   const guideLinks = guides
     .filter((g) => g.site === site)
@@ -47,7 +56,11 @@ export function linkBlock(site) {
 ${areaLinks}
         <li><a href="/damp-survey">Every area we cover, by district</a></li>
       </ul>
-      <h3 style="margin-top:22px">Guides by problem</h3>
+${proofLinks ? `      <h3 style="margin-top:22px">Quoted for damp proofing?</h3>
+      <ul>
+${proofLinks}
+      </ul>
+` : ''}      <h3 style="margin-top:22px">Guides by problem</h3>
       <ul>
 ${serviceLinks}
       </ul>
@@ -66,6 +79,12 @@ export async function writeHomeLinks(root, homes) {
     const from = html.indexOf(START);
     const to = html.indexOf(END);
     if (from === -1 || to === -1) throw new Error(`${file}: area link markers missing`);
-    await writeFile(path, html.slice(0, from) + linkBlock(site) + html.slice(to + END.length), 'utf8');
+    let out = html.slice(0, from) + linkBlock(site) + html.slice(to + END.length);
+    /* The grouped list of every area page, in the footer. */
+    const f = out.indexOf(FOOT_START);
+    const t = out.indexOf(FOOT_END);
+    if (f === -1 || t === -1) throw new Error(`${file}: footer area markers missing`);
+    out = out.slice(0, f) + `${FOOT_START}\n    ${FOOT_CSS}\n    ${footerAreas(site)}\n    ` + out.slice(t);
+    await writeFile(path, out, 'utf8');
   }
 }

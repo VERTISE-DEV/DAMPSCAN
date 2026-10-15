@@ -26,6 +26,11 @@ export default {
     'We cover the borough and the surrounding streets, from Shoreditch up to Stamford Hill and across to Hackney Wick.',
   places: ['Dalston', 'Stoke Newington', 'Hackney Central', 'London Fields', 'Clapton', 'Homerton', 'Shoreditch', 'Hackney Wick', 'Stamford Hill'],
   districts: ['E2', 'E5', 'E8', 'E9', 'E20', 'N1', 'N16'],
+  towns: [
+    { name: 'Stoke Newington and Clapton', text: 'Long Victorian terraces, many converted into flats, with closet wings and rear additions. Concreted yards and lean to roofs against the rear walls are the most common causes of damp, and party walls in conversions often carry water from a neighbour\'s defect.' },
+    { name: 'Dalston, London Fields and Hackney Central', text: 'Victorian terraces mixed with former industrial buildings and post war estates. Conversions of old workshops and warehouses bring thick brick walls sealed internally, and estates bring condensation on cold structure.' },
+    { name: 'Hackney Wick and Homerton', text: 'Former industrial land with warehouse conversions and large recent developments near the Olympic Park. Modern flats here have mechanical ventilation that needs to work, and the older buildings need their roofs and walls able to dry.' }
+  ],
   faq: [
     {
       q: 'Our managing agent says the mould is condensation and therefore our problem. Is that right?',
@@ -37,6 +42,9 @@ export default {
       a:
         'That is one of the most common situations in Hackney and one of the most useful things an independent report does. We record where the water is entering and where it goes, whether that is a shared parapet, a valley gutter, a rear extension roof or a stack in a riser. You are then arguing about a documented defect and whose repairing obligation it falls under, rather than about whose fault it is.'
     },
+    { q: 'Our social housing flat has mould. What can a survey do?', a: 'An independent report records the cause with readings and photographs, separating condensation from leaks and building defects. Social landlords in England now have to investigate and act on damp and mould within fixed timescales, and clear evidence helps both tenant and landlord.' },
+    { q: 'Our warehouse conversion has damp on the inside of thick brick walls. Why?', a: 'Often because the conversion sealed the inside face with impermeable finishes, and rain getting through the old brickwork can no longer dry outwards and inwards. The survey looks at the wall build up and recommends how to let it dry.' },
+    { q: 'Do you survey new build flats in Hackney Wick?', a: 'Yes. We measure mechanical ventilation, humidity and surface temperatures and look at details such as balconies and windows. Where the cause is a defect, the report is written so a developer or warranty provider can act.' }
   ],
   nearby: ['islington', 'camden']
 };

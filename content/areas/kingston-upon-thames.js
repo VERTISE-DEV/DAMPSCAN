@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Kingston and Surbiton out through New Malden and Tolworth to Chessington.',
   places: ['Kingston', 'Surbiton', 'New Malden', 'Tolworth', 'Chessington', 'Norbiton', 'Berrylands', 'Coombe', 'Hook'],
   districts: ['KT1', 'KT2', 'KT3', 'KT4', 'KT5', 'KT6'],
+  towns: [
+    { name: 'Kingston town centre and the riverside', text: 'Older buildings, flats above shops and modern riverside developments near the Thames. Parapets, flat roofs and groundwater on the lowest ground recur.' },
+    { name: 'Surbiton', text: 'Victorian and Edwardian villas and terraces, many converted into flats. Valley gutters, bays and shared drainage are common sources of damp.' },
+    { name: 'New Malden and Tolworth', text: 'Interwar suburbs. Drives over the course, extensions and mould make up most surveys.' }
+  ],
   faq: [
     {
       q: 'The house flooded years ago. Why does it still read damp?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Flood history and how it was dealt with, first. Then whether the ground floor construction, finishes and services are appropriate for a property that may flood again, and whether previous reinstatement used materials that will survive it. Beyond that it is a normal survey: ground levels, drainage, rainwater goods, roof and extension junctions, and calibrated readings interpreted with the salt question in mind rather than taken at face value.'
     },
+    { q: 'Our riverside flat in Kingston has damp in the ground floor. Is it the Thames?', a: 'On low ground near the river the water table can be high, especially in floors. The survey separates groundwater from rainwater and defects.' },
+    { q: 'Our Surbiton conversion has damp in the top flat. Who fixes it?', a: 'Roofs and gutters are commonly the freeholder\'s responsibility. The report identifies the source.' },
+    { q: 'Do New Malden semis need damp proofing?', a: 'Rarely. Their courses usually work; drives and patios are the common cause.' }
   ],
   nearby: ['richmond-upon-thames', 'sutton']
 };

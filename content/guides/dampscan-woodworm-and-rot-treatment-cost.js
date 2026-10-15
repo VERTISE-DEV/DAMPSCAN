@@ -11,7 +11,7 @@ export default {
   h1: 'What woodworm and rot treatment costs, and when you do not need it',
   published: '2026-09-13',
   intro:
-    'We carry out this work, so we have every commercial reason to tell you that you need it. Here is the honest version instead: a large share of the woodworm and rot we are asked to quote for does not need treating, and the rest costs far less when the diagnosis comes first. This page sets out what actually drives the bill, the ranges quotes tend to fall in, and the questions that separate a fair one from a padded one.',
+    'We survey and report, and we do not carry out treatment, so we have no commercial reason to tell you that you need it. Here is the honest version: a large share of the woodworm and rot we are asked to look at does not need treating, and the rest costs far less when the diagnosis comes first. This page sets out what actually drives the bill, the ranges quotes tend to fall in, and the questions that separate a fair one from a padded one.',
   sections: [
     {
       h2: 'Start with the 215 pound question',
@@ -31,7 +31,7 @@ export default {
     {
       h2: 'Rough figures, honestly hedged',
       paras: [
-        'Every job is priced in writing after the survey, so these are ranges to calibrate a quote against rather than a tariff. Replacing a rotten joist end, a sill or a section of floor where wet rot has been confined to one spot is carpentry, and typically lands in the low hundreds to around a thousand pounds depending on access and making good. A targeted woodworm treatment of the floor or roof section that is actually affected, once the moisture is dealt with, is usually a few hundred to the low thousands.',
+        'Every job should be priced in writing after a survey, so these are ranges to calibrate a quote against rather than a tariff. Replacing a rotten joist end, a sill or a section of floor where wet rot has been confined to one spot is carpentry, and typically lands in the low hundreds to around a thousand pounds depending on access and making good. A targeted woodworm treatment of the floor or roof section that is actually affected, once the moisture is dealt with, is usually a few hundred to the low thousands.',
         'A blanket spray of every timber in the house is commonly quoted at somewhere between one and three thousand pounds, and it is the figure we are most often asked to look at and most often say is unnecessary. A confirmed dry rot outbreak, with opening up, replacement of affected timber and treatment of adjacent masonry, starts in the low thousands and can reach five figures where it has travelled unnoticed for years. On top of any of these sits the repair to whatever let the water in, from a gutter bracket to a rebuilt bay roof.',
       ]
     },
@@ -39,7 +39,7 @@ export default {
       h2: 'When you do not need it',
       paras: [
         'Old flight holes with no frass in dry timber. Wet rot where the leak has already been fixed and the timber has kept its strength. A single soft joist end presented as a reason to treat a whole floor. A guarantee offered on treatment over a water source nobody has proposed to repair. Each of these is common, each is quoted for regularly, and each is a case where the right answer is a repair, a repair to the water, or nothing at all.',
-        'Our own reports conclude that no treatment is needed often enough that it is a routine outcome rather than a surprise. Where treatment is warranted we carry it out under an insured workmanship guarantee, targeted at the timber that needs it, and where the real job is a gutter, a drain or a ground level we will say that instead.',
+        'Our own reports conclude that no treatment is needed often enough that it is a routine outcome rather than a surprise. Where treatment is warranted the report names the timbers that need it, so a contractor prices those and not the whole house, and where the real job is a gutter, a drain or a ground level it says that instead.',
       ]
     },
     {

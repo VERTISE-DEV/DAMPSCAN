@@ -37,7 +37,7 @@ export default {
       h2: 'What we do about it',
       paras: [
         'Establish the moisture content of the affected timber and find out why it is wet, which is usually a leak, a bridged wall, a blocked underfloor void or a defective gutter. Fix that and the infestation loses its conditions. Where structural timber has already lost section, it is replaced or reinforced, which is a carpentry job rather than a chemical one.',
-        'Where treatment is genuinely warranted, it is targeted at the affected timbers rather than sprayed through a whole house, and DampScan carries it out under an insured workmanship guarantee. A report that concludes the activity is historic and no treatment is required is a perfectly normal outcome and one we write frequently.',
+        'Where treatment is genuinely warranted, it is targeted at the affected timbers rather than sprayed through a whole house, and the report identifies exactly which timbers, so a contractor prices that and nothing more. DampScan does not carry out timber treatment. A report that concludes the activity is historic and no treatment is required is a perfectly normal outcome and one we write frequently.',
       ]
     },
   ],

@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Enfield Town and Winchmore Hill down through Palmers Green to Edmonton and Ponders End.',
   places: ['Enfield Town', 'Palmers Green', 'Winchmore Hill', 'Edmonton', 'Southgate', 'Ponders End', 'Cockfosters', 'Oakwood', 'Bush Hill Park'],
   districts: ['EN1', 'EN2', 'EN3', 'N9', 'N13', 'N14', 'N18', 'N21'],
+  towns: [
+    { name: 'Enfield Town and Bush Hill Park', text: 'Victorian and Edwardian houses near the centre and around the station, with interwar estates beyond. Bay windows, rear additions and drives over the damp proof course recur.' },
+    { name: 'Edmonton and Ponders End', text: 'Victorian terraces and post war estates in the east of the borough, near the Lea valley. Rear yards, condensation and, on the lowest ground, groundwater are the usual findings.' },
+    { name: 'Southgate and Winchmore Hill', text: 'Interwar and Edwardian suburbs with larger houses and gardens. Mature trees blocking gutters, extensions and paved drives are the common causes of damp.' }
+  ],
   faq: [
     {
       q: 'We are low lying and the floor is damp. Is that just the water table?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Almost certainly. Original windows leaked air continuously, which ventilated the house whether anyone intended it or not. Replacing them removes that, and if the new units have no trickle vents, or the vents are closed, the moisture a household generates has nowhere to go. It is one of the most common causes of sudden condensation in otherwise sound houses, and the answer is controlled ventilation rather than anything applied to the walls.'
     },
+    { q: 'Our house in Edmonton is near the Lea. Is the damp groundwater?', a: 'On the lowest ground it can be, especially in floors. The survey separates groundwater from rainwater, condensation and bridging.' },
+    { q: 'Our Southgate semi has damp after we paved the drive. Is that connected?', a: 'Very likely, if the paving sits less than about two courses below the damp proof course. It is fixed by cutting back the paving or adding a drained channel.' },
+    { q: 'Do you survey for landlords in Enfield?', a: 'Yes. The report separates building defects from condensation driven by occupancy, which helps landlords meet their duties and resolve disputes.' }
   ],
   nearby: ['barnet', 'haringey']
 };

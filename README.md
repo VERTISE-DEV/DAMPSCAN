@@ -606,9 +606,11 @@ the robots files.
 Both sites cover the same eight subjects. Written once and published on both,
 they would be duplicates across two domains the same owner controls, and Google
 would pick one and bury the other. They are written from the two businesses'
-actual positions instead: DampScan diagnoses and then carries out the work under
-an insured guarantee, ATi surveys only and writes for buyers, solicitors and
-disrepair claims. `test/areas.test.js` asserts that no two paired pages share a
+positions and places instead: both are survey only, DampScan writing for Kent
+homeowners, buyers and landlords house by house, ATi writing for London buyers,
+leaseholders, solicitors and disrepair claims. Kent town pages, "damp proofing
+in <place>" pages and their distinctness test are described in
+content/kent-towns.js and test/town-pages.test.js. `test/areas.test.js` asserts that no two paired pages share a
 heading, an intro or any substantial sentence, so a future edit cannot quietly
 collapse them back into one document.
 

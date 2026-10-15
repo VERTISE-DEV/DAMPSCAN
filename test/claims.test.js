@@ -193,22 +193,38 @@ test('both home pages replaced the quotes with what the client receives', () => 
   }
 });
 
-/* The two firms are openly the same people, and the cross-links say so. What
-   they cannot share is the claim to be neutral. ATI sells no remedial work, so
-   "independent" is a fact about it. DampScan carries out the work it
-   recommends, so the same word there is a claim it cannot support, whatever it
-   would do for the rankings. DampScan sells diagnosis before a quote instead,
-   which is true of it. */
-test('only the site that sells no remedial work calls itself independent', () => {
-  const banned = /\bindependent(ly)?\b|\bsurvey[- ]led\b/i;
-  for (const { path, html } of PAGES) {
-    const isDampScan = path === 'index.html'
-      || path.startsWith('areas/dampscan/')
-      || path.startsWith('service-pages/dampscan/');
-    if (!isDampScan) continue;
-    const found = html.match(banned);
-    assert.ok(!found, `${path} claims to be ${found && found[0]}, and it sells the remedial work`);
+/* Both firms are survey only now, so both may call themselves independent.
+   What DampScan may no longer do is say it carries out or guarantees the work:
+   the owners decided it surveys and reports only, exactly as ATi does. This
+   catches any page, generated or hand written, that drifts back into the old
+   wording. Phrases are the ones the old pages actually used. */
+test('DampScan pages never claim to carry out or guarantee remedial work', () => {
+  const banned = [
+    /workmanship guarantee/i,
+    /guaranteed workmanship/i,
+    /fixed[- ]price quote/i,
+    /we quote (a fixed price|for the work)/i,
+    /carries out (that|this|the) (remedial )?work/i,
+    /every (system|treatment) we (install|carry out)/i,
+    /remedial work we carry out/i,
+    /under (an|our) insured guarantee/i
+  ];
+  const dampscan = PAGES.filter(({ path }) => path === 'index.html'
+    || /^(areas|service-pages|guide-pages|proofing-pages|problem-pages|seasonal-pages|hubs)\/dampscan\//.test(path)
+    || path === 'pricing/dampscan.html');
+  assert.ok(dampscan.length > 60, `expected the DampScan pages, found ${dampscan.length}`);
+  for (const { path, html } of dampscan) {
+    for (const phrase of banned) {
+      const found = html.match(phrase);
+      assert.ok(!found, `${path} still says "${found && found[0]}", and DampScan carries out no remedial work`);
+    }
   }
+});
+
+test('the DampScan home page says it is independent and survey only', () => {
+  const home = PAGES.find((p) => p.path === 'index.html').html;
+  assert.match(home, /<h1>Independent Damp Surveys in Kent<\/h1>/);
+  assert.match(home, /<title>Independent Damp Surveys in Kent \| DampScan<\/title>/);
 });
 
 test("ATI's own positioning was not collateral damage", () => {

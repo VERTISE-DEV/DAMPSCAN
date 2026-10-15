@@ -51,6 +51,9 @@ export default {
       a:
         'A benefit, while it is maintained. It is a rain screen: it sheds water off the structure and lets air move behind it. It stops working when boards cup or split at the fixings, when laps have been sealed by repeated repainting, or when ground or paving has been built up against the bottom boards. That last one is the serious version, because the sole plate behind is structural and it is the first thing to decay.'
     },
+    { q: 'Is our Gidea Park house harder to survey?', a: 'Gidea Park has Arts and Crafts houses in a conservation area, and repairs need to suit them. The survey is the same; the recommendations are written with the constraints in mind.' },
+    { q: 'Our Romford semi has damp after a new drive. Is that connected?', a: 'Very likely, if the drive sits less than about two courses below the damp proof course. It is fixed at the drive, not in the wall.' },
+    { q: 'Do you survey for landlords in Havering?', a: 'Yes. The report separates building defects from condensation, which is what landlords and tenants need to agree what to do.' }
   ],
   nearby: ['redbridge', 'barking-and-dagenham']
 };

@@ -7,12 +7,15 @@
  * same paragraph is the doorway page pattern, and Google demotes it, so the
  * generator refuses to build a page whose distinctive copy is too short.
  */
+import { body as reviewText } from './reviews-block.js';
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
 import { SITES } from './sites.js';
 import { areaTitle, areaDescription } from './seo-meta.js';
 import { reviews } from '../content/reviews/index.js';
 import { MIN_REVIEWS } from '../lib/google-reviews.js';
+import { boroughFraming, districtTowns } from './area-sections.js';
+import { towns } from '../content/kent-towns.js';
 
 /* The booking form needs the same per site values the home pages set inline.
    A static page cannot read environment variables, so they live in SITES.
@@ -78,8 +81,8 @@ export function distinctiveWordCount(area) {
    questions rather than replacing any. */
 const BRAND_FAQ = {
   dampscan: (n) => ({
-    q: `Do I have to use you for damp proofing in ${n}?`,
-    a: 'No. The survey and report come first and stand on their own, written so that any competent contractor could work from them. Where remedial work is needed we quote a fixed price for it alongside the report, covered by an insured workmanship guarantee, and declining it changes nothing about what the report says. A survey concluding that no damp proofing is needed is a routine outcome.'
+    q: `Do you carry out damp proofing in ${n}?`,
+    a: 'No. DampScan is an independent survey practice and carries out no remedial work. The report is written so that any competent contractor could price from it, and a survey concluding that no damp proofing is needed is a routine outcome, because nothing rides on the answer for us.'
   }),
   ati: (n) => ({
     q: `Will you try to sell me damp proofing in ${n}?`,
@@ -142,7 +145,7 @@ function reviewsSection(area, allAreas) {
   return `
   <section class="sec quotes" id="reviews">
     <h2>What customers say about us</h2>
-    ${pick.map((r) => `<blockquote class="quote-card"><p>${esc(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
+    ${pick.map((r) => `<blockquote class="quote-card"><p>${reviewText(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
   </section>
 `;
 }
@@ -156,7 +159,7 @@ function ctaSection(area, site) {
     : '';
   const what = area.site === 'ati'
     ? 'We survey and report only, with no treatment to sell, so what the report says is the whole of our interest.'
-    : 'A qualified surveyor finds the cause first, and nothing is quoted until it is found.';
+    : 'An independent surveyor finds the cause, and we sell no treatment, so the report is the whole of what you pay for.';
   return `
   <section class="sec">
     <h2>Book a damp survey in ${esc(area.name)}</h2>
@@ -188,7 +191,8 @@ export function render(area, allAreas) {
   const description = areaDescription(area);
 
   const nearby = (area.nearby || [])
-    .map((slug) => allAreas.find((a) => a.slug === slug && a.site === area.site))
+    .map((slug) => allAreas.find((a) => a.slug === slug && a.site === area.site)
+      || (area.site === 'dampscan' && towns.find((t) => t.slug === slug)))
     .filter(Boolean);
 
   const body = `
@@ -211,7 +215,7 @@ export function render(area, allAreas) {
     </ul>
   </section>
 
-${area.towns && area.towns.length ? `
+${boroughFraming(area, allAreas)}${districtTowns(area)}${area.towns && area.towns.length ? `
   <section class="sec">
     <h2>By town</h2>
     ${area.towns.map((t) => `<h3>${esc(t.name)}</h3>

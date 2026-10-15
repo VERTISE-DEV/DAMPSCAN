@@ -82,25 +82,25 @@ export const hubs = {
     services: {
       title: 'Damp, Mould & Timber Services | DampScan',
       metaDescription:
-        'What we survey and treat across Kent and the South East: rising and penetrating damp, condensation, mould, rot, woodworm, ventilation and basements.',
-      h1: 'What we survey, and what we put right',
+        'Independent surveys across Kent and the South East: rising and penetrating damp, condensation, mould, rot, woodworm, ventilation and basements.',
+      h1: 'What we survey, and what each problem really needs',
       intro:
         'Water gets into buildings in a small number of ways and they are confused with each other constantly. Rising damp gets diagnosed where a gully is blocked. Condensation gets treated as penetrating damp and comes straight back. A wall gets tanked when the problem was above it all along.',
       body: [
-        'Each page below covers one of those faults on its own terms: what it actually looks like on a wall, what separates it from the two things it is most often mistaken for, and what a proportionate repair involves. They are written to be read before you commit to anything, including by us.',
-        'If you are not sure which one describes your property, that is normal and it is what the survey is for. The diagnosis comes first and the quote follows it, never the other way round.'
+        'Each page below covers one of those faults on its own terms: what it actually looks like on a wall, what separates it from the two things it is most often mistaken for, and what a proportionate repair involves. They are written to be read before you commit to anything, and we sell none of the repairs they describe.',
+        'If you are not sure which one describes your property, that is normal and it is what the survey is for. The diagnosis comes first, and because we sell no treatment, there is no quote waiting behind it.'
       ]
     },
     areas: {
-      title: 'Damp Surveys by Area: Kent, Surrey & Sussex | DampScan',
+      title: 'Damp Surveys by Town in Kent and the South East | DampScan',
       metaDescription:
-        'Damp, mould and timber surveys across Kent, Surrey, Sussex and the South East. Local guides to the housing stock in each district we cover.',
+        'Independent damp, mould and timber surveys across Kent towns and districts, with local guides to the housing, geology and the damp each place gets.',
       h1: 'Where we work, and what the housing does there',
       intro:
         'A damp survey is mostly a question about a building, and buildings in one place have more in common with each other than with buildings anywhere else. Ragstone in the Weald, chalk under the Downs, brick earth along the Thames, and estates thrown up in every decade since.',
       body: [
-        'Each page below is about that district rather than about us: what was built there and when, what that construction does when it gets wet, and the failures we are called out to most often within it.',
-        'Properties inside Greater London are surveyed by our sister practice, ATi Damp Survey, which carries out no remedial work at all. If your postcode falls inside London we will say so and pass you across rather than travel to it.'
+        'Each page below is about a town or district rather than about us: what was built there and when, what that construction does when it gets wet, and the failures we are called out to most often within it.',
+        'Properties inside Greater London are surveyed by our sister practice, ATi Damp Survey, which, like us, carries out no remedial work. If your postcode falls inside London we will say so and pass you across rather than travel to it.'
       ]
     },
     guides: {
@@ -111,7 +111,7 @@ export const hubs = {
       intro:
         'Most of the money wasted on damp and timber in this region is spent before anyone has established what is wrong. These guides are written for the point before that, when you are holding a quote or a valuation comment and want to know what it should mean.',
       body: [
-        'We carry out the remedial work, which is exactly why these pages say when it is not needed. A firm that treats a historic woodworm infestation or sprays a whole house for one soft joist end has earned an invoice and nothing else, and we would rather write the report that says so.',
+        'We carry out no remedial work, which is why these pages can say plainly when it is not needed. A firm that treats a historic woodworm infestation or sprays a whole house for one soft joist end has earned an invoice and nothing else, and we would rather write the report that says so.',
         'Each guide gives the figures quotes tend to fall in, the questions that separate a fair scope from a padded one, and the cases where the right answer is a repair, a repair to the water, or nothing at all.'
       ]
     }

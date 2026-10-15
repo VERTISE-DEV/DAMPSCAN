@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Fulham and Parsons Green up through Hammersmith to Shepherds Bush and White City.',
   places: ['Fulham', 'Hammersmith', 'Shepherds Bush', 'Parsons Green', 'Sands End', 'White City', 'Brook Green', 'Baron\'s Court', 'Wormwood Scrubs'],
   districts: ['W6', 'W12', 'W14', 'SW6'],
+  towns: [
+    { name: 'Fulham', text: 'Long streets of Victorian terraces, many with basement extensions. Basement systems, rear additions and party walls recur.' },
+    { name: 'Hammersmith and Brook Green', text: 'Victorian terraces and mansion blocks, with riverside buildings near the Thames. Mansion block roofs and riverside groundwater are typical.' },
+    { name: 'Shepherd\'s Bush and White City', text: 'Victorian terraces, conversions and large estates. Conversions and condensation dominate.' }
+  ],
   faq: [
     {
       q: 'We have been quoted for an injected damp proof course. Is it likely to be right?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Almost always the maintainable parts rather than the waterproofing. Perimeter drainage channels silt up, sump pumps fail or their float switches stick, and service penetrations that were sealed correctly can be disturbed by later work. Because most owners are never told the system needs servicing, the first fault arrives with no maintenance history behind it. We inspect the whole system, including the parts a re waterproofing quote will not mention.'
     },
+    { q: 'Our Fulham basement extension leaks. Does it need re tanking?', a: 'Usually not. Pumps, channels and float switches fail long before membranes. The survey checks the whole system.' },
+    { q: 'Our riverside flat in Hammersmith has a damp floor. Is it the Thames?', a: 'On low ground near the river it can be groundwater. The survey separates causes.' },
+    { q: 'Do you survey mansion blocks in Hammersmith?', a: 'Yes. The report traces damp to its source in the building.' }
   ],
   nearby: ['kensington-and-chelsea', 'ealing']
 };

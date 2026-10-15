@@ -26,6 +26,11 @@ export default {
     'We survey the borough and the surrounding streets, from Bloomsbury and Kings Cross up through Camden Town to Hampstead and Highgate.',
   places: ['Camden Town', 'Hampstead', 'Kentish Town', 'Belsize Park', 'Primrose Hill', 'Bloomsbury', 'Kings Cross', 'Gospel Oak', 'Swiss Cottage'],
   districts: ['NW1', 'NW3', 'NW5', 'NW6', 'N6', 'WC1'],
+  towns: [
+    { name: 'Hampstead and Belsize Park', text: 'Large Victorian houses on the slopes of the hill, many divided into flats, alongside Georgian cottages in the old village and mansion blocks. The sands and gravels on top of the hill sit on London clay, and springs emerge where they meet. Basements and lower ground floors on the uphill side of a house retain ground that can be wet for months, and the damp in them is lateral rather than rising.' },
+    { name: 'Camden Town, Kentish Town and Primrose Hill', text: 'Stucco fronted and plain brick terraces from the early and mid nineteenth century, almost all now flats. Front areas with vaults under the pavement, closet wings at the rear and shared roofs and soil stacks are where the water comes from. In converted houses, the flat with the damp is frequently not the flat with the defect.' },
+    { name: 'Bloomsbury and Kings Cross', text: 'Georgian terraces around the squares, many in institutional or office use with flats above, and large Victorian and modern developments around the stations. Parapet gutters, valley roofs and lightwells are recurring sources of damp, and listed building constraints shape what can be recommended.' }
+  ],
   faq: [
     {
       q: 'Who is responsible for damp in a mansion block flat?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Yes, and in most cases that is the point. A great deal can be established without intervention: calibrated moisture readings across a grid, thermal patterns, drainage and ground level inspection outside, roof and rainwater goods, and the internal environment. Where something genuinely cannot be resolved without opening up, we say so and say exactly what needs opening and where, so you can seek consent for the smallest possible intervention rather than the largest.'
     },
+    { q: 'Our Hampstead flat is damp only in winter. Why?', a: 'Seasonal damp on the hill often follows the water table in the sands and gravels, which rises through the winter and drops in summer. It reaches walls that retain ground on the uphill side. Condensation is also worse in winter, so the survey separates the two with readings and the pattern of the damp.' },
+    { q: 'Do you survey mansion flats in Camden?', a: 'Yes, often for buyers and for leaseholders in dispute with a freeholder. Mansion blocks have shared roofs, gutters, soil stacks and heating pipes, and a damp patch in one flat is often the visible end of a defect elsewhere. The report traces it back.' },
+    { q: 'Is a listed Bloomsbury building harder to survey?', a: 'Not harder, but the recommendations are different. The report focuses on repairs that suit historic fabric and are likely to be acceptable, such as lime repairs, rainwater work and drainage, and notes where consent would be needed.' }
   ],
   nearby: ['islington', 'hackney']
 };

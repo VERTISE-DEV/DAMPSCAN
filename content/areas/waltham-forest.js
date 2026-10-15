@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Leyton and Leytonstone up through Walthamstow to Chingford.',
   places: ['Walthamstow', 'Leyton', 'Leytonstone', 'Chingford', 'Highams Park', 'Wood Street', 'Blackhorse Road', 'Upper Walthamstow', 'Whipps Cross'],
   districts: ['E4', 'E10', 'E11', 'E17'],
+  towns: [
+    { name: 'Walthamstow', text: 'Long streets of Victorian and Edwardian terraces, many with bays and rear additions, plus the village conservation area. Bays, closet wings and raised yards are the most common sources of damp.' },
+    { name: 'Leyton and Leytonstone', text: 'Victorian terraces and conversions. Rear yards, party wall damp in conversions and condensation in busy households recur.' },
+    { name: 'Chingford', text: 'Interwar and post war suburbs near Epping Forest. Drives over the course, extensions and mould make up most surveys.' }
+  ],
   faq: [
     {
       q: 'We are in a Warner flat and the damp is coming from above. Whose repair is it?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Comfortably, yes. An overflowing gutter puts a continuous sheet of water down a wall in exactly the spot where it can find pointing defects, and it does so during the wettest months when the wall has least chance of drying. Near the forest and the valley it is a predictable annual event rather than bad luck. A great many damp diagnoses in this borough end in cleared gutters and repointing rather than anything applied to the inside of the wall.'
     },
+    { q: 'Our Walthamstow bay has damp underneath. Why?', a: 'Bays leak at the roof junction, leadwork and sill, and water runs down inside the bay. A roofer or joiner fixes that.' },
+    { q: 'Our Leyton flat has damp on the party wall. Is it ours?', a: 'Party wall damp in conversions often comes from next door: a leaking pipe, a raised floor or a neighbour\'s defect. The report records it as evidence.' },
+    { q: 'Do Chingford interwar houses need damp proofing?', a: 'Rarely. Courses usually work; bridging by drives or patios is the common cause.' }
   ],
   nearby: ['redbridge', 'newham']
 };

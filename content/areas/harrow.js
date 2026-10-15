@@ -26,6 +26,11 @@ export default {
     'We survey across the borough, from Harrow and Wealdstone out through Pinner and Stanmore to Hatch End and Harrow Weald.',
   places: ['Harrow', 'Pinner', 'Stanmore', 'Wealdstone', 'Hatch End', 'Harrow Weald', 'North Harrow', 'Rayners Lane', 'Kenton'],
   districts: ['HA1', 'HA2', 'HA3', 'HA5', 'HA6', 'HA7'],
+  towns: [
+    { name: 'Harrow on the Hill', text: 'Historic buildings around the school and church, many listed, in a conservation area on the hill. Lime walls and retained ground on slopes recur.' },
+    { name: 'Pinner and Stanmore', text: 'Interwar suburbs and older village cores with timber framed houses. Breathable repairs in the old cores; drives and extensions in the suburbs.' },
+    { name: 'Wealdstone and Harrow Weald', text: 'Victorian terraces and interwar housing. Rear additions, drives and mould are typical.' }
+  ],
   faq: [
     {
       q: 'How do I know if my house is timber framed?',
@@ -37,6 +42,9 @@ export default {
       a:
         'Generally not injected fill of the kind used on masonry. The cavity in a timber framed wall is a designed, ventilated drainage gap between the cladding and the breather membrane, and it needs to stay clear so that water getting past the outer skin can drain and dry. Filling it can bridge moisture straight onto the frame. Where a house has been filled, we look for evidence of that having happened rather than assuming either way, and the report says what was found.'
     },
+    { q: 'Our Pinner cottage is timber framed and damp. Should we inject?', a: 'No. Timber frames need breathable finishes, low ground and sound rainwater goods.' },
+    { q: 'Do Stanmore semis need damp proofing?', a: 'Rarely. Drives and patios bridging the course are the usual cause.' },
+    { q: 'Do you survey on Harrow on the Hill?', a: 'Yes. The report respects listed building and conservation controls.' }
   ],
   nearby: ['brent', 'hillingdon']
 };

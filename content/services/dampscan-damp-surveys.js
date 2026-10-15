@@ -7,9 +7,9 @@ export default {
   title: 'Damp Surveys in Kent | Report in 24 Hours | DampScan',
   metaDescription:
     'Damp survey by a qualified surveyor: calibrated readings, full external inspection and a written report in 24 hours. No sales reps. 5-star Google reviews.',
-  h1: 'Damp surveys: the diagnosis comes before the quote',
+  h1: 'Independent damp surveys: the diagnosis, with nothing to sell',
   intro:
-    'A damp survey should tell you what is wrong, why, and what to do about it, in enough detail that you could take the report to anybody. Most of what gets called a damp survey is an inspection carried out by a firm that sells the remedy, which is a different thing with a different incentive. We diagnose first and quote second, and the report stands on its own either way.',
+    'A damp survey should tell you what is wrong, why, and what to do about it, in enough detail that you could take the report to anybody. Most of what gets called a damp survey is an inspection carried out by a firm that sells the remedy, which is a different thing with a different incentive. We carry out no treatment of any kind, so the report is the whole of what we sell.',
   signsHeading: 'When a survey is worth having',
   signs: [
     'A homebuyer or building survey has flagged damp and recommended a specialist',
@@ -31,11 +31,11 @@ export default {
       h2: 'What you get',
       paras: [
         'A written report within 24 hours of the visit. Photographs, the readings and where they were taken, the diagnosed cause, and what should be done in order of priority. Where we have not been able to establish something without opening up, the report says so and says exactly where to open, rather than leaving it vague.',
-        'Where remedial work is needed and you would like us to carry it out, there is a fixed price quote alongside it, covered by an insured workmanship guarantee. Where it is not needed, the report says that just as clearly, and a survey concluding that no damp proofing is required is a routine outcome here.',
+        'Where work is needed, it is written as a specification any competent contractor can price, so the quotes you collect are for the same job. Where it is not needed, the report says that just as clearly, and a survey concluding that no damp proofing is required is a routine outcome here.',
       ]
     },
     {
-      h2: 'Why survey before quote',
+      h2: 'Why the survey should come from someone with nothing to sell',
       paras: [
         'Because the two most expensive mistakes in this trade both come from doing it the other way round. Treating a symptom that has a different cause means paying for work that cannot succeed, and the failure shows up two or three years later once the replastering has dried. And specifying a remedy before establishing the cause tends to produce the remedy the specifier sells.',
         'Most repeat damp problems we are called to are second visits to work that treated a symptom. That is the whole reason the sequence matters.',
@@ -49,12 +49,12 @@ export default {
     {
       q: 'What does a damp survey cost?',
       a:
-        'It depends on the size of the property and how much is in question, which is why the fee is confirmed when you enquire rather than quoted here as a headline. What is worth comparing it against is the cost of the treatment it might avoid: a survey is a small fraction of a typical injection and replastering quote for a ground floor, and a meaningful share of the surveys we carry out conclude that the treatment is not required.'
+        'It depends on the size of the property and how much is in question, which is why the fee is confirmed when you enquire rather than quoted here as a headline. What is worth comparing it against is the cost of the treatment it might avoid: a survey is a small fraction of a typical injection and replastering quote for a ground floor, and a meaningful share of our surveys conclude that the treatment is not required. Our current fee bands are on the prices page.'
     },
     {
-      q: 'Do I have to use you for the work?',
+      q: 'Will you try to sell me the work afterwards?',
       a:
-        'No, and a good number of clients do not. The report is written to stand on its own, with enough detail that you could hand it to any competent contractor. Where we quote for the work the quote is separate from the report, and declining it changes nothing about what the report says. That separation is deliberate, because a diagnosis that only makes sense if you buy the remedy is not a diagnosis.'
+        'No. DampScan does not carry out remedial work, so there is no quote to follow the report. It is written to stand on its own, with enough detail that you could hand it to any competent contractor and compare like for like prices. That separation is deliberate, because a diagnosis that only makes sense if you buy the remedy is not a diagnosis.'
     },
     {
       q: 'How long does the visit take and when do I get the report?',

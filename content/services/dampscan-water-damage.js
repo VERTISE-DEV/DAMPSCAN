@@ -1,18 +1,18 @@
 /* Water Damage, dampscan. Written from this site's position, not shared with the
    other. See scripts/service-template.js for why the pair are two documents.
 
-   DampScan carries out the work, so this is the drying and the reinstatement:
-   what to do in the first two days, why a room that looks dry usually is not,
-   and what putting it back properly involves. ATi's page on the same subject is
-   about the insurance argument, which is a different job for a different buyer. */
+   DampScan is survey only, so this is about measurement: what to do in the
+   first two days, why a room that looks dry usually is not, and how to know
+   when it is safe to reinstate. ATi's page on the same subject is about the
+   insurance argument, which is a different job for a different buyer. */
 export default {
   slug: 'water-damage',
   site: 'dampscan',
   name: 'Water Damage',
-  title: 'Water Damage Drying & Repair in Kent | DampScan',
+  title: 'Water Damage Moisture Surveys in Kent | DampScan',
   metaDescription:
-    'Burst pipes, leaks and flooding across Kent and the South East. Moisture mapped, dried to the core and reinstated, under an insured guarantee.',
-  h1: 'Water damage: dried properly, not just dried on the surface',
+    'After a burst pipe, leak or flood in Kent: moisture mapped to depth, drying checked with readings, and sign off before anyone redecorates. Survey only.',
+  h1: 'Water damage: measured properly, not just dry on the surface',
   intro:
     'The expensive mistake after a leak is almost never the leak. It is redecorating three weeks later over fabric that is still wet inside, because the wall felt dry to the hand and nobody measured it. Six months on the paint blisters, a tide mark comes back, and the job is done twice.',
   signsHeading: 'What we are called out to',
@@ -39,23 +39,23 @@ export default {
       paras: [
         'A surface dries first and fastest. Plaster, screed, masonry and structural timber hold water much longer, and a hand on the wall or a pin meter pushed into the skim tells you about the outer few millimetres and nothing about what is behind them.',
         'We map the moisture rather than sample it: readings across the affected area and to depth, so the extent is a boundary drawn on evidence rather than a guess at where the stain stops. Where the reading needs to be certain, in a screed or a solid wall being signed off before reinstatement, deep measurement settles it.',
-        'Drying to the core takes days to weeks depending on what got wet. Plasterboard and timber studwork come back relatively quickly. A sand and cement screed, a solid brick wall or an insulated floor build up can take considerably longer, and no amount of wishing shortens it. What we can do is target the equipment at what is actually wet, and tell you honestly when it is finished rather than when the hire period ends.',
+        'Drying to the core takes days to weeks depending on what got wet. Plasterboard and timber studwork come back relatively quickly. A sand and cement screed, a solid brick wall or an insulated floor build up can take considerably longer, and no amount of wishing shortens it. What we can do is show the drying contractor exactly what is wet, and tell you honestly when it is finished rather than when the hire period ends.',
       ]
     },
     {
-      h2: 'What the work involves',
+      h2: 'How we fit around the drying',
       paras: [
         'A survey first, because the drying regime depends on what got wet and how deep it went. That means finding the source if it is still active, establishing the extent, and identifying anything that has to come out rather than be dried, typically saturated insulation, delaminated plasterboard and blown plaster.',
-        'Then controlled drying: dehumidification and air movement sized to the space and the materials, monitored with readings rather than left running and hoped over. We record the readings as we go, so there is a documented drying curve at the end instead of an assurance.',
-        'Then reinstatement, once and only once the readings say the fabric is dry. Replastering, timber repairs and redecoration, with any salt contaminated plaster removed rather than sealed over, because sealing over it is what produces the tide mark that comes back. Everything we carry out is covered by an insured workmanship guarantee.',
+        'Then controlled drying by the contractor or your insurer\'s drying firm: dehumidification and air movement sized to the space and the materials. We do not supply drying equipment. We return to take readings at intervals, so there is an independent drying curve at the end instead of an assurance.',
+        'Then reinstatement, once and only once the readings say the fabric is dry. Our sign off report records those final readings, and notes any salt contaminated plaster that should be removed rather than sealed over, because sealing over it is what produces the tide mark that comes back.',
       ]
     },
     {
       h2: 'Insurance, and being straight about the scope',
       paras: [
-        'Most escape of water damage is covered by household buildings insurance, and your insurer will usually want a scope and a price before authorising work. We provide that, with the survey findings, photographs and moisture readings behind it, in a form a loss adjuster can assess.',
-        'We do not inflate a scope to fill a claim. If half the room is dry we dry half the room, and the report says which half and why. That is the same principle as the rest of what we do: the diagnosis comes first, the price follows it, and nothing gets recommended because it happens to be profitable.',
-        'If a claim has already been declined and you want the decision challenged rather than the work done, that is a different job and a contractor is the wrong person to do it. Our sister practice ATi Damp Survey carries out no remedial work at all and writes those reports, which is why they carry weight with an insurer.',
+        'Most escape of water damage is covered by household buildings insurance, and your insurer will usually want evidence of the extent before authorising work. Our report gives that, with the survey findings, photographs and moisture readings behind it, in a form a loss adjuster can assess.',
+        'We do not inflate a scope to fill a claim, and we have no repair work to gain from one. If half the room is dry the report says which half and why. That is the same principle as the rest of what we do: the diagnosis is the product, and nothing gets recommended because it happens to be profitable.',
+        'If a claim has already been declined, a clear independent record of cause and extent is what the challenge rests on. Inside London our sister practice ATi Damp Survey writes those reports; across Kent we do.',
       ]
     },
   ],
@@ -66,7 +66,7 @@ export default {
     {
       q: 'How long does drying actually take?',
       a:
-        'It depends entirely on what got wet. Plasterboard and timber studwork often come back within one to two weeks under proper dehumidification. A sand and cement screed, a solid masonry wall or an insulated floor build up can take several weeks, sometimes longer, because the water has gone deep into a dense material and there is no shortcut. Anyone who quotes you a fixed number of days before seeing the property is guessing. We give you a range after the survey and readings as we go, so you can see it happening rather than take our word for it.'
+        'It depends entirely on what got wet. Plasterboard and timber studwork often come back within one to two weeks under proper dehumidification. A sand and cement screed, a solid masonry wall or an insulated floor build up can take several weeks, sometimes longer, because the water has gone deep into a dense material and there is no shortcut. Anyone who quotes you a fixed number of days before seeing the property is guessing. We give you a range after the survey and take readings as drying goes, so you can see it happening rather than take anybody\'s word for it.'
     },
     {
       q: 'Can I just redecorate and see what happens?',

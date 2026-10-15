@@ -26,6 +26,11 @@ export default {
     'We cover the borough and the surrounding area, from Croydon town centre out to the Surrey boundary.',
   places: ['Croydon', 'South Croydon', 'Thornton Heath', 'Purley', 'Coulsdon', 'Addiscombe', 'Norbury', 'Selsdon', 'South Norwood'],
   districts: ['CR0', 'CR2', 'CR5', 'CR7', 'CR8', 'SE25'],
+  towns: [
+    { name: 'Purley and Coulsdon', text: 'Interwar and post war houses on the slopes of the North Downs, many on sloping plots with retaining walls and steps. Garden run off and retained ground at the uphill wall are the usual causes of damp, along with paved drives.' },
+    { name: 'Thornton Heath and South Norwood', text: 'Victorian and Edwardian terraces mixed with interwar streets. Rear additions, concreted yards and bays recur, and conversions bring shared responsibility for roofs and drains.' },
+    { name: 'Addiscombe and Shirley', text: 'Interwar semis and later housing. Drives bridging the course, blocked airbricks under suspended floors and mould in bedrooms make up most surveys.' }
+  ],
   faq: [
     {
       q: 'Can a 1930s house get rising damp?',
@@ -37,6 +42,9 @@ export default {
       a:
         'It can be, and it is worth checking rather than assuming. Retrofit cavity fill can slump over time and leave the top of the wall uninsulated, or bridge the cavity and carry water from the outer leaf to the inner one. The signature is damp patches on the most weather exposed elevation, often at first floor level, appearing after driving rain rather than continuously. We inspect for it directly rather than inferring it, and the report says what we found.'
     },
+    { q: 'Our Croydon semi smells musty under the floor. What causes that?', a: 'Usually a suspended timber floor with blocked airbricks, often behind a later path or extension. Reopening and adding ventilation is the main repair, with any decayed timber replaced.' },
+    { q: 'We are buying in Purley and the house is on a slope. What should we check?', a: 'Retaining walls, drainage on the uphill side and any rooms below ground level. The survey covers these and the report says what they need.' },
+    { q: 'Do you survey flats above shops in central Croydon?', a: 'Yes. Damp in flats above shops often comes from parapets, flat roofs and shared drainage, and the report identifies the source and likely responsibility.' }
   ],
   nearby: ['bromley', 'wandsworth']
 };

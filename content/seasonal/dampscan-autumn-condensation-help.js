@@ -22,10 +22,10 @@ export default {
   ],
   whatWeDo: [
     'If the pattern fits condensation, the first steps cost little: extract fans on and working in the kitchen and bathroom, trickle vents open, lids on pans, washing dried outside or in a vented room, furniture a few centimetres off outside walls, and the heating kept low and steady rather than off and on.',
-    'If it persists, or appears where condensation would not explain it, we survey with meters, a thermal camera and a hygrometer, find the cause in writing, and where works are needed carry them out under our insured guarantee, from ventilation upgrades to fixing the defect letting water in.'
+    'If it persists, or appears where condensation would not explain it, we survey with meters, a thermal camera and a hygrometer, find the cause in writing, and specify the works that would fix it, from ventilation upgrades to the defect letting water in. We sell none of it, so the advice is the cheapest that will work.'
   ],
   price:
-    'Our survey fees are published on our prices page. Any works are quoted separately in writing after the survey, so you know what the problem is before anybody asks you to pay to fix it.',
+    'Our survey fees are published on our prices page. We do not carry out works, so you know what the problem is before anybody asks you to pay to fix it.',
   faq: [
     { q: 'Is black mould dangerous?', a: 'It can affect people with asthma, allergies and weakened immune systems, and children and older people are most at risk. It is worth dealing with rather than repainting over.' },
     { q: 'Will a dehumidifier fix it?', a: 'It helps a lot in a home with a moisture problem, and is often part of the answer. It will not fix water coming in from outside.' },

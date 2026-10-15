@@ -10,14 +10,27 @@
  * positions 30 to 50, and more internal links is the cheapest lift available.
  * Re-sort it when the data moves; nothing else depends on the order.
  */
+import { towns } from './kent-towns.js';
+
 export const areaGroups = {
+  /* DampScan is grouped by the towns people search for, with the remaining
+     district pages (Medway, Swale, Thanet...) as hubs at the head of their
+     group. Towns that share a name with their district (Maidstone, Dover)
+     replaced the district page at the same URL. */
   dampscan: {
     groups: [
-      { name: 'West Kent and Medway', slugs: ['dartford', 'gravesham', 'medway', 'maidstone', 'sevenoaks', 'tonbridge-and-malling', 'tunbridge-wells'] },
-      { name: 'East Kent', slugs: ['ashford', 'canterbury', 'dover', 'folkestone-and-hythe', 'swale', 'thanet'] },
+      { name: 'Dartford and Gravesend', slugs: ['dartford', 'gravesham', 'gravesend', 'swanley'] },
+      { name: 'Medway towns', slugs: ['medway', 'chatham', 'gillingham', 'rochester'] },
+      { name: 'Maidstone and the Malling towns', slugs: ['maidstone', 'tonbridge-and-malling', 'east-malling', 'west-malling', 'kings-hill', 'aylesford', 'snodland', 'tonbridge'] },
+      { name: 'Sevenoaks and the Weald', slugs: ['sevenoaks', 'edenbridge', 'tunbridge-wells'] },
+      { name: 'Swale and Canterbury', slugs: ['swale', 'sittingbourne', 'faversham', 'canterbury', 'whitstable', 'herne-bay'] },
+      { name: 'Thanet', slugs: ['thanet', 'margate', 'ramsgate', 'broadstairs'] },
+      { name: 'Dover, Folkestone and Ashford', slugs: ['dover', 'deal', 'folkestone-and-hythe', 'folkestone', 'hythe', 'ashford'] },
       { name: 'Surrey and Sussex', slugs: ['guildford', 'brighton'] }
     ],
-    top: ['guildford', 'sevenoaks', 'dover', 'medway', 'dartford', 'tunbridge-wells', 'brighton', 'maidstone']
+    /* Search Console: "damp proofing" plus these towns carry the impressions
+       (Sevenoaks, Sittingbourne, Chatham, Dover, Maidstone, Tunbridge Wells). */
+    top: ['sevenoaks', 'maidstone', 'sittingbourne', 'chatham', 'dover', 'tunbridge-wells', 'canterbury', 'tonbridge', 'gravesend', 'ashford', 'margate', 'dartford']
   },
   ati: {
     groups: [
@@ -32,12 +45,15 @@ export const areaGroups = {
   }
 };
 
-/** The top areas for a site, as area objects, in priority order. */
-export function topAreas(site, areas, n = 8) {
+/** The top areas for a site, as area or town objects, in priority order.
+    Kent towns are looked up as well as the list passed in, because a town
+    page is an area page as far as a reader is concerned. */
+export function topAreas(site, areas, n = 12) {
   const g = areaGroups[site];
   if (!g) return [];
+  const pool = [...areas, ...towns.filter((t) => !areas.includes(t))];
   return g.top
-    .map((slug) => areas.find((a) => a.site === site && a.slug === slug))
+    .map((slug) => pool.find((a) => a.site === site && a.slug === slug))
     .filter(Boolean)
     .slice(0, n);
 }

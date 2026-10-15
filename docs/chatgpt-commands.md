@@ -6,7 +6,9 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 
 ## What needs doing
 
-- "What needs doing today?"
+- "What needs doing today?" / "What's outstanding?" (the same list as the Calendar's Today panel: today's visits, then every action needed, grouped and counted: enquiries to call back, messages to send, quotes accepted with no date, surveys awaiting the estate agent, reports to send, deposits and payments to collect, overdue invoices, quotes to chase, to-dos, services due, over budget. Money only if you manage the business.)
+- "What's outstanding for Verge?" (any company on its own)
+- "Show me the full Due list." (the Due page as it was, with visits this week and payouts to freeze)
 - "Which messages are due today?"
 - "What's on the calendar next week?"
 - "Any new enquiries since Monday?"

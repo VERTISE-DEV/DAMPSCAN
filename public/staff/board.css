@@ -59,10 +59,75 @@
 .ev--done{opacity:.6}
 .cal-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .cal-key-item{display:inline-block;width:auto}
-.agenda{display:none;margin-top:16px}
-.agenda h3{font-size:13px;color:var(--muted);margin:16px 0 6px}
-.agenda .ev{white-space:normal;padding:8px 10px;margin-bottom:6px}
-@media (max-width:760px){.cal,.cal-dows{display:none}.agenda{display:block}}
+.cal-day.is-target,.day-block.is-target{border-color:var(--accent);background:var(--accent-soft)}
+.cal-num{background:none;border:0;padding:0;text-align:left;cursor:pointer;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted)}
+.cal-count{display:none}
+.ev{display:flex;gap:4px;align-items:center}
+.ev[draggable="true"]{cursor:grab}
+.ev-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.badge{flex:none;font-size:10px;font-weight:700;line-height:1;padding:3px 5px;border-radius:999px;background:var(--warn);color:#06121f}
+.badge--messages,.badge--quotes,.badge--todos{background:var(--accent);color:#06121f}
+.badge--agent,.badge--budget{background:var(--muted-2);color:#06121f}
+.dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--warn);padding:0}
+.dot.badge--messages,.dot.badge--quotes,.dot.badge--todos{background:var(--accent)}.dot.badge--agent,.dot.badge--budget{background:var(--muted-2)}
+
+/* ---------- the working calendar: Today panel, strips, views ---------- */
+.work-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:14px}
+@media (min-width:1100px){.work-grid{grid-template-columns:360px minmax(0,1fr)}.today-panel{position:sticky;top:12px;align-self:start;max-height:calc(100vh - 24px);overflow:auto}}
+.today-panel{background:var(--slate);border:1px solid var(--line);border-radius:var(--radius);padding:14px;min-width:0}
+.today-panel h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px}
+.today-visits{display:flex;flex-direction:column;gap:6px}
+.today-visits .ev{white-space:normal;padding:8px 10px}
+.act-h{margin-top:18px}
+.act-count{display:inline-block;min-width:20px;padding:2px 7px;border-radius:999px;background:var(--accent-soft);color:var(--text);font-size:12px;font-weight:700;text-align:center;margin-left:6px;letter-spacing:0}
+.act-group{border-top:1px solid var(--line);padding:8px 0}
+.act-group summary{cursor:pointer;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:space-between}
+.act-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.act-item{background:var(--navy);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:10px;transition:opacity .25s;min-width:0}
+.act-item.ev--dampscan{border-left-color:#8b7cff}.act-item.ev--ati-london{border-left-color:#d6b25e}.act-item.ev--roofing{border-left-color:#f4581c}.act-item.ev--ac{border-left-color:#38bdf8}
+.act-item.is-overdue{box-shadow:inset 0 0 0 1px var(--warn)}
+.act-item.is-busy{opacity:.6}.act-item.is-done{opacity:0}
+.act-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.act-who{font-weight:700;overflow-wrap:anywhere}
+.act-biz{font-size:11.5px;color:var(--muted-2);white-space:nowrap}
+.act-what{font-size:13px;color:var(--muted);margin:4px 0 8px;overflow-wrap:anywhere}
+.act-bar,.act-date{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.act-date{margin-top:8px}
+.act-date input{background:var(--slate);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:6px 8px;font:inherit;font-size:16px;max-width:100%}
+.pill.act{padding:7px 12px;font-size:13px;color:var(--text);text-decoration:none;min-height:36px;display:inline-flex;align-items:center}
+.pill.act-main{border-color:var(--accent)}
+.act-err{color:var(--warn);font-size:12.5px;margin-top:6px}
+.act-item .msg{margin-bottom:8px}
+.cal-main{min-width:0}
+.cal-filters{display:flex;gap:6px;flex-wrap:wrap}
+.cal-bar .pills{display:flex;gap:6px}
+.cal-bar .pill{padding:7px 12px}
+.cal-nav{display:flex;gap:6px}
+.strip{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:12px;background:var(--slate)}
+.strip--overdue{border-color:var(--warn)}
+.strip summary{cursor:pointer;font-weight:700}
+.strip .strip-count{color:var(--muted-2);font-weight:600}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:16px}
+.day-block{background:var(--slate);border:1px solid var(--line);border-radius:10px;padding:8px;min-width:0;display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.week .day-block{margin-top:0;min-height:160px}
+.day-block.is-today{border-color:var(--accent)}
+.day-block h3{font-size:13px;color:var(--muted)}
+.day-link{cursor:pointer}.day-link:hover{color:var(--accent)}
+.day-ev{display:flex;gap:6px;align-items:center}
+.day-ev .ev{flex:1;min-width:0;white-space:normal;padding:8px 10px}
+.act-list--inline{margin:0 0 0 12px}
+.linkish{background:none;border:0;padding:0;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
+@media (max-width:1099px){.week{grid-template-columns:minmax(0,1fr)}.week .day-block{min-height:0}}
+/* A phone keeps the month as a grid of numbers with a count: tapping a day opens it. */
+@media (max-width:760px){
+  .cal{gap:3px}.cal-dow{padding:0;text-align:center;letter-spacing:0}
+  .cal-day{min-height:52px;padding:4px;align-items:center}
+  .cal-day .ev{display:none}
+  .cal-num{text-align:center;width:100%}
+  .cal-count{display:block;font-size:11px;font-weight:700;color:var(--text);background:var(--accent-soft);border-radius:999px;padding:1px 7px}
+  .cal-day.has-flags .cal-count{background:var(--warn);color:#06121f}
+  .cal-bar h2{flex-basis:100%}
+}
 
 /* ---------- price book, inside the job's Quote block ---------- */
 .pb{margin:10px 0;display:flex;flex-direction:column;gap:6px}

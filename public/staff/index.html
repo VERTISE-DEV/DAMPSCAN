@@ -98,7 +98,7 @@
            redirector for anyone who could get a staff member to click. */
         var next = new URLSearchParams(location.search).get('next') || '';
         var safe = /^\/(?![\/\\])/.test(next) && next.indexOf('\\') === -1;
-        location.replace(safe ? next : '/staff/dashboard.html');
+        location.replace(safe ? next : '/staff/calendar.html');
         return;
       }
       const body = await res.json().catch(function(){ return null; });

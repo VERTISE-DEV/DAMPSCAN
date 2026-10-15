@@ -22,7 +22,7 @@
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html']]
+      tabs: [['Surveys', 'surveys.html'], ['Day sheet', 'day.html'], ['Agents', 'agents.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',
@@ -204,6 +204,6 @@
     first: first,
     /* The routes that narrow by company. The calendar asks for every company
        the person holds, so nothing is added to its requests. */
-    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights)\b/
+    scoped: overall ? /(?!)/ : /^\/api\/admin\/(leads|summary|due|clients|jobs|quoted|contracts|calendar|insights|surveys)\b/
   };
 })(window);

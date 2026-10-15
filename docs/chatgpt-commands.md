@@ -6,7 +6,7 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 
 ## What needs doing
 
-- "What needs doing today?" / "What's outstanding?" (the same list as the Calendar's Today panel: today's visits, then every action needed, grouped and counted: enquiries to call back, messages to send, quotes accepted with no date, surveys awaiting the estate agent, reports to send, deposits and payments to collect, overdue invoices, quotes to chase, to-dos, services due, over budget. Money only if you manage the business.)
+- "What needs doing today?" / "What's outstanding?" (the same list as the Calendar's Today panel: today's visits, then every action needed, grouped and counted: enquiries to call back, messages to send, quotes accepted with no date, surveys awaiting the estate agent, reports to send (paid surveys whose report has not gone, red after two days), remedial work to follow up, deposits and payments to collect, overdue invoices, quotes to chase, to-dos, services due, over budget. Money only if you manage the business.)
 - "What's outstanding for Verge?" (any company on its own)
 - "Show me the full Due list." (the Due page as it was, with visits this week and payouts to freeze)
 - "Which messages are due today?"
@@ -28,6 +28,9 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "Book Mrs Patel in for Tuesday the 3rd at half eight."
 - "Move Mrs Patel to Thursday at 10." / "Push the Smiths in TN13 back a week." (the date moves, nothing else changes)
 - "Mark Shuah as awaiting estate agent confirmation." (ATi and DampScan: the card stays in Upcoming until a time is set) / "Shuah's agent has confirmed, take off the wait."
+- "Book a DampScan survey for Sam Lee, ME14 2AB, full, Ben, through Foxtons Maidstone, Jo 01622 000000, waiting on the agent for a time." (ATi and DampScan: the estate agent is kept once and reused by name and branch; most surveys are booked with the customer and need no agent)
+- "Shuah's survey was booked through Purplebricks, Kate, kate@example.com." (adds the estate agent to an existing survey)
+- "The Patels want the remedial work quoted, about £2,400." / "We won the Patel remedial work at £2,350." / "The Smiths don't want remedial work." (after the report: quoting, won, which then counts in the payout, or declined. Today lists reports sent three or more days ago with no decision.)
 - "Mark Mrs Patel as completed." / "Mark the Jones job in DA1 as declined, they went elsewhere."
 - "Add a note to Mrs Patel: side gate code is 1234."
 - "Add a £240 skip to Mrs Patel."

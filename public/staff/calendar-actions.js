@@ -14,7 +14,7 @@
 
   function jobHref(site, id, quoted) {
     if (!id) return null;
-    return quoted || site === 'roofing' || site === 'ac' ? '/staff/quoted.html?area=' + AREA_OF[site] + '#job-' + id : '/staff/jobs.html?area=damp#job-' + id;
+    return quoted || site === 'roofing' || site === 'ac' ? '/staff/quoted.html?area=' + AREA_OF[site] + '#job-' + id : '/staff/surveys.html?area=damp#job-' + id;
   }
 
   function shortDate(iso) {
@@ -115,6 +115,10 @@
       if (a === 'deposit') add(button('Deposit paid', function () { act(row, '/api/admin/clients', { id: it.jobId, depositPaid: true }, onDone, { body: { id: it.jobId, depositPaid: false } }, 'Deposit marked paid.'); }, 'act-main'));
       if (a === 'paid') add(button('Paid in full', function () { act(row, '/api/admin/clients', { id: it.jobId, paid: true }, onDone, { body: { id: it.jobId, paid: false } }, 'Marked paid in full.'); }));
       if (a === 'report') add(button('Report sent', function () { act(row, '/api/admin/clients', { id: it.jobId, surveySent: true }, onDone, { body: { id: it.jobId, surveySent: false } }, 'Report marked sent.'); }, 'act-main'));
+      if (a === 'remedial') {
+        add(button('Quoting', function () { act(row, '/api/admin/surveys', { op: 'remedial', id: it.jobId, status: 'quoting' }, onDone, { body: { op: 'remedial', id: it.jobId, status: 'none' } }, 'Marked quoting.'); }, 'act-main'));
+        add(button('Not wanted', function () { act(row, '/api/admin/surveys', { op: 'remedial', id: it.jobId, status: 'declined' }, onDone, { body: { op: 'remedial', id: it.jobId, status: 'none' } }, 'Marked not wanted.'); }));
+      }
       if (a === 'todo') add(button('Done', function () { act(row, '/api/admin/todos', { op: 'done', id: it.id }, onDone, { body: { op: 'reopen', id: it.id } }, 'To-do ticked off.'); }, 'act-main'));
       if (a === 'contacted') add(button('Reminded', function () { act(row, '/api/admin/contracts', { op: 'contacted', id: it.id }, onDone, { body: { op: 'uncontacted', id: it.id, on: it.lastContactedOn || '' } }, 'Marked reminded.'); }));
       if (a === 'date') add(button('Set date', function () {

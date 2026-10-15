@@ -87,6 +87,8 @@ async function world() {
   const accepted = await j({ op: 'save', site: 'roofing', customerName: 'Ann Accepted', invoiceNetPence: P(2000), status: 'quoted' });
   await pool.query('update jobs set quote_accepted_at = now() where id = $1', [accepted.id]);
   const report = await damp({ name: 'Rita Report', status: 'completed', date: D.past, paid: true });
+  /* Owed from the survey or the payment, whichever was later: paid four days ago. */
+  await pool.query(`update jobs set paid_at = now() - interval '4 days' where id = $1`, [report]);
   const agent = await damp({ name: 'Andy Agent', date: D.tomorrow, agent: true });
   const deposit = await damp({ name: 'Dee Deposit', date: D.tomorrow });
   await pool.query(`insert into todos (text, site, set_by_name, source, due_on) values ('Ring the skip firm', 'roofing', 'Scott', 'manual', $1::date - 1)`, [D.today]);

@@ -210,6 +210,8 @@
     if (global.DSQTIME) global.DSQTIME.fill(j);
     if (global.DSQPB) global.DSQPB.fill(j);
     if (global.DSQPHOTOS) global.DSQPHOTOS.fill(j);
+    if (global.DSQGLANCE) global.DSQGLANCE.fill(j);
+    if (global.DSQPLAN) global.DSQPLAN.fill(j);
     ['w-cost-error', 'w-days-error', 'w-pay-error', 'w-details-error'].forEach(function (id) { el(id).classList.remove('is-shown'); });
   }
 

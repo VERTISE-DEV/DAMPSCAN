@@ -1066,3 +1066,52 @@ alter table jobs add constraint jobs_remedial_status_check check (remedial_statu
 alter table jobs add column if not exists remedial_quote_pence integer check (remedial_quote_pence >= 0);
 -- The address of a survey booked by phone, with no web enquiry to carry it.
 alter table jobs add column if not exists customer_address text;
+
+-- ---------------------------------------------------------------------------
+-- The Verge Roofing pipeline (lib/roofing.js). The stages are derived from
+-- these facts, never stored as one column, so the job screen, the board and
+-- the assistant agree. site_visit_on is the booked look at the roof and
+-- visit_done_at says the look happened; won_at is a yes taken by phone (an
+-- online yes is quote_accepted_at); started_at puts a booked job in progress;
+-- stage_at is when the card last changed column, for "days in stage".
+-- expected_days is how long the crew expect to be on the roof. google_posted_at
+-- ticks the Google Business post in the finishing checklist.
+-- ---------------------------------------------------------------------------
+alter table jobs add column if not exists site_visit_on    date;
+alter table jobs add column if not exists visit_done_at    timestamptz;
+alter table jobs add column if not exists won_at           timestamptz;
+alter table jobs add column if not exists started_at       timestamptz;
+alter table jobs add column if not exists stage_at         timestamptz;
+alter table jobs add column if not exists expected_days    numeric(4,1) check (expected_days is null or (expected_days > 0 and expected_days <= 60));
+alter table jobs add column if not exists google_posted_at timestamptz;
+
+-- The job planner: one row per thing a roof needs before and during the work.
+-- Scaffold, materials and skip are one row each; crew is a row per person.
+-- A row with a cost owns one cost line (cost_id), updated in place, so the
+-- figure is counted once however often it is edited.
+create table if not exists job_tasks (
+  id          bigserial primary key,
+  job_id      bigint not null references jobs (id) on delete cascade,
+  kind        text not null check (kind in ('scaffold', 'materials', 'skip', 'crew')),
+  status      text not null default 'needed',
+  task_date   date,
+  supplier    text,
+  cost_pence  integer check (cost_pence is null or cost_pence >= 0),
+  note        text,
+  person_id   bigint references people (id) on delete cascade,
+  cost_id     bigint references job_costs (id) on delete set null,
+  updated_at  timestamptz not null default now()
+);
+alter table job_tasks drop constraint if exists job_tasks_status_check;
+alter table job_tasks add constraint job_tasks_status_check
+  check (status in ('needed', 'not_needed', 'booked', 'up', 'down', 'ordered', 'delivered', 'on_site', 'collected', 'confirmed'));
+create unique index if not exists job_tasks_one_idx on job_tasks (job_id, kind) where kind <> 'crew';
+create unique index if not exists job_tasks_crew_idx on job_tasks (job_id, person_id) where kind = 'crew';
+
+-- The forecast for a postcode, kept for the day so the week board and the
+-- pipeline ask Open-Meteo at most a few times a day.
+create table if not exists weather_cache (
+  postcode    text primary key,
+  fetched_at  timestamptz not null default now(),
+  days        jsonb not null
+);

@@ -35,6 +35,7 @@ import push from '../../lib/routes/admin/push.js';
 import pricebook from '../../lib/routes/admin/pricebook.js';
 import quoted from '../../lib/routes/admin/quoted.js';
 import rates from '../../lib/routes/admin/rates.js';
+import roofing from '../../lib/routes/admin/roofing.js';
 import search from '../../lib/routes/admin/search.js';
 import snooze from '../../lib/routes/admin/snooze.js';
 import surveys from '../../lib/routes/admin/surveys.js';
@@ -44,7 +45,7 @@ import usage from '../../lib/routes/admin/usage.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, search, snooze, summary, surveys, todos, usage };
+const ROUTES = { attachment, bank, business, calendar, clients, contracts, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, roofing, search, snooze, summary, surveys, todos, usage };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;

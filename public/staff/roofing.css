@@ -1,0 +1,47 @@
+/* The Verge pipeline, the week board and the planner on the job screen.
+   Phone first: stages stack and fold; from tablet width they sit side by side
+   and scroll sideways; the week is one day under another on a phone and six
+   columns from a tablet up. Builds on survey.css for cards, badges and ticks. */
+.rf-tiles{margin-top:12px}
+.rf-board{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}
+@media (min-width:760px){.rf-board{grid-template-columns:repeat(9,minmax(250px,1fr));overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity}
+  .rf-col{scroll-snap-align:start}}
+.rf-col{min-height:0}
+.rf-card{border-left-color:#e0703a}
+.rf-card.rf-done,.rf-card.rf-paid,.rf-card.rf-reviewed{border-left-color:rgba(37,211,102,.7)}
+.rf-card.rf-enquiry{border-left-color:var(--muted-2)}
+.rf-next{font-weight:700;font-size:14px;margin:0}
+.rf-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rf-badges{display:flex;flex-wrap:wrap;gap:6px}
+.rf-crew{display:inline-flex;gap:4px}
+.rf-initials{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:999px;background:var(--accent-soft);color:var(--text);font-size:11px;font-weight:800;padding:0 4px}
+.rf-nocrew{font-size:12px;color:var(--warn)}
+.rf-weather{display:inline-flex;gap:2px}
+.rf-wx{font-size:16px;line-height:1;padding:2px 3px;border-radius:6px}
+.rf-wx.is-warn{background:var(--warn)}
+.rf-finish{display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--line);padding-top:8px}
+.rf-finish a.sv-tick{text-decoration:none;display:inline-flex;align-items:center}
+.rf-dialog{max-width:480px}
+.wk-board{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}
+@media (min-width:760px){.wk-board{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1200px){.wk-board{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.wk-day{min-height:120px}
+.wk-day.is-today{border-color:var(--accent)}
+.wk-card .card-name{color:var(--text);text-decoration:none}
+.wk-plan{display:flex;flex-wrap:wrap;gap:4px}
+.wk-step{font-size:12px;padding:2px 7px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted)}
+.wk-step.is-ok{border-color:rgba(37,211,102,.6);color:var(--text)}
+/* The job screen: the quote at a glance and the planner. */
+.rq-glance{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.rq-glance .tile{flex:1 1 130px}
+.rq-fixed{font-size:13px;color:var(--muted)}
+.rq-thumbs{display:flex;gap:6px;overflow-x:auto;max-width:100%}
+.rq-thumbs img{width:64px;height:64px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+.rp-list{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+@media (min-width:900px){.rp-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rp-item{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rp-item h4{margin:0;font-size:14px}
+.rp-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rp-row input,.rp-row select{background:var(--navy);border:1px solid var(--line-strong);border-radius:8px;color:var(--text);padding:7px 9px;font:inherit;font-size:16px;min-height:38px;max-width:100%}
+.rp-row input[type="text"]{flex:1 1 120px;min-width:0}
+.rp-row .rp-cost{width:100px}

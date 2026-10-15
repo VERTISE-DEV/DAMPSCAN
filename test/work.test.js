@@ -220,3 +220,27 @@ test('one job for the pop-up, with money only for a manager', async () => {
   assert.equal(steve.money, null);
   assert.equal((await get(w.steve, w.deposit)).statusCode, 404, 'not his business');
 });
+
+/* The live bug: a survey booked by phone or by the assistant has no enquiry,
+   so its address is only on the job, and the pop-up showed none (no way to
+   navigate). An enquiry's photos and notes must come through as well. */
+test('the pop-up carries the job address, the enquiry files and notes', async () => {
+  const w = await world();
+  const get = async (id) => (await call(calendar, { method: 'GET', url: `/api/admin/calendar?view=job&id=${id}`, headers: { cookie: w.boss } })).json().job;
+  const phoned = await damp({ name: 'Jack Phoned' });
+  await pool.query(`update jobs set customer_address = '12 High Street, Maidstone' where id = $1`, [phoned]);
+  let j = await get(phoned);
+  assert.deepEqual(j.address, ['12 High Street, Maidstone', 'ME14 1AA']);
+  assert.equal(j.phone, '07700 900123');
+  assert.deepEqual([j.lead, j.files, j.photos], [null, [], []]);
+  const lead = (await pool.query(
+    `insert into leads (stage, first_name, email, postcode, phone, session_id, address_line1, town, notes, issues, files, site)
+     values ('complete', 'Lena', 'lena@example.com', 'ME14 1AA', '07700 900456', gen_random_uuid(), '3 Mill Lane', 'Maidstone', 'Side gate is locked', '{Rising damp}',
+             '{leads/2026-10-01/abc-wall.jpg,leads/2026-10-01/def-report.pdf}', 'dampscan') returning id`)).rows[0].id;
+  const withLead = await damp({ name: 'Lena Lead' });
+  await pool.query('update jobs set lead_id = $1 where id = $2', [lead, withLead]);
+  j = await get(withLead);
+  assert.deepEqual(j.address, ['3 Mill Lane', 'Maidstone', 'ME14 1AA']);
+  assert.deepEqual(j.lead, { notes: 'Side gate is locked', issues: ['Rising damp'] });
+  assert.deepEqual(j.files.map((f) => [f.name, f.image]), [['abc-wall.jpg', true], ['def-report.pdf', false]]);
+});

@@ -64,16 +64,15 @@
     if (c.finish) card.appendChild(R.finishList(c, load, function (job, kind) { R.messageDialog(job, kind, load); }));
     var bar = U.node('div', 'card-actions');
     if (R.NEXT[c.stage] && !c.frozen) bar.appendChild(button(R.NEXT[c.stage][1], function () { run(bar, function () { return R.move(c, R.NEXT[c.stage][0], load); }); }, 'act-main'));
-    bar.appendChild(link('Open', R.jobHref(c.id)));
-    if (['accepted', 'booked', 'in_progress'].indexOf(c.stage) !== -1) bar.appendChild(link('Plan', R.jobHref(c.id) + '-plan'));
-    if (c.phone) bar.appendChild(link('Call', 'tel:' + String(c.phone).replace(/[^\d+]/g, '')));
-    if (R.BACK[c.stage] && !c.frozen) bar.appendChild(button('Back', function () { run(bar, function () { return R.move(c, R.BACK[c.stage], load); }); }, 'sv-back'));
-    if (['visit', 'quoted', 'accepted', 'booked'].indexOf(c.stage) !== -1) {
-      bar.appendChild(button(c.stage === 'booked' ? 'Cancelled' : 'Lost', function () {
-        run(bar, function () { return R.write({ op: 'stage', id: c.id, to: 'lost' }, (c.firstName || 'Job') + ' marked ' + (c.stage === 'booked' ? 'cancelled.' : 'lost.'), load); });
-      }, 'sv-back'));
-    }
-    card.appendChild(bar);
+    /* One next step on the card; the rest (call, plan, back, lost, money)
+       is in the job sheet a tap away, or on the job page it links to. */
+    card.classList.add('is-compact');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    var open = function () { if (global.DSPOP) global.DSPOP.open(c.id, { onChange: load }); else global.location.href = R.jobHref(c.id); };
+    card.addEventListener('click', function (e) { if (!e.target.closest('button,a,input,select,label,textarea')) open(); });
+    card.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target === card) { e.preventDefault(); open(); } });
+    if (bar.children.length) card.appendChild(bar);
     card.addEventListener('dragstart', function (e) { state.dragging = c; card.classList.add('is-dragging'); e.dataTransfer.setData('text/plain', String(c.id)); });
     card.addEventListener('dragend', function () { state.dragging = null; card.classList.remove('is-dragging'); });
     if (state.focus === c.id) card.classList.add('is-focus');
@@ -172,6 +171,6 @@
   var out = el('logout');
   if (out) out.addEventListener('click', async function () { await fetch('/api/auth/logout', { method: 'POST' }); location.replace('/staff'); });
   var m = /^#job-(\d+)/.exec(global.location.hash);
-  if (m) state.focus = Number(m[1]);
+  if (m) { state.focus = Number(m[1]); if (global.DSPOP) global.DSPOP.open(state.focus, { onChange: load }); }
   load();
 })(window);

@@ -16,12 +16,13 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 
 - "Find the client at BR6 0AA." / "Have we done work for anyone called Patel?"
 - "Add a new client for CoolRight: Dev Shah, TN13 1AA, 07700 900456."
-- "Mrs Patel's new number is 07700 900999." / "Fix the spelling of the name on Mrs Patel's job to Anita Patel."
+- "Mrs Patel's new number is 07700 900999." / "Fix the spelling of the name on Mrs Patel's job to Anita Patel." (works on ATi and DampScan cards too: a phone or email set here is used instead of the enquiry's, handy for surveys booked by phone)
 - "Start a new job for Mrs Patel, same details as last time." (it reuses the client, no retyping)
 
 ## Jobs
 
 - "Start a roofing job for Anita Patel, BR6 0AA, 07700 900123, leaking valley."
+- "Book an ATi survey for John Nicholls, SW2 2JX, 07814 663729, localised, Tom, 20 October at 5pm, £215, deposit paid." (survey type by name or key, surveyor by name; a price given replaces the rate card's; if a survey type is not on the rate card it lists the ones that are)
 - "Book Mrs Patel in for Tuesday the 3rd at half eight."
 - "Move Mrs Patel to Thursday at 10." / "Push the Smiths in TN13 back a week." (the date moves, nothing else changes)
 - "Mark Shuah as awaiting estate agent confirmation." (ATi and DampScan: the card stays in Upcoming until a time is set) / "Shuah's agent has confirmed, take off the wait."

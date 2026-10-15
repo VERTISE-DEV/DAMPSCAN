@@ -152,6 +152,10 @@
     if (agent !== Boolean(c.awaitingAgent)) body.awaitingAgent = agent;
     var note = el('c-note').value.trim();
     if (note !== (c.note || '')) body.note = note;
+    var phone = el('c-phone').value.trim();
+    if (phone !== (c.phone || '')) body.phone = phone;
+    var email = el('c-email').value.trim();
+    if (email !== (c.email || '')) body.email = email;
 
     if (Object.keys(body).length === 1) {
       el('c-save').disabled = false;

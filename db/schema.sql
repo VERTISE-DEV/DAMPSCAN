@@ -1115,3 +1115,28 @@ create table if not exists weather_cache (
   fetched_at  timestamptz not null default now(),
   days        jsonb not null
 );
+
+-- A job always holds a date (job_date defaults to today), so on its own the
+-- date cannot say whether anyone agreed it. date_set records that a date was
+-- really given: Today keeps jobs without one in "Not booked in yet" instead of
+-- piling them on the day they were made. Backfilled once (only rows still
+-- null): a date unlike the day it was made, a time, or finished work counts.
+alter table jobs add column if not exists date_set boolean;
+update jobs set date_set = (job_time is not null or status in ('completed', 'paid', 'refunded')
+    or job_date <> (created_at at time zone 'Europe/London')::date
+    or status not in ('booked', 'quoted'))
+  where date_set is null;
+alter table jobs alter column date_set set default false;
+alter table jobs alter column date_set set not null;
+-- Every route that writes a date also sets date_set itself; this catches the
+-- rest: a time always means a date was agreed, a date that moves was chosen,
+-- and an insert dated other than today was given its date.
+create or replace function jobs_date_set() returns trigger language plpgsql as $$
+begin
+  if new.job_time is not null then new.date_set := true; end if;
+  if tg_op = 'INSERT' and new.job_date <> (now() at time zone 'Europe/London')::date then new.date_set := true; end if;
+  if tg_op = 'UPDATE' and new.job_date is distinct from old.job_date then new.date_set := true; end if;
+  return new;
+end $$;
+drop trigger if exists jobs_date_set_trg on jobs;
+create trigger jobs_date_set_trg before insert or update on jobs for each row execute function jobs_date_set();

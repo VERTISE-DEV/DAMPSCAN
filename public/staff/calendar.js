@@ -1,12 +1,17 @@
-/* The Calendar: the place to work from. A Today panel (today's visits in time
-   order and everything outstanding, grouped, with one-tap actions from
-   calendar-actions.js), then the calendar itself as a month, a week or one
-   day. Each job on the calendar carries small badges for what is still
-   outstanding on it; a day opens as an agenda with those actions inline.
-   Jobs move by dragging on a desktop, or with Move on a phone, through the
-   same routes the job screens use. "Add to my calendar" writes the visible
-   range as an .ics file, so it reaches a phone or Outlook without the staff
-   area holding anybody's calendar login. */
+/* Today: a timeline first. One week, Monday at the top to Sunday at the
+   bottom, each day's jobs in time order (jobs with a day but no hour sit under
+   "Time to confirm" on their day), today highlighted, arrows or a sideways
+   swipe for the week before or after. Tapping a job opens its pop-up
+   (calendar-pop.js) with everything about it and every action on it.
+
+   Under the timeline, two short lists and nothing else: "Not booked in yet"
+   (agreed work with no date anybody chose; a job's date defaults to the day
+   it was typed in, so date_set on the server tells the two apart) and "Needs
+   doing" with only three groups: collect a deposit, collect payment in full,
+   send a survey report. The whole outstanding list lives on the Due page.
+
+   A month grid is still there behind a toggle for looking further ahead.
+   Jobs move by dragging in the month grid on a desktop, or from the pop-up. */
 (function (global) {
   'use strict';
 
@@ -14,223 +19,181 @@
   var W = global.DSWORK;
   var el = function (id) { return document.getElementById(id); };
   var DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  var BADGE = { messages: 'Message', deposits: 'Deposit', payments: 'Unpaid', invoices: 'Overdue', payouts: 'Payout', reports: 'Report', remedial: 'Remedial', agent: 'Agent', quotes: 'Chase', budget: 'Budget', todos: 'To-do', prep: 'Prep', finish: 'Finish' };
   var today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-  var VIEW_KEY = 'ds_cal_view';
+  var VIEW_KEY = 'ds_cal_view2';
   var stored = function () { try { return global.localStorage.getItem(VIEW_KEY); } catch (e) { return null; } };
-  var state = { view: ['month', 'week', 'day'].indexOf(stored()) !== -1 ? stored() : 'month', cursor: today, area: (['damp', 'roofing', 'ac'].indexOf(new URLSearchParams(location.search).get('area')) !== -1 ? new URLSearchParams(location.search).get('area') : ''), events: [], todayEvents: [], work: null };
+  var qs = new URLSearchParams(location.search);
+  var state = { view: stored() === 'month' ? 'month' : 'week', cursor: today, area: ['damp', 'roofing', 'ac'].indexOf(qs.get('area')) !== -1 ? qs.get('area') : '',
+    events: [], unbooked: [], work: null };
+  /* The three groups Today lists, each built from the server's groups. */
+  var NEEDS = [['deposit', 'Collect deposit', ['deposits']], ['paid', 'Collect paid in full', ['payments', 'invoices']], ['report', 'Send survey report', ['reports']]];
 
-  /* Dates are YYYY-MM-DD strings read at noon UTC, so no clock change can
-     move an event onto the next or previous day. */
   function at(iso) { return new Date(iso + 'T12:00:00Z'); }
   function iso(d) { return d.toISOString().slice(0, 10); }
   function addDays(s, n) { var d = at(s); d.setUTCDate(d.getUTCDate() + n); return iso(d); }
   function monday(s) { return addDays(s, -((at(s).getUTCDay() + 6) % 7)); }
-  function longDay(s) { return at(s).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }); }
+  function fmt(s, o) { return at(s).toLocaleDateString('en-GB', Object.assign({ timeZone: 'UTC' }, o)); }
 
   function range() {
-    if (state.view === 'day') return { from: state.cursor, to: state.cursor };
     if (state.view === 'week') return { from: monday(state.cursor), to: addDays(monday(state.cursor), 6) };
     var first = state.cursor.slice(0, 7) + '-01';
     var next = at(first); next.setUTCMonth(next.getUTCMonth() + 1);
-    var last = addDays(iso(next), -1);
-    return { from: monday(first), to: addDays(monday(last), 6) };
+    return { from: monday(first), to: addDays(monday(addDays(iso(next), -1)), 6) };
   }
-
   function title() {
     var r = range();
-    if (state.view === 'day') return state.cursor === today ? 'Today, ' + longDay(today) : longDay(state.cursor);
-    if (state.view === 'week') return 'Week of ' + at(r.from).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' });
-    return at(state.cursor).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    if (state.view === 'month') return fmt(state.cursor, { month: 'long', year: 'numeric' });
+    return fmt(r.from, { day: 'numeric', month: 'short' }) + ' to ' + fmt(r.to, { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  function hrefFor(e) { return e.kind === 'service' ? W.jobHref(e.site, e.jobId, true) : W.jobHref(e.site, e.id, e.quoted); }
-  function movable(e) { return e.kind === 'job' && e.status !== 'paid'; }
+  var popOpts = { work: function () { return state.work; }, onChange: function () { return load(); } };
+  function open(e) {
+    if (e.kind === 'service') { var h = W.jobHref(e.site, e.jobId, true); if (h) location.href = h; return; }
+    global.DSPOP.open(e.jobId || e.id, popOpts);
+  }
+  function outstanding(e) {
+    var n = 0;
+    ((state.work && state.work.groups) || []).forEach(function (g) { g.items.forEach(function (i) { if (i.jobId === e.id) n++; }); });
+    return e.kind === 'job' ? n : 0;
+  }
 
-  /* One event: its colour, time, first name and postcode, and a badge for
-     each kind of thing still outstanding on the job. */
-  function chip(e, long) {
-    var href = hrefFor(e);
-    var a = document.createElement(href ? 'a' : 'span');
-    if (href) a.href = href;
-    a.className = 'ev ev--' + e.site + (e.kind === 'service' ? ' ev--service' : '') + (e.status === 'completed' || e.status === 'paid' ? ' ev--done' : '');
-    var who = [String(e.customerName || 'No name').split(' ')[0], e.postcode].filter(Boolean).join(', ');
-    a.appendChild(U.node('span', 'ev-text', (e.time ? e.time + ' ' : '') + (e.kind === 'service' ? 'Service: ' : '') + (long ? W.NAME[e.site] + ': ' : '') + who));
-    /* In a month cell the badges are dots, so the name keeps the room; the
-       word is the dot's tooltip and the day view spells it out. */
-    var flags = (e.flags || []).filter(function (f) { return BADGE[f]; });
-    if (e.awaitingAgent && flags.indexOf('agent') === -1) flags.push('agent');
-    flags.forEach(function (f) {
-      var b = U.node('span', (long ? 'badge' : 'dot') + ' badge--' + f, long ? BADGE[f] : '');
-      b.title = BADGE[f];
-      a.appendChild(b);
-    });
-    if (!long && flags.length) a.setAttribute('aria-label', a.textContent + ', outstanding: ' + flags.map(function (f) { return BADGE[f]; }).join(', '));
-    a.title = W.NAME[e.site] + ': ' + (e.customerName || '') + ' (' + e.status + ')';
-    if (movable(e)) {
-      a.draggable = true;
-      a.addEventListener('dragstart', function (ev) { ev.dataTransfer.setData('text/plain', String(e.id)); ev.dataTransfer.effectAllowed = 'move'; });
+  /* One job on the timeline: a button, so it is a tap target, never a stripe of colour. */
+  function jobButton(e, compact) {
+    var b = U.node('button', 'tl-job' + (e.status === 'completed' || e.status === 'paid' ? ' is-done' : '') + (e.kind === 'service' ? ' is-service' : '') + (compact ? ' tl-job--compact' : ''));
+    b.type = 'button';
+    if (!compact) b.appendChild(U.node('span', 'tl-time', e.time || (e.kind === 'service' ? 'Due' : '')));
+    var main = U.node('span', 'tl-main');
+    main.appendChild(U.node('span', 'tl-who', (compact && e.time ? e.time + ' ' : '') + (e.kind === 'service' ? 'Service: ' : '') + [e.customerName || 'No name', e.postcode].filter(Boolean).join(', ')));
+    main.appendChild(U.node('span', 'tl-biz', W.NAME[e.site] + (e.status && e.kind === 'job' ? ' · ' + e.status : '')));
+    b.appendChild(main);
+    var n = outstanding(e);
+    if (n) { var c = U.node('span', 'tl-count', String(n)); c.setAttribute('aria-label', n + ' outstanding'); b.appendChild(c); }
+    b.addEventListener('click', function (ev) { ev.stopPropagation(); open(e); });
+    if (compact && e.kind === 'job' && e.status !== 'paid') {
+      b.draggable = true;
+      b.addEventListener('dragstart', function (ev) { ev.dataTransfer.setData('text/plain', String(e.id)); });
     }
-    return a;
+    return b;
   }
+
+  function onTimeline(e) { return e.kind !== 'job' || e.dateSet !== false; }
   function byDay() {
     var map = {};
-    state.events.forEach(function (e) { (map[e.date] = map[e.date] || []).push(e); });
+    state.events.filter(onTimeline).forEach(function (e) { (map[e.date] = map[e.date] || []).push(e); });
     return map;
   }
-  function items() {
-    var all = [];
-    ((state.work && state.work.groups) || []).forEach(function (g) { all = all.concat(g.items); });
-    return all;
-  }
 
-  function move(e, date, time) {
-    var it = { jobId: e.id, quoted: e.quoted, status: e.status };
-    return U.send('/api/admin/' + (e.quoted ? 'quoted' : 'clients'), W.moveBody(it, date, time)).then(function (r) {
-      if (!r.ok) throw new Error('Not moved');
-      return load();
-    }).catch(function (err) { el('state').hidden = false; el('state').textContent = err.message; });
+  function drawWeek(mount) {
+    var r = range();
+    var days = byDay();
+    var wrap = U.node('div', 'tl');
+    for (var d = r.from; d <= r.to; d = addDays(d, 1)) {
+      var list = (days[d] || []).slice().sort(function (a, b) { return String(a.time || '').localeCompare(String(b.time || '')); });
+      var box = U.node('section', 'tl-day' + (d === today ? ' is-today' : '') + (d < today ? ' is-past' : ''));
+      var h = U.node('h3', 'tl-head');
+      h.appendChild(U.node('span', 'tl-dow', fmt(d, { weekday: 'long' })));
+      h.appendChild(U.node('span', 'tl-date', fmt(d, { day: 'numeric', month: 'short' }) + (d === today ? ' · Today' : '')));
+      box.appendChild(h);
+      var timed = list.filter(function (e) { return e.time || e.kind === 'service'; });
+      var tbc = list.filter(function (e) { return !e.time && e.kind === 'job'; });
+      timed.forEach(function (e) { box.appendChild(jobButton(e)); });
+      if (tbc.length) {
+        box.appendChild(U.node('p', 'tl-sub', 'Time to confirm'));
+        tbc.forEach(function (e) { box.appendChild(jobButton(e)); });
+      }
+      if (!list.length) box.appendChild(U.node('p', 'tl-empty', 'Nothing booked'));
+      wrap.appendChild(box);
+    }
+    mount.appendChild(wrap);
   }
-
-  function dropTarget(node, date) {
-    node.addEventListener('dragover', function (ev) { ev.preventDefault(); node.classList.add('is-target'); });
-    node.addEventListener('dragleave', function () { node.classList.remove('is-target'); });
-    node.addEventListener('drop', function (ev) {
-      ev.preventDefault();
-      node.classList.remove('is-target');
-      var id = Number(ev.dataTransfer.getData('text/plain'));
-      var e = state.events.find(function (x) { return x.kind === 'job' && x.id === id; });
-      if (e && e.date !== date) move(e, date, e.time);
-    });
-  }
-
-  function openDay(date) { state.view = 'day'; state.cursor = date; remember(); load(); }
 
   function drawMonth(mount) {
     var r = range();
     var days = byDay();
     var grid = U.node('div', 'cal');
-    grid.setAttribute('role', 'grid');
     DOW.forEach(function (d) { grid.appendChild(U.node('div', 'cal-dow', d)); });
     for (var d = r.from; d <= r.to; d = addDays(d, 1)) {
-      var list = days[d] || [];
-      var cell = U.node('div', 'cal-day' + (d.slice(0, 7) !== state.cursor.slice(0, 7) ? ' is-out' : '') + (d === today ? ' is-today' : '') + (d < today ? ' is-past' : ''));
-      cell.setAttribute('role', 'gridcell');
+      var cell = U.node('div', 'cal-day' + (d.slice(0, 7) !== state.cursor.slice(0, 7) ? ' is-out' : '') + (d === today ? ' is-today' : ''));
       var num = U.node('button', 'cal-num', String(Number(d.slice(8))));
       num.type = 'button';
-      num.setAttribute('aria-label', longDay(d) + ', ' + list.length + ' on');
-      num.addEventListener('click', openDay.bind(null, d));
+      num.setAttribute('aria-label', 'Week of ' + fmt(d, { day: 'numeric', month: 'long' }));
+      num.addEventListener('click', function (date) { state.view = 'week'; state.cursor = date; remember(); load(); }.bind(null, d));
       cell.appendChild(num);
-      if (list.length) cell.appendChild(U.node('span', 'cal-count', String(list.length)));
-      list.forEach(function (e) { cell.appendChild(chip(e, false)); });
-      if (list.some(function (e) { return (e.flags || []).length; })) cell.classList.add('has-flags');
-      cell.addEventListener('click', function (date, ev) { if (ev.target === ev.currentTarget) openDay(date); }.bind(null, d));
-      dropTarget(cell, d);
+      (days[d] || []).forEach(function (e) { cell.appendChild(jobButton(e, true)); });
+      drop(cell, d);
       grid.appendChild(cell);
     }
     mount.appendChild(grid);
   }
-
-  /* One day as an agenda: each event with Move, and under it the actions on
-     that job; then anything else dated that day. */
-  function dayBlock(date, withActions) {
-    var box = U.node('section', 'day-block' + (date === today ? ' is-today' : ''));
-    var h = U.node('h3', null, date === today ? 'Today' : longDay(date));
-    if (state.view !== 'day') { h.className = 'day-link'; h.tabIndex = 0; h.addEventListener('click', openDay.bind(null, date)); }
-    box.appendChild(h);
-    dropTarget(box, date);
-    var list = (byDay()[date] || []);
-    var used = {};
-    var all = withActions ? items() : [];
-    list.forEach(function (e) {
-      var row = U.node('div', 'day-ev');
-      row.appendChild(chip(e, true));
-      if (movable(e)) {
-        var b = U.node('button', 'pill act', 'Move');
-        b.type = 'button';
-        b.addEventListener('click', function () { askMove(e); });
-        row.appendChild(b);
-      }
-      box.appendChild(row);
-      if (e.kind === 'job') all.filter(function (it) { return it.jobId === e.id; }).forEach(function (it) {
-        used[it.key] = true;
-        box.appendChild(wrapItem(it));
-      });
-    });
-    all.filter(function (it) { return !used[it.key] && it.date === date; }).forEach(function (it) { box.appendChild(wrapItem(it)); });
-    if (box.children.length === 1) box.appendChild(U.node('p', 'panel-note', 'Nothing on.'));
-    return box;
-  }
-
-  function wrapItem(it) { var ul = U.node('ul', 'act-list act-list--inline'); ul.appendChild(W.itemRow(it, refreshSoon)); return ul; }
-
-  function drawWeek(mount) {
-    var r = range();
-    var wrap = U.node('div', 'week');
-    for (var d = r.from; d <= r.to; d = addDays(d, 1)) wrap.appendChild(dayBlock(d, false));
-    mount.appendChild(wrap);
-  }
-
-  /* The move dialog: a date and an optional time, for phones that cannot drag. */
-  function askMove(e) {
-    var dlg = el('move-dialog');
-    el('move-who').textContent = (e.customerName || 'No name') + (e.postcode ? ', ' + e.postcode : '');
-    el('move-date').value = e.date;
-    el('move-time').value = e.time || '';
-    dlg.onsubmit = function (ev) {
-      if (ev.submitter && ev.submitter.value === 'cancel') return;
+  function drop(node, date) {
+    node.addEventListener('dragover', function (ev) { ev.preventDefault(); node.classList.add('is-target'); });
+    node.addEventListener('dragleave', function () { node.classList.remove('is-target'); });
+    node.addEventListener('drop', function (ev) {
       ev.preventDefault();
-      dlg.close();
-      move(e, el('move-date').value, el('move-time').value);
-    };
-    dlg.showModal();
+      node.classList.remove('is-target');
+      var e = state.events.find(function (x) { return x.kind === 'job' && x.id === Number(ev.dataTransfer.getData('text/plain')); });
+      if (!e || e.date === date) return;
+      U.send('/api/admin/' + (e.quoted ? 'quoted' : 'clients'), W.moveBody({ jobId: e.id, quoted: e.quoted, status: e.status }, date, e.time)).then(load);
+    });
   }
 
-  function strip(id, list) {
-    var box = el(id);
-    box.hidden = !list.length;
-    var ul = box.querySelector('ul');
-    ul.textContent = '';
-    box.querySelector('.strip-count').textContent = String(list.length);
-    list.forEach(function (it) { ul.appendChild(W.itemRow(it, refreshSoon)); });
+  function listRow(e, what) {
+    var li = U.node('li');
+    var b = U.node('button', 'tl-job tl-job--row');
+    b.type = 'button';
+    var main = U.node('span', 'tl-main');
+    main.appendChild(U.node('span', 'tl-who', [e.customerName || e.firstName || 'No name', e.postcode].filter(Boolean).join(', ')));
+    main.appendChild(U.node('span', 'tl-biz', W.NAME[e.site] + (what ? ' · ' + what : '')));
+    b.appendChild(main);
+    b.addEventListener('click', function () { global.DSPOP.open(e.jobId || e.id, popOpts); });
+    li.appendChild(b);
+    return li;
   }
 
-  function drawToday() {
-    var visits = el('today-visits');
-    visits.textContent = '';
-    var list = state.todayEvents.slice().sort(function (a, b) { return String(a.time || '99').localeCompare(String(b.time || '99')); });
-    if (!list.length) visits.appendChild(U.node('p', 'panel-note', 'Nothing booked today.'));
-    list.forEach(function (e) { visits.appendChild(chip(e, true)); });
-    var total = state.work ? state.work.total : 0;
-    el('act-total').textContent = total ? String(total) : '';
-    W.render(el('actions'), state.work, refreshSoon);
+  function drawLists() {
+    var ub = el('unbooked');
+    ub.textContent = '';
+    el('unbooked-count').textContent = state.unbooked.length ? String(state.unbooked.length) : '';
+    if (!state.unbooked.length) ub.appendChild(U.node('p', 'panel-note', 'Everything agreed has a date.'));
+    state.unbooked.forEach(function (e) { ub.appendChild(listRow(e, e.status === 'quoted' ? 'quote accepted' : 'booked, no date')); });
+
+    var mount = el('needs');
+    mount.textContent = '';
+    var groups = (state.work && state.work.groups) || [];
+    var total = 0;
+    NEEDS.forEach(function (n) {
+      var items = [];
+      groups.filter(function (g) { return n[2].indexOf(g.key) !== -1; }).forEach(function (g) { items = items.concat(g.items); });
+      if (!items.length) return;
+      total += items.length;
+      var box = U.node('section', 'needs-group');
+      var h = U.node('h3', null, n[1]);
+      h.appendChild(U.node('span', 'act-count', String(items.length)));
+      box.appendChild(h);
+      var ul = U.node('ul', 'tl-list');
+      items.forEach(function (it) { ul.appendChild(listRow(it, (it.owedPence ? U.money(it.owedPence) + ' · ' : '') + it.what)); });
+      box.appendChild(ul);
+      mount.appendChild(box);
+    });
+    if (!total) mount.appendChild(U.node('p', 'panel-note', 'No deposits, payments or reports waiting.'));
   }
 
   function render() {
     el('title').textContent = title();
     document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === state.view)); });
     document.querySelectorAll('[data-area-filter]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-area-filter') === state.area)); });
-    drawToday();
-    strip('overdue', items().filter(function (it) { return it.overdue; }));
-    strip('confirm', items().filter(function (it) { return it.group === 'agent'; }));
     var mount = el('cal-view');
     mount.textContent = '';
-    if (state.view === 'month') drawMonth(mount);
-    else if (state.view === 'week') drawWeek(mount);
-    else mount.appendChild(dayBlock(state.cursor, true));
+    if (state.view === 'month') drawMonth(mount); else drawWeek(mount);
+    drawLists();
   }
-
-  var timer = null;
-  /* After an action the item has already gone; the counts and badges catch
-     up a moment later, once, however many things were ticked in a row. */
-  function refreshSoon() { clearTimeout(timer); timer = setTimeout(load, 1200); }
 
   async function load() {
     var r = range();
     try {
       var data = await U.get('/api/admin/calendar?view=work&from=' + r.from + '&to=' + r.to + (state.area ? '&area=' + state.area : ''));
       state.events = data.events || [];
-      state.todayEvents = data.todayEvents || [];
+      state.unbooked = data.unbooked || [];
       state.work = data.work;
       el('state').hidden = true;
       el('content').hidden = false;
@@ -240,21 +203,30 @@
       el('state').textContent = e.message || 'Could not load.';
     }
   }
-
-  function remember() { try { global.localStorage.setItem(VIEW_KEY, state.view); } catch (e) {} }
-
+  function remember() { try { global.localStorage.setItem(VIEW_KEY, state.view); } catch (e) { /* private mode */ } }
   function shift(n) {
-    if (state.view === 'day') state.cursor = addDays(state.cursor, n);
-    else if (state.view === 'week') state.cursor = addDays(state.cursor, 7 * n);
+    if (state.view === 'week') state.cursor = addDays(state.cursor, 7 * n);
     else { var d = at(state.cursor.slice(0, 7) + '-01'); d.setUTCMonth(d.getUTCMonth() + n); state.cursor = iso(d); }
     load();
   }
+
+  /* A clear sideways swipe on the timeline is the next or previous week; a
+     mostly vertical one is the page scrolling and is left alone. */
+  var touch = null;
+  el('cal-view').addEventListener('touchstart', function (ev) { var t = ev.touches[0]; touch = { x: t.clientX, y: t.clientY }; }, { passive: true });
+  el('cal-view').addEventListener('touchend', function (ev) {
+    if (!touch) return;
+    var t = ev.changedTouches[0];
+    var dx = t.clientX - touch.x, dy = t.clientY - touch.y;
+    touch = null;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > 2 * Math.abs(dy)) shift(dx < 0 ? 1 : -1);
+  }, { passive: true });
 
   function ics() {
     var esc = function (s) { return String(s).replace(/\\/g, '\\\\').replace(/[,;]/g, '\\$&').replace(/\n/g, '\\n'); };
     var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
     var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Staff area//Calendar//EN', 'CALSCALE:GREGORIAN'];
-    state.events.forEach(function (e) {
+    state.events.filter(onTimeline).forEach(function (e) {
       lines.push('BEGIN:VEVENT', 'UID:' + e.kind + '-' + e.id + '-' + e.date + '@staff', 'DTSTAMP:' + stamp,
         'DTSTART;VALUE=DATE:' + e.date.replace(/-/g, ''), 'DTEND;VALUE=DATE:' + addDays(e.date, 1).replace(/-/g, ''),
         'SUMMARY:' + esc(W.NAME[e.site] + ': ' + (e.time ? e.time + ' ' : '') + [e.customerName, e.postcode].filter(Boolean).join(', ')), 'END:VEVENT');

@@ -149,9 +149,25 @@
     var firstItem = sheet.querySelector('button, a');
     if (firstItem) firstItem.focus();
   }
+  /* The To-do drawer (today-todo.js) on whatever page this is, loaded the
+     first time it is wanted; it needs the one-tap helpers of calendar-actions.js. */
+  function load(src) {
+    return new Promise(function (ok, bad) {
+      var tag = document.createElement('script');
+      tag.src = src; tag.onload = ok; tag.onerror = bad;
+      document.body.appendChild(tag);
+    });
+  }
+  function openTodo(add) {
+    if (global.DSTODO) { global.DSTODO.open(add); return; }
+    (global.DSWORK ? Promise.resolve() : load('/staff/calendar-actions.js')).then(function () { return load('/staff/today-todo.js'); })
+      .then(function () { global.DSTODO.open(add); }).catch(function () { go('/staff/todo.html'); });
+  }
+  if (/^#todo/.test(global.location.hash) && !document.querySelector('script[src="/staff/today-todo.js"]')) openTodo(global.location.hash === '#todo-add');
   function plusMenu() {
     (A.held || []).forEach(function (a) { item('New enquiry or job: ' + A.names[a], function () { go(newWork(a)); }); });
-    item('New to-do', function () { go('/staff/calendar.html#todo-add'); });
+    item('New to-do', function () { openTodo(true); });
+    item('To-do list', function () { openTodo(false); });
     item('Add a cost to a job', function () { openSearch(true); });
   }
   function companiesMenu() {
@@ -182,6 +198,11 @@
     var end = header.querySelector('.top-end');
     header.insertBefore(form, end || null);
     header.insertBefore(plus, end || null);
+    if (!document.getElementById('todo-open')) {
+      var todo = button('To-do', 'todo', 'btn btn--ghost btn--sm shell-todo');
+      todo.addEventListener('click', function () { openTodo(false); });
+      header.insertBefore(todo, end || null);
+    }
   }
 
   /* ---------- the phone's bottom bar ---------- */
@@ -208,6 +229,16 @@
   barLink('Money', '/staff/bank.html?area=' + (A.area || (A.held || ['damp'])[0]), A.page === 'bank.html');
   document.body.appendChild(bar);
   document.documentElement.classList.add('has-shell');
+
+  /* While any dialog or the To-do drawer is open the page behind it stays
+     still, so a swipe inside a pop-up on a phone scrolls the pop-up and never
+     the page underneath. One watcher for every page's dialogs. */
+  function lockCheck() {
+    var open = document.querySelector('dialog[open]') || document.querySelector('.todo-drawer:not([hidden])');
+    document.documentElement.classList.toggle('is-locked', Boolean(open));
+  }
+  new MutationObserver(lockCheck).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['open', 'hidden'], childList: true });
+  lockCheck();
 
   /* The + menu's "new" lands on the page's own add form, scrolled to and
      ready. Pages keep their content hidden until their data arrives, so this

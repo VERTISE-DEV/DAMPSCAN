@@ -1,5 +1,6 @@
-/* The To-do drawer on Today: the shared to-do list (lib/todos.js) without
-   leaving the calendar. Mine, Set by me, Failed and Done, an add form, and a
+/* The To-do drawer: the shared to-do list (lib/todos.js) without leaving the
+   page. The shell (shell.js) loads it on any staff page and opens it from its
+   To-do button and the + menu. Mine, Set by me, Failed and Done, an add form, and a
    tick that can be undone for five seconds. It talks to /api/admin/todos,
    the same route as todo.html, which still works for old links.
    Opened by the To-do button, or by #todo in the address (where alerts about
@@ -155,6 +156,7 @@
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !drawer.hidden) shut(); });
   var btn = document.getElementById('todo-open');
   if (btn) btn.addEventListener('click', function () { open(false); });
+  global.DSTODO = { open: open };
   if (global.location.hash === '#todo') open(false);
   if (global.location.hash === '#todo-add') open(true);
 })(window);

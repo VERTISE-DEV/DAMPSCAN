@@ -11,6 +11,7 @@
  * The shared page shell and site details come from area-template.js, so the
  * area and service pages stay visually identical without a second copy of it.
  */
+import { body as reviewText } from './reviews-block.js';
 import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell, orCall } from './page-shell.js';
 import { bookForm } from './book-form.js';
@@ -105,7 +106,7 @@ function reviewsBlock(service, site) {
   return `
   <section class="sec quotes">
     <h2>What customers say</h2>
-    ${list.slice(0, 3).map((r) => `<blockquote class="quote-card"><p>${esc(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
+    ${list.slice(0, 3).map((r) => `<blockquote class="quote-card"><p>${reviewText(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
   </section>
 `;
 }

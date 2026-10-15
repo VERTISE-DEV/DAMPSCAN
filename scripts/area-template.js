@@ -7,6 +7,7 @@
  * same paragraph is the doorway page pattern, and Google demotes it, so the
  * generator refuses to build a page whose distinctive copy is too short.
  */
+import { body as reviewText } from './reviews-block.js';
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
 import { SITES } from './sites.js';
@@ -142,7 +143,7 @@ function reviewsSection(area, allAreas) {
   return `
   <section class="sec quotes" id="reviews">
     <h2>What customers say about us</h2>
-    ${pick.map((r) => `<blockquote class="quote-card"><p>${esc(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
+    ${pick.map((r) => `<blockquote class="quote-card"><p>${reviewText(r.text)}</p><cite>${esc(r.author)}, on Google</cite></blockquote>`).join('\n    ')}
   </section>
 `;
 }

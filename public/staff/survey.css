@@ -64,3 +64,4 @@
 @media (min-width:900px){.ag-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .ag-card{background:var(--slate);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .ag-wait{border-top:1px solid var(--line);padding-top:8px}
+.card-contact a{color:inherit;text-decoration:underline;word-break:break-all}

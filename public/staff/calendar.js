@@ -67,6 +67,7 @@
     if (!compact) b.appendChild(U.node('span', 'tl-time', e.time || (e.kind === 'service' ? 'Due' : '')));
     var main = U.node('span', 'tl-main');
     main.appendChild(U.node('span', 'tl-who', (compact && e.time ? e.time + ' ' : '') + (e.kind === 'service' ? 'Service: ' : '') + [e.customerName || 'No name', e.postcode].filter(Boolean).join(', ')));
+    if (!compact && e.phone) main.appendChild(U.node('span', 'tl-biz', e.phone));
     main.appendChild(U.node('span', 'tl-biz', W.NAME[e.site] + (e.status && e.kind === 'job' ? ' · ' + e.status : '')));
     b.appendChild(main);
     var n = outstanding(e);

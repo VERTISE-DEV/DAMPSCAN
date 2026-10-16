@@ -1181,3 +1181,10 @@ alter table jobs add column if not exists pressure_test       text;
 alter table jobs add column if not exists summer_asked_on     date;
 alter table service_contracts add column if not exists booked_on   date;
 alter table service_contracts add column if not exists booked_time time;
+
+-- An enquiry staff have dealt with without a job: booked elsewhere, spam, no
+-- answer. Closed ones drop out of every call-back list and alert but stay on
+-- the Leads page, greyed, so nothing is lost. closed_by is the person's name.
+alter table leads add column if not exists closed_at     timestamptz;
+alter table leads add column if not exists closed_reason text;
+alter table leads add column if not exists closed_by     text;

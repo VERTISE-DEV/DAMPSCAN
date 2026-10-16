@@ -14,6 +14,15 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "Any new enquiries since Monday?"
 - "Find Mrs Patel." / "Who's at BR6 0AA?"
 
+## Website enquiries
+
+- "Show me the open enquiries." / "Which enquiries did we close this month?" (each enquiry is open, converted (a job came from it) or closed)
+- "Close Sarah's enquiry in BR6, she booked elsewhere." (reasons: booked elsewhere, not interested, spam, duplicate, no response, or your own words; closed ones stop showing in call-backs, half-finished form alerts and the weekly count, but stay on the Leads page greyed)
+- "Reopen the Patel enquiry."
+- "Delete that spam enquiry from test@example.com." (managers only, it asks you to confirm first, and never for an enquiry a job came from)
+- "Book Sarah Jones BR6 in for a survey on Friday." (if she came from a web enquiry ChatGPT links it, so the enquiry shows as converted; close any leftovers)
+- If more than one enquiry matches, it describes them and asks which.
+
 ## Clients
 
 - "Find the client at BR6 0AA." / "Have we done work for anyone called Patel?"

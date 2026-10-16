@@ -105,8 +105,8 @@ test('a person connects, sees only their business, and a code and a refresh toke
   assert.equal(init.serverInfo.name, 'staff-area');
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools;
   const writes = tools.filter((x) => x.annotations.readOnlyHint === false).map((x) => x.name).sort();
-  assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'add_todo', 'book_job', 'build_quote_from_words', 'complete_todo', 'coolright_commissioning', 'coolright_service_plan', 'coolright_unit', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template',
-    'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'move_job', 'remove_quote_line', 'reopen_todo',
+  assert.deepEqual(writes, ['add_cost', 'add_note', 'add_quote_line', 'add_todo', 'book_job', 'build_quote_from_words', 'close_enquiry', 'complete_todo', 'coolright_commissioning', 'coolright_service_plan', 'coolright_unit', 'create_client', 'create_invoice', 'create_job', 'create_quote_from_template', 'delete_enquiry',
+    'get_quote_link', 'log_miles', 'log_time', 'mark_deposit_paid', 'mark_message_sent', 'mark_paid_in_full', 'mark_report_sent', 'match_payment', 'move_job', 'remove_quote_line', 'reopen_enquiry', 'reopen_todo',
     'set_awaiting_agent', 'set_estate_agent', 'set_project_page', 'set_remedial_status', 'set_roofing_stage', 'update_client', 'update_job_status', 'update_roofing_plan', 'use_quote_lines_as_price']);
   assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');
   assert.ok(tools.every((x) => !('run' in x)));
@@ -170,7 +170,7 @@ test('every read works for the owners\' code, which sees all four businesses', a
   const t = await connect('1290');
   const today = new Date().toISOString().slice(0, 10);
   const args = { search: { text: 'a' + 'b' }, get_job: { id: 1 }, calendar: { from: today, to: today }, job_photos: { job: 1 }, price_book: { site: 'roofing' }, list_price_book: { site: 'roofing' },
-    get_message: { id: 1, kind: 'rating' }, get_google_post: { id: 1 }, get_invoice_link: { id: 1 }, find_client: { text: 'ab' } };
+    get_message: { id: 1, kind: 'rating' }, get_google_post: { id: 1 }, get_invoice_link: { id: 1 }, find_client: { text: 'ab' }, find_enquiry: { text: 'ab' } };
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools.filter((x) => x.annotations.readOnlyHint);
   for (const x of tools) {
     const r = await tool(t.access_token, x.name, args[x.name] || {});

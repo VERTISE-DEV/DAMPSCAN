@@ -4,6 +4,13 @@ Once the staff area is connected to ChatGPT (or Claude), you can just talk to it
 
 Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel BR6"). You never need a job number. If two customers match, it describes them and asks which one you mean.
 
+## Catch me up
+
+- "What's happened since I last checked?" / "Catch me up." (new enquiries, bookings and moves, payments and ticks, reports sent, quotes and invoices, deletions and closures, to-dos others set for you, and anything else, each saying who did it, for which customer and when. Your own changes are left out. The first time covers the last 24 hours; after that, since you last asked.)
+- "What's happened since yesterday?" / "...in the last 3 hours?" / "...since 2026-10-12?"
+- "Catch me up, including my own changes."
+- "Anything new? Don't mark it as read." (peek: looks without moving your bookmark)
+
 ## What needs doing
 
 - "What needs doing today?" / "What's outstanding?" (the same list as the Calendar's Today panel: today's visits, then every action needed, grouped and counted: enquiries to call back, messages to send, quotes accepted with no date, surveys awaiting the estate agent, reports to send (paid surveys whose report has not gone, red after two days), remedial work to follow up, deposits and payments to collect, overdue invoices, quotes to chase, to-dos, services due, over budget. Money only if you manage the business.)

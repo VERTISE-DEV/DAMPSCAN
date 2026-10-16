@@ -110,6 +110,8 @@ test('a person connects, sees only their business, and a code and a refresh toke
     'set_awaiting_agent', 'set_estate_agent', 'set_project_page', 'set_remedial_status', 'set_roofing_stage', 'update_client', 'update_job_status', 'update_roofing_plan', 'use_quote_lines_as_price']);
   assert.ok(tools.filter((x) => x.annotations.readOnlyHint === false).every((x) => /wait for the person to say yes/.test(x.description)), 'every change asks first');
   assert.ok(tools.every((x) => !('run' in x)));
+  assert.ok(tools.some((x) => x.name === 'catch_up' && x.annotations.readOnlyHint), 'catch_up is listed as a read');
+  assert.match(init.instructions, /catch_up/);
 
   const found = await tool(t.access_token, 'search', { text: 'BR6' });
   assert.deepEqual(found.structuredContent.enquiries.map((l) => l.first_name), ['Ola']);

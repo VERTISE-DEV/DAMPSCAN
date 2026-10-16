@@ -53,7 +53,7 @@
       name: input('text', lead && lead.name), phone: input('tel', lead && lead.phone), email: input('email', lead && lead.email),
       address: input('text', lead && lead.street), postcode: input('text', lead && lead.postcode),
       type: select(rates.map(function (r) { return [r.key, r.label]; })), price: input('number'),
-      surveyor: select([['tom', 'Tom'], ['ben', 'Ben'], ['scott', 'Scott']]),
+      surveyor: select([['tom', 'Tom'], ['ben', 'Ben'], ['scott', 'Scott'], ['ronnie', 'Ronnie']]),
       date: input('date', S.addDays(S.londonToday(), 1)), time: input('time'), note: document.createElement('textarea')
     };
     f.name.required = true;

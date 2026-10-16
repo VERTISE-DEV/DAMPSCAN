@@ -16,6 +16,7 @@
  */
 import { json, requireMethod, actionFrom } from '../../lib/http.js';
 import { withActivity } from '../../lib/activity.js';
+import { withFigures } from '../../lib/figures.js';
 import attachment from '../../lib/routes/admin/attachment.js';
 import bank from '../../lib/routes/admin/bank.js';
 import business from '../../lib/routes/admin/business.js';
@@ -66,6 +67,7 @@ export default async function handler(req, res) {
     json(res, 404, { ok: false, error: 'not_found' });
     return;
   }
-  /* Each change made here is one phone alert, see lib/activity.js. */
-  return withActivity(route)(req, res);
+  /* Each change made here is one phone alert, see lib/activity.js. Figures
+     are taken out for anyone who only works on a business, lib/figures.js. */
+  return withActivity(withFigures(route))(req, res);
 }

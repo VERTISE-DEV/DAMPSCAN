@@ -1202,3 +1202,19 @@ create table if not exists catchups (
   key     text primary key,
   last_at timestamptz not null
 );
+
+-- ---------------------------------------------------------------------------
+-- Assistant-only helpers (lib/mcp/team-tools.js, draft-tools.js). Nothing on
+-- the staff screens reads these: who a job is handed to, a report being
+-- drafted, a staff note on an enquiry, and the shared house style.
+alter table jobs add column if not exists assigned_person_id bigint references people (id) on delete set null;
+alter table jobs add column if not exists report_draft text;
+alter table leads add column if not exists staff_note text;
+create table if not exists playbook_notes (
+  id            bigserial primary key,
+  business_slug text references businesses (slug),
+  section       text not null,
+  text          text not null,
+  added_by      text,
+  created_at    timestamptz not null default now()
+);

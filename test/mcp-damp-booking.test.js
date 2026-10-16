@@ -113,3 +113,14 @@ test('the client card dialog saves a phone and email, checked like the quoted tr
   assert.equal(good.data.client.phone, '020 7946 0000');
   assert.equal(good.data.client.email, 'a@b.co');
 });
+
+test('update_client sets a full address and postcode, and the card shows the address', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const j = (await pool.query('select id from jobs')).rows[0];
+  const r = await callTool(await owners(), { name: 'update_client', arguments: { id: 'Nicholls', address: '12 High Street, West Malling', postcode: 'me19 6qh' } });
+  assert.equal(r.isError, false, JSON.stringify(r.content));
+  const { rows: [row] } = await pool.query('select customer_address, customer_postcode from jobs where id = $1', [j.id]);
+  assert.deepEqual(row, { customer_address: '12 High Street, West Malling', customer_postcode: 'ME19 6QH' });
+  const card = (await callRoute(clients, await owners(), { url: '/api/admin/clients?view=all' })).data.clients[0];
+  assert.equal(card.fullAddress, '12 High Street, West Malling');
+});

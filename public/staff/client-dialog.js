@@ -94,6 +94,8 @@
     el('c-note').value = c.note || '';
     /* What the card shows, the job's own or else the enquiry's. A changed
        value is kept on the job, for jobs booked by phone with no enquiry. */
+    el('c-address').value = c.fullAddress || [c.address.line1, c.address.line2, c.address.town].filter(Boolean).join(', ');
+    el('c-postcode').value = c.address.postcode || '';
     el('c-phone').value = c.phone || '';
     el('c-email').value = c.email || '';
     el('c-edit').href = '/staff/jobs.html#job-' + c.id;

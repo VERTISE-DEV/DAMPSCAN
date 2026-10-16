@@ -144,3 +144,4 @@ Any touch screen counts, so a landscape iPad Pro (wider than 1024) does too. */
   .top .top-end{flex-wrap:nowrap;gap:6px}
   .top .top-end .btn{padding:0 12px;font-size:13px}
 }
+.sheet-car{width:100%;margin-top:8px;font:inherit;cursor:pointer}

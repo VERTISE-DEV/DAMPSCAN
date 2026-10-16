@@ -152,6 +152,11 @@
     if (agent !== Boolean(c.awaitingAgent)) body.awaitingAgent = agent;
     var note = el('c-note').value.trim();
     if (note !== (c.note || '')) body.note = note;
+    var addr = el('c-address').value.trim();
+    var shown = c.fullAddress || [c.address.line1, c.address.line2, c.address.town].filter(Boolean).join(', ');
+    if (addr !== shown) body.address = addr;
+    var pc = el('c-postcode').value.trim().toUpperCase();
+    if (pc && pc !== (c.address.postcode || '')) body.postcode = pc;
     var phone = el('c-phone').value.trim();
     if (phone !== (c.phone || '')) body.phone = phone;
     var email = el('c-email').value.trim();

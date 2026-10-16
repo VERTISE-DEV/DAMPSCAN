@@ -71,7 +71,7 @@
       links.appendChild(a);
     });
     if (!mode.cost) c.enquiries.forEach(function (e) {
-      var a = U.node('a', 'pill', SHORT[e.site] + ': enquiry');
+      var a = U.node('a', 'pill', SHORT[e.site] + (e.closed ? ': closed enquiry' : ': enquiry'));
       a.href = '/staff/dashboard.html?area=' + AREA_OF[e.site];
       links.appendChild(a);
     });

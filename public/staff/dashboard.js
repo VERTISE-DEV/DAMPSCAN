@@ -7,7 +7,7 @@
   var node = DSUI.node, num = DSUI.num, pct = DSUI.pct, when = DSUI.when;
   var table = DSUI.table, get = DSUI.get;
 
-  var state = { range: '7d', site: '', stage: '', offset: 0, limit: 50, summary: null, leads: null };
+  var state = { range: '7d', site: '', stage: '', status: 'all', offset: 0, limit: 50, summary: null, leads: null };
 
   var PLACEMENTS = {
     header: 'Header', 'mobile-bar': 'Mobile bar', closing: 'Closing CTA',
@@ -108,6 +108,7 @@
     var leadQuery = '/api/admin/leads?range=' + state.range
       + '&limit=' + state.limit + '&offset=' + state.offset
       + (state.stage ? '&stage=' + state.stage : '')
+      + '&status=' + state.status
       + (state.site ? '&site=' + state.site : '');
 
     try {
@@ -159,6 +160,9 @@
      first load, which left the whole page on "Loading" with no leads. */
   (window.DSUI || {}).scopePills && window.DSUI.scopePills('[data-site]');
   group('[data-stage]', function(btn){ state.stage = btn.dataset.stage; });
+  group('[data-status]', function(btn){ state.status = btn.dataset.status; });
+  /* A close, reopen or delete on a row reloads the page of leads. */
+  DSLEADS.onChange = load;
 
   el('prev').addEventListener('click', function(){
     state.offset = Math.max(0, state.offset - state.limit);

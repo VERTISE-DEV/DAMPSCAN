@@ -119,6 +119,8 @@
         if (e.state !== 'sent' && e.reason) wrap.appendChild(node('span', 'email-why', e.reason));
         return wrap;
       } },
+    /* Open, closed (and why) or turned into a job, with the buttons to change it. */
+    { label: 'Status', wrap: true, get: function(r){ return DSLEADACTS.cell(r); } },
     { label: 'Name', get: function(r){ return r.firstName; } },
     { label: 'Email', get: function(r){ return r.email; } },
     { label: 'Phone', get: function(r){ return r.phone; } },
@@ -147,7 +149,10 @@
   function renderLeads(data){
     table(el('leads'), LEAD_COLUMNS, data.leads, {
       empty: 'No leads in this period.',
-      onRow: function(tr, lead){ expandable(tr, lead); }
+      onRow: function(tr, lead){
+        expandable(tr, lead);
+        if (lead.status === 'closed') tr.className += ' is-closed';
+      }
     });
 
     var shown = data.leads.length;
@@ -160,7 +165,7 @@
 
   /* ---------- CSV export of the current page of leads ---------- */
   var CSV_COLUMNS = [
-['id', function(l){ return l.id; }], ['created_at', function(l){ return l.createdAt; }], ['stage', function(l){ return l.stage; }], ['first_name', function(l){ return l.firstName; }], ['email', function(l){ return l.email; }], ['phone', function(l){ return l.phone; }], ['postcode', function(l){ return l.postcode; }], ['address_line1', function(l){ return l.addressLine1; }], ['address_line2', function(l){ return l.addressLine2; }], ['town', function(l){ return l.town; }], ['files', function(l){ return (l.files || []).length; }], ['issues', function(l){ return (l.issues || []).join('; '); }], ['role', function(l){ return l.role; }], ['previous_survey', function(l){ return l.previousSurvey === null ? '' : l.previousSurvey ? 'Yes' : 'No'; }], ['notes', function(l){ return l.notes; }], ['channel', function(l){ return l.channel; }], ['landing_page', function(l){ return l.landingPage; }], ['referrer', function(l){ return l.referrer; }], ['utm_source', function(l){ return l.utm && l.utm.utm_source; }], ['utm_medium', function(l){ return l.utm && l.utm.utm_medium; }], ['utm_campaign', function(l){ return l.utm && l.utm.utm_campaign; }], ['device', function(l){ return l.device; }], ['site', function(l){ return l.site; }], ['session_id', function(l){ return l.sessionId; }], ['notified_at', function(l){ return l.notifiedAt; }], ['email_status', function(l){ return l.emailed && l.emailed.label; }], ['email_reason', function(l){ return l.emailed && l.emailed.state !== 'sent' ? l.emailed.reason : ''; }], ['email_error', function(l){ return l.notifyError; }]
+['id', function(l){ return l.id; }], ['created_at', function(l){ return l.createdAt; }], ['stage', function(l){ return l.stage; }], ['status', function(l){ return l.status; }], ['closed_reason', function(l){ return l.closedReason; }], ['first_name', function(l){ return l.firstName; }], ['email', function(l){ return l.email; }], ['phone', function(l){ return l.phone; }], ['postcode', function(l){ return l.postcode; }], ['address_line1', function(l){ return l.addressLine1; }], ['address_line2', function(l){ return l.addressLine2; }], ['town', function(l){ return l.town; }], ['files', function(l){ return (l.files || []).length; }], ['issues', function(l){ return (l.issues || []).join('; '); }], ['role', function(l){ return l.role; }], ['previous_survey', function(l){ return l.previousSurvey === null ? '' : l.previousSurvey ? 'Yes' : 'No'; }], ['notes', function(l){ return l.notes; }], ['channel', function(l){ return l.channel; }], ['landing_page', function(l){ return l.landingPage; }], ['referrer', function(l){ return l.referrer; }], ['utm_source', function(l){ return l.utm && l.utm.utm_source; }], ['utm_medium', function(l){ return l.utm && l.utm.utm_medium; }], ['utm_campaign', function(l){ return l.utm && l.utm.utm_campaign; }], ['device', function(l){ return l.device; }], ['site', function(l){ return l.site; }], ['session_id', function(l){ return l.sessionId; }], ['notified_at', function(l){ return l.notifiedAt; }], ['email_status', function(l){ return l.emailed && l.emailed.label; }], ['email_reason', function(l){ return l.emailed && l.emailed.state !== 'sent' ? l.emailed.reason : ''; }], ['email_error', function(l){ return l.notifyError; }]
   ];
 
   function exportCsv(range, leads){

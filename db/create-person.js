@@ -20,8 +20,7 @@
  * cannot be compared to each other.
  */
 import 'dotenv/config';
-import { hash, verify, Algorithm } from '@node-rs/argon2';
-import { query, queryOne } from '../lib/db.js';
+import { passcodeInUse, hashPasscode, unknownBusinesses, createPerson } from '../lib/people-admin.js';
 import { ask, askHidden, parseArgs } from './prompt.js';
 
 const MIN_LENGTH = 6;
@@ -41,8 +40,7 @@ async function main() {
 
   const grants = String(args.grants || (await ask('Businesses, comma separated (dampscan, ati-london, roofing, ac): ')))
     .split(',').map((g) => g.trim()).filter(Boolean);
-  const known = (await query('select slug from businesses where active')).map((r) => r.slug);
-  const unknown = grants.filter((g) => !known.includes(g));
+  const { known, unknown } = await unknownBusinesses(grants);
   if (unknown.length) {
     console.error(`Unknown business: ${unknown.join(', ')}. Known: ${known.join(', ')}`);
     process.exit(1);
@@ -64,14 +62,11 @@ async function main() {
     process.exit(1);
   }
 
-  /* Uniqueness. Every existing hash is verified against the new passcode,
-     because that is the only way to know whether somebody already has it. */
-  const existing = await query('select id, name, passcode_hash from people');
-  for (const p of existing) {
-    if (await verify(p.passcode_hash, passcode)) {
-      console.error(`That passcode is already in use by ${p.name} (id ${p.id}). Choose another.`);
-      process.exit(1);
-    }
+  /* Uniqueness, shared with the assistant's add_person (lib/people-admin.js). */
+  const taken = await passcodeInUse(passcode);
+  if (taken) {
+    console.error(`That passcode is already in use by ${taken.name} (id ${taken.id}). Choose another.`);
+    process.exit(1);
   }
 
   const rate = args.rate === undefined ? 0 : Math.round(Number(args.rate) * 100);
@@ -79,19 +74,8 @@ async function main() {
     console.error('--rate is an hourly rate in pounds, such as 18.50.');
     process.exit(1);
   }
-  const passcodeHash = await hash(passcode, { algorithm: Algorithm.Argon2id });
-  const person = await queryOne(
-    'insert into people (name, passcode_hash, is_admin, hourly_rate_pence) values ($1, $2, $3, $4) returning id',
-    [name, passcodeHash, isAdmin, rate]
-  );
-  for (const slug of grants) {
-    await query(
-      `insert into grants (person_id, business_slug, level) values ($1, $2, $3)
-       on conflict (person_id, business_slug) do update set level = excluded.level`,
-      [person.id, slug, isAdmin ? 'manage' : 'work']
-    );
-  }
-
+  const id = await createPerson({ name, grants, isAdmin, ratePence: rate, passcodeHash: await hashPasscode(passcode) });
+  const person = { id };
   console.log(`Created ${name} (id ${person.id})${isAdmin ? ', admin' : ''}: ${grants.join(', ') || 'no businesses'}`);
   process.exit(0);
 }

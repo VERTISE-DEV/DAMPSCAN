@@ -1188,3 +1188,33 @@ alter table service_contracts add column if not exists booked_time time;
 alter table leads add column if not exists closed_at     timestamptz;
 alter table leads add column if not exists closed_reason text;
 alter table leads add column if not exists closed_by     text;
+
+-- ---------------------------------------------------------------------------
+-- catch_up (lib/catch-up.js): who did each thing, and when each person last
+-- asked "what's happened?". actor_key is a person id, or 'owners' for the
+-- shared owners' code; null means the website or a scheduled job.
+alter table audit add column if not exists actor_key text;
+alter table audit add column if not exists actor_name text;
+alter table notifications add column if not exists actor_key text;
+alter table notifications add column if not exists actor_name text;
+create index if not exists notifications_created_idx on notifications (created_at desc);
+create table if not exists catchups (
+  key     text primary key,
+  last_at timestamptz not null
+);
+
+-- ---------------------------------------------------------------------------
+-- Assistant-only helpers (lib/mcp/team-tools.js, draft-tools.js). Nothing on
+-- the staff screens reads these: who a job is handed to, a report being
+-- drafted, a staff note on an enquiry, and the shared house style.
+alter table jobs add column if not exists assigned_person_id bigint references people (id) on delete set null;
+alter table jobs add column if not exists report_draft text;
+alter table leads add column if not exists staff_note text;
+create table if not exists playbook_notes (
+  id            bigserial primary key,
+  business_slug text references businesses (slug),
+  section       text not null,
+  text          text not null,
+  added_by      text,
+  created_at    timestamptz not null default now()
+);

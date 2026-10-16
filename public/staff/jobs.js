@@ -18,9 +18,12 @@
     { key: 'tom', name: 'Tom' },
     { key: 'ben', name: 'Ben' }
   ];
+  /* Surveys for his fee and is not a partner: a tile only once he has earned. */
+  var RONNIE = { key: 'ronnie', name: 'Ronnie' };
 
   function name(key) {
     for (var i = 0; i < PEOPLE.length; i += 1) if (PEOPLE[i].key === key) return PEOPLE[i].name;
+    if (key === RONNIE.key) return RONNIE.name;
     return key;
   }
 
@@ -33,7 +36,7 @@
   function renderTiles(totals) {
     var mount = el('tiles');
     mount.textContent = '';
-    PEOPLE.forEach(function (p) {
+    PEOPLE.concat(totals.pay.ronnie ? [RONNIE] : []).forEach(function (p) {
       var d = U.node('div', 'tile is-key');
       d.appendChild(U.node('span', 'k', p.name));
       d.appendChild(U.node('span', 'v', U.money(totals.pay[p.key])));

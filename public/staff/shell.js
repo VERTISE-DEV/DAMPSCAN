@@ -226,7 +226,14 @@
   var cBtn = button('Companies', 'companies', 'bb-item' + (A.area && todayPages.indexOf(A.page) === -1 && A.page !== 'bank.html' ? ' is-current' : ''));
   cBtn.addEventListener('click', function () { showSheet(cBtn, companiesMenu); });
   bar.appendChild(cBtn);
-  barLink('Money', '/staff/bank.html?area=' + (A.area || (A.held || ['damp'])[0]), A.page === 'bank.html');
+  /* Money only for an admin, the one person the bank answers (area.js). */
+  function moneyLink() {
+    if (!A.rights || !A.rights.money || bar.querySelector('[data-money]')) return;
+    barLink('Money', '/staff/bank.html?area=' + (A.area || (A.held || ['damp'])[0]), A.page === 'bank.html');
+    bar.lastChild.setAttribute('data-money', '');
+  }
+  moneyLink();
+  document.addEventListener('ds:me', moneyLink);
   document.body.appendChild(bar);
   document.documentElement.classList.add('has-shell');
 

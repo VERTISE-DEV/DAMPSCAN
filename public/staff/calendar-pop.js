@@ -196,7 +196,8 @@
         js.appendChild(tick(j, 'paid', 'Paid in full', j.paid, 'Marked paid in full.'));
       }
       js.appendChild(tick(j, 'surveySent', 'Report sent', j.reportSent, 'Report marked sent.'));
-      js.appendChild(tick(j, 'awaitingAgent', 'Awaiting estate agent', j.awaitingAgent, 'Marked awaiting the agent.'));
+      /* A surveyor who only works here marks the report; the rest is the manager's. */
+      if (!global.DSAREA.rights || !global.DSAREA.rights.known || global.DSAREA.rights.manages[j.site]) js.appendChild(tick(j, 'awaitingAgent', 'Awaiting estate agent', j.awaitingAgent, 'Marked awaiting the agent.'));
     } else if (j.money) {
       X.facts(js, [['Quote', U.money(j.money.pricePence)], ['Received', U.money(j.money.receivedPence)],
         ['To collect', j.money.pricePence > j.money.receivedPence ? U.money(j.money.pricePence - j.money.receivedPence) : null]]);

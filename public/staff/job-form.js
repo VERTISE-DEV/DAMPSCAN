@@ -29,7 +29,7 @@
 
     var pay = { scott: 0, tom: 0, ben: 0 };
     pay[s.leadEarner] += lead + remLead;
-    pay[input.surveyor] += input.fee;
+    pay[input.surveyor] = (pay[input.surveyor] || 0) + input.fee; /* Ronnie: his fee only */
     pay[s.partners[0]] += remainder - second;
     pay[s.partners[1]] += second;
 

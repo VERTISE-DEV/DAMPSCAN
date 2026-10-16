@@ -49,13 +49,13 @@
     b.appendChild(U.node('span', 'ccard-name', c.name || 'No name'));
     var addr = addressLines(c);
     b.appendChild(U.node('span', 'ccard-addr', addr.length ? addr.join(', ') : 'No address on file'));
-    b.appendChild(U.node('span', 'ccard-survey', c.survey.label + ' · ' + U.money(c.survey.pricePence)));
+    b.appendChild(U.node('span', 'ccard-survey', c.survey.label + (c.survey.pricePence == null ? '' : ' · ' + U.money(c.survey.pricePence))));
 
     var chips = U.node('div', 'ccard-chips');
     chips.appendChild(U.node('span', 'tag ' + (c.money.depositPaidAt ? 'tag--good' : ''),
-      c.money.depositPaidAt ? 'Deposit paid' : 'Deposit ' + U.money(c.money.depositPence)));
+      c.money.depositPaidAt ? 'Deposit paid' : c.money.depositPence == null ? 'No deposit yet' : 'Deposit ' + U.money(c.money.depositPence)));
     chips.appendChild(U.node('span', 'tag ' + (c.money.paidAt ? 'tag--good' : ''),
-      c.money.paidAt ? 'Paid in full' : 'Balance ' + U.money(c.money.balancePence)));
+      c.money.paidAt ? 'Paid in full' : c.money.balancePence == null ? 'Not paid yet' : 'Balance ' + U.money(c.money.balancePence)));
     if (c.files.length) chips.appendChild(U.node('span', 'tag tag--muted', c.files.length === 1 ? '1 file' : c.files.length + ' files'));
     if (c.status === 'completed') chips.appendChild(U.node('span', 'tag tag--muted', 'Completed'));
     /* Archived by the calendar but never marked done: it wants either

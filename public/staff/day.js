@@ -71,7 +71,7 @@
     li.appendChild(U.node('p', 'day-address', s.address || s.postcode || 'No address yet'));
     li.appendChild(U.node('p', 'card-meta', [s.surveyLabel, S.cap(s.surveyor)].filter(Boolean).join(' · ')));
     li.appendChild(U.node('p', 'sv-badge' + (s.deposit || s.paid ? ' sv-badge--ok' : ' sv-badge--late'),
-      s.paid ? 'Paid in full' : s.deposit ? 'Deposit paid, ' + U.money(s.pricePence - s.depositPence) + ' to come' : 'No deposit yet'));
+      s.paid ? 'Paid in full' : s.deposit ? (s.pricePence == null ? 'Deposit paid' : 'Deposit paid, ' + U.money(s.pricePence - s.depositPence) + ' to come') : 'No deposit yet'));
     if (s.awaitingAgent) li.appendChild(U.node('p', 'sv-badge sv-badge--agent', 'Time not yet confirmed by the agent'));
     var notes = [s.note, s.leadNotes].filter(Boolean).join('\n');
     if (notes) li.appendChild(U.node('p', 'day-notes', notes));

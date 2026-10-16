@@ -38,7 +38,7 @@
 
   function fillDialog(c) {
     el('c-name').textContent = c.name || 'No name';
-    el('c-sub').textContent = c.survey.label + ' survey, ' + U.money(c.survey.pricePence)
+    el('c-sub').textContent = c.survey.label + ' survey' + (c.survey.pricePence == null ? '' : ', ' + U.money(c.survey.pricePence))
       + (c.survey.remedialPence ? ' plus ' + U.money(c.survey.remedialPence) + ' remedial' : '')
       + ' · surveyed by ' + (c.survey.surveyor || 'unassigned').replace(/^./, function (m) { return m.toUpperCase(); })
       + ' · ' + (SITE[c.site] || c.site);
@@ -75,10 +75,15 @@
     });
 
     el('c-deposit').checked = Boolean(c.money.depositPaidAt);
-    el('c-deposit-amt').textContent = U.money(c.money.depositPence) + ', half the survey price';
+    /* No amounts for somebody who only works on the business (lib/figures.js);
+       they may not tick payments either, so those boxes are locked for them. */
+    var figures = c.money.depositPence != null;
+    el('c-deposit').disabled = !figures;
+    el('c-paid').disabled = !figures;
+    el('c-deposit-amt').textContent = figures ? U.money(c.money.depositPence) + ', half the survey price' : '';
     el('c-deposit-when').textContent = c.money.depositPaidAt ? 'on ' + U.when(c.money.depositPaidAt) : '';
     el('c-paid').checked = Boolean(c.money.paidAt);
-    el('c-paid-amt').textContent = U.money(c.survey.pricePence) + ' in total';
+    el('c-paid-amt').textContent = figures ? U.money(c.survey.pricePence) + ' in total' : '';
     el('c-paid-when').textContent = c.money.paidAt ? 'on ' + U.when(c.money.paidAt) : '';
     el('c-sent').checked = Boolean(c.surveySentAt);
     el('c-sent-when').textContent = c.surveySentAt ? 'on ' + U.when(c.surveySentAt) : '';

@@ -89,14 +89,20 @@
     allowed.forEach(function (a) {
       nav.appendChild(link(AREAS[a].name, href(a, first(a)), !overall && a === area && EXTRA.indexOf(page) === -1, 'co-tab co-tab--' + a));
     });
-    nav.appendChild(link('Money', href(allowed.indexOf(area) !== -1 ? area : allowed[0], MONEY), page === MONEY, 'co-tab co-tab--money'));
-    var cog = link('\u2699', '/staff/' + SETTINGS, page === SETTINGS, 'co-tab co-tab--settings');
-    cog.setAttribute('aria-label', 'Settings');
-    cog.title = 'Settings';
-    nav.appendChild(cog);
+    /* Money (the bank, admin only on the server) and Settings are drawn once
+       /api/admin/me says this person may have them, so somebody who only
+       works on a business never sees either, not even for a moment. */
+    if (rights.money) nav.appendChild(link('Money', href(allowed.indexOf(area) !== -1 ? area : allowed[0], MONEY), page === MONEY, 'co-tab co-tab--money'));
+    if (rights.settings) {
+      var cog = link('\u2699', '/staff/' + SETTINGS, page === SETTINGS, 'co-tab co-tab--settings');
+      cog.setAttribute('aria-label', 'Settings');
+      cog.title = 'Settings';
+      nav.appendChild(cog);
+    }
     held = allowed;
   }
   var held = ORDER;
+  var rights = { money: false, settings: false, manages: {} };
 
   /* The row under it: the chosen company's own sections. On Money it is the
      company filter instead, since the books are kept per company. */
@@ -113,7 +119,11 @@
       held.forEach(function (a) { bar.appendChild(link(AREAS[a].name, href(a, MONEY), a === area, 'section-tab')); });
     } else {
       bar.setAttribute('aria-label', AREAS[area].name + ' sections');
-      AREAS[area].tabs.forEach(function (t) { bar.appendChild(link(t[0], href(area, t[1]), t[1] === page, 'section-tab')); });
+      /* Jobs is the earnings page: only for whoever manages a damp brand. */
+      AREAS[area].tabs.forEach(function (t) {
+        if (t[1] === 'jobs.html' && rights.known && !AREAS[area].sites.some(function (x) { return rights.manages[x]; })) return;
+        bar.appendChild(link(t[0], href(area, t[1]), t[1] === page, 'section-tab'));
+      });
     }
     header.parentNode.insertBefore(bar, header.nextSibling);
   }
@@ -171,11 +181,15 @@
     try { me = await global.DSUI.get('/api/admin/me'); } catch (e) { return; }
     var held = {};
     (me.businesses || []).forEach(function (b) { held[b.slug] = true; });
+    rights = { known: true, money: Boolean(me.isAdmin), manages: {} };
+    (me.businesses || []).forEach(function (b) { if (me.isAdmin || b.level === 'manage') rights.manages[b.slug] = true; });
+    rights.settings = Boolean(me.isAdmin) || Object.keys(rights.manages).length > 0;
+    global.DSAREA.rights = rights;
     var allowed = ORDER.filter(function (a) { return AREAS[a].sites.some(function (s) { return held[s]; }); });
     if (!allowed.length) return;
     if (!overall && allowed.indexOf(area) === -1) { remember(allowed[0]); global.location.replace(href(allowed[0], first(allowed[0]))); return; }
     drawCompanies(allowed);
-    if (page === MONEY) drawSections();
+    drawSections();
     global.DSAREA.held = allowed.slice();
     global.DSAREA.me = me;
     document.dispatchEvent(new CustomEvent('ds:me', { detail: me }));

@@ -14,8 +14,11 @@
  * imported directly by the tests, which is where their behaviour is covered.
  * This file is only a lookup.
  */
-import { json, requireMethod, actionFrom } from '../../lib/http.js';
+import { json, requireMethod, actionFrom, readJson } from '../../lib/http.js';
+import { requireScope } from '../../lib/access.js';
+import { workOnly, allowedWrite, REFUSED } from '../../lib/work-only.js';
 import { withActivity } from '../../lib/activity.js';
+import { withFigures } from '../../lib/figures.js';
 import attachment from '../../lib/routes/admin/attachment.js';
 import bank from '../../lib/routes/admin/bank.js';
 import business from '../../lib/routes/admin/business.js';
@@ -66,6 +69,19 @@ export default async function handler(req, res) {
     json(res, 404, { ok: false, error: 'not_found' });
     return;
   }
-  /* Each change made here is one phone alert, see lib/activity.js. */
-  return withActivity(route)(req, res);
+  /* A surveyor who only works on a business changes nothing but the survey
+     steps (lib/work-only.js), refused here whatever the screen offered. The
+     body is read once and left on the request for the route to read again. */
+  const action = actionFrom(req.url);
+  if (req.method !== 'GET' && !['mcp', 'oauth', 'push', 'usage'].includes(action)) {
+    const scope = await requireScope(req, res);
+    if (!scope) return;
+    if (workOnly(scope)) {
+      req.body = await readJson(req);
+      if (!allowedWrite(action, req.method, req.body)) return json(res, 403, { ok: false, error: 'forbidden', message: REFUSED });
+    }
+  }
+  /* Each change made here is one phone alert, see lib/activity.js. Figures
+     are taken out for anyone who only works on a business, lib/figures.js. */
+  return withActivity(withFigures(route))(req, res);
 }

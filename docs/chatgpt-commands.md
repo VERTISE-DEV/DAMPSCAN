@@ -4,6 +4,13 @@ Once the staff area is connected to ChatGPT (or Claude), you can just talk to it
 
 Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel BR6"). You never need a job number. If two customers match, it describes them and asks which one you mean.
 
+## Catch me up
+
+- "What's happened since I last checked?" / "Catch me up." (new enquiries, bookings and moves, payments and ticks, reports sent, quotes and invoices, deletions and closures, to-dos others set for you, and anything else, each saying who did it, for which customer and when. Your own changes are left out. The first time covers the last 24 hours; after that, since you last asked.)
+- "What's happened since yesterday?" / "...in the last 3 hours?" / "...since 2026-10-12?"
+- "Catch me up, including my own changes."
+- "Anything new? Don't mark it as read." (peek: looks without moving your bookmark)
+
 ## What needs doing
 
 - "What needs doing today?" / "What's outstanding?" (the same list as the Calendar's Today panel: today's visits, then every action needed, grouped and counted: enquiries to call back, messages to send, quotes accepted with no date, surveys awaiting the estate agent, reports to send (paid surveys whose report has not gone, red after two days), remedial work to follow up, deposits and payments to collect, overdue invoices, quotes to chase, to-dos, services due, over budget. Money only if you manage the business.)
@@ -117,6 +124,31 @@ Just say the customer's name, postcode or both ("Mrs Patel", "BR6 0AA", "Patel B
 - "Write Mrs Patel's page as if it were a nature documentary." (it will still keep the customer's name and street out of it)
 - "I'm stuck in traffic outside Sevenoaks, tell Mrs Patel I'll be 45 minutes, and make it sound cheerful."
 - "Turn this voice note into a quote: forty metres of Redland, two days, scaffold both sides, skip."
+
+## Your day, start to finish
+
+- "Brief me for today." / "Brief Tom for Thursday." (each job in time order: customer, full address with a maps link, phone, notes, what's owed if you manage the business, deposit, paid and report ticks, the estate agent, earlier jobs at that postcode in any business, and open to-dos for it)
+- "Who's on Thursday?" / "Who's free next week?" (by who the job was handed to, or the surveyor on a damp survey; it does not know about holidays)
+- "Hand the Sarah Jones job to Tom." (Tom is put on the job and gets a to-do with the address, date and phone; his phone buzzes)
+- "Just rang Sarah in BR6, she wants 2pm instead." (a dated call note on the job, the time moved, and the team hears it in their catch-up) / "Rang Ann in BR1 about her enquiry, ring back Friday."
+- "Done at Mrs Patel's: rising damp on the rear wall." (marks the visit done, saves the findings, and puts "Send report for Dee, ME1" on your list for two working days on, or the day you say)
+- "Wrap up my day." (visits not marked done, tomorrow's jobs missing a time or address, messages due, reports to send, deposits and balances, overdue invoices, to-dos and unanswered enquiries)
+- "How did this week go?" / "How did last week compare?" (enquiries, bookings, money in if you manage, reports sent, reviews, and what is slipping)
+- "Everything we've ever done for 07700 900123." / "History for 1 High Street." (every enquiry and job across all your businesses)
+
+## Writing to customers, reports and house style
+
+- "Draft a balance chase for Sarah." / "Write a booking confirmation for Mrs Patel." (it reads the playbook, the job's facts and links, and any ready-made message, then writes it; you get WhatsApp, text and email links for the final words)
+- "Give me links to send this to Ola: ..." (links only; nothing is sent until you tap)
+- "Write up the report for Mrs Patel and keep it as a draft." / "Get Mrs Patel's report draft back."
+- "Remember that we always sign off 'Cheers, Scott'." / "Remember we never quote over the phone." (saved to the shared playbook, so Tom's ChatGPT writes the same way)
+- "What's in our playbook?" / "Forget the note about Saturday work."
+- "Look at my sent emails and learn how I write." (with your own Outlook connected in ChatGPT, it reads them there, tells you the style it found, and saves it to the playbook once you agree)
+
+## What can it do?
+
+- "What can you do?" / "What can you do for roofing?" (a guide built from everything the connector has, with example phrases)
+- Ask for something it cannot do and it says so plainly and offers the nearest thing: it cannot send emails or texts itself (it gives tap-to-send links, or your Outlook connector can send), take card payments (it marks paid), add staff logins (owners use npm run create-person), or delete an enquiry a job came from (it closes it).
 
 ## To-do list
 

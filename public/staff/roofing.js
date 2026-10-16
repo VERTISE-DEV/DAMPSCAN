@@ -45,7 +45,7 @@
     card.draggable = !c.frozen && Boolean(R.NEXT[c.stage] || R.BACK[c.stage]);
     var top = U.node('div', 'card-top');
     top.appendChild(U.node('span', 'card-name', [c.firstName || 'No name', c.postcode].filter(Boolean).join(', ')));
-    top.appendChild(U.node('span', 'card-value', U.money(c.valuePence)));
+    if (c.valuePence != null) top.appendChild(U.node('span', 'card-value', U.money(c.valuePence)));
     card.appendChild(top);
     card.appendChild(U.node('p', 'rf-next', c.next));
     var meta = [c.stageDays + (c.stageDays === 1 ? ' day' : ' days') + ' in ' + R.NAMES[c.stage].toLowerCase()];

@@ -112,7 +112,8 @@ test('report drafts and the playbook are kept and shared', async () => {
 test('draft_message hides money from a worker; links_for builds tap links', async () => {
   const boss = await person('Scott', 'roofing');
   const worker = await person('Wes', 'roofing', 'work');
-  await roofJob();
+  /* A worker sees a customer's contacts only on a job handed to them. */
+  await pool.query('update jobs set assigned_person_id = $1 where id = $2', [worker.personId, await roofJob()]);
   assert.ok((await call(boss, 'draft_message', { id: 'Sarah BR6', purpose: 'chase balance' })).context.owed);
   const w = await call(worker, 'draft_message', { id: 'Sarah BR6', purpose: 'chase balance' });
   assert.equal(w.context.owed, undefined);

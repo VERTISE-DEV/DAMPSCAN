@@ -39,7 +39,11 @@
       talk.appendChild(big('Text', 'sms:' + tel));
     }
     if (j.email) talk.appendChild(big('Email', 'mailto:' + j.email));
-    if (talk.children.length) s.appendChild(talk);
+    if (talk.children.length) {
+      /* The number and address written out too, to read over the phone or copy. */
+      s.appendChild(U.node('p', 'sheet-note', [j.phone, j.email].filter(Boolean).join(' · ')));
+      s.appendChild(talk);
+    }
     else s.appendChild(U.node('p', 'panel-note', 'No phone or email on file.'));
   }
 

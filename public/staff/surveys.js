@@ -84,6 +84,14 @@
     top.appendChild(U.node('span', 'act-biz', S.BRAND[s.site]));
     c.appendChild(top);
     c.appendChild(U.node('p', 'card-meta', [s.date ? S.shortDate(s.date) + (s.time ? ' ' + s.time : '') : 'No date', s.surveyLabel, S.cap(s.surveyor)].filter(Boolean).join(' · ')));
+    /* Phone and email on the card itself, so a call is one tap from the board. */
+    if (s.phone || s.email) {
+      var ct = U.node('p', 'card-meta card-contact');
+      if (s.phone) { var t = U.node('a', null, s.phone); t.href = 'tel:' + String(s.phone).replace(/[^\d+]/g, ''); ct.appendChild(t); }
+      if (s.phone && s.email) ct.appendChild(document.createTextNode(' · '));
+      if (s.email) { var m = U.node('a', null, s.email); m.href = 'mailto:' + s.email; ct.appendChild(m); }
+      c.appendChild(ct);
+    }
     c.appendChild(marks(s));
     var step = s.stage === 'booked' && s.awaitingAgent ? ['agent', 'Agent confirmed'] : NEXT[s.stage];
     if (step) {

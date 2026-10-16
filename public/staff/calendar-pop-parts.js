@@ -17,6 +17,13 @@
     return a;
   }
 
+  /* Only for the people who asked for it, so nobody else gets an extra button. */
+  var CAR_DRIVERS = ['ronnie'];
+  function sendsToCar() {
+    var me = (global.DSAREA || {}).me || {};
+    return CAR_DRIVERS.indexOf(String(me.name || '').trim().split(/\s+/)[0].toLowerCase()) !== -1;
+  }
+
   /* Where: the address in full, three ways to drive there, and the customer's
      phone and email. A job booked by phone or the assistant carries its own
      address; an enquiry's comes from the form (lib/calendar-job.js). */
@@ -30,6 +37,17 @@
       nav.appendChild(big('Google Maps', 'https://www.google.com/maps/dir/?api=1&destination=' + q));
       nav.appendChild(big('Apple Maps', 'https://maps.apple.com/?daddr=' + q));
       s.appendChild(nav);
+      if (sendsToCar() && navigator.share) {
+        /* Ronnie drives by his Tesla's own sat nav: the share sheet hands the
+           address to the Tesla app, which sends it to the car. */
+        var car = U.node('button', 'sheet-big is-main sheet-car', 'Send to car');
+        car.type = 'button';
+        car.addEventListener('click', function () {
+          var pc = j.postcode && addr.indexOf(j.postcode) === -1 ? j.postcode : '';
+          navigator.share({ text: [addr, pc].filter(Boolean).join(', ') }).catch(function () {});
+        });
+        s.appendChild(car);
+      }
     }
     var tel = j.phone ? String(j.phone).replace(/[^\d+]/g, '') : '';
     var talk = U.node('div', 'sheet-grid');

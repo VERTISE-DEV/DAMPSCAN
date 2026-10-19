@@ -152,7 +152,8 @@ test('the morning digest says what is on, what is waiting and what happened, per
   assert.match(text, /£500 outstanding on 1 completed job\./);
   assert.match(text, /Since the last digest: 3 jobs saved, 1 payment received\./);
   assert.ok(!/priya|sharma|another|old quote/i.test(text), text);
-  assert.ok((await rows()).every((r) => r.digest_sent_at), 'everything summarised is stamped');
+  /* The Monday weekly summary is sent after the digest, so it is not one it summarised. */
+  assert.ok((await rows()).filter((r) => r.kind !== 'weekly').every((r) => r.digest_sent_at), 'everything summarised is stamped');
 
   pushes = [];
   const quiet = await call(digest, { method: 'GET', url: '/api/cron/digest', headers: { authorization: 'Bearer a-cron-secret-that-is-long-enough' } });

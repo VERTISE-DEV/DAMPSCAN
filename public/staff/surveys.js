@@ -14,6 +14,20 @@
   var state = { data: null, site: '', surveyor: '', q: '', agentOnly: false, dragging: null, focus: null };
   var el = function (id) { return document.getElementById(id); };
 
+  /* The report countdown: grey, amber in the last 4 hours, red and counting
+     up once it is over. Every card's timer moves once a minute. */
+  function tick(el) {
+    var left = Date.parse(el.getAttribute('data-deadline')) - Date.now();
+    /* Shown only once the survey is over and the 24 hours have started. */
+    el.hidden = left > 24 * 3600000;
+    var mins = Math.round(Math.abs(left) / 60000);
+    var text = Math.floor(mins / 60) + 'h ' + (mins % 60) + 'm';
+    el.textContent = left >= 0 ? text : text + ' over';
+    el.className = 'card-countdown' + (left < 0 ? ' is-over' : left < 4 * 3600000 ? ' is-soon' : '');
+    el.title = left >= 0 ? 'Time left to send the report' : 'Report overdue';
+  }
+  setInterval(function () { document.querySelectorAll('.card-countdown').forEach(tick); }, 60000);
+
   function matches(s) {
     if (state.site && s.site !== state.site) return false;
     if (state.surveyor && s.surveyor && s.surveyor !== state.surveyor) return false;
@@ -84,6 +98,12 @@
     top.appendChild(U.node('span', 'act-biz', S.BRAND[s.site]));
     c.appendChild(top);
     c.appendChild(U.node('p', 'card-meta', [s.date ? S.shortDate(s.date) + (s.time ? ' ' + s.time : '') : 'No date', s.surveyLabel, S.cap(s.surveyor)].filter(Boolean).join(' · ')));
+    if (s.reportDeadline) {
+      var cd = U.node('span', 'card-countdown');
+      cd.setAttribute('data-deadline', s.reportDeadline);
+      top.insertBefore(cd, top.lastChild);
+      tick(cd);
+    }
     /* Phone and email on the card itself, so a call is one tap from the board. */
     if (s.phone || s.email) {
       var ct = U.node('p', 'card-meta card-contact');

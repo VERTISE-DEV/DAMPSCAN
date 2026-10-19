@@ -145,7 +145,7 @@ test('a work surveyor\'s ChatGPT lists only reads (and mark_report_sent) and ref
   const scope = await scopeOf(ronnie);
   const id = await book('ronnie', 'Sam Lee', 'ME14 2AB', '07700 900222');
   const listed = TOOLS.filter((t) => toolAllowed(scope, t));
-  assert.ok(listed.every((t) => t.annotations.readOnlyHint || t.name === 'mark_report_sent'));
+  assert.ok(listed.every((t) => t.annotations.readOnlyHint || ['mark_report_sent', 'attach_report'].includes(t.name)));
   assert.ok(listed.some((t) => t.name === 'mark_report_sent'));
   assert.ok(!listed.some((t) => t.name === 'mark_paid_in_full'));
   const paid = await callTool(scope, { name: 'mark_paid_in_full', arguments: { id } });

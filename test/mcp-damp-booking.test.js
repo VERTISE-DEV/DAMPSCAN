@@ -124,3 +124,24 @@ test('update_client sets a full address and postcode, and the card shows the add
   const card = (await callRoute(clients, await owners(), { url: '/api/admin/clients?view=all' })).data.clients[0];
   assert.equal(card.fullAddress, '12 High Street, West Malling');
 });
+
+test('a survey handed to Ben with no login of his own makes him the surveyor, on the owners\' list', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const r = await callTool(await owners(), { name: 'handover_job', arguments: { id: 'Nicholls', to: 'Ben', note: 'Surveyor changed from Tom to Ben.' } });
+  assert.equal(r.isError, false, JSON.stringify(r.content));
+  assert.equal((await pool.query('select surveyor from jobs')).rows[0].surveyor, 'ben');
+  const todo = (await pool.query('select text, for_owners from todos')).rows[0];
+  assert.match(todo.text, /^For Ben:/);
+  assert.equal(todo.for_owners, true);
+  const t = await callTool(await owners(), { name: 'add_todo', arguments: { text: 'Ring Nicholls', for: 'Tom' } });
+  assert.equal(t.isError, false, JSON.stringify(t.content));
+});
+
+test('still_to_pay counts the surveys not yet paid in full', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, job_date: '2026-10-01' } });
+  await pool.query(`update jobs set status = 'completed'`);
+  const r = await callTool(await owners(), { name: 'still_to_pay', arguments: {} });
+  assert.equal(r.isError, false, JSON.stringify(r.content));
+  assert.equal(r.structuredContent.count, 1);
+  assert.equal(r.structuredContent.list[0].business, 'ATi');
+});

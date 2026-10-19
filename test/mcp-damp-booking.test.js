@@ -41,7 +41,7 @@ before(async () => {
   await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8'));
   await pool.query(`insert into job_rates (key, label, price_pence, surveyor_fee_pence, position) values ('localised-basement', 'Localised Basement', 25000, 11000, 5) on conflict (key) do nothing`);
 });
-beforeEach(async () => { await pool.query('truncate jobs, leads, todos, audit, notifications restart identity cascade'); });
+beforeEach(async () => { await pool.query('truncate jobs, leads, todos, audit, notifications, competitor_pages, competitor_checks restart identity cascade'); });
 after(async () => { await pool.end(); });
 
 test('the owners\' failed ATi booking now goes through with everything said', async () => {
@@ -174,4 +174,44 @@ test('a phone alert button ticks paid in full for its job only, and a forged one
   assert.equal((await pool.query('select paid_at from jobs')).rows[0].paid_at, null);
   assert.equal(await hit(paid.url), 200);
   assert.notEqual((await pool.query('select paid_at from jobs')).rows[0].paid_at, null);
+});
+
+test('a paid job from a Google Ads click is in the brand\'s feed, behind its key, with no customer details', async () => {
+  const { feedKey } = await import('../lib/ads-conversions.js');
+  const conversions = (await import('../lib/routes/admin/conversions.js')).default;
+  const lead = (await pool.query(`insert into leads (session_id, site, stage, first_name, phone, email, postcode, utm) values (gen_random_uuid(), 'ati-london', 'complete', 'Jo', '07000 000000', 'jo@example.com', 'SW2 2JX', '{"gclid":"abc123"}') returning id`)).rows[0].id;
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, lead_id: Number(lead) } });
+  await pool.query(`update jobs set paid_at = now()`);
+  const hit = async (qs) => { let body = ''; const res = { statusCode: 200, setHeader() {}, getHeader() {}, write(c) { body += c; }, end(c) { if (c) body += c; } };
+    await conversions({ method: 'GET', url: '/api/admin/conversions?' + qs, headers: {} }, res); return { status: res.statusCode, body }; };
+  assert.equal((await hit('site=ati-london&key=wrong')).status, 404);
+  assert.equal((await hit(`site=dampscan&key=${feedKey('ati-london')}`)).status, 404, 'another brand\'s key');
+  const ok = await hit(`site=ati-london&key=${feedKey('ati-london')}`);
+  assert.equal(ok.status, 200);
+  assert.match(ok.body, /^Parameters:TimeZone=Europe\/London\nGoogle Click ID,Conversion Name,Conversion Time,Conversion Value,Conversion Currency\nabc123,Paid job,\d{4}-\d\d-\d\d \d\d:\d\d:\d\d,215\.00,GBP\n$/);
+  assert.ok(!/Nicholls|Jo|SW2/.test(ok.body));
+});
+
+test('the competitor watch remembers pages and names the new ones from the second look', async () => {
+  const { checkCompetitor } = await import('../lib/competitors.js');
+  const real = globalThis.fetch;
+  let pages = ['https://rival.example/', 'https://rival.example/damp-proofing/maidstone/'];
+  const sent = [];
+  globalThis.fetch = async (url, init) => {
+    if (String(url).includes('ntfy') || (init && init.method === 'POST')) { sent.push(JSON.parse(init.body)); return { ok: true, status: 200 }; }
+    if (String(url).endsWith('sitemap.xml')) return { ok: true, status: 200, text: async () => `<urlset>${pages.map((p) => `<url><loc>${p}</loc></url>`).join('')}</urlset>` };
+    return { ok: true, status: 200, text: async () => '<html><title>Damp proofing Sevenoaks</title></html>' };
+  };
+  process.env.NTFY_TOPIC = 'test-topic';
+  try {
+    const c = { name: 'Rival', host: 'rival.example', business: 'dampscan' };
+    assert.equal((await checkCompetitor(c)).added, 0, 'the first look is the baseline');
+    pages = [...pages, 'https://rival.example/damp-proofing/sevenoaks/', 'https://elsewhere.example/x'];
+    const second = await checkCompetitor(c);
+    assert.equal(second.added, 1);
+    assert.equal((await pool.query(`select title from competitor_pages where url like '%sevenoaks%'`)).rows[0].title, 'Damp proofing Sevenoaks');
+    const note = (await pool.query(`select title, message from notifications where kind = 'competitor'`)).rows[0];
+    assert.match(note.title, /Rival: 1 new page/);
+    assert.match(note.message, /damp proofing sevenoaks/i);
+  } finally { globalThis.fetch = real; delete process.env.NTFY_TOPIC; }
 });

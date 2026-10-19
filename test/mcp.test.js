@@ -172,7 +172,7 @@ test('every read works for the owners\' code, which sees all four businesses', a
   const t = await connect('1290');
   const today = new Date().toISOString().slice(0, 10);
   const args = { search: { text: 'a' + 'b' }, get_job: { id: 1 }, calendar: { from: today, to: today }, job_photos: { job: 1 }, price_book: { site: 'roofing' }, list_price_book: { site: 'roofing' },
-    get_message: { id: 1, kind: 'rating' }, get_google_post: { id: 1 }, get_invoice_link: { id: 1 }, find_client: { text: 'ab' }, find_enquiry: { text: 'ab' }, customer_history: { words: 'ab' }, get_report_draft: { id: 1 }, draft_message: { id: 1 }, links_for: { id: 1, text: 'hi' }, get_report_file: { id: 1 }, match_email: { from_email: 'a@example.com' } };
+    get_message: { id: 1, kind: 'rating' }, get_google_post: { id: 1 }, get_invoice_link: { id: 1 }, find_client: { text: 'ab' }, find_enquiry: { text: 'ab' }, customer_history: { words: 'ab' }, get_report_draft: { id: 1 }, draft_message: { id: 1 }, links_for: { id: 1, text: 'hi' }, get_report_file: { id: 1 }, match_email: { from_email: 'a@example.com' }, ads_conversion_setup: { site: 'roofing' } };
   const tools = (await rpc(t.access_token, 'tools/list')).json().result.tools.filter((x) => x.annotations.readOnlyHint);
   for (const x of tools) {
     const r = await tool(t.access_token, x.name, args[x.name] || {});

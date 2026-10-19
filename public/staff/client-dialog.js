@@ -65,7 +65,15 @@
 
     var files = el('c-files');
     files.textContent = '';
-    if (!c.files.length) files.appendChild(U.node('li', 'empty', 'None attached'));
+    /* The finished report, saved through the assistant (attach_report). */
+    if (c.reportFile) {
+      var rli = document.createElement('li');
+      var ra = link('/api/admin/attachment?report=' + c.id, 'Report: ' + c.reportFile);
+      ra.className = 'pill';
+      rli.appendChild(ra);
+      files.appendChild(rli);
+    }
+    if (!c.files.length && !c.reportFile) files.appendChild(U.node('li', 'empty', 'None attached'));
     c.files.forEach(function (path) {
       var li = document.createElement('li');
       var a = link('/api/admin/attachment?path=' + encodeURIComponent(path), displayName(path));

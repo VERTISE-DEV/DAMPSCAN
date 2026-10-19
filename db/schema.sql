@@ -1218,3 +1218,12 @@ create table if not exists playbook_notes (
   added_by      text,
   created_at    timestamptz not null default now()
 );
+
+-- The finished survey report, as a file on the job: uploaded through the
+-- assistant (attach_report) and read back for the final email. The path is a
+-- private blob, reached only through /api/admin/attachment. The alert stamp
+-- keeps the overdue report alert to one per job.
+alter table jobs add column if not exists report_path text;
+alter table jobs add column if not exists report_name text;
+alter table jobs add column if not exists report_at timestamptz;
+alter table jobs add column if not exists report_late_alerted_at timestamptz;

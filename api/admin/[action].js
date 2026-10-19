@@ -19,6 +19,7 @@ import { requireScope } from '../../lib/access.js';
 import { workOnly, allowedWrite, REFUSED } from '../../lib/work-only.js';
 import { withActivity } from '../../lib/activity.js';
 import { withFigures } from '../../lib/figures.js';
+import quick from '../../lib/routes/admin/quick.js';
 import attachment from '../../lib/routes/admin/attachment.js';
 import bank from '../../lib/routes/admin/bank.js';
 import business from '../../lib/routes/admin/business.js';
@@ -49,7 +50,7 @@ import usage from '../../lib/routes/admin/usage.js';
 
 export const config = { runtime: 'nodejs' };
 
-const ROUTES = { attachment, bank, business, calendar, clients, contracts, coolright, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, roofing, search, snooze, summary, surveys, todos, usage };
+const ROUTES = { quick, attachment, bank, business, calendar, clients, contracts, coolright, due, insights, jobs, leads, mcp, me, oauth, people, photos, pricebook, push, quoted, rates, roofing, search, snooze, summary, surveys, todos, usage };
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, ['GET', 'POST', 'DELETE'])) return;
@@ -73,7 +74,7 @@ export default async function handler(req, res) {
      steps (lib/work-only.js), refused here whatever the screen offered. The
      body is read once and left on the request for the route to read again. */
   const action = actionFrom(req.url);
-  if (req.method !== 'GET' && !['mcp', 'oauth', 'push', 'usage'].includes(action)) {
+  if (req.method !== 'GET' && !['mcp', 'oauth', 'push', 'usage', 'quick'].includes(action)) {
     const scope = await requireScope(req, res);
     if (!scope) return;
     if (workOnly(scope)) {

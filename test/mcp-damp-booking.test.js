@@ -157,3 +157,21 @@ test('owner_briefing and match_email answer for the owners', async () => {
   const byPhone = await callTool(await owners(), { name: 'match_email', arguments: { from_email: 'other@example.com', text: 'ring me on 07814 663729' } });
   assert.equal(byPhone.structuredContent.jobs.length, 1);
 });
+
+test('a phone alert button ticks paid in full for its job only, and a forged one does nothing', async () => {
+  const { quickButtons } = await import('../lib/quick-action.js');
+  const quick = (await import('../lib/routes/admin/quick.js')).default;
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const id = Number((await pool.query('select id from jobs')).rows[0].id);
+  const [paid, deposit, open] = quickButtons(id, ['paid', 'deposit'], 'https://dampscan.co.uk/staff/jobs.html');
+  assert.equal(paid.label, 'Paid in full');
+  assert.equal(deposit.label, 'Deposit paid');
+  assert.equal(open.action, 'view');
+  const hit = async (url) => { const u = new URL(url); let body = ''; const res = { statusCode: 200, setHeader() {}, getHeader() {}, write(c) { body += c; }, end(c) { if (c) body += c; } };
+    await quick({ method: 'POST', url: u.pathname + u.search, headers: {} }, res); return res.statusCode; };
+  assert.equal(await hit(paid.url.replace(/sig=../, 'sig=00')), 403);
+  assert.equal(await hit(paid.url.replace(`job=${id}`, `job=${id + 1}`)), 403);
+  assert.equal((await pool.query('select paid_at from jobs')).rows[0].paid_at, null);
+  assert.equal(await hit(paid.url), 200);
+  assert.notEqual((await pool.query('select paid_at from jobs')).rows[0].paid_at, null);
+});

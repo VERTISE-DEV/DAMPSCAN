@@ -27,6 +27,7 @@ globalThis.fetch = async (url, init) => { pushes.push(JSON.parse(init.body)); re
 const { alertPartials, alertOverdue, alertDiary, diaryLine } = await import('../lib/daily-alerts.js');
 const { runWeekly, weekFigures, weekLine, isLondonMonday } = await import('../lib/weekly-summary.js');
 const { digestFor } = await import('../lib/digest.js');
+process.env.EVENING_DIARY = 'on';
 const evening = (await import('../lib/routes/cron/evening.js')).default;
 
 const P = (pounds) => Math.round(pounds * 100);

@@ -15,3 +15,11 @@ test('a signed report link opens its own job only, and runs out', () => {
   const old = new URL(reportLink('https://dampscan.co.uk', 42, Date.now() - 8 * 86400000));
   assert.equal(signedOk('42', old.searchParams.get('exp'), old.searchParams.get('sig')), false, 'over a week old');
 });
+
+test('only an upload address issued for a report is accepted', async () => {
+  const { reportBody } = await import('../lib/report-file.js');
+  const out = await reportBody({ isAdmin: true }, { id: 1, site: 'dampscan' }, { reportPath: 'leads/2026-10-19/../../secret.pdf' });
+  assert.equal(out.status, 400);
+  const roof = await reportBody({ isAdmin: true }, { id: 1, site: 'roofing' }, { reportPath: 'x' });
+  assert.equal(roof.status, 400);
+});

@@ -36,6 +36,28 @@
     return a;
   }
 
+  /* The finished report, straight from the phone or laptop to storage, then
+     saved on the job (lib/report-file.js). */
+  async function uploadReport(c, file, status) {
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) { status.textContent = 'That file is over 25MB.'; return; }
+    var type = /\.docx$/i.test(file.name) ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf';
+    status.textContent = 'Uploading…';
+    try {
+      var ticket = await U.send('/api/admin/clients', { id: c.id, reportUpload: { name: file.name, type: type } });
+      if (!ticket.ok) throw new Error(ticket.data && ticket.data.error);
+      var put = await fetch(ticket.data.url, { method: 'PUT', headers: { 'Content-Type': type }, body: file });
+      if (!put.ok) throw new Error('The upload did not finish. Try again.');
+      var saved = await U.send('/api/admin/clients', { id: c.id, reportPath: ticket.data.path, reportName: file.name });
+      if (!saved.ok) throw new Error(saved.data && saved.data.error);
+      c.reportFile = saved.data.reportFile;
+      fillDialog(c);
+      status.textContent = 'Report saved.';
+    } catch (e) {
+      status.textContent = (e && e.message && !/Request failed/.test(e.message)) ? e.message : 'Could not upload the report. Try again.';
+    }
+  }
+
   function fillDialog(c) {
     el('c-name').textContent = c.name || 'No name';
     el('c-sub').textContent = c.survey.label + ' survey' + (c.survey.pricePence == null ? '' : ', ' + U.money(c.survey.pricePence))
@@ -73,6 +95,12 @@
       rli.appendChild(ra);
       files.appendChild(rli);
     }
+    var row = el('c-report-row');
+    row.hidden = !(c.site === 'dampscan' || c.site === 'ati-london');
+    row.querySelector('label').textContent = c.reportFile ? 'Replace report' : 'Upload report';
+    el('c-report').value = '';
+    el('c-report-status').textContent = '';
+    el('c-report').onchange = function () { uploadReport(c, this.files[0], el('c-report-status')); };
     if (!c.files.length && !c.reportFile) files.appendChild(U.node('li', 'empty', 'None attached'));
     c.files.forEach(function (path) {
       var li = document.createElement('li');

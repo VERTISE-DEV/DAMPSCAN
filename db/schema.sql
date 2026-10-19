@@ -1227,3 +1227,5 @@ alter table jobs add column if not exists report_path text;
 alter table jobs add column if not exists report_name text;
 alter table jobs add column if not exists report_at timestamptz;
 alter table jobs add column if not exists report_late_alerted_at timestamptz;
+-- One "surveyed, not paid in full" alert per survey, with its buttons.
+alter table jobs add column if not exists unpaid_alerted_at timestamptz;

@@ -215,3 +215,10 @@ test('the competitor watch remembers pages and names the new ones from the secon
     assert.match(note.message, /damp proofing sevenoaks/i);
   } finally { globalThis.fetch = real; delete process.env.NTFY_TOPIC; }
 });
+
+test('a survey whose day has passed with nothing paid is on the paid-in-full list, though still booked', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, job_date: '2026-10-01' } });
+  assert.equal((await pool.query('select status from jobs')).rows[0].status, 'booked');
+  const r = await callTool(await owners(), { name: 'still_to_pay', arguments: {} });
+  assert.equal(r.structuredContent.count, 1, JSON.stringify(r.structuredContent));
+});

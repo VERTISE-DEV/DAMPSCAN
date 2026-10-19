@@ -145,3 +145,15 @@ test('still_to_pay counts the surveys not yet paid in full', async () => {
   assert.equal(r.structuredContent.count, 1);
   assert.equal(r.structuredContent.list[0].business, 'ATi');
 });
+
+test('owner_briefing and match_email answer for the owners', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const b = await callTool(await owners(), { name: 'owner_briefing', arguments: { weeks_ago: 0 } });
+  assert.equal(b.isError, false, JSON.stringify(b.content));
+  assert.ok(b.structuredContent.businesses.some((x) => x.business === 'ATi'));
+  const m = await callTool(await owners(), { name: 'match_email', arguments: { from_email: 'JSNicholls@gmail.com', text: 'Can we move the survey?' } });
+  assert.equal(m.isError, false, JSON.stringify(m.content));
+  assert.equal(m.structuredContent.jobs[0].customer, 'John Nicholls');
+  const byPhone = await callTool(await owners(), { name: 'match_email', arguments: { from_email: 'other@example.com', text: 'ring me on 07814 663729' } });
+  assert.equal(byPhone.structuredContent.jobs.length, 1);
+});

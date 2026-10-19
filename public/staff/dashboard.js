@@ -16,87 +16,33 @@
 
   function el(id){ return document.getElementById(id); }
 
-  /* ---------- headline tiles ---------- */
-  function renderTiles(c){
-    var tiles = [
-      { k: 'Page views', v: num(c.pageViews) },
-      { k: 'Unique sessions', v: num(c.sessions) },
-      { k: 'Call clicks', v: num(c.callClicks) },
-      { k: 'Form opens', v: num(c.formOpens) },
-      { k: 'Step 1 dropouts', v: num(c.partials) },
-      { k: 'Bookings', v: num(c.bookings), key: true },
-      { k: 'Dropout rate', v: pct(c.sessionToPartial), s: num(c.partials) + ' of ' + num(c.sessions) + ' sessions' },
-      { k: 'Session to booking', v: pct(c.sessionToBooking), s: num(c.bookings) + ' of ' + num(c.sessions) + ' sessions', key: true }
-    ];
-    var mount = el('tiles');
-    mount.textContent = '';
-    tiles.forEach(function(t){
-      var d = node('div', 'tile' + (t.key ? ' is-key' : ''));
-      d.appendChild(node('span', 'k', t.k));
-      d.appendChild(node('span', 'v', t.v));
-      if (t.s) d.appendChild(node('span', 's', t.s));
-      mount.appendChild(d);
-    });
-  }
-
-  /* ---------- funnel and the fields that cost leads ---------- */
-  function renderFunnel(f){
-    var mount = el('funnel');
-    mount.textContent = '';
-    var top = Math.max(f.step1, f.step2, f.step3, f.submitted, 1);
-    [
-      { label: 'Step 1', value: f.step1, drop: null },
-      { label: 'Step 2', value: f.step2, drop: f.dropStep1To2 },
-      { label: 'Step 3', value: f.step3, drop: f.dropStep2To3 },
-      { label: 'Submitted', value: f.submitted, drop: f.dropStep3ToSubmit }
-    ].forEach(function(r){
-      var row = node('div', 'frow');
-      row.appendChild(node('span', null, r.label + ' (' + num(r.value) + ')'));
-      var bar = node('div', 'fbar');
-      var fill = node('span');
-      fill.style.width = Math.round((r.value / top) * 100) + '%';
-      bar.appendChild(fill);
-      row.appendChild(bar);
-      row.appendChild(node('span', 'fdrop', r.drop === null ? '' : '-' + pct(r.drop) + ' drop'));
-      mount.appendChild(row);
-    });
-
+  /* ---------- the boxes that cost bookings ---------- */
+  function renderErrors(f){
     table(el('form-errors'), [
-      { label: 'Field', get: function(r){ return r.field; } },
-      { label: 'Errors', numeric: true, get: function(r){ return num(r.errors); } },
-      { label: 'Sessions affected', numeric: true, get: function(r){ return num(r.sessions); } }
-    ], f.errorsByField, { empty: 'No validation errors. No field is costing you leads.' });
+      { label: 'Box', get: function(r){ return r.field; } },
+      { label: 'People', numeric: true, get: function(r){ return num(r.sessions); } }
+    ], f.errorsByField, { empty: 'Nobody got a box wrong. The form is not losing anyone here.' });
   }
 
   /* ---------- call log ---------- */
   function renderCalls(calls){
-    table(el('calls'), [
-      { label: 'When', get: function(r){ return when(r.createdAt); } },
-      { label: 'Placement', get: function(r){ return PLACEMENTS[r.placement] || r.placement; } },
-      { label: 'Device', get: function(r){ return r.device; } },
-      { label: 'Channel', get: function(r){ return r.channel; } },
-      { label: 'Booked after', get: function(r){
-          return node('span', 'tag ' + (r.booked ? 'tag--good' : 'tag--muted'), r.booked ? 'Yes' : 'No');
-        } }
-    ], calls.rows, { empty: 'No calls in this period.' });
+    var mount = el('calls');
+    mount.textContent = '';
+    if (!calls.rows.length) { mount.appendChild(node('p', 'empty', 'Nobody tapped to call in this period.')); return; }
+    var list = node('ul', 'dash-calls');
+    calls.rows.slice(0, 10).forEach(function(r){
+      var li = node('li');
+      li.appendChild(node('span', 'dash-bar-name', when(r.createdAt)));
+      li.appendChild(node('span', 'dash-bar-did', [(window.DSDASH.DEVICE[r.device] || r.device), 'from the ' + (PLACEMENTS[r.placement] || r.placement).toLowerCase() + ' button', window.DSDASH.CHANNEL[r.channel] || r.channel].filter(Boolean).join(' · ')));
+      if (r.booked) li.appendChild(node('span', 'tag tag--good', 'Booked later'));
+      list.appendChild(li);
+    });
+    mount.appendChild(list);
 
     if (calls.truncated) {
       el('calls').appendChild(node('p', 'panel-note',
         'Showing the most recent ' + calls.limit + ' calls. There are older ones in this range.'));
     }
-  }
-
-  /* ---------- source, landing page and device breakdowns ---------- */
-  function renderBreakdown(mount, rows, keyLabel){
-    table(mount, [
-      { label: keyLabel, get: function(r){ return r.key; } },
-      { label: 'Sessions', numeric: true, get: function(r){ return num(r.sessions); } },
-      { label: 'Calls', numeric: true, get: function(r){ return num(r.callClicks); } },
-      { label: 'Bookings', numeric: true, get: function(r){ return num(r.bookings); } },
-      { label: 'Booking rate', numeric: true, get: function(r){
-          return node('span', 'tag ' + (r.bookings > 0 ? 'tag--accent' : 'tag--muted'), pct(r.bookingRate));
-        } }
-    ], rows);
   }
 
   /* ---------- load ---------- */
@@ -122,14 +68,23 @@
       if (state.summary.viewer) {
         el('who').textContent = 'Signed in as ' + (state.summary.viewer.name || state.summary.viewer.email);
       }
-      renderTiles(state.summary.counters);
-      renderFunnel(state.summary.funnel);
-      renderCalls(state.summary.calls);
-      renderBreakdown(el('src-channel'), state.summary.sources.byChannel, 'Channel');
-      renderBreakdown(el('src-referrer'), state.summary.sources.byReferrer, 'Referrer host');
-      renderBreakdown(el('src-campaign'), state.summary.sources.byCampaign, 'Campaign');
-      renderBreakdown(el('landing'), state.summary.landingPages, 'Landing page');
-      renderBreakdown(el('devices'), state.summary.devices, 'Device');
+      var D = window.DSDASH, sum = state.summary;
+      el('sentence').textContent = D.story(sum, state.range);
+      D.tiles(el('tiles'), sum);
+      var tips = D.tips(sum);
+      el('tips').textContent = '';
+      tips.forEach(function (t) { el('tips').appendChild(node('li', null, t)); });
+      el('tips-panel').hidden = !tips.length;
+      D.funnel(el('funnel'), sum.funnel);
+      renderErrors(sum.funnel);
+      renderCalls(sum.calls);
+      var same = function (k) { return k; };
+      D.bars(el('src-channel'), sum.sources.byChannel, function (k) { return D.CHANNEL[k] || k; });
+      D.bars(el('src-referrer'), sum.sources.byReferrer, same, { limit: 8 });
+      D.bars(el('src-campaign'), sum.sources.byCampaign, same);
+      el('campaign-more').hidden = !(sum.sources.byCampaign || []).length;
+      D.bars(el('landing'), sum.landingPages, D.pageName, { limit: 8 });
+      D.bars(el('devices'), sum.devices, function (k) { return D.DEVICE[k] || k; });
       DSLEADS.render(state.leads);
 
       el('state').hidden = true;

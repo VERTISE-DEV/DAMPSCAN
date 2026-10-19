@@ -300,3 +300,24 @@ td.details small{display:block;color:var(--muted-2);font-size:12px;margin-top:2p
 .search input:focus{outline:none;border-color:var(--accent);background:var(--slate-2)}
 .search input::placeholder{color:var(--muted-2)}
 .quote-block{grid-column:1/-1}
+
+/* Dashboard, in plain words (dashboard-parts.js): bar lists in place of wide
+   tables, so every number shows on a phone. */
+.dash-sentence{font-size:clamp(16px,2.2vw,19px);line-height:1.5;margin:0 0 16px;max-width:70ch}
+.dash-change.is-up{color:#16a34a;font-weight:700}
+.dash-change.is-down{color:#dc2626;font-weight:700}
+.dash-tips{margin:0;padding-left:20px;display:grid;gap:10px;line-height:1.5}
+.dash-bars,.dash-funnel,.dash-calls{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.dash-bar-head,.dash-funnel li,.dash-calls li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:baseline}
+.dash-bar-name{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.dash-bar-num{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dash-bar{flex-basis:100%;height:8px;border-radius:99px;background:var(--navy);overflow:hidden;margin-top:6px}
+.dash-bar span{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.dash-bar-did{display:block;font-size:13px;color:var(--muted-2);margin-top:4px}
+.dash-bar-did.is-good{color:var(--accent)}
+.dash-calls li{border-bottom:1px solid var(--line);padding-bottom:10px}
+.dash-calls .dash-bar-did{flex-basis:100%;margin-top:0}
+.dash-more{margin-top:18px}
+.dash-more summary{cursor:pointer;font-weight:600;color:var(--muted);padding:8px 0;min-height:44px;display:flex;align-items:center}
+.dash-more[open] summary{margin-bottom:10px}
+#tiles{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}

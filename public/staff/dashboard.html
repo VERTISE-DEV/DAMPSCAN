@@ -73,47 +73,47 @@
   <div class="state" id="state">Loading…</div>
 
   <div id="content" hidden>
-    <section class="panel" aria-labelledby="h-counters">
-      <h2 id="h-counters">Headline</h2>
+    <section class="panel dash-story" aria-labelledby="h-counters">
+      <h2 id="h-counters">At a glance</h2>
+      <p class="dash-sentence" id="sentence"></p>
       <div class="tiles" id="tiles"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-tips" id="tips-panel">
+      <h2 id="h-tips">Worth a look</h2>
+      <ul class="dash-tips" id="tips"></ul>
     </section>
 
     <div class="grid-2">
       <section class="panel" aria-labelledby="h-funnel">
-        <h2 id="h-funnel">Form funnel</h2>
-        <div class="funnel" id="funnel"></div>
-        <h2 id="h-errors" style="margin-top:26px">Validation errors by field</h2>
-        <div id="form-errors"></div>
+        <h2 id="h-funnel">How far people get with the form</h2>
+        <div id="funnel"></div>
+        <details class="dash-more"><summary>Boxes people get wrong</summary><div id="form-errors"></div></details>
       </section>
 
-      <section class="panel" aria-labelledby="h-calls">
-        <h2 id="h-calls">Call log</h2>
+      <section class="panel" aria-labelledby="h-sources">
+        <h2 id="h-sources">Where visitors come from</h2>
+        <div id="src-channel"></div>
+        <details class="dash-more"><summary>Which websites sent them</summary><div id="src-referrer"></div></details>
+        <details class="dash-more" id="campaign-more"><summary>Ad campaigns</summary><div id="src-campaign"></div></details>
+      </section>
+    </div>
+
+    <div class="grid-2">
+      <section class="panel" aria-labelledby="h-landing">
+        <h2 id="h-landing">Pages people land on</h2>
+        <div id="landing"></div>
+      </section>
+      <section class="panel" aria-labelledby="h-devices">
+        <h2 id="h-devices">Phone or computer</h2>
+        <div id="devices"></div>
+        <h2 id="h-calls" style="margin-top:22px">Calls from the website</h2>
         <div id="calls"></div>
       </section>
     </div>
 
-    <section class="panel" aria-labelledby="h-sources">
-      <h2 id="h-sources">Sources by channel</h2>
-      <div id="src-channel"></div>
-      <h2 id="h-referrer" style="margin-top:26px">By referrer host</h2>
-      <div id="src-referrer"></div>
-      <h2 id="h-campaign" style="margin-top:26px">By UTM campaign</h2>
-      <div id="src-campaign"></div>
-    </section>
-
-    <div class="grid-2">
-      <section class="panel" aria-labelledby="h-landing">
-        <h2 id="h-landing">Top landing pages</h2>
-        <div id="landing"></div>
-      </section>
-      <section class="panel" aria-labelledby="h-devices">
-        <h2 id="h-devices">Devices</h2>
-        <div id="devices"></div>
-      </section>
-    </div>
-
     <section class="panel" aria-labelledby="h-leads">
-      <h2 id="h-leads">Leads</h2>
+      <h2 id="h-leads">Enquiries</h2>
       <div class="top-end" style="margin-bottom:14px">
         <button class="pill" data-stage="" aria-pressed="true">All</button>
         <button class="pill" data-stage="complete" aria-pressed="false">Booked</button>
@@ -130,7 +130,7 @@
         <button class="btn btn--ghost btn--sm" id="next">Next</button>
         <span class="who" id="page-info"></span>
       </div>
-      <p class="panel-note">Click a row to see that visitor's full event timeline.</p>
+      <p class="panel-note">Tap an enquiry to see everything that person did on the website.</p>
     </section>
   </div>
 </main>
@@ -138,6 +138,7 @@
 <script src="/staff/ui.js"></script><script src="/staff/area.js"></script>
 <script src="/staff/leads-actions.js"></script>
 <script src="/staff/leads-table.js"></script>
+<script src="/staff/dashboard-parts.js"></script>
 <script src="/staff/dashboard.js"></script>
 </body>
 </html>

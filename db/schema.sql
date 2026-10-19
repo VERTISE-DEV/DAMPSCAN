@@ -1229,3 +1229,21 @@ alter table jobs add column if not exists report_at timestamptz;
 alter table jobs add column if not exists report_late_alerted_at timestamptz;
 -- One "surveyed, not paid in full" alert per survey, with its buttons.
 alter table jobs add column if not exists unpaid_alerted_at timestamptz;
+
+-- Competitor watch (lib/competitors.js): every page in a competitor's
+-- sitemap, and when it was first seen, so a month's new pages can be named.
+create table if not exists competitor_pages (
+  host        text not null,
+  url         text not null,
+  title       text,
+  first_seen  timestamptz not null default now(),
+  last_seen   timestamptz not null default now(),
+  primary key (host, url)
+);
+create table if not exists competitor_checks (
+  host        text not null,
+  checked_at  timestamptz not null default now(),
+  pages       integer not null default 0,
+  new_pages   integer not null default 0,
+  error       text
+);

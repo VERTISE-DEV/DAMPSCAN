@@ -101,6 +101,13 @@ test('the assistant\'s changes are marked, and ntfy being down never fails a sav
   const r = await callRoute(quoted, scope, { method: 'POST', url: '/api/admin/quoted', body: { op: 'qline', id: job.id, kind: 'materials', description: 'Tiles', costPence: P(1000) } });
   assert.equal(r.status, 200);
   assert.deepEqual(said(), ['Added a £1,000 quote line to Priya.']);
+  /* A second change to the same job within the minute replaces the held alert with both. */
+  const r2 = await callRoute(quoted, scope, { method: 'POST', url: '/api/admin/quoted', body: { op: 'cost', id: job.id, label: 'Skip', amountPence: P(260) } });
+  assert.equal(r2.status, 200);
+  const last = pushes[pushes.length - 1].body;
+  assert.equal(last.sequence_id, `job-${job.id}`);
+  assert.equal(last.delay, '1m');
+  assert.equal(last.message, 'Added a £1,000 quote line to Priya. Added a £260 cost to Priya.');
   ntfyDown = true;
   assert.equal((await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip', amountPence: P(260) })).statusCode, 200);
 });

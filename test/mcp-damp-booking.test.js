@@ -222,3 +222,10 @@ test('a survey whose day has passed with nothing paid is on the paid-in-full lis
   const r = await callTool(await owners(), { name: 'still_to_pay', arguments: {} });
   assert.equal(r.structuredContent.count, 1, JSON.stringify(r.structuredContent));
 });
+
+test('a postcode being corrected still finds the job by the name', async () => {
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const r = await callTool(await owners(), { name: 'update_client', arguments: { id: 'Nicholls ME14 2RP', postcode: 'ME14 2RP' } });
+  assert.equal(r.isError, false, JSON.stringify(r.content));
+  assert.equal((await pool.query('select customer_postcode from jobs')).rows[0].customer_postcode, 'ME14 2RP');
+});

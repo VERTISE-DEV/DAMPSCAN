@@ -82,8 +82,8 @@ test('a cost added on the screen is one alert naming who, the job and the amount
   assert.equal(pushes.length, 1, 'the new job has its own alert, not a second one');
   pushes = [];
   await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip for Priya Sharma', amountPence: P(260) });
-  assert.deepEqual(said(), ['Tom added a £260 cost to Priya, BR1.']);
-  assert.equal(pushes[0].body.title, 'Tom made a change: Verge Roofing');
+  assert.deepEqual(said(), ['Added a £260 cost to Priya, BR1.']);
+  assert.equal(pushes[0].body.title, 'Verge Roofing: Tom');
   assert.equal(pushes[0].body.priority, 3, 'staff activity shows as a normal alert');
   assert.deepEqual(pushes[0].body.tags, ['receipt']);
   assert.equal(pushes[0].body.click, `https://dampscan.co.uk/staff/quoted.html?area=roofing#job-${job.id}`);
@@ -100,7 +100,7 @@ test('the assistant\'s changes are marked, and ntfy being down never fails a sav
   const scope = { ...(await scopeFor({ person: true, sub: tom.id })), viaAssistant: true };
   const r = await callRoute(quoted, scope, { method: 'POST', url: '/api/admin/quoted', body: { op: 'qline', id: job.id, kind: 'materials', description: 'Tiles', costPence: P(1000) } });
   assert.equal(r.status, 200);
-  assert.deepEqual(said(), ['Tom (via ChatGPT) added a £1,000 quote line to Priya.']);
+  assert.deepEqual(said(), ['Added a £1,000 quote line to Priya.']);
   ntfyDown = true;
   assert.equal((await post(tom.cookie, { op: 'cost', id: job.id, label: 'Skip', amountPence: P(260) })).statusCode, 200);
 });

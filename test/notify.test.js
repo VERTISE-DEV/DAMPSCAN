@@ -38,6 +38,7 @@ globalThis.fetch = async (url, init) => {
 
 const login = (await import('../lib/routes/auth/login.js')).default;
 const quoted = (await import('../lib/routes/admin/quoted.js')).default;
+process.env.MORNING_DIGEST = 'on';
 const digest = (await import('../lib/routes/cron/digest.js')).default;
 
 const P = (pounds) => Math.round(pounds * 100);

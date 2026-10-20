@@ -58,7 +58,19 @@
     }
   }
 
+  /* The card's to-dos come from the same job view the Today pop-up uses. */
+  async function loadTodos(c) {
+    var mount = el('c-todos');
+    if (!mount || !global.DSTODOS) return;
+    mount.textContent = '';
+    try {
+      var data = await U.get('/api/admin/calendar?view=job&id=' + c.id);
+      global.DSTODOS.render(mount, c.id, (data.job && data.job.todos) || [], function () { loadTodos(c); });
+    } catch (e) { mount.appendChild(U.node('p', 'panel-note', 'Could not load the to-dos.')); }
+  }
+
   function fillDialog(c) {
+    loadTodos(c);
     el('c-name').textContent = c.name || 'No name';
     el('c-sub').textContent = c.survey.label + ' survey' + (c.survey.pricePence == null ? '' : ', ' + U.money(c.survey.pricePence))
       + (c.survey.remedialPence ? ' plus ' + U.money(c.survey.remedialPence) + ' remedial' : '')

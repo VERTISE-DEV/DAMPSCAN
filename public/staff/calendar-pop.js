@@ -153,21 +153,10 @@
   }
 
   function todos(j) {
-    if (!j.todos.length) return;
-    var td = section('To-dos for this job');
-    j.todos.forEach(function (x) {
-      var l = U.node('label', 'sheet-tick');
-      var box = document.createElement('input');
-      box.type = 'checkbox';
-      box.addEventListener('change', async function () {
-        await U.send('/api/admin/todos', { op: 'done', id: x.id });
-        W.offerUndo('To-do ticked off.', function () { return U.send('/api/admin/todos', { op: 'reopen', id: x.id }); }, changed);
-        changed();
-      });
-      l.appendChild(box);
-      l.appendChild(U.node('span', null, x.text + (x.forName ? ' (' + x.forName + ')' : '')));
-      td.appendChild(l);
-    });
+    var td = section('To-dos for this customer');
+    var box = U.node('div');
+    td.appendChild(box);
+    global.DSTODOS.render(box, j.id, j.todos, changed);
   }
 
   function cap(x) { return x ? x.charAt(0).toUpperCase() + x.slice(1) : x; }

@@ -145,3 +145,8 @@ Any touch screen counts, so a landscape iPad Pro (wider than 1024) does too. */
   .top .top-end .btn{padding:0 12px;font-size:13px}
 }
 .sheet-car{width:100%;margin-top:8px;font:inherit;cursor:pointer}
+/* A job's to-dos (job-todos.js). */
+.todo-add{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.todo-add input[type=text]{flex:1 1 200px;min-width:0;font-size:16px}
+.todo-add select{font-size:16px}
+.todo-tag{font-size:11px;white-space:nowrap}

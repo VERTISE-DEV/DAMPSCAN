@@ -82,6 +82,9 @@ enforces the mechanical ones in CI.
   whose day has come; booked ahead, paid and still to pay shown apart. The
   hand form is folded away (ChatGPT books jobs now).
 - Records page celebrates all-time damp stats; money only for managers.
+- To-dos linked to a customer show as a small "N to-dos" tag on the timeline
+  and board cards, and as a list with tick boxes and an add box in the Today
+  pop-up and the client card (`public/staff/job-todos.js`).
 - Ronnie alone gets the Send to car button.
 
 ## ChatGPT connector (`/api/admin/mcp`)

@@ -104,6 +104,7 @@
       top.insertBefore(cd, top.lastChild);
       tick(cd);
     }
+    if (s.todoCount && global.DSTODOS) c.appendChild(global.DSTODOS.tag(s.todoCount));
     /* Phone and email on the card itself, so a call is one tap from the board. */
     if (s.phone || s.email) {
       var ct = U.node('p', 'card-meta card-contact');

@@ -249,3 +249,16 @@ test('job totals count damp surveys done apart from those booked ahead, and reco
   assert.equal((await records(['ati-london'], false)).valuePence, undefined, 'no money without managing');
   assert.equal(await records(['roofing'], true), null);
 });
+
+test('a to-do added against a job shows as a count on the board and in the pop-up', async () => {
+  const todosRoute = (await import('../lib/routes/admin/todos.js')).default;
+  const surveysRoute = (await import('../lib/routes/admin/surveys.js')).default;
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  const id = Number((await pool.query('select id from jobs')).rows[0].id);
+  const add = await callRoute(todosRoute, await owners(), { method: 'POST', url: '/api/admin/todos', body: { op: 'add', text: 'Chase the agent for keys', jobId: id } });
+  assert.equal(add.status, 200, JSON.stringify(add.data));
+  assert.equal(Number((await pool.query('select job_id from todos')).rows[0].job_id), id);
+  const board = (await callRoute(surveysRoute, await owners(), { url: '/api/admin/surveys?area=damp' })).data;
+  const card = JSON.stringify(board).match(/"todoCount":(\d+)/);
+  assert.equal(card && card[1], '1');
+});

@@ -70,6 +70,7 @@
     /* Survey type and who is going, so the day reads at a glance. */
     var kind = [e.surveyLabel, e.surveyor && e.surveyor.charAt(0).toUpperCase() + e.surveyor.slice(1)].filter(Boolean).join(' · ');
     if (kind) main.appendChild(U.node('span', 'tl-biz tl-kind', kind));
+    if (e.todoCount && global.DSTODOS) main.appendChild(global.DSTODOS.tag(e.todoCount));
     if (!compact && e.phone) main.appendChild(U.node('span', 'tl-biz', e.phone));
     main.appendChild(U.node('span', 'tl-biz', W.NAME[e.site] + (e.status && e.kind === 'job' ? ' · ' + e.status : '')));
     b.appendChild(main);

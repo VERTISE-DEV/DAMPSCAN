@@ -1,0 +1,99 @@
+# DampScan staff area and sites: the rules
+
+Read this before changing anything. It records how the four businesses run
+today and the owners' decisions behind it. A change must keep every rule
+here unless the owner (Scott) asks for a different one in so many words; when
+he does, update this file in the same change. `test/guardrails.test.js`
+enforces the mechanical ones in CI.
+
+## The businesses
+- **DampScan** (dampscan.co.uk, Kent): damp survey and report only,
+  independent, no remedial work sold. Public address is "East Malling, Kent
+  ME19" only; never publish the street (service-area Google profile).
+- **ATi Damp Survey** (atidampsurvey.co.uk, London). Runs Google Ads.
+- **Verge Roofing** (vergeroofing.com) and **CoolRight** (coolright.co.uk):
+  quoted trades, their own pipelines. Each business keeps its own workflow;
+  never merge pipelines.
+- Never touch, merge with or send to Surveymate. Resend is Surveymate's;
+  nothing here sends email through it unless the owner says otherwise.
+- Nothing is ever sent to a customer automatically: messages are words with
+  tap-to-send links, emails are drafts the person checks and sends.
+
+## People and access (enforced on the server)
+- Owners: Scott, Tom, Ben. Ben and Tom have no logins of their own yet and
+  use the owners' code; jobs and to-dos for them go on the owners' list
+  marked "For Ben:" / "For Tom:". Surveyors: scott, tom, ben, ronnie.
+- Work level (Ronnie): sees all jobs in his businesses, never any money;
+  may only mark Surveyed and Report sent and attach a report; contact details
+  only on jobs he surveys or is assigned; ChatGPT read-only plus those marks;
+  no ntfy.
+- Every filter lives on the server (`lib/figures.js`, `lib/work-only.js`),
+  never only in the page.
+
+## Hard technical limits
+- Vercel Hobby: at most 12 files under `api/`. New endpoints go into an
+  existing dispatcher (`api/admin/[action].js`, `api/cron/[task].js`).
+- Vercel crons run once a day only (06:30 digest run, 17:00 evening run).
+  Anything hourly goes through `.github/workflows/report-due.yml`.
+- `db/schema.sql` is re-applied on every merge: every statement idempotent
+  (`if not exists`, `on conflict`, guarded `do` blocks). Add new tables to the
+  list in `test/migrate.test.js`.
+- The repo is public: no secrets, keys or tokens in code, ever. Use env vars.
+- Never store raw IPs (hash with IP_SALT).
+
+## Writing code
+- British English. No em dashes anywhere (CI checks). Files under 300 lines;
+  split into a sibling module instead. Comments say why, not what. Match the
+  surrounding style: plain DOM in `public/staff`, no framework, no build step.
+- No model names in commits, PRs or code.
+- Every staff page must work on iPhone, iPad and desktop: no sideways scroll,
+  dialogs inside the viewport, 44px tap targets, 16px inputs.
+- Run `TEST_DATABASE_URL=postgresql://dampscan:dampscan@127.0.0.1:5432/dampscan npm test`
+  (mass failures mean local Postgres died: `service postgresql restart`),
+  `npm run build:check`, and the em dash check before pushing.
+- Ship through a PR to main, wait for CI to pass, then merge. Never merge red.
+
+## Alerts (ntfy)
+- Customer details in alert text: first name and postcode district only.
+- Off by the owner's choice: the 06:30 "Good morning" digest push
+  (`MORNING_DIGEST=on` restores) and the evening "Tomorrow" push
+  (`EVENING_DIARY=on`).
+- Change alerts say only what happened ("Booked Kim for Tue 20 Oct at
+  09:00."); title is the business, plus a colleague's first name when it was
+  them. Never "Owners", never "via ChatGPT". Changes to one job within a
+  minute are one alert (per-job ntfy sequence id, 1 minute delay).
+- On: new enquiries, report overdue (24h after survey end, with Report sent
+  button), survey not paid in full (morning after, with Paid/Deposit
+  buttons), overdue invoices, half-finished forms, to-dos, competitor watch.
+- Alert buttons use signed, 3-day tickets (`lib/quick-action.js`).
+
+## Staff area behaviour the owners chose
+- Today is a vertical week timeline; jobs without a confirmed date sit in
+  "Not booked in yet", never on today. Below it only: Collect deposit,
+  Collect paid in full, Send survey report (and CoolRight warranties).
+- A damp survey whose day has passed with nothing paid is under Collect paid
+  in full even while still "booked".
+- Timeline cards show survey type and surveyor; cards show phone and email.
+- To-do list: newest first by when it came in, each with how long it has
+  been waiting.
+- Survey cards show a small report countdown (24h from survey end, red when
+  over) until the report is ticked sent.
+- Jobs page: totals are ATi and DampScan surveys only; earnings count surveys
+  whose day has come; booked ahead, paid and still to pay shown apart. The
+  hand form is folded away (ChatGPT books jobs now).
+- Records page celebrates all-time damp stats; money only for managers.
+- Ronnie alone gets the Send to car button.
+
+## ChatGPT connector (`/api/admin/mcp`)
+- "Strictly ChatGPT, no extra parts on the site" for assistant features.
+- Tools take the customer's words (name and/or postcode), never job numbers.
+  The version hash follows the tool list; tell the owner to refresh the
+  connector after any tool change. Keep `lib/mcp/guide-tools.js` (every tool
+  listed) and the instructions in `lib/routes/admin/mcp.js` in step.
+- Changes read back and wait for a yes. A failed change goes on the caller's
+  to-do list.
+
+## SEO
+- Town pages use the place names people type, for both "damp survey" and
+  "damp proofing" where relevant. Do not add prices to titles. DampScan sells
+  survey and report only, so its pages never promise remedial work.

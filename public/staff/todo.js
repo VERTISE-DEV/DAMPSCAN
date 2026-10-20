@@ -15,8 +15,19 @@
     return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
   }
 
+  /* How long it has been waiting: "Waiting 3 days", "Waiting 5 hours". */
+  function waiting(iso) {
+    var mins = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000));
+    if (mins < 60) return 'Waiting ' + mins + ' min';
+    var hours = Math.round(mins / 60);
+    if (hours < 24) return 'Waiting ' + hours + (hours === 1 ? ' hour' : ' hours');
+    var days = Math.floor(hours / 24);
+    return 'Waiting ' + days + (days === 1 ? ' day' : ' days');
+  }
+
   function meta(t) {
     var bits = [];
+    if (!t.doneAt) bits.push(waiting(t.createdAt));
     if (state.view === 'set' || state.view === 'done') bits.push('For ' + t.forName);
     bits.push((t.source === 'failed' ? 'Assistant could not do this for ' : 'Set by ') + t.setBy + ', ' + U.when(t.createdAt));
     if (t.site) bits.push(NAME[t.site] || t.site);

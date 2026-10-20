@@ -22,7 +22,7 @@
   var AREAS = {
     damp: {
       name: 'ATi & DampScan', sites: ['dampscan', 'ati-london'], books: 'damp',
-      tabs: [['Surveys', 'surveys.html'], ['Day sheet', 'day.html'], ['Agents', 'agents.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html']]
+      tabs: [['Surveys', 'surveys.html'], ['Day sheet', 'day.html'], ['Agents', 'agents.html'], ['Leads', 'dashboard.html'], ['Jobs', 'jobs.html'], ['Clients', 'clients.html'], ['Insights', 'insights.html'], ['Records', 'records.html']]
     },
     roofing: {
       name: 'Verge Roofing', sites: ['roofing'], books: 'roofing',

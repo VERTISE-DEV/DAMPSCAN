@@ -42,13 +42,18 @@
       d.appendChild(U.node('span', 'v', U.money(totals.pay[p.key])));
       mount.appendChild(d);
     });
-    [['Jobs', U.num(totals.jobs)],
-      ['Survey value', U.money(totals.surveyValuePence)],
-      ['Remedial value', U.money(totals.remedialValuePence)]].forEach(function (pair) {
-      var d = U.node('div', 'tile');
-      d.appendChild(U.node('span', 'k', pair[0]));
-      d.appendChild(U.node('span', 'v', pair[1]));
-      mount.appendChild(d);
+    var work = el('tiles-work');
+    work.textContent = '';
+    [['Surveys done', U.num(totals.done), U.money(totals.surveyValuePence)],
+      ['Paid in full', U.num(totals.paid), null],
+      ['Still to be paid', U.num(totals.unpaid), totals.unpaid ? U.money(totals.unpaidValuePence) : null, totals.unpaid ? 'is-warn' : ''],
+      ['Booked ahead', U.num(totals.bookedAhead), totals.bookedAhead ? U.money(totals.aheadValuePence) : null],
+      ['Remedial won', U.money(totals.remedialValuePence), null]].forEach(function (t) {
+      var d = U.node('div', 'tile' + (t[3] ? ' ' + t[3] : ''));
+      d.appendChild(U.node('span', 'k', t[0]));
+      d.appendChild(U.node('span', 'v', t[1]));
+      if (t[2]) d.appendChild(U.node('span', 's', t[2]));
+      work.appendChild(d);
     });
 
     var s = state.settings;
@@ -56,32 +61,36 @@
       + (s.leadBp / 100) + '% lead fee to ' + name(s.leadEarner)
       + ' on the post-tax figure, then the surveyor fee, then the remainder '
       + 'split 50/50 between ' + name(s.partners[0]) + ' and ' + name(s.partners[1])
-      + '. Cancelled jobs are listed but not counted. Remedial work pays the lead '
+      + '. Earnings count surveys whose day has come; booked ahead is shown on its own. Cancelled jobs are listed but not counted. Remedial work pays the lead '
       + 'fee only; materials and labour are settled offline.';
   }
 
+  /* A row per job that reads on a phone: who, when, what, and the split. */
   function renderJobs(onEdit) {
-    U.table(el('jobs'), [
-      { label: 'Date', get: function (j) { return String(j.jobDate).slice(0, 10); } },
-      { label: 'Customer', get: function (j) { return j.customerName || 'Not given'; } },
-      { label: 'Survey', get: function (j) { return label(j.surveyType); } },
-      { label: 'Price', numeric: true, get: function (j) { return U.money(j.surveyPricePence); } },
-      { label: 'Remedial', numeric: true, get: function (j) { return j.remedialPence ? U.money(j.remedialPence) : ''; } },
-      { label: 'Surveyor', get: function (j) { return name(j.surveyor); } },
-      { label: 'Scott', numeric: true, get: function (j) { return U.money(j.pay.scott); } },
-      { label: 'Tom', numeric: true, get: function (j) { return U.money(j.pay.tom); } },
-      { label: 'Ben', numeric: true, get: function (j) { return U.money(j.pay.ben); } },
-      { label: 'Status', get: function (j) {
-        var tone = j.status === 'cancelled' ? ' tag--muted' : j.status === 'completed' ? ' tag--good' : '';
-        return U.node('span', 'tag' + tone, j.status);
-      } },
-      { label: '', get: function (j) {
-        var edit = U.node('button', 'pill', 'Edit');
-        edit.type = 'button';
-        edit.addEventListener('click', function () { onEdit(j); });
-        return edit;
-      } }
-    ], state.jobs, { empty: 'No jobs in this period.' });
+    var mount = el('jobs');
+    mount.textContent = '';
+    if (!state.jobs.length) { mount.appendChild(U.node('p', 'empty', 'No jobs in this period.')); return; }
+    var list = U.node('ul', 'jobs-list');
+    state.jobs.forEach(function (j) {
+      var li = U.node('li', 'jobs-row' + (j.status === 'cancelled' ? ' is-cancelled' : ''));
+      var top = U.node('div', 'jobs-top');
+      top.appendChild(U.node('span', 'jobs-who', (j.customerName || 'Not given') + (j.customerPostcode ? ', ' + j.customerPostcode : '')));
+      top.appendChild(U.node('span', 'jobs-price', U.money(j.surveyPricePence) + (j.remedialPence ? ' + ' + U.money(j.remedialPence) : '')));
+      li.appendChild(top);
+      var day = new Date(String(j.jobDate).slice(0, 10) + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+      li.appendChild(U.node('p', 'jobs-meta', [day, label(j.surveyType), name(j.surveyor), j.site === 'ati-london' ? 'ATi' : 'DampScan'].join(' · ')));
+      var foot = U.node('div', 'jobs-foot');
+      var tone = j.status === 'cancelled' ? ' tag--muted' : j.status === 'completed' || j.status === 'paid' ? ' tag--good' : '';
+      foot.appendChild(U.node('span', 'tag' + tone, j.status));
+      foot.appendChild(U.node('span', 'jobs-split', ['Scott ' + U.money(j.pay.scott), 'Tom ' + U.money(j.pay.tom), 'Ben ' + U.money(j.pay.ben)].join(' · ')));
+      var edit = U.node('button', 'pill', 'Edit');
+      edit.type = 'button';
+      edit.addEventListener('click', function () { onEdit(j); });
+      foot.appendChild(edit);
+      li.appendChild(foot);
+      list.appendChild(li);
+    });
+    mount.appendChild(list);
   }
 
   /* ---------- loading ---------- */

@@ -229,3 +229,23 @@ test('a postcode being corrected still finds the job by the name', async () => {
   assert.equal(r.isError, false, JSON.stringify(r.content));
   assert.equal((await pool.query('select customer_postcode from jobs')).rows[0].customer_postcode, 'ME14 2RP');
 });
+
+test('job totals count damp surveys done apart from those booked ahead, and records celebrate them', async () => {
+  const { jobTotals, records } = await import('../lib/job-totals.js');
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, job_date: '2026-09-01' } });
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, customer_name: 'Ahead Person', job_date: '2099-01-01' } });
+  await pool.query(`update jobs set paid_at = now() where customer_name = 'John Nicholls'`);
+  const t = await jobTotals(['ati-london', 'roofing'], `'-infinity'::timestamptz`);
+  assert.equal(t.done, 1);
+  assert.equal(t.bookedAhead, 1);
+  assert.equal(t.paid, 1);
+  assert.equal(t.unpaid, 0);
+  assert.equal(t.surveyValuePence, 21500);
+  const r = await records(['ati-london'], true);
+  assert.equal(r.surveys, 1);
+  assert.equal(r.milestones[0].survey, 1);
+  assert.equal(r.nextMilestone.at, 10);
+  assert.equal(r.surveyors[0].name, 'Tom');
+  assert.equal((await records(['ati-london'], false)).valuePence, undefined, 'no money without managing');
+  assert.equal(await records(['roofing'], true), null);
+});

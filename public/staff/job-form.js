@@ -125,7 +125,7 @@
     el('j-save').textContent = job ? 'Update job' : 'Save job';
     el('job-error').classList.remove('is-shown');
     renderPreview();
-    if (job) el('job-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (job) { el('add-panel').open = true; el('job-form').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   }
 
   function fail(id, message) {

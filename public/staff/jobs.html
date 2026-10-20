@@ -55,11 +55,9 @@
 <main class="wrap">
   <h1 class="sr-only">Jobs and earnings</h1>
   <div class="ranges" role="group" aria-label="Site" style="margin-bottom:10px">
-    <button class="pill" data-site="" aria-pressed="true">All brands</button>
+    <button class="pill" data-site="" aria-pressed="true">Both brands</button>
     <button class="pill" data-site="dampscan" aria-pressed="false">DampScan, Kent</button>
     <button class="pill" data-site="ati-london" aria-pressed="false">ATI, London</button>
-    <button class="pill" data-site="roofing" aria-pressed="false">Verge Roofing</button>
-    <button class="pill" data-site="ac" aria-pressed="false">CoolRight</button>
   </div>
 
   <div class="ranges" role="group" aria-label="Date range">
@@ -73,13 +71,15 @@
 
   <div id="content" hidden>
     <section class="panel" aria-labelledby="h-earnings">
-      <h2 id="h-earnings">Earnings</h2>
+      <h2 id="h-earnings">Earnings from surveys done</h2>
       <div class="tiles" id="tiles"></div>
+      <h3 class="jobs-sub">The surveys</h3>
+      <div class="tiles" id="tiles-work"></div>
       <p class="panel-note" id="basis"></p>
     </section>
 
-    <section class="panel" aria-labelledby="h-add">
-      <h2 id="h-add">Add a job</h2>
+    <details class="panel jobs-fold" id="add-panel">
+      <summary><h2 id="h-add">Add or edit a job by hand</h2><span class="panel-note">ChatGPT does this for you now; this is here if you need it.</span></summary>
       <form id="job-form" novalidate>
         <input type="hidden" id="j-id" />
         <div class="jgrid">
@@ -157,7 +157,7 @@
           <button type="button" class="btn btn--ghost btn--sm" id="j-reset">Clear</button>
         </div>
       </form>
-    </section>
+    </details>
 
     <section class="panel" aria-labelledby="h-jobs">
       <h2 id="h-jobs">Jobs</h2>
@@ -167,8 +167,8 @@
       <div id="jobs"></div>
     </section>
 
-    <section class="panel" aria-labelledby="h-rates">
-      <h2 id="h-rates">Rate card</h2>
+    <details class="panel jobs-fold">
+      <summary><h2 id="h-rates">Rate card</h2></summary>
       <p class="panel-note">Changes apply to jobs saved from now on. Jobs already
         recorded keep the rates they were agreed at, so nothing already paid moves.</p>
       <form id="rates-form" novalidate>
@@ -188,7 +188,7 @@
           <button type="submit" class="btn btn--ghost btn--sm">Save rate card</button>
         </div>
       </form>
-    </section>
+    </details>
   </div>
 </main>
 

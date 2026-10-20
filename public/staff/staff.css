@@ -321,3 +321,34 @@ td.details small{display:block;color:var(--muted-2);font-size:12px;margin-top:2p
 .dash-more summary{cursor:pointer;font-weight:600;color:var(--muted);padding:8px 0;min-height:44px;display:flex;align-items:center}
 .dash-more[open] summary{margin-bottom:10px}
 #tiles{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+
+/* Jobs page: the hand form and rate card fold away; jobs read as rows. */
+.jobs-sub{margin:22px 0 10px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+.tile.is-warn{border-color:#b45309}
+.jobs-fold>summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:4px;min-height:44px;justify-content:center}
+.jobs-fold>summary::-webkit-details-marker{display:none}
+.jobs-fold>summary h2{margin:0}
+.jobs-fold>summary h2::after{content:' +';color:var(--muted)}
+.jobs-fold[open]>summary h2::after{content:' \2212'}
+.jobs-fold[open]>summary{margin-bottom:14px}
+.jobs-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.jobs-row{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--navy)}
+.jobs-row.is-cancelled{opacity:.55}
+.jobs-top,.jobs-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 10px;align-items:center}
+.jobs-who{font-weight:700;min-width:0;overflow-wrap:anywhere}
+.jobs-price{font-weight:700;font-variant-numeric:tabular-nums}
+.jobs-meta{margin:4px 0 8px;font-size:13px;color:var(--muted)}
+.jobs-split{font-size:13px;color:var(--muted-2);font-variant-numeric:tabular-nums;flex:1;min-width:0}
+
+/* Records: the celebration page. */
+.records-title{font-size:clamp(26px,4vw,34px);margin:6px 0 4px}
+.records-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:28px 16px;margin:14px 0;border-radius:16px;background:var(--accent-soft);border:1px solid var(--accent-ring)}
+.records-big{font-size:clamp(56px,14vw,96px);font-weight:800;line-height:1;letter-spacing:-.03em}
+.records-label{font-size:17px;font-weight:600}
+.records-sub{color:var(--muted)}
+.records-next{margin-top:6px;font-weight:700;color:var(--accent)}
+.records-board,.records-miles{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.records-board li.is-top .dash-bar-name{font-size:17px}
+.records-miles li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.records-miles li.is-next{opacity:.7;border-bottom-style:dashed}
+.records-mile{font-weight:700}

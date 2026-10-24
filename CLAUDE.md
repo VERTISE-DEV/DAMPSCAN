@@ -81,6 +81,9 @@ enforces the mechanical ones in CI.
 - Jobs page: totals are ATi and DampScan surveys only; earnings count surveys
   whose day has come; booked ahead, paid and still to pay shown apart. The
   hand form is folded away (ChatGPT books jobs now).
+- Insights opens with all time: total earned, what every enquiry booked
+  would have made, and what every unique visitor booked would have made,
+  both at the average job won (managers only, `lib/potential.js`).
 - Records page celebrates all-time damp stats; money only for managers.
 - To-dos linked to a customer show as a small "N to-dos" tag on the timeline
   and board cards, and as a list with tick boxes and an add box in the Today

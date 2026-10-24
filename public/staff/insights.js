@@ -141,6 +141,17 @@
   }
 
   function render(d) {
+    var a = d.allTime;
+    el('p-alltime').hidden = !a;
+    if (a) {
+      tiles(el('alltime'), [
+        ['Total earned', U.money(a.earnedPence), 'money in, all time', true],
+        ['If every enquiry had booked', U.money(a.everyEnquiryPence), U.num(a.enquiries) + ' enquiries' + (a.bookingRate != null ? ', ' + a.bookingRate + '% booked now' : ''), true],
+        ['If every visitor had booked', U.money(a.everyVisitorPence), U.num(a.visitors) + ' unique visitors to the website'],
+        ['Average job', U.money(a.averageJobPence), U.num(a.jobsWon) + ' jobs won']
+      ]);
+      el('alltime-note').textContent = 'The two "if" figures price every missed chance at the average job won. They are ceilings to aim at, not forecasts.';
+    }
     el('p-money').hidden = !d.money;
     if (d.money) {
       var t = d.money.thisMonth;

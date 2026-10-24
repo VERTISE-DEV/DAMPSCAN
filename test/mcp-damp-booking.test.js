@@ -277,4 +277,10 @@ test('all time: earned, and what every enquiry and every visitor would have made
   assert.equal(a.visitors, 3);
   assert.equal(a.everyVisitorPence, 64500);
   assert.equal(a.bookingRate, 50);
+  /* A second survey with only its deposit in adds that half, and a matched
+     bank payment on the paid one is not counted twice. */
+  await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, customer_name: 'Dep Only' } });
+  await pool.query(`update jobs set deposit_paid_at = now() where customer_name = 'Dep Only'`);
+  await pool.query(`insert into job_payments (job_id, amount_pence, paid_on, label) select id, 21500, current_date, 'balance' from jobs where customer_name = 'John Nicholls'`);
+  assert.equal((await allTime(['ati-london'])).earnedPence, 21500 + 10750);
 });

@@ -80,7 +80,9 @@ let D;
 before(async () => { await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8')); });
 beforeEach(async () => {
   await pool.query('truncate leads, jobs, people, audit, notifications, todos, job_photos, weather_cache restart identity cascade');
-  D = (await pool.query(`select d::text as today, (d + 1)::text as tomorrow, (d + 3)::text as soon, (d - 6)::text as past from (select (now() at time zone 'Europe/London')::date as d) x`)).rows[0];
+  D = (await pool.query(`select d::text as today, (d + 1)::text as tomorrow, (d + 3)::text as soon, (d - 6)::text as past,
+    /* The week board runs Monday to Saturday, so a Sunday tomorrow is not on it. */
+    (d + case when extract(dow from d + 1) = 0 then 2 else 1 end)::text as workday from (select (now() at time zone 'Europe/London')::date as d) x`)).rows[0];
   calls = [];
   down = false;
 });
@@ -155,23 +157,23 @@ test('a planner cost is one cost line, updated in place and removed when cleared
 
 test('the week board places each working day, moves a start with Undo, and survives the forecast failing', async () => {
   const boss = await person('Tom Roofer', 'tom-code', ['roofing']);
-  const id = await job(boss, { status: 'booked', jobDate: D.tomorrow });
+  const id = await job(boss, { status: 'booked', jobDate: D.workday });
   await roof(boss, { op: 'plan', id, expectedDays: 2 });
-  const wk = (await api(boss, 'GET', `/api/admin/roofing?view=week&from=${D.tomorrow}`)).json();
+  const wk = (await api(boss, 'GET', `/api/admin/roofing?view=week&from=${D.workday}`)).json();
   const mine = wk.jobs.find((j) => j.id === id);
   assert.ok(mine, JSON.stringify(wk));
   assert.equal(wk.days.length, 6, 'Monday to Saturday');
-  assert.ok(mine.days.includes(D.tomorrow));
+  assert.ok(mine.days.includes(D.workday));
   assert.ok(mine.weather.length && mine.weather[0].warn === 'rain', 'an 80% chance of rain is a warning');
   assert.ok(mine.badges.includes('weather'));
   assert.equal((await pool.query('select count(*)::int as n from weather_cache')).rows[0].n, 1, 'the forecast is kept');
   const asked = calls.length;
-  await api(boss, 'GET', `/api/admin/roofing?view=week&from=${D.tomorrow}`);
+  await api(boss, 'GET', `/api/admin/roofing?view=week&from=${D.workday}`);
   assert.equal(calls.length, asked, 'a fresh forecast is not fetched again');
 
   const moved = await roof(boss, { op: 'date', id, date: D.soon });
   assert.equal(moved.card.jobDate, D.soon);
-  assert.equal((await roof(boss, moved.undo)).card.jobDate, D.tomorrow, 'the move undoes');
+  assert.equal((await roof(boss, moved.undo)).card.jobDate, D.workday, 'the move undoes');
 
   await pool.query('truncate weather_cache');
   down = true;

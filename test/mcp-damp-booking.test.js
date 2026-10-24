@@ -41,7 +41,7 @@ before(async () => {
   await pool.query(await readFile(new URL('../db/schema.sql', import.meta.url), 'utf8'));
   await pool.query(`insert into job_rates (key, label, price_pence, surveyor_fee_pence, position) values ('localised-basement', 'Localised Basement', 25000, 11000, 5) on conflict (key) do nothing`);
 });
-beforeEach(async () => { await pool.query('truncate jobs, leads, todos, audit, notifications, competitor_pages, competitor_checks restart identity cascade'); });
+beforeEach(async () => { await pool.query('truncate jobs, leads, todos, audit, notifications, competitor_pages, competitor_checks, events restart identity cascade'); });
 after(async () => { await pool.end(); });
 
 test('the owners\' failed ATi booking now goes through with everything said', async () => {
@@ -261,4 +261,20 @@ test('a to-do added against a job shows as a count on the board and in the pop-u
   const board = (await callRoute(surveysRoute, await owners(), { url: '/api/admin/surveys?area=damp' })).data;
   const card = JSON.stringify(board).match(/"todoCount":(\d+)/);
   assert.equal(card && card[1], '1');
+});
+
+test('all time: earned, and what every enquiry and every visitor would have made at the average job', async () => {
+  const { allTime } = await import('../lib/potential.js');
+  await callTool(await owners(), { name: 'create_job', arguments: ASKED });
+  await pool.query(`update jobs set paid_at = now()`);
+  await pool.query(`insert into leads (session_id, site, stage, first_name, email, postcode) values (gen_random_uuid(), 'ati-london', 'complete', 'Lost', 'l@example.com', 'SW2 2JX')`);
+  for (let i = 0; i < 3; i++) await pool.query(`insert into events (session_id, site, type) values (gen_random_uuid(), 'ati-london', 'page_view')`);
+  const a = await allTime(['ati-london']);
+  assert.equal(a.earnedPence, 21500);
+  assert.equal(a.averageJobPence, 21500);
+  assert.equal(a.enquiries, 2);
+  assert.equal(a.everyEnquiryPence, 43000);
+  assert.equal(a.visitors, 3);
+  assert.equal(a.everyVisitorPence, 64500);
+  assert.equal(a.bookingRate, 50);
 });

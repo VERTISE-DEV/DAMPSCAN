@@ -277,6 +277,10 @@ test('all time: earned, and what every enquiry and every visitor would have made
   assert.equal(a.visitors, 3);
   assert.equal(a.everyVisitorPence, 64500);
   assert.equal(a.bookingRate, 50);
+  /* The same person enquiring online, then booked by phone with no link, is
+     not a missed enquiry. */
+  await pool.query(`insert into leads (session_id, site, stage, first_name, email, postcode) values (gen_random_uuid(), 'ati-london', 'complete', 'John', 'JSNICHOLLS@gmail.com', 'SW2 2JX')`);
+  assert.equal((await allTime(['ati-london'])).enquiries, 2, 'matched by email');
   /* A second survey with only its deposit in adds that half, and a matched
      bank payment on the paid one is not counted twice. */
   await callTool(await owners(), { name: 'create_job', arguments: { ...ASKED, customer_name: 'Dep Only' } });

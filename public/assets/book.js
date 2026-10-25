@@ -129,6 +129,19 @@
     return el ? (el.value || '').trim() : '';
   };
 
+  /* Buyers on a deadline (damp sites): the date and the agent ride in the
+     notes, so the card and the assistant see them with the enquiry. */
+  const buyerBox = document.getElementById('f-buyer');
+  if (buyerBox) buyerBox.addEventListener('change', () => { document.getElementById('f-buyer-fields').hidden = !buyerBox.checked; });
+  function withBuyer(notes) {
+    if (!buyerBox || !buyerBox.checked) return notes;
+    const by = val('f-deadline');
+    const nice = by ? new Date(by + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }) : '';
+    const line = ['Buying this property, report needed quickly' + (nice ? ' (by ' + nice + ')' : '') + '.',
+      val('f-agent') ? 'Agent: ' + val('f-agent') + (val('f-agent-phone') ? ', ' + val('f-agent-phone') : '') + '.' : ''].filter(Boolean).join(' ');
+    return [line, notes].filter(Boolean).join(' ');
+  }
+
   /* The postcode of the property being surveyed. Step 1 asks for one to get the
      conversation started and to have something on a partial lead; step 3 asks
      again as part of the address, prefilled from step 1. The later answer is
@@ -155,7 +168,7 @@
       phone: val('f-phone'),
       issues: Array.from(form.querySelectorAll('input[name="Issue"]:checked')).map(b => b.value),
       previousSurvey: document.getElementById('f-prev').checked,
-      notes: val('f-notes'),
+      notes: withBuyer(val('f-notes')),
       sourcePath: location.pathname,
       referrer: DS.referrer,
       utm: DS.utm,
@@ -239,7 +252,7 @@
         : { Attachments: 'None' }),
       Issue: issues.length ? issues.join(', ') : 'Not given yet',
       'Previous survey': stage === 'complete' ? (document.getElementById('f-prev').checked ? 'Yes' : 'No') : 'Not asked yet',
-      Notes: val('f-notes') || 'None',
+      Notes: withBuyer(val('f-notes')) || 'None',
       'Lead stage': stage,
       Submitted: new Date().toLocaleString('en-GB'),
       'Lead ID': id ? String(id) : 'Saved as they left the page'

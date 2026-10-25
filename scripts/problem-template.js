@@ -11,6 +11,7 @@
  * a range for the related service; until then each page says how the job is
  * priced without inventing a figure.
  */
+import { heroCta } from './hero-cta.js';
 import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell, orCall } from './page-shell.js';
 import { sectionList } from './service-template.js';
@@ -86,6 +87,7 @@ export function render(page, kind, links) {
   <div class="hero">
     <h1>${esc(page.h1)}</h1>
     <p class="lede">${page.intro}</p>
+    ${heroCta(page.site)}
   </div>
 
   <section class="sec">

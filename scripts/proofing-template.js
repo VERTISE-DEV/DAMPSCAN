@@ -11,6 +11,7 @@
  * `page` is a normalised object built in scripts/proofing-pages.js from a
  * Kent town (DampScan) or a London borough plus its proofing copy (ATi).
  */
+import { heroCta } from './hero-cta.js';
 import { shell, orCall } from './page-shell.js';
 import { SITES } from './sites.js';
 import { bookForm } from './book-form.js';
@@ -80,6 +81,7 @@ export function render(page, index, count) {
   <div class="hero">
     <h1>${esc(page.site === 'ati' ? `Damp proofing in ${page.name}: an independent survey first` : `Damp proofing in ${page.name}? Get an independent survey first`)}</h1>
     <p class="lede">${p.intro}</p>
+    ${heroCta(page.site)}
   </div>
 
   <section class="sec">

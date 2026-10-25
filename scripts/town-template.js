@@ -8,6 +8,7 @@
  * part every survey shares, in versions picked so that no two towns read
  * alike. test/town-pages.test.js measures how much any two pages share.
  */
+import { heroCta } from './hero-cta.js';
 import { shell, orCall } from './page-shell.js';
 import { SITES } from './sites.js';
 import { bookForm } from './book-form.js';
@@ -140,6 +141,7 @@ export function render(t, allTowns) {
   <div class="hero">
     <h1>${esc(s.h1 || `Damp survey in ${t.name}`)}</h1>
     <p class="lede">${s.intro}</p>
+    ${heroCta('dampscan')}
   </div>
 
   <section class="sec">

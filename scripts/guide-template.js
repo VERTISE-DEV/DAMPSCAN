@@ -11,6 +11,7 @@
  * written from the two firms' positions, never one shared between them. The
  * template is shared; the words are not.
  */
+import { heroCta } from './hero-cta.js';
 import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell, orCall } from './page-shell.js';
 import { sectionList } from './service-template.js';
@@ -87,6 +88,7 @@ export function render(guide, allGuides, allServices) {
   <div class="hero">
     <h1>${esc(guide.h1)}</h1>
     <p class="lede">${guide.intro}</p>
+    ${heroCta(guide.site)}
   </div>
 
   ${guide.sections.map((s) => `<section class="sec">

@@ -20,9 +20,9 @@ enforces the mechanical ones in CI.
   tap-to-send links, emails are drafts the person checks and sends.
 
 ## People and access (enforced on the server)
-- Owners: Scott, Tom, Ben. Ben and Tom have no logins of their own yet and
-  use the owners' code; jobs and to-dos for them go on the owners' list
-  marked "For Ben:" / "For Tom:". Surveyors: scott, tom, ben, ronnie.
+- Owners: Scott, Tom, Ben. Tom (manages ATi, DampScan) and Ben (manages
+  ATi, DampScan, Verge) have their own logins; Scott uses the owners' code.
+  Surveyors: scott, tom, ben, ronnie.
 - Work level (Ronnie): sees all jobs in his businesses, never any money;
   may only mark Surveyed and Report sent and attach a report; contact details
   only on jobs he surveys or is assigned; ChatGPT read-only plus those marks;
@@ -88,6 +88,11 @@ enforces the mechanical ones in CI.
 - To-dos linked to a customer show as a small "N to-dos" tag on the timeline
   and board cards, and as a list with tick boxes and an add box in the Today
   pop-up and the client card (`public/staff/job-todos.js`).
+- Reports page (ATi & DampScan): every survey done and not reported, oldest
+  first, with countdown, upload, "Draft email in ChatGPT" and Report sent.
+- Client card shows "What has happened" (`lib/timeline.js`) and offers to link
+  the same person's unlinked website enquiry (`lib/duplicates.js`).
+- Friday morning: one alert for work done over a week ago and not paid.
 - Ronnie alone gets the Send to car button.
 
 ## ChatGPT connector (`/api/admin/mcp`)

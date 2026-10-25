@@ -288,3 +288,29 @@ test('all time: earned, and what every enquiry and every visitor would have made
   await pool.query(`insert into job_payments (job_id, amount_pence, paid_on, label) select id, 21500, current_date, 'balance' from jobs where customer_name = 'John Nicholls'`);
   assert.equal((await allTime(['ati-london'])).earnedPence, 21500 + 10750);
 });
+
+test('reports owed, the customer story, the same-person link and the Friday money check', async () => {
+  const { reportsOwed } = await import('../lib/surveys.js');
+  const { timelineFor } = await import('../lib/timeline.js');
+  const { matchesFor, linkLead } = await import('../lib/duplicates.js');
+  const { alertFridayMoney } = await import('../lib/friday-money.js');
+  const scope = await owners();
+  await callTool(scope, { name: 'create_job', arguments: { ...ASKED, job_date: '2026-09-01' } });
+  const id = Number((await pool.query('select id from jobs')).rows[0].id);
+  assert.equal((await reportsOwed(['ati-london'])).length, 1);
+  await pool.query('update jobs set deposit_paid_at = now() where id = $1', [id]);
+  const story = await timelineFor(scope, id);
+  assert.ok(story.some((e) => e.what === 'Job started') && story.some((e) => e.what === 'Deposit paid'));
+  const lead = Number((await pool.query(`insert into leads (session_id, site, stage, first_name, email, postcode) values (gen_random_uuid(), 'ati-london', 'complete', 'John', 'jsnicholls@gmail.com', 'SW2 2JX') returning id`)).rows[0].id);
+  assert.equal((await matchesFor(scope, id))[0].leadId, lead);
+  assert.equal((await linkLead(scope, id, 999999)).error !== undefined, true, 'only a real match links');
+  assert.equal((await linkLead(scope, id, lead)).ok, true);
+  assert.equal(Number((await pool.query('select lead_id from jobs where id = $1', [id])).rows[0].lead_id), lead);
+  assert.equal((await alertFridayMoney(new Date('2026-10-22T08:00:00Z'))).skipped, 'not Friday');
+  const fri = await alertFridayMoney(new Date('2026-10-23T08:00:00Z'));
+  assert.equal(fri.sent, 1);
+  assert.equal((await alertFridayMoney(new Date('2026-10-23T09:00:00Z'))).skipped, 'sent', 'once a Friday');
+  const note = (await pool.query(`select title, message from notifications where kind = 'friday_money'`)).rows[0];
+  assert.match(note.title, /1 unpaid, £107\.50/);
+  assert.ok(!/Nicholls/.test(note.message));
+});

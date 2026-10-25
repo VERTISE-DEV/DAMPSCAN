@@ -314,3 +314,24 @@ test('reports owed, the customer story, the same-person link and the Friday mone
   assert.match(note.title, /1 unpaid, £107\.50/);
   assert.ok(!/Nicholls/.test(note.message));
 });
+
+test('free times come only from set hours, two days on, and never next to a booked survey', async () => {
+  const { addHours, freeSlots, addUsual } = await import('../lib/availability.js');
+  await pool.query('truncate surveyor_hours, lab_flags');
+  const scope = await owners();
+  const today = '2026-11-02';
+  assert.deepEqual(await freeSlots({ today }), [], 'no hours, nothing offered');
+  await addHours(scope, 'tom', '2026-11-03', '09:00', '17:00');
+  assert.deepEqual(await freeSlots({ today }), [], 'inside two days is never offered');
+  await addHours(scope, 'tom', '2026-11-07', '09:00', '13:00');
+  assert.deepEqual((await freeSlots({ today })).map((s) => s.time), ['09:00', '10:00', '11:00', '12:00']);
+  await callTool(scope, { name: 'create_job', arguments: { ...ASKED, job_date: '2026-11-07', job_time: '10:00' } });
+  assert.deepEqual((await freeSlots({ today })).map((s) => s.time), ['12:00'], 'an hour either side of a booked survey is travel');
+  await pool.query(`insert into leads (session_id, site, stage, first_name, email, postcode, slot_at, slot_surveyor) values (gen_random_uuid(), 'ati-london', 'complete', 'Held', 'h@example.com', 'SW2 2JX', '2026-11-07 12:00:00 Europe/London', 'tom')`);
+  assert.deepEqual(await freeSlots({ today }), [], 'a time an enquiry is holding is taken');
+  await addHours(scope, 'ronnie', '2026-11-08', '09:00', '10:00');
+  await callTool(scope, { name: 'create_job', arguments: { ...ASKED, customer_name: 'No Time', job_date: '2026-11-08', job_time: undefined, surveyor: 'Ronnie' } });
+  assert.deepEqual(await freeSlots({ today }), [], "a booked survey with no time blocks that surveyor's day");
+  const usual = await addUsual(scope, 'ben', '2026-11-09', 1);
+  assert.equal(usual.added, 7);
+});

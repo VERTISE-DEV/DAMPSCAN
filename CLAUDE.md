@@ -93,6 +93,14 @@ enforces the mechanical ones in CI.
 - Client card shows "What has happened" (`lib/timeline.js`) and offers to link
   the same person's unlinked website enquiry (`lib/duplicates.js`).
 - Friday morning: one alert for work done over a week ago and not paid.
+- My hours (`lib/availability.js`): Tom, Ronnie and Ben each set their own
+  survey hours day by day; nothing set means not available. Free times are
+  one hour starts from two days ahead, never within an hour's travel of a
+  booked survey, never on a day with an untimed booked survey, never a time
+  an enquiry holds. The booking form is always filled in; picking a time is
+  only offered at the end, and only once the owners switch it on after the
+  Lab. The Lab (owners only) previews that picker and the survey quiz (ATi
+  and DampScan share one price list).
 - Ronnie alone gets the Send to car button.
 
 ## ChatGPT connector (`/api/admin/mcp`)

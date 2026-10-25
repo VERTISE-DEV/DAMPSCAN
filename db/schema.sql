@@ -1247,3 +1247,27 @@ create table if not exists competitor_checks (
   new_pages   integer not null default 0,
   error       text
 );
+
+-- Surveyor hours (lib/availability.js): each surveyor sets the windows they
+-- can survey, day by day; no window means not available. Booked jobs and
+-- held enquiry slots are taken out when free times are worked out.
+create table if not exists surveyor_hours (
+  id          bigserial primary key,
+  surveyor    text not null,
+  on_date     date not null,
+  start_time  time not null,
+  end_time    time not null,
+  set_by      bigint references people (id) on delete set null,
+  created_at  timestamptz not null default now(),
+  check (end_time > start_time)
+);
+create index if not exists surveyor_hours_date_idx on surveyor_hours (on_date, surveyor);
+-- A time chosen at the end of the booking form, held until staff confirm.
+alter table leads add column if not exists slot_at timestamptz;
+alter table leads add column if not exists slot_surveyor text;
+-- Lab switches: features tried in the staff Lab before they reach the sites.
+create table if not exists lab_flags (
+  key         text primary key,
+  enabled     boolean not null default false,
+  changed_at  timestamptz not null default now()
+);

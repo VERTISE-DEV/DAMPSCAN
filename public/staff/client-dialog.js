@@ -36,26 +36,15 @@
     return a;
   }
 
-  /* The finished report, straight from the phone or laptop to storage, then
-     saved on the job (lib/report-file.js). */
+  /* The finished report (report-upload.js). */
   async function uploadReport(c, file, status) {
     if (!file) return;
-    if (file.size > 25 * 1024 * 1024) { status.textContent = 'That file is over 25MB.'; return; }
-    var type = /\.docx$/i.test(file.name) ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf';
     status.textContent = 'Uploading…';
     try {
-      var ticket = await U.send('/api/admin/clients', { id: c.id, reportUpload: { name: file.name, type: type } });
-      if (!ticket.ok) throw new Error(ticket.data && ticket.data.error);
-      var put = await fetch(ticket.data.url, { method: 'PUT', headers: { 'Content-Type': type }, body: file });
-      if (!put.ok) throw new Error('The upload did not finish. Try again.');
-      var saved = await U.send('/api/admin/clients', { id: c.id, reportPath: ticket.data.path, reportName: file.name });
-      if (!saved.ok) throw new Error(saved.data && saved.data.error);
-      c.reportFile = saved.data.reportFile;
+      c.reportFile = await global.DSREPORT.upload(c.id, file);
       fillDialog(c);
       status.textContent = 'Report saved.';
-    } catch (e) {
-      status.textContent = (e && e.message && !/Request failed/.test(e.message)) ? e.message : 'Could not upload the report. Try again.';
-    }
+    } catch (e) { status.textContent = e.message; }
   }
 
   /* The card's to-dos come from the same job view the Today pop-up uses. */
@@ -69,8 +58,48 @@
     } catch (e) { mount.appendChild(U.node('p', 'panel-note', 'Could not load the to-dos.')); }
   }
 
+  /* The customer's story in order (lib/timeline.js). */
+  async function loadStory(c) {
+    var mount = el('c-story');
+    if (!mount) return;
+    mount.textContent = '';
+    try {
+      var data = await U.get('/api/admin/calendar?view=timeline&id=' + c.id);
+      data.events.forEach(function (e) {
+        var li = U.node('li');
+        li.appendChild(U.node('span', 'client-story-when', new Date(e.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })));
+        li.appendChild(U.node('span', null, e.what + (e.amountPence != null ? ' ' + U.money(e.amountPence) : '') + (e.by ? ' (' + e.by + ')' : '')));
+        mount.appendChild(li);
+      });
+      if (!data.events.length) mount.appendChild(U.node('li', 'empty', 'Nothing recorded yet.'));
+    } catch (e) { mount.appendChild(U.node('li', 'empty', 'Could not load the history.')); }
+  }
+
+  /* The same person's enquiry, not linked to this job (lib/duplicates.js). */
+  async function loadMatch(c) {
+    var box = el('c-match');
+    if (!box) return;
+    box.hidden = true; box.textContent = '';
+    try {
+      var m = ((await U.get('/api/admin/calendar?view=matches&id=' + c.id)).matches || [])[0];
+      if (!m) return;
+      box.appendChild(document.createTextNode('Same person as the website enquiry from ' + new Date(m.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + '. '));
+      var b = U.node('button', 'btn btn--ghost btn--sm', 'Link it');
+      b.type = 'button';
+      b.addEventListener('click', async function () {
+        b.disabled = true;
+        var r = await U.send('/api/admin/clients', { id: c.id, linkLead: m.leadId }).catch(function () { return { ok: false }; });
+        box.textContent = r.ok ? 'Linked. The enquiry now counts as booked.' : 'Could not link it.';
+      });
+      box.appendChild(b);
+      box.hidden = false;
+    } catch (e) { /* no banner is fine */ }
+  }
+
   function fillDialog(c) {
     loadTodos(c);
+    loadStory(c);
+    loadMatch(c);
     el('c-name').textContent = c.name || 'No name';
     el('c-sub').textContent = c.survey.label + ' survey' + (c.survey.pricePence == null ? '' : ', ' + U.money(c.survey.pricePence))
       + (c.survey.remedialPence ? ' plus ' + U.money(c.survey.remedialPence) + ' remedial' : '')

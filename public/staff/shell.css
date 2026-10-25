@@ -150,3 +150,9 @@ Any touch screen counts, so a landscape iPad Pro (wider than 1024) does too. */
 .todo-add input[type=text]{flex:1 1 200px;min-width:0;font-size:16px}
 .todo-add select{font-size:16px}
 .todo-tag{font-size:11px;white-space:nowrap}
+/* The customer's story on the client card (lib/timeline.js). */
+.client-story{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line);display:grid;gap:10px}
+.client-story li{display:flex;flex-direction:column;gap:2px;position:relative}
+.client-story li::before{content:'';position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.client-story-when{font-size:12px;color:var(--muted-2)}
+.client-match{border:1px solid var(--accent-ring);background:var(--accent-soft);border-radius:12px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}

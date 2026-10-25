@@ -11,6 +11,7 @@
  * The shared page shell and site details come from area-template.js, so the
  * area and service pages stay visually identical without a second copy of it.
  */
+import { heroCta } from './hero-cta.js';
 import { body as reviewText } from './reviews-block.js';
 import { SITES, bookScripts, verifiedBadge } from './area-template.js';
 import { shell, orCall } from './page-shell.js';
@@ -201,6 +202,7 @@ export function render(service, allServices, hub = SERVICES_HUB) {
   <div class="hero">
     <h1>${esc(service.h1)}</h1>
     <p class="lede">${service.intro}</p>
+    ${heroCta(service.site)}
   </div>
 
 ${signsBlock(service)}  ${service.sections.map((s) => `<section class="sec">

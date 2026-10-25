@@ -7,6 +7,7 @@
  * same paragraph is the doorway page pattern, and Google demotes it, so the
  * generator refuses to build a page whose distinctive copy is too short.
  */
+import { heroCta } from './hero-cta.js';
 import { body as reviewText } from './reviews-block.js';
 import { bookForm } from './book-form.js';
 import { shell, orCall } from './page-shell.js';
@@ -201,6 +202,7 @@ export function render(area, allAreas) {
   <div class="hero">
     <h1>${esc(area.h1)}</h1>
     <p class="lede">${area.intro}</p>
+    ${heroCta(area.site)}
   </div>
 
   <section class="sec">

@@ -262,3 +262,6 @@ body{padding-top:92px}
 .foot-areas-h{font-weight:600;margin:0 0 6px;color:var(--text)}
 .steps{padding-left:1.2em}
 .steps li{margin:6px 0}
+/* Price and Book button in the first screen of every town page. */
+.hero-cta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.hero-price{color:var(--muted);font-size:15px}

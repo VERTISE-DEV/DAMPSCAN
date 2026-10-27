@@ -146,7 +146,22 @@ enforces the mechanical ones in CI.
   surveyor first, then whoever else can reach it, else it is not offered.
   Brands do not matter. The day's limit is only hours, survey length and
   drive. Picks stay requests; the team confirms, decides who goes and sends
-  the deposit by hand. The Lab shows the same. A pick is a request: checked again, held 48 hours as a
+  the deposit by hand. The Lab shows the same. The form is saved before any
+  of this, so leaving part way loses nothing and makes no second enquiry.
+  Time first (least friction), then, with the Lab's survey quiz switch on,
+  "What do you need?": damp survey, damp and timber, a check on its own, or
+  not sure; then the size and add-ons, each with a small (i) saying what it
+  is. Priced on the server from the one list, kept on the enquiry
+  (survey_choice), shown on the Scheduling card and preselected when booking.
+- One price list (`content/prices.js`, the owners' 13 Sept 2026 list with the
+  size bands): damp £215, £295, from £375, from £450; damp and timber £310,
+  £445 (the two larger bands assume +£150, "from"); timber, invasive, camera
+  and cavity on their own or with a survey. The prices pages, the website's
+  survey step and the Lab quiz all use it (test/prices.test.js). The prices
+  page is kept simple: one table by size (damp, damp and timber), one table
+  of extra checks (with a survey, on its own), and everything wordy folded
+  away in tap-to-open sections. Minutes on
+  site: 60, 120, 150, 180, set once on the rate card. A pick is a request: checked again, held 48 hours as a
   pencilled hold and alerted; the team confirms it on Scheduling.
 - Survey length per survey type is on the rate card (Minutes on site,
   default 60) and every drive check uses it. Staff best times after a

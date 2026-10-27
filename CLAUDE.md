@@ -160,6 +160,12 @@ enforces the mechanical ones in CI.
   card opens with times to offer; the same phone or email already open is
   offered back first. The booking form has Today and Tomorrow, and a clash
   about missing hours links to that surveyor's My hours.
+- One stage per damp customer (`lib/journey.js`): New, Contacted, Waiting for
+  time, Pencilled, Booked, Surveyed, Report sent, Paid (or Closed, Cancelled),
+  worked out one way for every page; the job pop-up shows it. After any change
+  to a job (every route, ChatGPT and the alert buttons, through
+  lib/activity.js) its open to-dos that the facts have overtaken (deposit,
+  booking, report, payment) tick themselves off.
 - Scheduling has a forgiving search (`public/staff/sched-search.js`) over the
   customers on the board: name, postcode, phone, email, address, message;
   typos and spacing forgiven; a result opens the customer card.
@@ -169,8 +175,11 @@ enforces the mechanical ones in CI.
   wanted, emails in full, what the team did, and the survey's own facts
   (deposit, payments, paid in full, visit, report) from `lib/timeline.js`. An
   email with no subject is named by its first words. Emails are filed whole by
-  ChatGPT's log_email (inbox sweep or pasted in). Today's pop-up stays the
-  basic card; the history is the Scheduling view only.
+  ChatGPT's log_email (inbox sweep or pasted in). The same history, with its
+  add box, is in the job pop-up (`public/staff/pop-history.js`, managers), and
+  that pop-up is the one customer card everywhere: Today, Scheduling, Surveys,
+  To-do, Reports (tap the name) and Clients (damp customers; "Edit details"
+  still opens the client dialog).
 - Scheduling (`lib/scheduling.js`, managers only) shows the whole enquiry
   (address, problem, message, photos). Every damp enquiry starts
   in New enquiry, moves to Contacted when a call, email or text is logged,

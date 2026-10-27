@@ -63,6 +63,11 @@ enforces the mechanical ones in CI.
   asks for reduced motion. Keep new motion there, short (under 300 ms).
 - Every staff page must work on iPhone, iPad and desktop: no sideways scroll,
   dialogs inside the viewport, 44px tap targets, 16px inputs.
+  The websites too. `public/assets/fit.css` (imported with motion.css) keeps
+  every field inside its box, iOS date and time fields included. Every pop-up
+  fits the visible screen (dvh, not vh, for iOS) and scrolls inside itself.
+  The booking form has no buyer box, no "report needed by" and no agent
+  fields (removed by the owner).
 - Run `TEST_DATABASE_URL=postgresql://dampscan:dampscan@127.0.0.1:5432/dampscan npm test`
   (mass failures mean local Postgres died: `service postgresql restart`),
   `npm run build:check`, and the em dash check before pushing.

@@ -43,7 +43,11 @@ enforces the mechanical ones in CI.
 ## Hard technical limits
 - Vercel Hobby: at most 12 files under `api/`. New endpoints go into an
   existing dispatcher (`api/admin/[action].js`, `api/cron/[task].js`).
-- Vercel crons run once a day only (06:30 digest run, 17:00 evening run).
+- Vercel crons run once a day only (06:30 digest run, 17:00 evening run,
+  London time all year). Each is listed twice in vercel.json, once per UTC
+  hour (05:30 and 06:30, 16:00 and 17:00, with ?utc=H on the path), and the
+  handler skips the one that is not London's hour (`lib/routes/cron/london-hour.js`).
+  The evening route check is sent once per surveyor and day (route_sent).
   Anything hourly goes through `.github/workflows/report-due.yml`, which runs
   only in the VERTISE-DEV/DAMPSCAN mirror, where CRON_SECRET is kept.
 - `db/schema.sql` is re-applied on every merge: every statement idempotent
@@ -108,6 +112,10 @@ checks the mechanical ones.
   09:00."); title is the business, plus a colleague's first name when it was
   them. Never "Owners", never "via ChatGPT". Changes to one job within a
   minute are one alert (per-job ntfy sequence id, 1 minute delay).
+- Change alerts are kept in the app (the notifications row, for catch-up and
+  the digest) and only pushed to ntfy with ACTIVITY_PUSH=on, to protect the
+  ntfy daily limit for enquiries. After a 429, pushes below priority 4 are
+  skipped for a minute; priority 4 and up are always tried.
 - On: new enquiries (a damp one opens its Scheduling card; one untouched two
   hours in working hours is nudged once, `lib/enquiry-nudge.js`), report overdue (24h after survey end, with Report sent
   button), survey not paid in full (morning after, with Paid/Deposit
@@ -138,7 +146,9 @@ checks the mechanical ones.
   everything outstanding from lib/work.js gathered into one card per
   customer, late first, with Call and Open.
 - Survey cards show a small report countdown (24h from survey end, red when
-  over) until the report is ticked sent.
+  over) until the report is ticked sent. Survey end is the start plus the rate
+  card's minutes on site (an untimed survey ends with its day); the board,
+  Today, Reports and the overdue alert all use this one deadline (lib/surveys.js).
 - Jobs page: totals are ATi and DampScan surveys only; earnings count surveys
   whose day has come; booked ahead, paid and still to pay shown apart. The
   hand form and the plain list of every job are folded away (ChatGPT books
@@ -238,7 +248,8 @@ checks the mechanical ones.
   Leads figures, and their channel reads "Phone call". The booking form has Today and Tomorrow, and a clash
   about missing hours links to that surveyor's My hours.
 - One stage per damp customer (`lib/journey.js`): New, Contacted, Waiting for
-  time, Pencilled, Booked, Surveyed, Report sent, Paid (or Closed, Cancelled),
+  time, Pencilled, Booked, Surveyed, Report to send (paid, report owed), Report sent
+  (not paid yet, on After the visit until paid in full), Paid (or Closed, Cancelled),
   worked out one way for every page; the job pop-up shows it. To-dos that the
   facts look to have overtaken (deposit, booking, report, payment) are never
   cleared on their own: the job pop-up asks "These look done now. Clear them?"

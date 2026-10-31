@@ -65,13 +65,27 @@
     if (field) field.setAttribute('aria-invalid', String(on));
   }
 
+  /* A UK number: 11 digits from 0 (or +44 for the 0), a 10 digit landline
+     allowed for the few areas that have them, never a mobile short of 11. */
+  function ukPhone(v){
+    const d = v.replace(/[\s()-]/g, '').replace(/^(\+44|0044)0?/, '0');
+    return /^0\d{10}$/.test(d) || (/^0[1-3]\d{8}$/.test(d));
+  }
+  /* Phone boxes take only digits, spaces and a leading +, so letters never get in. */
+  form.addEventListener('input', e => {
+    const f = e.target;
+    if (f.type !== 'tel') return;
+    const clean = f.value.replace(/[^\d+ ]/g, '').replace(/(?!^)\+/g, '');
+    if (clean !== f.value) f.value = clean;
+  });
+
   /* Format checks for a field that may be empty but must be right when it is
      not. The server does the same, but by the time it answers the files have
      already been uploaded and the visitor has waited for nothing. */
   function formatBad(field){
     const v = field.value.trim();
     if (!v) return false;
-    if (field.type === 'tel') return v.replace(/\D/g, '').length < 9;
+    if (field.type === 'tel') return !ukPhone(v);
     if (field.type === 'email') return !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
     /* The same full-postcode rule as the server (lib/validate.js). */
     if (field.id === 'f-postcode') return !/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i.test(v.replace(/\s+/g, ' '));
@@ -136,12 +150,13 @@
   /* Damp sites: the estate agent arranges access, so their details ride in
      the notes where the Scheduling card and ChatGPT see them. */
   const agentBox = document.getElementById('f-agent-on');
-  /* Ticked, the agent's name and phone are needed to arrange access, so the
-     step's own required check covers them; unticked, they drop out. */
-  if (agentBox) agentBox.addEventListener('change', () => {
+  /* "The estate agent" picked, their name and phone are needed to arrange
+     access, so the step's own required check covers them; "Me", they drop out.
+     Both choices are radios, and only the newly picked one fires change. */
+  if (agentBox) form.querySelectorAll('input[name="Access"]').forEach(r => r.addEventListener('change', () => {
     document.getElementById('f-agent-fields').hidden = !agentBox.checked;
     ['f-agent', 'f-agent-phone'].forEach(id => { const f = document.getElementById(id); f.required = agentBox.checked; if (!agentBox.checked) setError(f.closest('.form-row'), false); });
-  });
+  }));
   const viaAgent = () => Boolean(agentBox && agentBox.checked);
   function withAgent(notes) {
     if (!viaAgent()) return notes;
@@ -259,7 +274,10 @@
         : { Attachments: 'None' }),
       Issue: issues.length ? issues.join(', ') : 'Not given yet',
       'Previous survey': stage === 'complete' ? (document.getElementById('f-prev').checked ? 'Yes' : 'No') : 'Not asked yet',
-      Notes: withAgent(val('f-notes')) || 'None',
+      /* Who lets the surveyor in, with the agent's details on their own lines. */
+      ...(agentBox ? { 'Who lets us in': stage === 'complete' ? (viaAgent() ? 'The estate agent' : 'The customer') : 'Not asked yet' } : {}),
+      ...(viaAgent() ? { 'Estate agent': val('f-agent') || 'Not given', 'Agent phone': val('f-agent-phone') || 'Not given', 'Agent email': val('f-agent-email') || 'Not given' } : {}),
+      Notes: val('f-notes') || 'None',
       'Lead stage': stage,
       Submitted: new Date().toLocaleString('en-GB'),
       'Lead ID': id ? String(id) : 'Saved as they left the page'
@@ -301,6 +319,22 @@
       report(false, String(e && e.message || e));
     }
   }
+
+  /* What they do after Book (a time picked, the survey chosen) follows in a
+     short second email, so the backup copy is never missing the end of it. */
+  window.DS_EMAIL_UPDATE = function (what, fields, id) {
+    if (!NOTIFY_ENDPOINT) return;
+    const who = val('f-name') || 'unknown';
+    try {
+      fetch(NOTIFY_ENDPOINT, { method: 'POST', keepalive: true, headers: { Accept: 'application/json' },
+        body: new URLSearchParams(Object.assign({
+          _subject: (DS_CFG.subjectPrefix || '') + 'UPDATE, ' + what + ', ' + who + ', ' + (surveyPostcode() || 'no postcode'),
+          _captcha: 'false', _template: 'table',
+          'First name': who, Email: val('f-email'), Phone: val('f-phone') || 'Not given',
+          Address: [val('f-addr1'), val('f-town'), surveyPostcode()].filter(Boolean).join(', ') || 'Not given'
+        }, fields, { 'Lead ID': id ? String(id) : 'Not known', Sent: new Date().toLocaleString('en-GB') })) }).catch(function(){});
+    } catch (e) {}
+  };
 
   /* A step 1 dropout's email, sent as the page closes. Nothing can wait for
      FormSubmit's answer then, so it goes as a beacon, and the lead records
@@ -379,6 +413,9 @@
 
   function advance(){
     if (!validate()) return;
+    /* The property's postcode starts as the one from step 1; almost always right. */
+    const pc = document.getElementById('f-addr-postcode');
+    if (pc && !pc.value.trim()) pc.value = val('f-postcode').toUpperCase();
     /* Step 1 complete = usable lead, but only worth sending if they abandon it. */
     if (current === 0) partial.arm();
     show(current + 1, true);

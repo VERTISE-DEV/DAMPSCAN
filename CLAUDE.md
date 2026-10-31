@@ -18,7 +18,9 @@ enforces the mechanical ones in CI.
   nothing here sends email through it unless the owner says otherwise.
 - Enquiry alerts are ntfy plus the installed staff app's own notification
   (both for every enquiry; Settings lists whose phones have it on). The email
-  is only a backup copy through FormSubmit. Microsoft 365 sending
+  is only a backup copy through FormSubmit: everything on the form (the
+  agent on its own lines), then a short UPDATE email for a time picked or a
+  survey chosen after Book. Microsoft 365 sending
   (`lib/m365-email.js`) is off because the GoDaddy-run tenant refuses it;
   LEAD_EMAIL_M365=on turns it back on.
 - Nothing is ever sent to a customer automatically: messages are words with
@@ -71,10 +73,14 @@ enforces the mechanical ones in CI.
   every field inside its box, iOS date and time fields included. Every pop-up
   fits the visible screen (dvh, not vh, for iOS) and scrolls inside itself.
   The booking form has no buyer box and no "report needed by" (removed by the
-  owner). Damp sites have one tick box, "The estate agent needs to be
-  contacted to arrange access": it asks for the agent's name, phone and email
-  (kept in the enquiry notes) and skips the time picker, since the time is
-  confirmed with the agent.
+  owner). It is one small question per screen, nothing to scroll: you (name,
+  email, postcode), the problem, the property (address typed by hand, no
+  address finder, then "Your mobile", optional), "Who will let us in?" (damp
+  sites: Me or The estate agent; the agent's name, phone and optional email
+  only for the agent, kept in the enquiry notes, and the time picker skipped
+  since the time is confirmed with the agent), then photos, a note and a
+  previous survey, all optional. Phone boxes take only digits, spaces and a
+  leading +, and must be a UK number of the right length (11 digits).
 - Run `TEST_DATABASE_URL=postgresql://dampscan:dampscan@127.0.0.1:5432/dampscan npm test`
   (mass failures mean local Postgres died: `service postgresql restart`),
   `npm run build:check`, and the em dash check before pushing.

@@ -172,6 +172,15 @@
     item('New to-do', function () { openTodo(true); });
     item('To-do list', function () { openTodo(false); });
     item('Add a cost to a job', function () { openSearch(true); });
+    /* What used to crowd the header: alerts on this phone, a fresh look, sign out. */
+    sheet.appendChild(U.node('hr', 'shell-sep'));
+    var P = global.DSPUSH;
+    if (P && P.available) item(P.on ? 'Notifications on: tap to stop' : 'Turn on notifications', function () {
+      P.toggle().then(function (r) { global.alert(r === 'on' ? 'Notifications are on for this device.' : r === 'off' ? 'Notifications are off for this device.' : 'Notifications are blocked in this phone\'s settings.'); document.dispatchEvent(new CustomEvent('ds:push')); },
+        function () { global.alert('That did not work. Try again.'); });
+    });
+    item('Refresh', function () { global.location.reload(); });
+    item('Sign out', function () { fetch('/api/auth/logout', { method: 'POST' }).finally(function () { global.location.replace('/staff'); }); });
   }
   function companiesMenu() {
     (A.held || []).forEach(function (a) {
@@ -180,6 +189,13 @@
       link.setAttribute('role', 'menuitem');
       sheet.appendChild(link);
     });
+    /* Settings lives here on a phone: the cog at the end of the company row runs off the screen. */
+    if (A.rights && A.rights.settings) {
+      var cog = U.node('a', 'shell-item', 'Settings');
+      cog.href = '/staff/settings.html';
+      cog.setAttribute('role', 'menuitem');
+      sheet.appendChild(cog);
+    }
   }
   document.addEventListener('click', function (ev) {
     if (sheet.hidden || sheet.contains(ev.target) || ev.target.closest('[data-shell]')) return;
